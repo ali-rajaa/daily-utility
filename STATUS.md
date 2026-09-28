@@ -269,6 +269,57 @@ text nav link, not a primary action button; 40px already clears the
 actual WCAG 2.5.8 minimum (24px) by a wide margin, and inflating plain
 nav links to the full 44px would pad out the header for no real gain.
 
+## 4d. `ui-ux-pro-max --design-system` run (28 Sep)
+
+Section 4c used `--domain ux` spot-checks only (a real bug came out of
+that). The user then asked directly whether the skill had actually been
+applied — it hadn't, not in full: the skill's own workflow marks
+`--design-system` "REQUIRED for new pages/projects" as the primary step,
+and that hadn't been run. Ran it now, ahead of step 5, since that's
+exactly when a product-wide design-system read matters:
+
+```
+python .claude/skills/ui-ux-pro-max/scripts/search.py \
+  "utility app backup cloud storage landing page" --design-system -p "Daily Utility Apps"
+```
+
+Read-only — not `--persist`, so nothing was written to
+`design-system/`; this was a check against what's already built, not a
+new source of truth to reconcile later.
+
+**Confirms what's already in place:** the recommended primary
+(`#2563EB`) sits in the same blue family as `--brand` (`#0b5fe8`, taken
+from the real logo, section 4a) — no change needed, the real logo wins
+over a generic recommendation anyway. Transition timings (150-200ms),
+the full accessibility/responsive checklist, and cursor:pointer on every
+interactive element were all confirmed already satisfied (the last one
+checked directly with Playwright's `getComputedStyle`, not assumed).
+
+**Two real tensions, decided rather than silently picked either way:**
+
+- **Typography:** it recommends Inter. `shell.css` uses `system-ui`
+  first, per the Apple Design skill's explicit "default to the
+  platform's system font, override only with a reason" — kept as is.
+  Visually close to Inter anyway (same geometric-sans family), and
+  system-ui costs zero extra requests and no FOUT. Revisit only if the
+  user specifically wants Inter's branded look.
+- **Shadows:** the matched style ("Flat Design") says avoid them.
+  `shell.css` uses soft `box-shadow` for the header's scroll-elevation
+  hairline and the mobile menu panel. Kept as is — these signal "this is
+  floating above the page," which is closer to an accessibility/affordance
+  cue than decoration, and plenty of otherwise-flat systems (Stripe,
+  Linear) do the same for popovers/dropdowns.
+
+**One real, un-applied opportunity — needs the user's call, not mine:**
+the recommendation uses a CTA color distinct from the primary (amber,
+`#D97706`) rather than matching the primary button to the brand blue,
+which is what `.btn--primary` currently does. `shell.css` already has an
+unused `--accent` token (`#06b6d4`, cyan) sitting idle — closer to the
+real logo's blue→green gradient than an unrelated amber would be. Worth
+asking before step 5: should the primary "Get the app" CTA use that
+accent instead of matching `--brand`, for more contrast against the rest
+of the blue-heavy UI? Not applied without asking.
+
 ## 5. Page sections
 
 **Homepage — flagship-first.** Every other app besides the flagship is a
@@ -667,3 +718,11 @@ what's there.
   real bug (header CTA button was 36px tall, below the 44px touch
   target minimum, at every desktop width), and swept 23 viewport widths
   from 320 to 2560px with 138 automated checks, all passing.
+- Ran `ui-ux-pro-max --design-system` (section 4d), the skill's own
+  primary/required step, not just spot-check domain queries. Confirmed:
+  brand blue family, transition timings, and cursor:pointer everywhere
+  (checked with Playwright, not assumed). Two deliberate deviations kept
+  (system-ui over Inter; soft shadows despite the matched "Flat Design"
+  style) and one open question for the user before step 5: whether the
+  primary CTA should use the unused --accent cyan token instead of
+  matching --brand, for contrast against the rest of the blue UI.
