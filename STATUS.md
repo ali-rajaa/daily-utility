@@ -217,20 +217,46 @@ user supplied Play Store links for are real, but get only a card each
 (icon, one line, store button) — a full page per minor app would be thin
 content for no SEO benefit and ongoing upkeep for little payoff.
 
-| App | Package ID | Tier | Notes |
-|---|---|---|---|
-| Cloud Storage Backup & Drive | `com.backup.and.restore.all.apps.photo.backup` | `flagship` | Has an `app.html` page. Apple id `6760700432` (unverified — see open items) |
-| (PDF tool) | `com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader` | `more` | Card only. Real name/description/icon/App Store link not yet supplied |
-| (File/app transfer tool) | `com.transfer.files.transfer.apps.share.app` | `more` | Card only. Same gaps as above |
-| (Data recovery tool) | `com.data.recovery.trashbin.recovery.files` | `more` | Card only. Same gaps as above |
+All four apps' real names, icons and Play listing facts are now
+confirmed — the user sent screenshots of each live Google Play listing
+(28 Sep) and they're in `_data/apps.yml`:
 
-The three "more" apps' real names, one-line descriptions, App Store links
-(if any) and icons are still needed from the user — placeholder names
-derived from the package ID are not going into `apps.yml` until
-confirmed, to avoid shipping copy that has to be walked back. Their
-Google Play links (`play.google.com/store/apps/details?id=<package>`)
-are enough to build the card and its button now; the rest slots in
-without touching the template.
+| App | Package ID | Tier | Page |
+|---|---|---|---|
+| Cloud Storage Backup & Drive | `com.backup.and.restore.all.apps.photo.backup` | `flagship` | Gets `app.html`. Apple id `6760700432` (still unverified — see open items) |
+| Document Reader: Read All PDF | `com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader` | `more` | Card only |
+| Smartphone All Data Transfer | `com.transfer.files.transfer.apps.share.app` | `more` | Card only |
+| Photo Recover & Data Recovery | `com.data.recovery.trashbin.recovery.files` | `more` | Card only |
+
+All four listings confirm the developer is "Daily Utility Apps" — matches
+the brand name correction in section 4a.
+
+- **Icons:** cropped from the Play listing screenshots the same way the
+  main logo was (Pillow; a tight window around the icon card, bbox by
+  distance-from-white, small proportional padding — no bottom-margin
+  bug this time since there's no text below the icon to overshoot into).
+  Source: `assets/icons/apps/<slug>.png`; display size:
+  `assets/icons/apps/<slug>-192.png`.
+- **Taglines are inferred from the listing title and icon only** — not a
+  full "About this app" description, which wasn't visible in what was
+  supplied. Review them before they ship; they're placeholder-quality,
+  not fabricated-quality.
+- **No ratings or download counts stored or shown**, per the standing
+  decision in section 6 — even though the flagship's listing shows a
+  real 4.8★/10K reviews and the recovery app 3.1★/13K, and download
+  counts range from "10+" to "1M+" across the four (showing that
+  spread side-by-side would undercut the newer apps anyway).
+- **`built: false` on all four for now.** The data is captured and
+  ready, but nothing links to it yet: the flagship's `app.html` doesn't
+  exist until step 5, and the "more" apps' footer/homepage cards need a
+  template change first (see below) — so nothing changed visually on
+  this push.
+- **Required before wiring the footer/homepage to this data (step 5-6):**
+  the footer's current app-list link (`/<slug>`, i.e. an internal page)
+  only makes sense for `page: true` apps. A `more`-tier card must link
+  straight to `android_url`/`ios_url` instead. Branch on `_app.page`
+  when that template work happens — don't reuse today's href logic
+  unmodified for the "more" apps.
 
 **Daily Info:**
 
@@ -471,11 +497,10 @@ what's there.
 - [x] ~~The real app icon (PNG)~~ — done, see section 4a. Screenshots for
       the flagship's app page are still needed; CSS device mockups are
       the placeholder until then.
-- [ ] For each of the three "more" apps (PDF tool, file-transfer tool,
-      data-recovery tool): real name, one-line description, App Store
-      link if one exists, and an icon. Their Play Store links alone are
-      enough to build a working card; these fill in the rest without a
-      template change.
+- [x] ~~For each of the three "more" apps: real name, icon.~~ — done,
+      see section 5a. Still open: an App Store link for any of the three,
+      if one exists (not checked), and taglines better than the
+      title-only inference currently in `apps.yml`.
 - [ ] The GA4 measurement ID (`G-…`) for step 7. Create a GA4 property for
       dailyutilityapps.store; until then analytics is simply left out.
 - [ ] Verify `fixmypcperth.com` (for the preview) and later
@@ -544,3 +569,9 @@ what's there.
   three apps the user linked (PDF tool, file-transfer tool, data-recovery
   tool — real names not yet supplied) get a homepage/footer card each,
   reusing `app.html` later if one of them warrants its own page.
+- All four apps confirmed from real Play Store listing screenshots (real
+  names, icons cropped and wired into `_data/apps.yml`, developer name
+  "Daily Utility Apps" cross-checked). Left `built: false` on all of
+  them — the data is ready, but the footer/homepage aren't wired to it
+  yet, and the "more"-tier cards need a link-target change (store URL,
+  not an internal page) before that wiring happens in step 5-6.

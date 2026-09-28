@@ -1,0 +1,58 @@
+# Daily Utility Apps portfolio — listing metadata only (name, tagline,
+# icon, store links). Never put page content here: an app with page: true
+# gets its full content in its own page's front matter (see app.html in
+# STATUS.md section 4). This file only drives the homepage apps grid and
+# the footer's app list.
+#
+# Names, taglines and package IDs below were taken directly from each
+# app's live Google Play listing (screenshots supplied by the user,
+# 28 Sep) — not invented. Taglines are inferred from the listing's title
+# and icon only, not a full "About this app" description, so review them
+# before they go live. No ratings or download counts are stored here on
+# purpose: the site never shows them (STATUS.md section 6, "no star
+# ratings or review scores anywhere on the site").
+#
+# tier: flagship (exactly one) or more.
+# page: true means it has its own page under the app.html layout, and
+#   built controls whether that page has actually been published yet
+#   (same true/false-until-published pattern as fixmypcperth's
+#   suburbs.yml). page: false means it never gets a site page — its card
+#   links straight to its store listing(s) instead.
+# ios_url is omitted where an app isn't confirmed to exist on iOS.
+
+- slug: cloud-storage-backup-drive
+  name: "Cloud Storage Backup & Drive"
+  tagline: "Automatic cloud backup and restore for your photos, videos, contacts and app data."
+  icon: /assets/icons/apps/cloud-storage-backup-drive-192.png
+  android_url: "https://play.google.com/store/apps/details?id=com.backup.and.restore.all.apps.photo.backup"
+  ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
+  tier: flagship
+  page: true
+  built: false # flips true once cloud-storage-backup-drive.html ships (step 5)
+
+- slug: document-reader-pdf
+  name: "Document Reader: Read All PDF"
+  tagline: "Read, view and manage PDF, Word, Excel and PowerPoint files in one app."
+  icon: /assets/icons/apps/document-reader-pdf-192.png
+  android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
+  tier: more
+  page: false
+  built: false # flips true once it has a homepage/footer card (step 5-6)
+
+- slug: smartphone-data-transfer
+  name: "Smartphone All Data Transfer"
+  tagline: "Transfer photos, videos and files between phones, fast and secure."
+  icon: /assets/icons/apps/smartphone-data-transfer-192.png
+  android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
+  tier: more
+  page: false
+  built: false
+
+- slug: photo-recover-data-recovery
+  name: "Photo Recover & Data Recovery"
+  tagline: "Recover deleted photos and files from your trash bin in one tap."
+  icon: /assets/icons/apps/photo-recover-data-recovery-192.png
+  android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
+  tier: more
+  page: false
+  built: false
