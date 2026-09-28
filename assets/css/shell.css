@@ -1,0 +1,505 @@
+/* ==========================================================================
+   shell.css: loaded by every page, before the page's own stylesheet.
+
+   Holds the design tokens, base type, the section scaffold every page
+   builds on (eyebrow, title, sub), buttons, and the header and footer.
+   Page stylesheets (pages/*.css) add only what their own sections need
+   and read these tokens rather than redefining them, so the header,
+   footer and rhythm can never drift apart between page types.
+
+   Colour pairs were checked for WCAG AA (4.5:1) in both themes before use:
+   text and text-2 on bg, bg-alt and surface; brand-text on those and on
+   brand-soft; on-brand on brand and brand-hover.
+   ========================================================================== */
+
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f4f7fb;
+  --surface: #ffffff;
+  --text: #0c1424;
+  --text-2: #4b5565;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --brand: #0b5fe8;
+  --brand-hover: #0848b8;
+  --on-brand: #ffffff;
+  --brand-soft: #e8f0ff;
+  --brand-text: #0a52c9;
+  --accent: #06b6d4;
+  --glass: rgba(255, 255, 255, 0.72);
+
+  --shadow-sm: 0 1px 2px rgba(12, 20, 36, 0.06), 0 1px 3px rgba(12, 20, 36, 0.08);
+  --shadow-md: 0 4px 12px rgba(12, 20, 36, 0.08), 0 12px 32px rgba(12, 20, 36, 0.08);
+  --shadow-lg: 0 12px 24px rgba(12, 20, 36, 0.1), 0 32px 64px rgba(12, 20, 36, 0.12);
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --wrap: 70rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --header-h: 4rem;
+  --space-section: clamp(4rem, 9vw, 7rem);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0e16;
+    --bg-alt: #0f1521;
+    --surface: #141b29;
+    --text: #e9eef6;
+    --text-2: #a2adbf;
+    --border: #233047;
+    --border-strong: #33425c;
+    --brand: #5b9bff;
+    --brand-hover: #7db0ff;
+    --on-brand: #06101f;
+    --brand-soft: #16233b;
+    --brand-text: #7db0ff;
+    --glass: rgba(10, 14, 22, 0.72);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.4), 0 32px 64px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* ---------- Base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Anchor targets land below the sticky header instead of under it. */
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  font: 400 1rem/1.6 var(--font);
+  font-optical-sizing: auto;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video { display: block; max-width: 100%; height: auto; }
+svg { flex-shrink: 0; }
+
+h1, h2, h3, h4, p, ul, ol, figure, blockquote { margin: 0; }
+
+a {
+  color: var(--brand-text);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+a:hover { color: var(--brand-hover); }
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+main:focus { outline: none; }
+
+::selection { background: var(--brand-soft); color: var(--text); }
+
+/* ---------- Type scale ----------
+   Tracking and leading change with size: large display text is tightened
+   and set close, body text is left near zero tracking with open leading. */
+
+h1, .h1 {
+  font-size: clamp(2.25rem, 1.6rem + 3.2vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.028em;
+  font-weight: 750;
+}
+h2, .h2 {
+  font-size: clamp(1.75rem, 1.35rem + 2vw, 2.625rem);
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+}
+h3, .h3 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  font-weight: 650;
+}
+.text-sm { font-size: 0.875rem; letter-spacing: 0.005em; }
+
+/* ---------- Section scaffold ----------
+   Every section on every page: eyebrow, then title, then sub, then its
+   own content. Page stylesheets style the content, never the scaffold. */
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--wrap) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section { padding-block: var(--space-section); }
+.section--alt { background: var(--bg-alt); }
+
+.section-head {
+  max-width: 40rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-text);
+}
+
+.section-sub {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+/* ---------- Buttons ----------
+   Feedback is on the press itself (:active), not on release. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font: 600 1rem/1.2 var(--font);
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn--primary { background: var(--brand); color: var(--on-brand); }
+.btn--primary:hover { background: var(--brand-hover); color: var(--on-brand); }
+
+.btn--ghost { background: transparent; color: var(--text); border-color: var(--border-strong); }
+.btn--ghost:hover { background: var(--bg-alt); color: var(--text); }
+
+.btn--sm { min-height: 2.25rem; padding: 0.4rem 1rem; font-size: 0.9375rem; }
+
+/* Any group of buttons or store badges: keeps a gap whether they sit side
+   by side or wrap onto separate lines on a narrow phone. */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ---------- Skip link ---------- */
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -6rem;
+  z-index: 100;
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus { top: 0.75rem; color: var(--bg); }
+
+/* ---------- Logo ---------- */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+}
+.brand:hover { color: var(--text); }
+
+.logo-mark { width: 2rem; height: 2rem; }
+.logo-mark .lm-bg { fill: var(--brand); }
+.logo-mark .lm-tile { fill: #fff; }
+.logo-mark .lm-tile--dim { fill-opacity: 0.55; }
+
+.logo-word {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+.logo-word span { color: var(--brand-text); }
+
+/* ---------- Header ----------
+   A translucent layer the page scrolls under. It has no divider until
+   something is actually underneath it: the hairline and shadow arrive with
+   .is-scrolled, set by scripts.html. */
+
+.scroll-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--glass);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: 0 1px 0 transparent;
+  transition: box-shadow 0.2s ease;
+}
+.site-header.is-scrolled {
+  box-shadow: 0 1px 0 var(--border), 0 8px 24px -16px rgba(12, 20, 36, 0.35);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header { background: var(--bg); }
+}
+
+.header-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--header-h);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-pill);
+  color: var(--text-2);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.nav-link:hover { color: var(--text); background: var(--bg-alt); }
+.nav-link[aria-current] { color: var(--text); font-weight: 650; }
+.nav-link, .nav-cta { white-space: nowrap; }
+
+.nav-toggle { display: none; }
+
+/* Phones. The menu is one list for every screen size; below 760px it
+   becomes a panel that grows out of the menu button (transform-origin top
+   right) and leaves the same way. Transitions, not keyframes, so a second
+   tap mid-animation reverses it from where it is. Everything here is gated
+   on .js (set in <head>): without JavaScript the links stay on screen. */
+
+@media (max-width: 759.98px) {
+  .js .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.625rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .js .nav-toggle:active { background: var(--bg-alt); }
+
+  .nav-toggle-bars {
+    position: relative;
+    width: 1.125rem;
+    height: 0.75rem;
+  }
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.22s var(--ease-out);
+  }
+  .nav-toggle-bars::before { top: 0.125rem; }
+  .nav-toggle-bars::after { bottom: 0.125rem; }
+  .nav-open .nav-toggle-bars::before { transform: translateY(0.1875rem) rotate(45deg); }
+  .nav-open .nav-toggle-bars::after { transform: translateY(-0.1875rem) rotate(-45deg); }
+
+  .js .site-nav {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: var(--gutter);
+    right: var(--gutter);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+    transform-origin: top right;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.375rem) scale(0.98);
+    transition: opacity 0.18s ease, transform 0.22s var(--ease-out), visibility 0s linear 0.22s;
+  }
+  .js .nav-open .site-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.18s ease, transform 0.22s var(--ease-out), visibility 0s;
+  }
+  .js .nav-list { flex-direction: column; align-items: stretch; gap: 0.125rem; }
+  .js .nav-link { padding: 0.875rem 1rem; font-size: 1.0625rem; color: var(--text); }
+  .js .nav-cta { width: 100%; min-height: 2.75rem; font-size: 1rem; }
+
+  html:not(.js) .header-inner {
+    height: auto;
+    flex-wrap: wrap;
+    padding-block: 0.75rem;
+  }
+  html:not(.js) .site-nav {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  html:not(.js) .nav-link { padding-inline: 0.5rem; }
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  padding-block: clamp(3rem, 6vw, 4.5rem) 2rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--text-2);
+  font-size: 0.9375rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.5rem;
+}
+.footer-brand { grid-column: 1 / -1; }
+
+@media (min-width: 760px) {
+  .footer-grid { grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr)); }
+  .footer-brand { grid-column: auto; }
+}
+
+.footer-tagline { margin-top: 1rem; max-width: 18rem; }
+
+.footer-head {
+  margin-bottom: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.footer-links {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-links a { color: var(--text-2); text-decoration: none; }
+.footer-links a:hover { color: var(--text); text-decoration: underline; }
+
+.footer-legal {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+/* ---------- Reveal on scroll ----------
+   Content is only hidden once scripts.html has confirmed the observer that
+   reveals it is running (.reveal-ready). Never put .reveal on anything in
+   the first screen: a hidden hero delays Largest Contentful Paint. */
+
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.reveal-ready .reveal.is-visible { opacity: 1; transform: none; }
+
+/* ---------- Accessibility preferences ---------- */
+
+/* Reduced motion keeps the fades that aid comprehension and drops movement. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:active { transform: none; }
+  .reveal-ready .reveal { transform: none; transition: opacity 0.3s ease; }
+  .js .site-nav, .js .nav-open .site-nav { transform: none; }
+  .nav-toggle-bars::before, .nav-toggle-bars::after { transition: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+@media (prefers-contrast: more) {
+  :root { --border: var(--border-strong); }
+  .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 var(--border-strong); }
+}

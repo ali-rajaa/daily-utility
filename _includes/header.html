@@ -1,0 +1,29 @@
+{%- comment -%}
+  Site header, one copy for every page. The nav is a single list used at
+  every screen size (shell.css turns it into a panel on phones), so the
+  desktop and mobile menus can never list different links.
+
+  Nav labels name what is behind them rather than "Home"; the logo is the
+  way home. "Get the app" goes to the app page's #download section, which
+  app.html must keep.
+{%- endcomment -%}
+<div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility home">
+      {%- include logo.html -%}
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <span class="nav-toggle-bars" aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="nav-list">
+        <li><a class="nav-link" href="{{ '/cloud-storage-backup-drive' | relative_url }}"{% if page.url == "/cloud-storage-backup-drive.html" %} aria-current="page"{% endif %}>Backup &amp; Drive</a></li>
+        <li><a class="nav-link" href="{{ '/daily-info' | relative_url }}"{% if page.url == "/daily-info.html" %} aria-current="page"{% elsif page.url contains "/daily-info/" %} aria-current="true"{% endif %}>Daily Info</a></li>
+      </ul>
+      <a class="btn btn--primary btn--sm nav-cta" href="{{ '/cloud-storage-backup-drive' | relative_url }}#download">Get the app</a>
+    </nav>
+  </div>
+</header>

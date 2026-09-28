@@ -61,6 +61,7 @@ daily-utility/
 │   ├── header.html
 │   ├── footer.html
 │   ├── scripts.html
+│   ├── logo.html                  # brand mark + wordmark, used by header and footer
 │   ├── store-badges.html          # params: ios_url, android_url
 │   ├── faq-schema.html            # param: faqs -> FAQPage JSON-LD
 │   └── breadcrumb-schema.html     # param: crumbs -> BreadcrumbList JSON-LD
@@ -75,7 +76,7 @@ daily-utility/
 │   │       ├── post.css
 │   │       ├── blog-hub.css
 │   │       └── legal.css
-│   ├── icons/favicon.svg          # placeholder until the real icon arrives
+│   ├── icons/favicon.svg          # the Daily Utility mark; light/dark aware
 │   └── og/default.png             # 1200x630 share card
 ├── index.html                     # layout: default. Homepage
 ├── cloud-storage-backup-drive.html   # layout: app
@@ -108,7 +109,9 @@ page is a plain page with a layout, as in fixmypcperth.
 
 Each specialized layout sets `css:` in its own front matter. Jekyll passes
 that value down to every page that uses the layout, so pages never repeat
-it. `default.html` loads `pages/{{ page.css | default: "index" }}.css`.
+it. `default.html` loads `shell.css`, then `pages/<css>.css` only when
+`css:` is set. There is no silent fallback: the homepage sets
+`css: index` and the hub sets `css: blog-hub` themselves.
 
 | Layout | Used by | Required front matter |
 |---|---|---|
@@ -278,17 +281,34 @@ what's there.
       pushed.
   - [ ] *(you)* Settings → General → Default branch → `main`
   - [ ] *(you)* Settings → Pages → Source → **GitHub Actions**
-  - Until step 2 adds a homepage, every run on `main` fails at "Check
-    built output" (no `_site/index.html`). That is intended: an empty
-    site must never deploy.
-- [ ] **2. Shell:** `shell.css`, `default.html`, header, footer and
-      scripts. Check that a blank page renders.
+  - `main` still holds only step 1, so its runs fail at "Check built
+    output" (no `_site/index.html`) until step 2 reaches `main`. That is
+    intended: an empty site must never deploy.
+- [x] **2. Shell:** `shell.css`, `default.html`, header, footer, scripts,
+      plus `logo.html` and `favicon.svg` (moved up from step 7).
+  - `index.html` is a **temporary placeholder** so the shell has a page
+    to render. Step 5 replaces it.
+  - Checked in Chromium (19 checks, all passing): desktop, 390px and
+    320px phones, dark mode, no JavaScript, keyboard skip link, the
+    phone menu (open, Escape, tap outside, focus return), header scroll
+    state, reveal, no console or network errors, no sideways scroll.
+  - Checked the Live config too (`url`/`baseurl`/`staging` swapped in):
+    every link, canonical and robots tag switched with no page edits.
+  - Rules the later steps must keep:
+    - The app page must have an element with `id="download"`; the
+      header's "Get the app" button links to it.
+    - Never put `.reveal` on first-screen content (it hides until
+      scrolled into view, which would delay the hero's paint).
+    - Button and badge groups go in `.btn-row`.
+    - Nav labels name their destination ("Backup & Drive", "Daily
+      Info"); the logo is the way home, so there is no "Home" link.
 - [ ] **3. Includes:** `store-badges`, `faq-schema`, `breadcrumb-schema`.
 - [ ] **4. Layouts:** `app`, `post` and `legal`, each with its CSS.
 - [ ] **5. Core pages:** `apps.yml`, homepage, app page, privacy, terms,
       404.
 - [ ] **6. Daily Info:** the hub, then the 6 articles.
-- [ ] **7. SEO files:** robots, sitemap, favicon, OG card, GA4.
+- [ ] **7. SEO files:** robots, sitemap, OG card, GA4. (The favicon
+      was done in step 2.)
 - [ ] **8. Validate on Preview:**
   - Build locally.
   - Check that every canonical includes `/daily-utility`.
@@ -324,3 +344,10 @@ what's there.
     cutover runbook
   - the domain is set in Settings rather than by the CNAME file
   - a `main` branch is required
+- Step 1 done: build config, Gemfile.lock, deploy workflow, `main`.
+- Step 2 done: shared styles, page wrapper, header, footer, scripts.
+  Design follows the Apple Design principles: system font, size-specific
+  tracking, press feedback on :active, a translucent header with a
+  scroll-edge hairline, a menu that grows out of its button, and
+  support for reduced motion, reduced transparency and higher contrast.
+  Light and dark colour pairs all pass WCAG AA.

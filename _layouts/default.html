@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  {%- comment -%} Set before any CSS loads, so the phone menu is hidden
+  from the first paint rather than flashing open. shell.css gates the
+  menu on it, which keeps the links usable without JavaScript. {%- endcomment %}
+  <script>document.documentElement.classList.add('js');</script>
+
+  {%- comment -%}
+    The shell for every page. Specialised layouts (app, post, legal) set
+    layout: default and render through this; the homepage, the Daily Info
+    hub and 404 use it directly.
+
+    Addresses. page.url keeps the .html extension, but every link on the
+    site drops it (GitHub Pages serves /x from x.html), so the canonical
+    drops it too; otherwise each page would name a second address for
+    itself. Full URLs always go through absolute_url, which adds site.url
+    AND site.baseurl: while baseurl is /daily-utility, building them from
+    site.url alone would leave that segment out of every one.
+  {%- endcomment -%}
+  {%- assign _title = page.title | default: site.title -%}
+  {%- assign _desc = page.description | default: site.description -%}
+  {%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+  {%- assign _is_404 = false -%}
+  {%- if page.url == "/404.html" -%}{%- assign _is_404 = true -%}{%- endif %}
+  <title>{{ _title | escape }}</title>
+  <meta name="description" content="{{ _desc | escape }}">
+  {%- unless _is_404 %}
+  <link rel="canonical" href="{{ _clean_url | absolute_url }}">
+  {%- endunless %}
+  {%- if site.staging or page.noindex %}
+  <meta name="robots" content="noindex, nofollow">
+  {%- else %}
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  {%- endif %}
+
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:locale" content="en_AU">
+  {%- if page.layout == "post" %}
+  <meta property="og:type" content="article">
+  {%- if page.date %}
+  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+  {%- endif %}
+  {%- if page.updated %}
+  <meta property="article:modified_time" content="{{ page.updated | date_to_xmlschema }}">
+  {%- endif %}
+  {%- else %}
+  <meta property="og:type" content="website">
+  {%- endif %}
+  <meta property="og:title" content="{{ _title | escape }}">
+  <meta property="og:description" content="{{ _desc | escape }}">
+  {%- unless _is_404 %}
+  <meta property="og:url" content="{{ _clean_url | absolute_url }}">
+  {%- endunless %}
+  {%- comment -%} Every page shares one 1200x630 card unless it names its
+  own with "image:" (and "image_alt:") in front matter. {%- endcomment -%}
+  {%- assign _og_img = page.image | default: "/assets/og/default.png" -%}
+  {%- assign _og_alt = page.image_alt | default: "Daily Utility: simple apps that do one job well" %}
+  <meta property="og:image" content="{{ _og_img | absolute_url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ _og_alt | escape }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ _og_img | absolute_url }}">
+  <meta name="twitter:image:alt" content="{{ _og_alt | escape }}">
+
+  <link rel="icon" href="{{ '/assets/icons/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0e16" media="(prefers-color-scheme: dark)">
+
+  {%- comment -%} shell.css first, then the page's own stylesheet, so a page
+  can build on the shared tokens. Layouts set css: in their own front
+  matter (app, post, legal) and every page using them inherits it; pages
+  on this layout directly set it themselves. No css: means shell only.
+  The ?v= stamp changes on every build, so browsers never keep a stale
+  copy after a deploy. {%- endcomment -%}
+  {%- assign _v = site.time | date: "%s" %}
+  <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
+  {%- if page.css %}
+  <link rel="stylesheet" href="{{ '/assets/css/pages/' | append: page.css | append: '.css' | relative_url }}?v={{ _v }}">
+  {%- endif %}
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+{% include header.html %}
+<main id="main" tabindex="-1">
+{{ content }}
+</main>
+{% include footer.html %}
+{% include scripts.html %}
+</body>
+</html>
