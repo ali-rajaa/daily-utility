@@ -1,182 +1,319 @@
 # Daily Utility — Status
 
-Living reference for this repo's decisions and plan. Update this file as
-things change; it's the source of truth for "what did we decide" so we
-don't re-litigate it every session.
+Living reference for this repo. It records what we decided and why, so
+no session has to re-derive or re-argue it. Update it whenever a
+decision changes or a phase completes.
 
-## What this site is
+**Current state:** Final blueprint locked. No site code written yet
+(only `_config.yml`, still in its preview-phase settings). Next: Phase 1.
 
-The homepage for **Daily Utility**, the brand CloudGate Technologies uses
-for its portfolio of single-purpose utility apps. App #1: **Cloud Storage
-Backup & Drive** (photo/video/contacts/app-data backup and restore,
-iOS + Android). The site's job, in order: drive installs for that app,
-host the privacy policy / terms URLs the app stores require, build
-durable SEO equity that scales as more apps ship.
+---
 
-## Company / legal (confirmed)
+## 1. What this site is
 
-- Legal entity: **CloudGate Technologies Pty Limited** (ACN 673 209 553)
-- Address: 10 Seddon Way, Canning Vale WA 6155, Australia
-- Support email: `support@cloudgate-app.com` (shared with the sibling
-  CloudGate app — confirm with the user if Daily Utility should get its
-  own address later)
-- Privacy policy / terms are adapted from the CloudGate Technologies
-  template already in production at cloudgate-app.com, generalized to
-  cover the Daily Utility product line under the same legal entity.
-- Sibling site for reference/pattern only, not to be copied verbatim:
-  cloudgate-app.com (their main CloudGate cloud storage app).
-- Sibling repo for structural pattern: `ali-rajaa/fixmypcperth`
-  (Jekyll, `_layouts`/`_includes`/`_data`, per-page CSS on a shared
-  `shell.css`, GitHub Actions → GitHub Pages, layout chaining via
-  `layout: default` in specialized layouts' own front matter).
+The website for **Daily Utility**, the brand CloudGate Technologies uses
+for its single-purpose utility apps. App #1 is **Cloud Storage Backup &
+Drive** (backup and restore of photos, videos, contacts and app data, on
+iOS and Android).
 
-## App details to verify before launch
+The site has three jobs, in this order:
 
-- Apple: `https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432`
-- Google Play: `com.backup.and.restore.all.apps.photo.backup`
-- **Open question:** confirm these IDs are still current for this app —
-  the legal template pasted into this session referenced a *different*
-  sibling CloudGate app's store IDs (id6504859413 / com.cloudgate.cloudstorage),
-  so don't reuse those by mistake.
-- Actual store descriptions/screenshots haven't been pulled (Apple/Play
-  domains are blocked by this environment's network policy). Site copy
-  is written from the app name/package + category conventions, not
-  scraped store text — review against the real listing before publishing.
+1. Drive installs of the app.
+2. Host the privacy policy, terms and support URLs that the App Store and
+   Google Play require.
+3. Build SEO value that carries over to every future app.
 
-## Deployment
+## 2. Confirmed facts
 
-- No custom domain yet. Deploys to the default GitHub Pages project URL.
-- `_config.yml`: `url: https://ali-rajaa.github.io`, `baseurl: /daily-utility`.
-- When a custom domain is connected: set `url` to it, `baseurl: ""`, add
-  a `CNAME` file. Every internal link uses Jekyll's `relative_url`
-  filter (never a hardcoded absolute path), so that's the only change
-  needed — no page edits.
-- Branch: `claude/bold-feynman-c7lqej`.
+| Item | Value |
+|---|---|
+| Domain | **`https://dailyutilityapps.store`** (apex is canonical; www redirects to it) |
+| Legal entity | CloudGate Technologies Pty Limited, ACN 673 209 553 |
+| Address | 10 Seddon Way, Canning Vale WA 6155, Australia |
+| Support email | `support@cloudgate-app.com` for now (see open items) |
+| Blog name | **Daily Info**, at `/daily-info` |
+| Apple | `https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432` |
+| Google Play | `com.backup.and.restore.all.apps.photo.backup` |
+| Structural model | `ali-rajaa/fixmypcperth` (Jekyll, chained layouts, per-page CSS on a shared `shell.css`, deployed by Actions) |
+| Legal text source | CloudGate Technologies templates from cloudgate-app.com, adapted to Daily Utility |
 
-## Information architecture (decided)
+The legal template pasted in this session names a **different** sibling
+app's store IDs (`id6504859413`, `com.cloudgate.cloudstorage`). Never use
+those here.
 
-No `.html` shown in links, no trailing slash (GitHub Pages serves the
-extensionless address automatically — same convention as fixmypcperth).
+## 3. Directory tree
 
-- `/` — Daily Utility home
-- `/cloud-storage-backup-drive` — app landing/sales page
-- `/daily-info` — blog hub ("Daily Info" — locked in as the blog name)
-- `/daily-info/[slug]` — individual articles
-- `/privacy-policy`
-- `/terms-of-service`
-- `/404`
-- Future: `/[app-slug]` per new Daily Utility app; new `/daily-info`
-  categories as the portfolio grows.
+```
+daily-utility/
+├── .github/workflows/pages.yml
+├── .gitignore
+├── Gemfile
+├── STATUS.md
+├── _config.yml
+├── _launch/                       # excluded from the build
+│   └── redirects.csv              # old URL -> new URL map (Phase 6)
+├── _layouts/
+│   ├── default.html               # shell: <head>, header, content, footer, scripts
+│   ├── app.html                   # layout: default. App landing pages
+│   ├── post.html                  # layout: default. Daily Info articles
+│   └── legal.html                 # layout: default. Privacy and terms
+├── _includes/
+│   ├── header.html
+│   ├── footer.html
+│   ├── scripts.html
+│   ├── store-badges.html          # params: ios_url, android_url
+│   ├── faq-schema.html            # param: faqs -> FAQPage JSON-LD
+│   └── breadcrumb-schema.html     # param: crumbs -> BreadcrumbList JSON-LD
+├── _data/
+│   └── apps.yml                   # app listing metadata only, never page content
+├── assets/
+│   ├── css/
+│   │   ├── shell.css              # tokens, reset, header, footer, nav
+│   │   └── pages/
+│   │       ├── index.css
+│   │       ├── app.css
+│   │       ├── post.css
+│   │       ├── blog-hub.css
+│   │       └── legal.css
+│   ├── icons/favicon.svg          # placeholder until the real icon arrives
+│   └── og/default.png             # 1200x630 share card
+├── index.html                     # layout: default. Homepage
+├── cloud-storage-backup-drive.html   # layout: app
+├── daily-info.html                # layout: default. Blog hub
+├── daily-info/
+│   ├── backup-before-switching-phones.html
+│   ├── free-up-phone-storage.html
+│   ├── automatic-photo-backup-iphone-vs-android.html
+│   ├── app-data-backup-new-phone.html
+│   ├── is-cloud-backup-safe.html
+│   └── cloud-vs-local-backup.html
+├── privacy-policy.html            # layout: legal
+├── terms-of-service.html          # layout: legal
+├── 404.html                       # layout: default, noindex: true
+├── robots.txt                     # Liquid, needs an empty front matter fence
+├── sitemap.xml                    # Liquid, needs an empty front matter fence
+└── CNAME                          # dailyutilityapps.store (see section 7)
+```
 
-## Layout architecture (decided)
+There are **no Jekyll collections**: no `_posts` and no `_apps`. Every
+page is a plain page with a layout, as in fixmypcperth.
 
-One shell, specialized layouts chain to it — not one layout for
-everything, not a bespoke layout per page either:
+- `_posts` was rejected because it requires date-prefixed filenames and
+  defaults to dated URLs (`/2026/09/28/...`). Dates in the URL make
+  evergreen guides look stale.
+- Posts are listed with `site.pages | where: "layout", "post"`, sorted by
+  the `date` front matter field.
 
-- `_layouts/default.html` — the shell every page renders through:
-  `<head>` (meta/schema/fonts/css), `_includes/header.html`,
-  `{{ content }}`, `_includes/footer.html`, `_includes/scripts.html`.
-  This is what keeps header/footer/meta identical on every page.
-- `_layouts/app.html` (`layout: default`) — reusable template for app
-  landing pages, front-matter/data driven, so app #2 is new data, not
-  new HTML.
-- `_layouts/post.html` (`layout: default`) — reusable template for
-  Daily Info articles: title, date/updated, category, breadcrumb, body,
-  related posts, CTA into the app page.
-- `_layouts/legal.html` (`layout: default`) — shared template for
-  privacy/terms: sticky TOC sidebar + numbered sections.
-- Homepage and the Daily Info hub use `layout: default` directly,
-  hand-authored — each is a one-off page, same as fixmypcperth's own
-  `index.html` and `tech-tips.html` hub.
-- `_includes/header.html` / `footer.html` / `scripts.html` — single
-  source of truth, included once by the shell, never duplicated per page.
-- CSS: `assets/css/shell.css` holds shared tokens + header/footer/nav
-  styles. Each page type gets its own stylesheet layered on top
-  (`index.css`, `app.css`, `post.css`, `blog-hub.css`, `legal.css`),
-  selected via `css:` front matter — same pattern as fixmypcperth.
+## 4. Layouts and required front matter
 
-## Homepage — 5 sections (decided)
+Each specialized layout sets `css:` in its own front matter. Jekyll passes
+that value down to every page that uses the layout, so pages never repeat
+it. `default.html` loads `pages/{{ page.css | default: "index" }}.css`.
 
-Every section follows the same scaffold (eyebrow label → H2 → sub-copy →
-content) so it reads as one system:
+| Layout | Used by | Required front matter |
+|---|---|---|
+| `default` | Homepage, Daily Info hub, 404 | `title`, `description`. Optional: `css`, `image`, `image_alt`, `noindex` |
+| `app` (`css: app`) | App landing pages | `title`, `description`, `app_name`, `tagline`, `icon`, `ios_url`, `android_url`, `category`, `features` (icon, title, text), `how_it_works` (3 steps: title, text), `faqs` (q, a). **No body content.** |
+| `post` (`css: post`) | Daily Info articles | `title`, `description`, `heading`, `category`, `date`, `updated`, `read_min`, `slug` (must match the filename), `image`. The body is prose. Optional: `faqs`, `related` |
+| `legal` (`css: legal`) | Privacy, terms | `title`, `description`, `last_updated`, `sections` (id, label). Each body `<h2>` uses the matching `id` |
 
-1. **Hero** — brand statement, CloudGate Technologies backing, primary
-   CTA straight to the app's store badges.
-2. **Apps grid** — data-driven from `_data/apps.yml` (1 card today).
-3. **Why Daily Utility** — trust pillars (focused not bloated,
-   privacy-first & encrypted, real Australian company/ACN shown,
-   cross-platform).
-4. **From Daily Info** — latest 3 posts, pulled from the posts
-   collection automatically (keeps the homepage fresh with no manual
-   upkeep).
-5. **Closing CTA band** — store badges again + company sign-off.
+- **App pages are fully driven by front matter.** This stops similar app
+  pages from drifting into near-duplicates (doorway pages), which is the
+  same reason fixmypcperth builds suburb pages this way.
+- **The legal table of contents is generated from `sections`.** A
+  hand-typed list would fall out of sync with the headings.
+- **Legal pages have no hardcoded `canonical:`.** They use the same
+  canonical logic as every other page.
+- **`_data/apps.yml` fields:** `slug`, `name`, `tagline`, `icon`,
+  `ios_url`, `android_url`, `built` (true/false).
 
-## App landing page (`/cloud-storage-backup-drive`) — sections (decided)
+## 5. Page sections
 
-Hero w/ store badges above the fold → 3-step "how it works" → feature
-grid (auto photo/video backup, contacts, app data, encrypted drive, free
-up storage, one-tap restore) → "who it's for" → FAQ (schema-marked,
-real long-tail questions) → security/trust section linking to the full
-privacy policy → closing CTA band.
+**Homepage.** Each section follows the same pattern: eyebrow label, H2,
+sub-copy, content.
 
-## Daily Info (blog) — decided
+1. Hero: brand statement, CloudGate backing and store badges.
+2. Apps grid, built from `apps.yml`.
+3. Why Daily Utility: focused, privacy-first, real Australian company
+   (ACN shown), iPhone and Android.
+4. Latest 3 Daily Info posts, filled in automatically.
+5. Closing CTA band with store badges.
 
-- Hub `/daily-info`: all posts newest-first, category pills.
-- Categories (shared across the whole future portfolio, not just this
-  app): Backup & Storage, Switching Phones, Photos & Media, Privacy &
-  Security.
-- Initial 6-article slate (each exists to funnel into the app page, not
-  to rank standalone):
-  1. How to Back Up Your Phone Before Switching to a New One
-  2. How to Free Up Storage Without Deleting Your Photos
-  3. Does Your Phone Really Back Up Photos Automatically? iPhone vs Android
-  4. What Happens to Your App Data When You Get a New Phone
-  5. Is Cloud Backup Actually Safe? Encryption and Privacy, Explained Plainly
-  6. Cloud Backup vs Local Backup: Which One Do You Actually Need
-- Every post: one required internal link to the app page, one to a
-  related post, `BlogPosting` + `BreadcrumbList` schema, no fabricated
-  bylines/review dates/ratings.
+**App page:** hero with badges above the fold → 3-step how it works →
+feature grid → who it's for → FAQ with schema → security and trust
+section linking to the privacy policy → closing CTA.
 
-## SEO (decided)
+**Daily Info:**
 
-- Keyword tiers: branded (Daily Utility, Cloud Storage Backup & Drive,
-  CloudGate Technologies) → long-tail high-intent (primary target:
-  "backup photos to cloud iphone", "restore photos to new android
-  phone", "backup and restore all apps android", "transfer photos to
-  new phone app", "free up phone storage backup app") → aspirational
-  head terms (long game: "cloud storage backup app", "photo backup app").
-- On-page: one H1/page, unique title+description, FAQPage schema on the
-  app page, SoftwareApplication schema (no fabricated ratings, ever —
-  only real ones once they exist), Organization schema on the homepage
-  tied to the legal entity.
-- Technical: sitemap.xml, robots.txt, canonical tags, lazy-loaded
-  images, system-font-first typography, OG/Twitter cards per page.
-- ASO tie-in: store badge links carry UTM/referrer tags for App Store
-  Connect / Play Console attribution.
-- Analytics: GA4, hostname-gated like fixmypcperth's (no
-  localhost/staging noise), click tracking on store badges + FAQ
-  expand events.
+- Categories: Backup & Storage, Switching Phones, Photos & Media, Privacy
+  & Security.
+- Every post links once to the app page and once to a related post.
+- No invented bylines, review dates or ratings.
 
-## Open items / assets still needed
+## 6. SEO and routing
 
-- [ ] Confirm store IDs above are correct for this specific app
-- [ ] Real app icon/logo (PNG) — favicon, OG image, badge alt text
-- [ ] Real screenshots for the app page (placeholder: clean CSS-only
-      device mockups until supplied)
-- [ ] Confirm support email (reuse `support@cloudgate-app.com` or new)
-- [ ] Custom domain decision (currently: none, GitHub Pages default)
+**URLs**
 
-## Build phasing
+- No `.html` and no trailing slash. GitHub Pages serves `/x` from
+  `x.html`. The layout strips `.html` when it builds canonicals and
+  links.
+- Internal links use `{{ '/path' | relative_url }}`.
+- Every full URL (canonical, OG, sitemap, schema) uses `| absolute_url`.
+  That filter adds `site.url` and `site.baseurl` together. This matters
+  in the preview phase, when `baseurl` is `/daily-utility`.
+- Final routes: `/`, `/cloud-storage-backup-drive`, `/daily-info`,
+  `/daily-info/<slug>`, `/privacy-policy`, `/terms-of-service`.
+- `404.html` sets `noindex: true`. `default.html` skips the canonical tag
+  on `/404.html`. The sitemap leaves out the 404 page and any `noindex`
+  page.
 
-- **Phase 1 (next, once this plan is approved):** home, app page,
-  privacy, terms, Daily Info hub + first article(s), schema,
-  sitemap/robots, GA4.
-- **Phase 2:** remaining Daily Info articles from the initial slate.
-- **Phase 3:** each new Daily Utility app = one data entry + one
-  `app.html`-layout page, reusing the existing scaffold.
+**Schema**
+
+- `Organization` (with `@id` `…/#organization`) appears once, on the
+  homepage.
+- `SoftwareApplication` and `BlogPosting` point to it as `publisher` by
+  `@id`.
+- Posts and legal pages carry `BreadcrumbList`. The app page, and any
+  post with `faqs`, carries `FAQPage`.
+- Ratings are added only once real ones exist.
+
+**Keywords**
+
+- Branded: Daily Utility, Cloud Storage Backup & Drive, CloudGate
+  Technologies.
+- Long-tail (the main target): backup photos to cloud iphone, restore
+  photos to new android phone, backup and restore all apps android,
+  transfer photos to new phone app, free up phone storage.
+- Head terms (long term): cloud storage backup app, photo backup app.
+
+**Measurement**
+
+- GA4 loads only on `dailyutilityapps.store`, so preview and localhost
+  visits are never counted.
+- Clicks on the store badges and FAQ opens are tracked as events.
+- Store links carry UTM tags.
+
+## 7. Build and deploy rules
+
+- **`plugins: []`**, and the site is built with plain Jekyll 4.3 in
+  Actions, not the `github-pages` gem. That gem is what broke
+  fixmypcperth. As a result, `sitemap.xml` and `robots.txt` are
+  hand-written Liquid.
+- **`robots.txt` and `sitemap.xml` must start with an empty `---`/`---`
+  fence.** Without it, Jekyll copies them unrendered.
+- **Set Settings → Pages → Source to "GitHub Actions".** If it is left on
+  "Deploy from branch", GitHub runs its own `github-pages` build instead.
+- **The custom domain is set in Settings → Pages → Custom domain.**
+  Actions deployments ignore the `CNAME` file. We keep the file only as a
+  record.
+- **The workflow deploys from `main`.** The repo has no `main` yet, and
+  its default branch is currently `claude/bold-feynman-c7lqej`. Create
+  `main`, make it the default branch, and deploy only from it. The Pages
+  environment allows the default branch only.
+- **`exclude:`** covers `Gemfile`, `Gemfile.lock`, `STATUS.md`,
+  `.github` and `_launch`.
+- **`.gitignore`** covers `_site/`, `.jekyll-cache/`, `.bundle/` and
+  `vendor/`.
+
+**Two config states.** Moving between them is a three-line change. It
+needs no page edits because every link and URL goes through the
+`relative_url` and `absolute_url` filters.
+
+| | Preview (build and check) | Live (after cutover) |
+|---|---|---|
+| `url` | `https://ali-rajaa.github.io` | `https://dailyutilityapps.store` |
+| `baseurl` | `/daily-utility` | `""` |
+| `staging` | `true` (noindex on every page) | `false` |
+
+Once the custom domain is set, GitHub redirects the github.io address to
+it, and the preview phase ends.
+
+## 8. Domain cutover (the old site is being removed)
+
+The live domain couldn't be inspected from this environment (it is
+blocked by network policy), so the steps below assume we don't know
+what's there.
+
+1. **Before anything else, list the old site's URLs.** Use Search Console
+   (Pages report) or the old sitemap.
+2. **Find the privacy policy, support and marketing URLs** currently
+   entered in App Store Connect and Play Console. If they point at the old
+   site, they must never break. A missing privacy policy URL can get an
+   app update rejected or an app flagged.
+3. **Map old URLs to new ones** in `_launch/redirects.csv`.
+   - GitHub Pages can't send 301s, and `plugins: []` rules out
+     `jekyll-redirect-from`.
+   - If the DNS is on Cloudflare, use Bulk Redirects (fixmypcperth did
+     this).
+   - Otherwise, create hand-written stub pages (meta refresh plus a
+     canonical to the target, set to noindex).
+   - Old URLs with no equivalent should return 404, not redirect to the
+     homepage (which Google treats as a soft 404).
+4. **DNS**
+   - Apex: A records `185.199.108.153`, `.109.153`, `.110.153`,
+     `.111.153`, and AAAA records `2606:50c0:8000::153`, `8001::153`,
+     `8002::153`, `8003::153`.
+   - `www`: CNAME to `ali-rajaa.github.io`.
+   - **Leave the existing MX and TXT records alone** (email and
+     verification).
+   - If the DNS is on Cloudflare, keep the records DNS-only until GitHub
+     has issued the certificate.
+5. **In GitHub:** verify the domain in account settings (this prevents
+   takeover), set the custom domain, then turn on Enforce HTTPS once the
+   certificate is ready.
+6. **Switch the config** to Live (section 7). Check the live site: every
+   canonical, the redirects, `/404`, and `/privacy-policy`.
+7. **Update the store listings** (privacy, support and marketing URLs) to
+   the new addresses.
+8. **Search Console:** keep or add the domain property, submit the new
+   sitemap, and watch coverage.
+9. **Cancel the old host only after steps 6–8 are confirmed.** Until
+   then, reverting DNS is the rollback.
+
+## 9. Execution order
+
+- [ ] **1. Config:** `.gitignore`, `Gemfile`, `pages.yml`, `_config.yml`
+      in its Preview state, `main` branch, Pages source set to Actions.
+- [ ] **2. Shell:** `shell.css`, `default.html`, header, footer and
+      scripts. Check that a blank page renders.
+- [ ] **3. Includes:** `store-badges`, `faq-schema`, `breadcrumb-schema`.
+- [ ] **4. Layouts:** `app`, `post` and `legal`, each with its CSS.
+- [ ] **5. Core pages:** `apps.yml`, homepage, app page, privacy, terms,
+      404.
+- [ ] **6. Daily Info:** the hub, then the 6 articles.
+- [ ] **7. SEO files:** robots, sitemap, favicon, OG card, GA4.
+- [ ] **8. Validate on Preview:**
+  - Build locally.
+  - Check that every canonical includes `/daily-utility`.
+  - Click through every link.
+  - Validate the JSON-LD.
+  - Run Lighthouse.
+  - Confirm noindex is present.
+- [ ] **9. Cutover:** follow section 8, in order.
+
+## 10. Open items
+
+- [ ] The old site's URL list, and the privacy/support URLs the stores
+      currently point to (this blocks the cutover, not the build).
+- [ ] Support email: keep `support@cloudgate-app.com`, or set up
+      `support@dailyutilityapps.store`? The second needs MX records on
+      the new domain.
+- [ ] Where the DNS is managed (Cloudflare or the registrar). This
+      decides how redirects are done.
+- [ ] Confirm the store IDs in section 2.
+- [ ] The real app icon (PNG) and screenshots. Until they arrive, the
+      page uses CSS device mockups.
 
 ## Log
 
-- Session started: repo scaffolded (`_config.yml` only), full site
-  structure, IA, blog, and homepage section plan agreed before any
-  HTML/CSS was written. This file created to track it.
+- Scaffolded `_config.yml` (Preview state) and agreed on the IA, layouts,
+  homepage and Daily Info plan.
+- Final blueprint locked, including:
+  - no `_posts`
+  - `absolute_url` for every full URL
+  - `apps.yml` holds listing metadata only
+  - the legal table of contents is generated from `sections`
+  - the domain `dailyutilityapps.store` with a two-state config and a
+    cutover runbook
+  - the domain is set in Settings rather than by the CNAME file
+  - a `main` branch is required
