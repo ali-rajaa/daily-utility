@@ -6,8 +6,11 @@
   from whatever pages use the post layout. Adding either never means
   editing this file.
 
-  The legal line carries the operating company on every page, and the
-  trademark notices are required wherever the store badges are used.
+  The legal row is kept to two short lines: the company name and ACN
+  (Australian companies show their ACN on public documents), and the
+  Apple/Google credit their badge guidelines ask for wherever the badges
+  appear. The street address lives on the legal pages and in the
+  Organization schema, not here.
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
@@ -17,7 +20,7 @@
       <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility home">
         {%- include logo.html -%}
       </a>
-      <p class="footer-tagline">Simple apps that do one job well, for iPhone and Android.</p>
+      <p class="footer-tagline">Simple apps that do one job well, for iPhone and Android. A brand of CloudGate Technologies.</p>
     </div>
 
     <nav class="footer-col" aria-label="Apps">
@@ -52,8 +55,8 @@
 
   <div class="wrap">
     <div class="footer-legal">
-      <p>Daily Utility is a brand of {{ site.company.legal_name }} ({{ site.company.acn }}), {{ site.company.address_line1 }}, {{ site.company.address_line2 }}.</p>
-      <p>&copy; {{ site.time | date: "%Y" }} {{ site.company.legal_name }}. Apple and the Apple logo are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Google Play and the Google Play logo are trademarks of Google LLC.</p>
+      <p>&copy; {{ site.time | date: "%Y" }} {{ site.company.legal_name }} <span class="nowrap">({{ site.company.acn }})</span></p>
+      <p>App Store is a service mark of Apple Inc. Google Play is a trademark of Google LLC.</p>
     </div>
   </div>
 </footer>

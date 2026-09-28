@@ -138,6 +138,7 @@ h3, .h3 {
   font-weight: 650;
 }
 .text-sm { font-size: 0.875rem; letter-spacing: 0.005em; }
+.nowrap { white-space: nowrap; }
 
 /* ---------- Section scaffold ----------
    Every section on every page: eyebrow, then title, then sub, then its
@@ -464,8 +465,10 @@ h3, .h3 {
 .footer-links a:hover { color: var(--text); text-decoration: underline; }
 
 .footer-legal {
-  display: grid;
-  gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
   padding-top: 1.5rem;
   border-top: 1px solid var(--border);

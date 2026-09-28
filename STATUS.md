@@ -258,8 +258,11 @@ One-time setup (owner):
    → Save.
    - Wait for the DNS check to pass, then tick **Enforce HTTPS** (the
      certificate can take up to about an hour).
-   - If `fixmypcperth.com` is already a verified domain on the GitHub
-     account (it should be from the live launch), the subdomain is covered.
+   - `fixmypcperth.com` is **not** a verified domain on the GitHub account
+     (no `_github-pages-challenge-ali-rajaa` TXT record exists). It isn't
+     needed to serve the site, but verifying it (GitHub profile Settings →
+     Pages → Add a domain) stops any other account's repo from claiming
+     its subdomains. Recommended.
 4. **Deploy:** the site updates whenever `main` changes.
 
 Once a custom domain is set, GitHub redirects the github.io address to
@@ -375,6 +378,10 @@ what's there.
 - [ ] Confirm the store IDs in section 2.
 - [ ] The real app icon (PNG) and screenshots. Until they arrive, the
       page uses CSS device mockups.
+- [ ] The GA4 measurement ID (`G-…`) for step 7. Create a GA4 property for
+      dailyutilityapps.store; until then analytics is simply left out.
+- [ ] Verify `fixmypcperth.com` (for the preview) and later
+      `dailyutilityapps.store` on the GitHub account.
 
 ## Log
 
@@ -414,3 +421,8 @@ what's there.
     that steps 5–7 build.
 - `main` fast-forwarded to the branch (fc50b62). Run 2: build and
   deploy green, published to https://staging.fixmypcperth.com/.
+- Footer legal row shortened to two lines: `© year CloudGate Technologies
+  Pty Limited (ACN …)` and a one-line Apple/Google trademark credit. The
+  street address was removed from the footer (it stays on the legal
+  pages and in the Organization schema). "A brand of CloudGate
+  Technologies" moved into the footer tagline.
