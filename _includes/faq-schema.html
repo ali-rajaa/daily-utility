@@ -1,0 +1,32 @@
+{%- comment -%}
+  FAQPage structured data. Param: faqs, a list of {q, a} (front matter on
+  the app layout and, optionally, a post). Renders nothing if faqs is
+  missing or empty, so an include call is always safe even before a page
+  has any FAQs written.
+
+  Values go through Liquid's jsonify filter, not manual string
+  concatenation -- an answer containing a quote mark or an ampersand
+  would otherwise produce invalid JSON silently.
+
+  Usage: {% include faq-schema.html faqs=page.faqs %}
+{%- endcomment -%}
+{%- if include.faqs and include.faqs.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- for item in include.faqs %}
+    {
+      "@type": "Question",
+      "name": {{ item.q | jsonify | replace: "/", "\/" }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ item.a | jsonify | replace: "/", "\/" }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- endif -%}

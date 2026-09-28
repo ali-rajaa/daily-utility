@@ -66,6 +66,8 @@ daily-utility/
 │   ├── scripts.html
 │   ├── logo.html                  # brand mark + wordmark, used by header and footer
 │   ├── store-badges.html          # params: ios_url, android_url
+│   ├── hero-glow.html             # SVG gradient-mesh glow; pair with
+│   │                              # .hero-glow-host/-content (section 4f)
 │   ├── faq-schema.html            # param: faqs -> FAQPage JSON-LD
 │   └── breadcrumb-schema.html     # param: crumbs -> BreadcrumbList JSON-LD
 ├── _data/
@@ -480,6 +482,47 @@ Screenshotted light, dark, and mobile (390px) — the glow reads as
 atmosphere behind the glass header/hero rather than competing with the
 text, in both themes.
 
+## 4g. Step 3 finished: `faq-schema` + `breadcrumb-schema` (28 Sep)
+
+Both take a Liquid list param (`faqs`: `{q, a}`; `crumbs`: `{name, url}`)
+and render nothing if the param is missing or empty, so calling either
+on a page that doesn't have FAQs/breadcrumbs yet is always safe. Both
+use Liquid's `jsonify` filter rather than hand-built strings, so a
+value containing a quote mark or an ampersand can't silently produce
+broken JSON.
+
+**A real vulnerability found and fixed, not just a style choice:**
+tested both with adversarial content in a throwaway page (never
+committed — built, checked, deleted before anything was pushed),
+including an FAQ answer containing the literal text
+`</script><script>alert(1)</script>`. `jsonify` escapes quotes
+correctly but **does not escape forward slashes**. Unescaped, that
+`</script>` closes the JSON-LD `<script>` tag early regardless of being
+"inside a JSON string" — the HTML parser doesn't know or care about
+JSON syntax — which both breaks the schema and injects a live,
+executing `<script>` tag onto the page. Confirmed the exact failure by
+counting literal `</script` occurrences in the built output (5 where
+4 was correct) before the fix, and exactly 4 after it.
+
+**Fix:** every `{{ x | jsonify }}` in both includes is followed by
+`| replace: "/", "\/"` — a backslash-escaped solidus is valid JSON and
+represents the identical character once parsed, so this changes nothing
+about the data, only how it's allowed to appear inside an HTML
+`<script>` block. Re-ran the same adversarial test after the fix:
+`</script>` now renders as the inert text `<\/script>` inside the JSON
+string, exactly 4 real script closures exist in the output, and both
+blocks still parse as valid JSON (checked with Python's `json.loads`,
+not eyeballed).
+
+Real-world exploitability today is low — `faqs`/`crumbs` only ever come
+from hand-authored front matter, never user input — but the fix costs
+nothing and the alternative was "works as long as nobody ever writes
+`</script>` in a Q&A," which isn't a real guarantee.
+
+Step 3 is now complete: `store-badges`, `hero-glow` (not in the
+original plan, earned its place — section 4f), `faq-schema`,
+`breadcrumb-schema`.
+
 ## 5. Page sections
 
 **Homepage — flagship-first.** Every other app besides the flagship is a
@@ -760,9 +803,10 @@ what's there.
     - Button and badge groups go in `.btn-row`.
     - Nav labels name their destination ("Backup & Drive", "Daily
       Info"); the logo is the way home, so there is no "Home" link.
-- [ ] **3. Includes:** ~~`store-badges`~~ (done early, section 4f, plus
-      `hero-glow` which wasn't in the original plan but earns its keep).
-      Still needed: `faq-schema`, `breadcrumb-schema`.
+- [x] **3. Includes:** `store-badges`, `hero-glow` (not in the original
+      plan, earned its place — section 4f), `faq-schema`,
+      `breadcrumb-schema` (section 4g — found and fixed a real
+      `</script>`-breakout bug in the JSON-LD escaping here).
 - [ ] **4. Layouts:** `app`, `post` and `legal`, each with its CSS.
 - [ ] **5. Core pages:** `apps.yml`, homepage, app page, privacy, terms,
       404.
@@ -912,3 +956,11 @@ what's there.
   resolution and content-above-glow stacking both confirmed in a real
   browser, all motion/transparency/contrast fallbacks in place, no
   regressions in either the 19-check or 138-check suite.
+- Step 3 complete: faq-schema.html and breadcrumb-schema.html built
+  (section 4g). Found and fixed a real bug while testing them with
+  adversarial content: jsonify doesn't escape forward slashes, so a
+  literal `</script>` inside a FAQ answer would close the JSON-LD
+  script tag early and inject live HTML/JS. Fixed with a `\/` escape
+  on every jsonify'd value; verified with a real adversarial test
+  (built, checked exact `</script` counts, deleted before committing)
+  that the fix actually holds, not just that it looks right.
