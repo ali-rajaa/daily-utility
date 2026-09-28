@@ -4,10 +4,10 @@ Living reference for this repo. It records what we decided and why, so
 no session has to re-derive or re-argue it. Update it whenever a
 decision changes or a phase completes.
 
-**Current state:** Build steps 1 (config) and 2 (shell) are done and
-verified on branch `claude/bold-feynman-c7lqej`. `main` still holds only
-step 1. The preview address is `staging.fixmypcperth.com`, waiting on the
-owner's one-time setup (section 7). Next: step 3 (includes).
+**Current state:** Build steps 1 (config) and 2 (shell) are done,
+verified, and **live on https://staging.fixmypcperth.com** (noindex).
+`main` deploys; work happens on `claude/bold-feynman-c7lqej` and is
+brought to `main` to update the preview. Next: step 3 (includes).
 
 ---
 
@@ -320,12 +320,12 @@ what's there.
       4.4.1, committed so CI builds the exact versions tested locally),
       `pages.yml`, `_config.yml` in its Preview state, `main` branch
       pushed.
-  - [ ] *(you)* Preview setup, section 7: default branch `main`, Pages
-        source GitHub Actions, Cloudflare `staging` CNAME (DNS only), then
+  - [x] *(owner)* Preview setup, section 7: default branch `main`, Pages
+        source GitHub Actions, Cloudflare `staging` CNAME (DNS only),
         custom domain `staging.fixmypcperth.com` + Enforce HTTPS.
-  - `main` still holds only step 1, so its runs fail at "Check built
-    output" (no `_site/index.html`) until step 2 reaches `main`. That is
-    intended: an empty site must never deploy.
+  - Run 1 on `main` failed at "Check built output" as intended (step 1
+    only, no homepage). Run 2 (step 2 on `main`) built and deployed to
+    https://staging.fixmypcperth.com/.
 - [x] **2. Shell:** `shell.css`, `default.html`, header, footer, scripts,
       plus `logo.html` and `favicon.svg` (moved up from step 7).
   - `index.html` is a **temporary placeholder** so the shell has a page
@@ -412,3 +412,5 @@ what's there.
   - Browser suite at the new root address: 19/19.
   - Link audit: the only missing targets are the pages and share image
     that steps 5–7 build.
+- `main` fast-forwarded to the branch (fc50b62). Run 2: build and
+  deploy green, published to https://staging.fixmypcperth.com/.
