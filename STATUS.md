@@ -4,8 +4,10 @@ Living reference for this repo. It records what we decided and why, so
 no session has to re-derive or re-argue it. Update it whenever a
 decision changes or a phase completes.
 
-**Current state:** Final blueprint locked. No site code written yet
-(only `_config.yml`, still in its preview-phase settings). Next: Phase 1.
+**Current state:** Build steps 1 (config) and 2 (shell) are done and
+verified on branch `claude/bold-feynman-c7lqej`. `main` still holds only
+step 1. The preview address is `staging.fixmypcperth.com`, waiting on the
+owner's one-time setup (section 7). Next: step 3 (includes).
 
 ---
 
@@ -48,10 +50,11 @@ daily-utility/
 ├── .github/workflows/pages.yml
 ├── .gitignore
 ├── Gemfile
+├── Gemfile.lock                   # committed: CI installs exactly these versions
 ├── STATUS.md
 ├── _config.yml
 ├── _launch/                       # excluded from the build
-│   └── redirects.csv              # old URL -> new URL map (Phase 6)
+│   └── redirects.csv              # old URL -> new URL map (cutover, section 8 step 3)
 ├── _layouts/
 │   ├── default.html               # shell: <head>, header, content, footer, scripts
 │   ├── app.html                   # layout: default. App landing pages
@@ -92,9 +95,11 @@ daily-utility/
 ├── terms-of-service.html          # layout: legal
 ├── 404.html                       # layout: default, noindex: true
 ├── robots.txt                     # Liquid, needs an empty front matter fence
-├── sitemap.xml                    # Liquid, needs an empty front matter fence
-└── CNAME                          # dailyutilityapps.store (see section 7)
+└── sitemap.xml                    # Liquid, needs an empty front matter fence
 ```
+
+There is no `CNAME` file: with an Actions deploy GitHub ignores it, and
+the custom domain lives in Settings → Pages (section 7).
 
 There are **no Jekyll collections**: no `_posts` and no `_apps`. Every
 page is a plain page with a layout, as in fixmypcperth.
@@ -199,7 +204,7 @@ section linking to the privacy policy → closing CTA.
 
 ## 7. Build and deploy rules
 
-- **`plugins: []`**, and the site is built with plain Jekyll 4.3 in
+- **`plugins: []`**, and the site is built with plain Jekyll 4.4 in
   Actions, not the `github-pages` gem. That gem is what broke
   fixmypcperth. As a result, `sitemap.xml` and `robots.txt` are
   hand-written Liquid.
@@ -208,13 +213,18 @@ section linking to the privacy policy → closing CTA.
 - **Set Settings → Pages → Source to "GitHub Actions".** If it is left on
   "Deploy from branch", GitHub runs its own `github-pages` build instead.
 - **The custom domain is set in Settings → Pages → Custom domain.**
-  Actions deployments ignore the `CNAME` file. We keep the file only as a
-  record.
+  Actions deployments ignore a `CNAME` file, so the repo has none.
+- **Workflow action versions** are the Node 24 majors: `checkout@v7`,
+  `setup-ruby@v1`, `configure-pages@v6`, `upload-pages-artifact@v5`,
+  `deploy-pages@v5` (Node 20 is deprecated on runners). The workflow is
+  linted with `actionlint`.
+- **Liquid and front matter errors fail the build** (`strict_front_matter`,
+  `error_mode: strict`, `strict_filters`), so a typo can't ship silently.
 - **The workflow deploys from `main`.** Make `main` the default branch
   before choosing GitHub Actions as the Pages source: the Pages
   environment only allows the branch that is default at that moment.
-- **`exclude:`** covers `Gemfile`, `Gemfile.lock`, `STATUS.md`,
-  `.github` and `_launch`.
+- **`exclude:`** covers `Gemfile`, `Gemfile.lock`, `README.md`,
+  `STATUS.md`, `.github`, `.claude`, `_launch` and `vendor`.
 - **`.gitignore`** covers `_site/`, `.jekyll-cache/`, `.bundle/` and
   `vendor/`.
 
@@ -342,7 +352,10 @@ what's there.
 - [ ] **7. SEO files:** robots, sitemap, OG card, GA4. (The favicon
       was done in step 2.)
 - [ ] **8. Validate on Preview:**
-  - Build locally.
+  - Build locally with `JEKYLL_ENV=production bundle exec jekyll build`.
+    Don't audit the output of `jekyll serve`: it swaps `site.url` for
+    `http://localhost:4000`, so every canonical looks wrong.
+  - `html-validate` on every built page.
   - Check that every canonical is on `staging.fixmypcperth.com`.
   - Click through every link.
   - Validate the JSON-LD.
@@ -387,3 +400,15 @@ what's there.
   `staging.fixmypcperth.com` (borrowed; handed back at the cutover).
   `_config.yml` now `url: https://staging.fixmypcperth.com`, `baseurl: ""`,
   `staging: true`.
+- Full verification after the "error on push" report:
+  - The one failed run (`main`, run 1) failed where intended: "Check
+    built output", because `main` has no homepage yet. Bundle install and
+    the Jekyll build before it succeeded on the runner.
+  - A fresh clone of the branch, installed with the lockfile frozen as CI
+    does, builds and passes the check step.
+  - Workflow actions bumped to their Node 24 majors (the run warned that
+    Node 20 is deprecated); `actionlint` is clean.
+  - `html-validate` (recommended rules): clean.
+  - Browser suite at the new root address: 19/19.
+  - Link audit: the only missing targets are the pages and share image
+    that steps 5–7 build.
