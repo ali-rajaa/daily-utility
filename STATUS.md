@@ -760,7 +760,9 @@ what's there.
     - Button and badge groups go in `.btn-row`.
     - Nav labels name their destination ("Backup & Drive", "Daily
       Info"); the logo is the way home, so there is no "Home" link.
-- [ ] **3. Includes:** `store-badges`, `faq-schema`, `breadcrumb-schema`.
+- [ ] **3. Includes:** ~~`store-badges`~~ (done early, section 4f, plus
+      `hero-glow` which wasn't in the original plan but earns its keep).
+      Still needed: `faq-schema`, `breadcrumb-schema`.
 - [ ] **4. Layouts:** `app`, `post` and `legal`, each with its CSS.
 - [ ] **5. Core pages:** `apps.yml`, homepage, app page, privacy, terms,
       404.
