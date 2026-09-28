@@ -402,7 +402,7 @@ h3, .h3 {
   }
   .js .nav-list { flex-direction: column; align-items: stretch; gap: 0.125rem; }
   .js .nav-link { padding: 0.875rem 1rem; font-size: 1.0625rem; color: var(--text); }
-  .js .nav-cta { width: 100%; min-height: 2.75rem; font-size: 1rem; }
+  .js .nav-cta { width: 100%; }
 
   html:not(.js) .header-inner {
     height: auto;

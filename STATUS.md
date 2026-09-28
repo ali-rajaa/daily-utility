@@ -184,6 +184,91 @@ actual mark, replacing the placeholder tile-grid SVG built in step 2.
   gradient is not yet used anywhere in the UI; consider it for the step-5
   hero or app-page accents, but it isn't required.
 
+## 4b. Skills installed in this repo
+
+Both under `.claude/skills/` (excluded from the Jekyll build). Neither is
+optional reading — check new CSS/layout work against both before it
+ships, not just when something looks off.
+
+- **`apple-design`** — fluid-interface motion/interaction guidance from
+  Apple's WWDC talks, translated to CSS. See section 4c for the audit
+  against it.
+- **`ui-ux-pro-max`** (from `nextlevelbuilder/ui-ux-pro-max-skill`,
+  copied in whole — SKILL.md, `data/`, `references/`, `scripts/`, 3.7MB)
+  — a searchable local database (UX guidelines, style/color/typography
+  catalogs, stack-specific rules) queried via
+  `python .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain>`.
+  **Its own docs invoke it via `${CLAUDE_PLUGIN_ROOT}`, which is a
+  marketplace-plugin mechanism — it is not set for a skill copied
+  straight into a repo's `.claude/skills/` like this one.** Invoke it by
+  its real path instead, exactly as above. Confirmed working: ran
+  several `--domain ux` queries during the audit in section 4c.
+
+## 4c. Apple Design + responsiveness audit (28 Sep)
+
+Prompted by the user asking directly whether the Apple Design skill had
+actually been applied to `shell.css`, and to check mobile responsiveness
+properly (earlier checks covered only 320/390/1280px). Full findings:
+
+**Apple Design skill, rule by rule against `shell.css`:**
+
+- §1 Response: `.btn:active { transform: scale(0.97) }`, no delay —
+  matches ("respond on pointer-down, not release").
+- §4 Springs: no JS springs exist (nothing drag-driven yet), but the
+  fallback the skill's own site-specific note allows — one consistent
+  easing curve (`--ease-out`), no `@keyframes` anywhere — is followed.
+- §7 Spatial consistency: the phone nav panel's `transform-origin: top
+  right` anchors it to the button that opens it — matches.
+- §11 Frame-level smoothness: only `transform`/`opacity` are animated
+  for anything gesture-adjacent. Exception: `.site-header`'s
+  `is-scrolled` hairline transitions `box-shadow` (paint, not layout) —
+  low-cost, not gesture-driven, left as is.
+- §12 Materials: `.site-header` is a real `backdrop-filter` layer with a
+  `@supports` fallback to a solid background; the hairline only appears
+  once content is under it, not as a permanent hard divider.
+- §14 Accessibility preferences: `prefers-reduced-motion` (cross-fades
+  replace the slide/scale, matches "keep opacity, drop movement"),
+  `prefers-reduced-transparency` (header goes solid), `prefers-contrast:
+  more` (solid header + strengthened border) are all implemented and
+  were re-verified as part of this audit.
+- §15 Typography: system font first, `font-optical-sizing: auto`, every
+  size in `rem`. Tracking is genuinely size-specific, not one fixed
+  value: -0.028em on `h1` down to +0.005em on `.text-sm` and +0.08em on
+  uppercase eyebrow/footer labels — the skill explicitly calls out
+  positive tracking on small text as the commonly-missed half of this
+  rule, and it's there.
+- **One open watch-item, not a bug:** §12 also asks for higher-contrast,
+  slightly heavier text specifically over translucent surfaces ("put
+  color on a solid layer, not the translucent foreground"). `.nav-link`
+  currently uses `--text-2` (a mid-gray) over the blurred header. Today
+  every page behind the header is a flat `--bg`/`--bg-alt` section, so
+  there's no real contrast risk yet — but **when step 5 adds a hero with
+  imagery or a gradient, recheck nav-link legibility over it** and
+  bump weight/color if needed.
+
+**Responsiveness — a real bug found and fixed, not just re-confirmed:**
+swept 320 through 2560px (23 widths, including phone landscape and the
+exact 759/760/761px breakpoint seam) for horizontal overflow, header
+internal overflow, footer fit, and touch-target size, using
+Playwright/Chromium against a production build. 138 checks now pass, 0
+fail — but the first pass found 12 real failures: **the header's
+"Get the app" button (`.btn--sm`) was 36px tall at every desktop width**,
+below both Apple's 44pt guidance and `ui-ux-pro-max`'s own "Touch &
+Interaction — CRITICAL — min 44×44px" rule (confirmed by querying it
+directly). Touchscreen laptops and tablets exist at desktop widths too,
+so this wasn't dismissed as "mouse-only, doesn't need it". Fixed by
+dropping `.btn--sm` from that one button (`_includes/header.html`) — it
+was the class's only use in the whole codebase, so `.btn--sm` itself is
+now dead code, kept in `shell.css` for the next thing that legitimately
+needs a small button. Re-verified visually (desktop header screenshot,
+light and dark) that the taller button doesn't look out of place in the
+64px header bar.
+
+`.nav-link` measures 40px, not 44px, at every width — left as is. It's a
+text nav link, not a primary action button; 40px already clears the
+actual WCAG 2.5.8 minimum (24px) by a wide margin, and inflating plain
+nav links to the full 44px would pad out the header for no real gain.
+
 ## 5. Page sections
 
 **Homepage — flagship-first.** Every other app besides the flagship is a
@@ -492,8 +577,9 @@ what's there.
       the new domain.
 - [ ] Where the DNS is managed (Cloudflare or the registrar). This
       decides how redirects are done.
-- [ ] Confirm the flagship's Apple id (`6760700432`) is current — the
-      legal template pasted earlier named a different sibling app's ids.
+- [x] ~~Confirm the flagship's Apple id~~ — confirmed by the user (28
+      Sep): `https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432`,
+      matches what was already in `apps.yml`.
 - [x] ~~The real app icon (PNG)~~ — done, see section 4a. Screenshots for
       the flagship's app page are still needed; CSS device mockups are
       the placeholder until then.
@@ -575,3 +661,9 @@ what's there.
   them — the data is ready, but the footer/homepage aren't wired to it
   yet, and the "more"-tier cards need a link-target change (store URL,
   not an internal page) before that wiring happens in step 5-6.
+- Installed `ui-ux-pro-max` skill (section 4b) and ran a full Apple
+  Design + responsiveness audit (section 4c): confirmed shell.css
+  already follows the applicable Apple Design rules, found and fixed a
+  real bug (header CTA button was 36px tall, below the 44px touch
+  target minimum, at every desktop width), and swept 23 viewport widths
+  from 320 to 2560px with 138 automated checks, all passing.
