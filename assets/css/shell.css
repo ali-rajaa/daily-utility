@@ -16,6 +16,7 @@
   --bg: #ffffff;
   --bg-alt: #f4f7fb;
   --surface: #ffffff;
+  --surface-glass: rgba(255, 255, 255, 0.78);
   --text: #0c1424;
   --text-2: #4b5565;
   --border: #e2e8f0;
@@ -25,6 +26,18 @@
   --on-brand: #ffffff;
   --brand-soft: #e8f0ff;
   --brand-text: #0a52c9;
+  /* Sampled directly from the real logo mark (assets/icons/mark.png), not
+     a generic accent: the icon sweeps from this blue to this green. Used
+     for decoration only (hero glow, borders, the logo itself) -- never
+     behind text. White text on it fails 4.5:1 contrast past ~20% into
+     the blend (measured), so buttons stay solid --brand. */
+  --brand-2: #16b871;
+  /* --brand-2 itself is 2.6:1 on white -- decoration only, never text.
+     This is the safe foreground sibling (5.4:1) for the rare case a
+     small green label/icon is needed, the same relationship --brand-text
+     has to --brand. */
+  --brand-2-text: #0a7a47;
+  --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #0f9ed6 45%, var(--brand-2) 100%);
   --accent: #06b6d4;
   --glass: rgba(255, 255, 255, 0.72);
 
@@ -37,7 +50,15 @@
   --radius-lg: 22px;
   --radius-pill: 999px;
 
-  --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* "Tech Startup" pairing (ui-ux-pro-max --domain typography): Space
+     Grotesk for headings/brand moments, DM Sans for everything read as
+     body or UI chrome. Both self-hosted (assets/fonts/) as variable
+     fonts -- one file per family covers every weight used, no
+     third-party request before text paints. System-ui is the fallback
+     for both, not a generic sans, so an unloaded-fonts render still
+     looks considered. */
+  --font-heading: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --wrap: 70rem;
   --gutter: clamp(1rem, 4vw, 2rem);
   --header-h: 4rem;
@@ -61,12 +82,40 @@
     --on-brand: #06101f;
     --brand-soft: #16233b;
     --brand-text: #7db0ff;
+    --brand-2: #2ce68c;
+    --brand-2-text: #34e59a;
+    --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #43b8f0 45%, var(--brand-2) 100%);
     --glass: rgba(10, 14, 22, 0.72);
+    --surface-glass: rgba(20, 27, 41, 0.78);
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.4), 0 32px 64px rgba(0, 0, 0, 0.45);
   }
+}
+
+/* ---------- Fonts ----------
+   Each file is a full variable font (weight axis covers every weight
+   used below), so one @font-face per family, not one per weight. Latin
+   subset only: the site is English-only, and an occasional accented
+   character falling back to the system font is an acceptable trade-off
+   against shipping a second, larger subset nothing on the site needs. */
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/assets/fonts/dm-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("/assets/fonts/space-grotesk-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* ---------- Base ---------- */
@@ -117,25 +166,32 @@ main:focus { outline: none; }
 
 /* ---------- Type scale ----------
    Tracking and leading change with size: large display text is tightened
-   and set close, body text is left near zero tracking with open leading. */
+   and set close, body text is left near zero tracking with open leading.
+   Headings carry --font-heading (Space Grotesk); everything else stays
+   on the body font. Weights are capped at 700 -- Space Grotesk's
+   variable axis only goes to 700, so a heavier value would silently
+   clamp to 700 and flatten the h1/h2 weight difference. */
 
 h1, .h1 {
+  font-family: var(--font-heading);
   font-size: clamp(2.25rem, 1.6rem + 3.2vw, 3.75rem);
   line-height: 1.05;
   letter-spacing: -0.028em;
-  font-weight: 750;
+  font-weight: 700;
 }
 h2, .h2 {
+  font-family: var(--font-heading);
   font-size: clamp(1.75rem, 1.35rem + 2vw, 2.625rem);
   line-height: 1.1;
   letter-spacing: -0.022em;
-  font-weight: 700;
+  font-weight: 650;
 }
 h3, .h3 {
+  font-family: var(--font-heading);
   font-size: 1.25rem;
   line-height: 1.3;
   letter-spacing: -0.012em;
-  font-weight: 650;
+  font-weight: 600;
 }
 .text-sm { font-size: 0.875rem; letter-spacing: 0.005em; }
 .nowrap { white-space: nowrap; }
@@ -166,6 +222,7 @@ h3, .h3 {
 .eyebrow {
   display: inline-block;
   margin-bottom: 0.75rem;
+  font-family: var(--font-heading);
   font-size: 0.75rem;
   font-weight: 650;
   letter-spacing: 0.08em;
@@ -251,6 +308,7 @@ h3, .h3 {
 .logo-mark { width: 2rem; height: 2rem; display: block; object-fit: contain; }
 
 .logo-word {
+  font-family: var(--font-heading);
   font-size: 1.0625rem;
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -288,6 +346,7 @@ h3, .h3 {
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-header { background: var(--bg); }
+  .js .site-nav { background: var(--surface); }
 }
 
 .header-inner {
@@ -386,7 +445,13 @@ h3, .h3 {
     padding: 0.75rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    background: var(--surface);
+    /* Glass, matching the header it grows out of: a bigger floating
+       surface than the header bar, so it gets the same blur but leans on
+       shadow-lg (already stronger than the header's) to read as the
+       thicker of the two materials. */
+    background: var(--surface-glass);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
     box-shadow: var(--shadow-lg);
     transform-origin: top right;
     opacity: 0;
@@ -444,6 +509,7 @@ h3, .h3 {
 
 .footer-head {
   margin-bottom: 0.875rem;
+  font-family: var(--font-heading);
   font-size: 0.75rem;
   font-weight: 650;
   letter-spacing: 0.08em;
@@ -497,6 +563,7 @@ h3, .h3 {
 
 @media (prefers-reduced-transparency: reduce) {
   .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .js .site-nav { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
 @media (prefers-contrast: more) {

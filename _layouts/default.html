@@ -81,6 +81,10 @@
   The ?v= stamp changes on every build, so browsers never keep a stale
   copy after a deploy. {%- endcomment -%}
   {%- assign _v = site.time | date: "%s" %}
+  {%- comment -%} Both fonts render above the fold on every page (headings
+  and body text), so both are worth the preload hint. {%- endcomment -%}
+  <link rel="preload" href="{{ '/assets/fonts/dm-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ '/assets/fonts/space-grotesk-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
   {%- if page.css %}
   <link rel="stylesheet" href="{{ '/assets/css/pages/' | append: page.css | append: '.css' | relative_url }}?v={{ _v }}">

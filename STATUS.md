@@ -72,18 +72,25 @@ daily-utility/
 │   └── apps.yml                   # app listing metadata only, never page content
 ├── assets/
 │   ├── css/
-│   │   ├── shell.css              # tokens, reset, header, footer, nav
+│   │   ├── shell.css              # tokens, reset, header, footer, nav, fonts
 │   │   └── pages/
 │   │       ├── index.css
 │   │       ├── app.css
 │   │       ├── post.css
 │   │       ├── blog-hub.css
 │   │       └── legal.css
+│   ├── fonts/                     # Space Grotesk + DM Sans, self-hosted
+│   │   │                         # variable fonts, latin subset only
+│   │   │                         # (section 4e)
+│   │   ├── space-grotesk-latin.woff2
+│   │   └── dm-sans-latin.woff2
 │   ├── icons/                     # the real brand mark, cropped from the
 │   │   │                         # supplied logo files (assets/icons/mark.png
 │   │   │                         # is the 833px master; favicon-*.png,
 │   │   │                         # apple-touch-icon.png and mark-192.png are
 │   │   │                         # derived from it, see section 4a)
+│   │   └── apps/                  # the four real app icons, cropped from
+│   │                             # Play Store screenshots (section 5a)
 │   └── og/default.png             # 1200x630 share card
 ├── index.html                     # layout: default. Homepage
 ├── cloud-storage-backup-drive.html   # layout: app
@@ -319,6 +326,96 @@ real logo's blue→green gradient than an unrelated amber would be. Worth
 asking before step 5: should the primary "Get the app" CTA use that
 accent instead of matching `--brand`, for more contrast against the rest
 of the blue-heavy UI? Not applied without asking.
+
+## 4e. Base redesign to the `ui-ux-pro-max` design system (28 Sep)
+
+Section 4d surfaced options but changed nothing. The user then asked
+directly to design the base *according to* the skill, explicitly for
+something unique, not the first generic match. Explored further
+(`--domain style` for "glassmorphism modern premium" and for "trustworthy
+premium tech utility", `--domain typography`, `--domain landing`,
+`--domain product`) before deciding, rather than taking the first
+`--design-system` result as final. Landed on:
+
+**Style: Glassmorphism**, not the earlier "Flat Design" match — the
+header already *was* a glass surface (built in step 2, before this
+skill existed in the repo), so this formalizes and extends something
+already there rather than bolting on something new. The skill's own
+listing names it "Best For: Modern SaaS... lifestyle apps... navigation"
+— a direct fit — and `products.csv` lists Glassmorphism as a secondary
+style for collaboration/utility tools, corroborating it rather than
+being the sole source for the choice.
+
+**Colour: sampled from the real logo, not the catalog.** Read actual
+pixel values out of `assets/icons/mark.png` (Pillow, sampling the body
+and the accent tile away from the white cutout) rather than using the
+skill's generic recommended primary (`#2563EB`). Result:
+- `--brand-2: #16b871` (from the logo's green tile) + `--brand-gradient`
+  (blue → `#0f9ed6` → green), for decoration only.
+- **Checked whether that gradient could sit behind white button text
+  before using it anywhere** — computed contrast across the full blend,
+  not just the endpoints. It fails 4.5:1 past t=0.20 (blue end only);
+  the far/green end is 1.64:1. So the gradient is decoration-only
+  (hero glow, borders, the mark itself) and never goes behind text —
+  `.btn--primary` stays solid `--brand`, already verified accessible.
+- `--brand-2` itself is 2.6:1 on white — also decoration-only. Added
+  `--brand-2-text` (`#0a7a47`, 5.4:1) as its safe foreground sibling,
+  the same relationship `--brand-text` already has to `--brand`, for
+  the day something needs a small green label/icon.
+- Full contrast re-check across every token pair, light and dark,
+  including both new tokens: all pass, none is a guess.
+
+**Typography: "Tech Startup" pairing** (`--domain typography`) — Space
+Grotesk for headings/brand moments, DM Sans for body and UI chrome.
+Reverses the section 4c/4d decision to keep system-ui; the user's
+explicit ask to design *to* this skill is the reason, not a reversal of
+the underlying reasoning (Apple Design's "prefer system font" is still
+right as a default — this is a deliberate brand choice overriding that
+default, not a rejection of it).
+- Both self-hosted as **variable fonts** (`assets/fonts/dm-sans-latin.woff2`,
+  `space-grotesk-latin.woff2`, 37KB + 22KB) — one file per family covers
+  every weight used; confirmed with `fontTools` (`fvar` axes: DM Sans
+  100-1000, Space Grotesk 300-700), not assumed from the Google Fonts
+  response alone.
+- **Caught before shipping:** `h1` was set to weight 750, but Space
+  Grotesk's variable axis tops out at 700 — it would have silently
+  clamped and become visually identical to `h2` at 700. Rescaled the
+  whole heading weight ramp to fit inside the font's real range (h1 700,
+  h2 650, h3 600) instead.
+- Latin subset only (no latin-ext) — deliberate simplification for an
+  English-only site; an occasional accented character falls back to
+  system-ui, an acceptable trade-off against a second subset nothing
+  currently needs.
+- `--font-heading` applied to `h1`-`h3`, `.eyebrow`, `.logo-word`,
+  `.footer-head` — brand/heading moments. Buttons, nav, footer body text
+  stay on `--font` (DM Sans) on purpose: Space Grotesk's character is
+  for display use, not small UI chrome.
+- Both preloaded in `default.html`'s `<head>` (render above the fold on
+  every page); confirmed both actually load via
+  `document.fonts` in a real browser, not just that the files exist.
+
+**Glass extended to the mobile nav panel** (`_includes` unchanged,
+`shell.css` only) — it was solid `--surface` before, so the header felt
+like glass but the menu it opened didn't. Now `--surface-glass` +
+`backdrop-filter: blur(20px)`, with its own `@supports` fallback and
+`prefers-reduced-transparency` fallback (both added alongside the
+header's existing ones, not a new mechanism). Screenshotted with the
+menu open: the hero text visibly blurs through the panel, confirming the
+blur is real, not just a translucent tint.
+
+**Verification, not just visual review:** full rebuild, `html-validate`
+clean, the 19-check browser suite and the 138-check responsiveness sweep
+both still pass (no regression from a change this size), fonts confirmed
+loaded via `document.fonts.status`, and every token pair re-run through
+the contrast checker.
+
+**Still open from 4d, unresolved on purpose:** the primary CTA accent
+question. Now more pointed with a real `--brand-2-text` available: should
+`.btn--primary` (currently solid `--brand`) switch to a green accent for
+contrast against the rest of the blue UI, or does that fight the new
+glass/gradient identity by introducing a third hue? Leaning toward
+"leave it blue" now that the gradient itself carries the brand's dual-hue
+identity — but this is a call for the user, not made here.
 
 ## 5. Page sections
 
@@ -726,3 +823,17 @@ what's there.
   style) and one open question for the user before step 5: whether the
   primary CTA should use the unused --accent cyan token instead of
   matching --brand, for contrast against the rest of the blue UI.
+- Redesigned the base to the ui-ux-pro-max design system (section 4e),
+  at the user's explicit request for something unique, not the generic
+  first match: Glassmorphism (formalizing what the header already did),
+  a brand gradient sampled from the real logo's own pixels (decorative
+  only -- checked its contrast across the full blend before ruling out
+  using it behind text), and the "Tech Startup" type pairing (Space
+  Grotesk headings + DM Sans body, self-hosted as variable fonts).
+  Caught a real bug before shipping: h1's weight (750) exceeded Space
+  Grotesk's actual variable range (max 700), which would have silently
+  made h1 and h2 render identically. Extended the header's glass
+  treatment to the mobile nav panel for consistency. Full re-verification
+  after: html-validate clean, both the 19-check and 138-check suites
+  still pass, fonts confirmed loaded via document.fonts, every colour
+  token pair re-run through the contrast checker (all pass).
