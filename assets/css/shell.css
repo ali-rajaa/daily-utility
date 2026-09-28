@@ -277,6 +277,57 @@ h3, .h3 {
   gap: 0.75rem;
 }
 
+/* ---------- Store badges ----------
+   Deliberately not theme-aware: Apple/Google's own badges are always
+   dark regardless of surrounding UI, and that convention is what makes
+   them instantly recognisable, so these stay on fixed colours rather
+   than the light/dark tokens everything else uses. */
+
+.store-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  background: #0c1424;
+  color: #ffffff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.15s ease, transform 0.1s ease-out;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.store-badge:hover { background: #1c2942; color: #ffffff; }
+.store-badge:active { transform: scale(0.97); }
+
+.store-badge-icon { flex-shrink: 0; }
+
+.store-badge-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.store-badge-text small {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+.store-badge-text strong {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .store-badge:active { transform: none; }
+}
+
 /* ---------- Skip link ---------- */
 
 .skip-link {
@@ -537,6 +588,63 @@ h3, .h3 {
   border-top: 1px solid var(--border);
   font-size: 0.8125rem;
   line-height: 1.6;
+}
+
+/* ---------- Hero glow (decorative SVG mesh gradient) ---------- */
+
+.hero-glow-host {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+}
+
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Required on the real content inside a .hero-glow-host: an absolutely
+   positioned z-index:0 layer (the glow) paints ABOVE plain in-flow
+   content per CSS stacking rules, not below it. position:relative +
+   z-index:1 here is what puts the content back on top -- without it the
+   glow would visually cover the text. */
+.hero-glow-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Slow, low-amplitude drift -- ~18s per blob, well clear of the ~5s
+   (0.2Hz) cycle Apple's own motion guidance flags as uncomfortable.
+   Each blob gets its own duration/direction so the group reads as one
+   organic field rather than three shapes moving in lockstep. */
+.hero-glow-blob { transform-origin: center; will-change: transform; }
+.hero-glow-blob--a { animation: heroGlowDriftA 19s ease-in-out infinite; }
+.hero-glow-blob--b { animation: heroGlowDriftB 23s ease-in-out infinite; }
+.hero-glow-blob--c { animation: heroGlowDriftC 27s ease-in-out infinite; }
+
+@keyframes heroGlowDriftA {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(3%, 4%) scale(1.08); }
+}
+@keyframes heroGlowDriftB {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-4%, -3%) scale(1.06); }
+}
+@keyframes heroGlowDriftC {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-2%, 3%) scale(0.94); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow-blob--a, .hero-glow-blob--b, .hero-glow-blob--c { animation: none; }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .hero-glow { display: none; }
 }
 
 /* ---------- Reveal on scroll ----------

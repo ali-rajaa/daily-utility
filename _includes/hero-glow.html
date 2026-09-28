@@ -1,0 +1,39 @@
+{%- comment -%}
+  Decorative gradient-mesh glow for a hero section. Pure atmosphere: sits
+  behind the content (z-index below it), aria-hidden, pointer-events:none.
+  Uses --brand/--brand-2 (sampled from the real logo, see STATUS.md 4e)
+  rather than the flat "vivid background" the Aurora-UI style calls for,
+  since this site's brand colours already do that job.
+
+  The drift animation is ~18s per cycle -- well clear of the ~5s (0.2Hz)
+  range Apple's own motion guidance flags as uncomfortable -- and freezes
+  under prefers-reduced-motion rather than just slowing down.
+
+  Usage: {% include hero-glow.html %} as the first child of a
+  position:relative container; pair with .hero-glow-host on that
+  container (shell.css).
+{%- endcomment -%}
+<svg class="hero-glow" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="glowBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--brand)" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowGreen" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--brand-2)" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="var(--brand-2)" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowTeal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glowBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+  </defs>
+  <g filter="url(#glowBlur)">
+    <circle class="hero-glow-blob hero-glow-blob--a" cx="220" cy="180" r="320" fill="url(#glowBlue)"/>
+    <circle class="hero-glow-blob hero-glow-blob--b" cx="980" cy="560" r="360" fill="url(#glowGreen)"/>
+    <circle class="hero-glow-blob hero-glow-blob--c" cx="760" cy="120" r="240" fill="url(#glowTeal)"/>
+  </g>
+</svg>

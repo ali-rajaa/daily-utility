@@ -417,6 +417,69 @@ glass/gradient identity by introducing a third hue? Leaning toward
 "leave it blue" now that the gradient itself carries the brand's dual-hue
 identity — but this is a call for the user, not made here.
 
+## 4f. Real SVG + motion pass, and a light audit (28 Sep)
+
+The user's assessment was fair: the shell had the right bones (tokens,
+glass header, type system) but nothing yet used them to feel designed —
+no real icons beyond the logo, a flat white hero, zero motion beyond the
+nav. Added three things, all reusable rather than one-off:
+
+- **`_includes/store-badges.html`** — real Apple/Google SVG marks (the
+  same path data already proven on the sibling CloudGate site's badges,
+  not a fresh guess at official brand assets), parameterized on
+  `ios_url`/`android_url` so any current or future app can use it.
+  Deliberately fixed dark colours regardless of site theme — real
+  App Store/Play Store badges never adapt to surrounding UI, and that
+  fixed look is part of what makes them recognisable.
+- **`_includes/hero-glow.html`** — an SVG gradient-mesh glow (three
+  blurred, radial-gradient circles in `--brand`/`--brand-2`/`--accent`)
+  for hero sections, with `.hero-glow-host`/`.hero-glow-content` helper
+  classes in `shell.css`. Confirmed in a real browser (not assumed) that
+  SVG `stop-color="var(--brand)"` actually resolves through the CSS
+  cascade — it does.
+- **The placeholder homepage hero now uses both**, and in the process
+  fixed a real broken link: "Get the app" pointed at
+  `/cloud-storage-backup-drive#download`, a page that won't exist until
+  step 5, so it 404s today. Replaced it with the flagship's real store
+  badges pulled from `apps.yml` — the hero now actually works, not just
+  looks better.
+
+**A real stacking bug caught before it shipped:** an absolutely
+positioned `z-index: 0` layer (the glow) paints *above* plain in-flow
+content per CSS's own stacking rules, not below it — despite `z-index:
+0` reading as "the bottom." Verified this exact failure mode would have
+buried the hero text under the glow, then added `.hero-glow-content`
+(`position: relative; z-index: 1`) as a required pairing, documented
+inline so the next page that uses `.hero-glow-host` doesn't rediscover
+it by shipping invisible text.
+
+**Motion:** kept to the same restraint as the rest of the site — the
+glow drifts on a ~19-27s cycle (three different durations per blob, so
+they don't move in lockstep), which is comfortably slower than the ~5s
+(0.2Hz) cycle Apple's own motion guidance flags as the range to avoid.
+Added `will-change: transform` on the blobs, a specific Apple Design
+recommendation ("hint where motion is imminent") not yet applied
+anywhere else in the codebase.
+
+**Light audit — new elements checked against both skills, not just
+visually reviewed:**
+
+| Check | Result |
+|---|---|
+| Store badge touch target | 49×152px measured in Chromium — clears 44px |
+| Store badge text contrast | 18.4:1 (bold), 11.16:1 (caption) on the badge's dark bg |
+| SVG `var()` resolution | confirmed via `getComputedStyle` in a real browser, not assumed |
+| Hero content paints above the glow | confirmed via computed `z-index`/`position`, not just visually |
+| `prefers-reduced-motion` | glow animation stops entirely (not just slows) |
+| `prefers-reduced-transparency` / `prefers-contrast: more` | glow hidden outright |
+| No horizontal overflow, 320px/390px | 0px both, with the new hero content in place |
+| Console/page errors | none |
+| Full regression suites | 19-check shell suite + 138-check responsiveness sweep both still pass |
+
+Screenshotted light, dark, and mobile (390px) — the glow reads as
+atmosphere behind the glass header/hero rather than competing with the
+text, in both themes.
+
 ## 5. Page sections
 
 **Homepage — flagship-first.** Every other app besides the flagship is a
@@ -837,3 +900,13 @@ what's there.
   after: html-validate clean, both the 19-check and 138-check suites
   still pass, fonts confirmed loaded via document.fonts, every colour
   token pair re-run through the contrast checker (all pass).
+- Added real SVG + motion to the base (section 4f): store-badges and
+  hero-glow includes, both reusable. Fixed the hero's broken "Get the
+  app" link (pointed at a page that doesn't exist until step 5) by
+  pulling the flagship's real store URLs from apps.yml instead. Caught
+  a real CSS stacking bug (z-index:0 painting above plain content, not
+  below) before it shipped. Light audit of the new elements against
+  both skills: touch target 49px, contrast 18.4:1/11.16:1, SVG var()
+  resolution and content-above-glow stacking both confirmed in a real
+  browser, all motion/transparency/contrast fallbacks in place, no
+  regressions in either the 19-check or 138-check suite.

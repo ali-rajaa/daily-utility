@@ -7,16 +7,24 @@ description: "Daily Utility Apps builds focused, privacy-first utility apps for 
   TEMPORARY. Build step 2 placeholder: exercises the shell (header, footer,
   section scaffold, buttons, reveal) so it can be checked before anything
   is built on it. Step 5 replaces this with the five-section homepage.
+
+  The store badges below are real, though: the flagship's app page
+  (/cloud-storage-backup-drive) doesn't exist until step 5, so linking
+  "Get the app" to its #download anchor would 404 today. Pulling the
+  flagship's real store URLs from apps.yml instead means this hero
+  actually works right now, not just once step 5 lands.
 {%- endcomment -%}
-<section class="section">
-  <div class="wrap">
+{%- assign flagship = site.data.apps | where: "tier", "flagship" | first %}
+<section class="section hero-glow-host">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
     <div class="section-head">
       <span class="eyebrow">Daily Utility Apps</span>
       <h1>Smart tools for everyday life</h1>
       <p class="section-sub">Focused, privacy-first utility apps for iPhone and Android, from CloudGate Technologies. Our flagship app, Cloud Storage Backup &amp; Drive, keeps your photos, videos, contacts and app data safe.</p>
     </div>
     <div class="btn-row">
-      <a class="btn btn--primary" href="{{ '/cloud-storage-backup-drive' | relative_url }}#download">Get the app</a>
+      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
       <a class="btn btn--ghost" href="{{ '/daily-info' | relative_url }}">Read Daily Info</a>
     </div>
   </div>
