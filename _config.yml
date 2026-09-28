@@ -1,24 +1,40 @@
 title: Daily Utility
 description: Simple, focused utility apps for Android and iPhone, from CloudGate Technologies.
 
-# No custom domain yet, so this deploys to the default GitHub Pages project
-# URL. url + baseurl combine (via Jekyll's relative_url / absolute_url
-# filters) to build every canonical, share and sitemap address, so this is
-# the one place to change when a custom domain is connected later:
-#   1. set url to the new domain, e.g. "https://dailyutility.app"
-#   2. set baseurl to ""
-#   3. add a CNAME file with the domain name
-# Every link in the site uses relative_url instead of a hardcoded path, so
-# no page needs editing when that switch happens.
+# ---------------------------------------------------------------------------
+# Site address. Two states; see STATUS.md section 7.
+#
+#   Preview (now)    url: "https://ali-rajaa.github.io"   baseurl: "/daily-utility"   staging: true
+#   Live (cutover)   url: "https://dailyutilityapps.store" baseurl: ""                staging: false
+#
+# Every internal link goes through relative_url and every full URL through
+# absolute_url, and both read these two values, so the switch is these
+# three lines and nothing else. The custom domain itself is set in the
+# repo's Settings > Pages > Custom domain: Actions deployments ignore a
+# CNAME file.
+# ---------------------------------------------------------------------------
 url: "https://ali-rajaa.github.io"
 baseurl: "/daily-utility"
 
-# Jekyll keeps the .html extension in each page's own permalink, but GitHub
-# Pages serves the extensionless address too (it tries path, path.html,
-# then path/index.html). Every link and canonical on the site is built by
-# stripping ".html" so nothing is ever linked with the extension showing.
+# true adds noindex to every page, so the preview copy can never be indexed
+# under the github.io address. Set to false only at the cutover.
+staging: true
+
+# Pages are served without the .html extension: GitHub Pages answers /x
+# from x.html. Jekyll's own permalinks keep the extension, so the layouts
+# strip ".html" whenever they build a link or canonical.
+
+timezone: Australia/Perth
 
 plugins: []
+
+# Fail the build on a Liquid or front matter mistake instead of shipping a
+# page with the mistake rendered into it. strict_variables stays off on
+# purpose: optional front matter (css, image, noindex) is read as unset.
+strict_front_matter: true
+liquid:
+  error_mode: strict
+  strict_filters: true
 
 company:
   legal_name: "CloudGate Technologies Pty Limited"
@@ -27,13 +43,12 @@ company:
   address_line2: "Canning Vale WA 6155, Australia"
   support_email: "support@cloudgate-app.com"
 
-# staging: true adds noindex to every page. There is only one copy of this
-# site right now, so it stays false; flip it if a staging copy is ever
-# deployed separately, the same way fixmypcperth does.
-staging: false
-
 exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - STATUS.md
   - .github
+  - .claude
+  - _launch
+  - vendor

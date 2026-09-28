@@ -1,0 +1,74 @@
+# Builds with plain Jekyll instead of GitHub's default Pages builder, which
+# forces the github-pages gem and its jekyll-github-metadata plugin (the
+# cause of fixmypcperth's broken builds). For this to be the build that
+# ships, Settings > Pages > Source must be "GitHub Actions".
+#
+# Pull requests into main are built and checked but never deployed, so a
+# broken change shows up before it is merged.
+
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Build
+        run: bundle exec jekyll build --trace
+        env:
+          JEKYLL_ENV: production
+
+      # A Liquid file without its --- front matter fence (robots.txt,
+      # sitemap.xml) is copied as-is, so its {{ }} tags reach production
+      # unrendered. Nothing in the built site should still contain one.
+      # Jekyll writes no _site at all when there is nothing to build, and
+      # grep would read that as "no match", so it is checked first.
+      - name: Check built output
+        run: |
+          if [ ! -f _site/index.html ]; then
+            echo "::error::The build produced no _site/index.html, so there is nothing to deploy."
+            exit 1
+          fi
+          if grep -rlE '\{\{|\{%' _site; then
+            echo "::error::The files above contain unrendered Liquid. Add an empty --- front matter fence to the top of each source file."
+            exit 1
+          fi
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

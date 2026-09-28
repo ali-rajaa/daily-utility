@@ -272,8 +272,15 @@ what's there.
 
 ## 9. Execution order
 
-- [ ] **1. Config:** `.gitignore`, `Gemfile`, `pages.yml`, `_config.yml`
-      in its Preview state, `main` branch, Pages source set to Actions.
+- [x] **1. Config:** `.gitignore`, `Gemfile` + `Gemfile.lock` (Jekyll
+      4.4.1, committed so CI builds the exact versions tested locally),
+      `pages.yml`, `_config.yml` in its Preview state, `main` branch
+      pushed.
+  - [ ] *(you)* Settings → General → Default branch → `main`
+  - [ ] *(you)* Settings → Pages → Source → **GitHub Actions**
+  - Until step 2 adds a homepage, every run on `main` fails at "Check
+    built output" (no `_site/index.html`). That is intended: an empty
+    site must never deploy.
 - [ ] **2. Shell:** `shell.css`, `default.html`, header, footer and
       scripts. Check that a blank page renders.
 - [ ] **3. Includes:** `store-badges`, `faq-schema`, `breadcrumb-schema`.
