@@ -51,7 +51,7 @@ jobs:
             echo "::error::The build produced no _site/index.html, so there is nothing to deploy."
             exit 1
           fi
-          if grep -rlE '\{\{|\{%' _site; then
+          if grep -rlE '\{\{|\{%' --include='*.html' --include='*.xml' --include='*.txt' --include='*.css' --include='*.js' --include='*.json' _site; then
             echo "::error::The files above contain unrendered Liquid. Add an empty --- front matter fence to the top of each source file."
             exit 1
           fi

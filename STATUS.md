@@ -1,4 +1,4 @@
-# Daily Utility — Status
+# Daily Utility Apps — Status
 
 Living reference for this repo. It records what we decided and why, so
 no session has to re-derive or re-argue it. Update it whenever a
@@ -13,7 +13,7 @@ brought to `main` to update the preview. Next: step 3 (includes).
 
 ## 1. What this site is
 
-The website for **Daily Utility**, the brand CloudGate Technologies uses
+The website for **Daily Utility Apps**, the brand CloudGate Technologies uses
 for its single-purpose utility apps. App #1 is **Cloud Storage Backup &
 Drive** (backup and restore of photos, videos, contacts and app data, on
 iOS and Android).
@@ -37,7 +37,7 @@ The site has three jobs, in this order:
 | Apple | `https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432` |
 | Google Play | `com.backup.and.restore.all.apps.photo.backup` |
 | Structural model | `ali-rajaa/fixmypcperth` (Jekyll, chained layouts, per-page CSS on a shared `shell.css`, deployed by Actions) |
-| Legal text source | CloudGate Technologies templates from cloudgate-app.com, adapted to Daily Utility |
+| Legal text source | CloudGate Technologies templates from cloudgate-app.com, adapted to Daily Utility Apps |
 
 The legal template pasted in this session names a **different** sibling
 app's store IDs (`id6504859413`, `com.cloudgate.cloudstorage`). Never use
@@ -79,7 +79,11 @@ daily-utility/
 │   │       ├── post.css
 │   │       ├── blog-hub.css
 │   │       └── legal.css
-│   ├── icons/favicon.svg          # the Daily Utility mark; light/dark aware
+│   ├── icons/                     # the real brand mark, cropped from the
+│   │   │                         # supplied logo files (assets/icons/mark.png
+│   │   │                         # is the 833px master; favicon-*.png,
+│   │   │                         # apple-touch-icon.png and mark-192.png are
+│   │   │                         # derived from it, see section 4a)
 │   └── og/default.png             # 1200x630 share card
 ├── index.html                     # layout: default. Homepage
 ├── cloud-storage-backup-drive.html   # layout: app
@@ -133,23 +137,100 @@ it. `default.html` loads `shell.css`, then `pages/<css>.css` only when
 - **Legal pages have no hardcoded `canonical:`.** They use the same
   canonical logic as every other page.
 - **`_data/apps.yml` fields:** `slug`, `name`, `tagline`, `icon`,
-  `ios_url`, `android_url`, `built` (true/false).
+  `ios_url` (optional), `android_url` (optional — at least one of the two
+  is required), `built` (true/false), `tier` (`flagship` or `more`),
+  `page` (true/false — whether it has its own page under `app.html`, vs.
+  just a footer/homepage card linking straight to its store listing).
+
+## 4a. Brand assets (the real logo)
+
+The user supplied the real Daily Utility Apps logo (4 PNG lockups: icon +
+"Daily Utility Apps" wordmark + "Smart Tools for Everyday Life" tagline,
+in light-on-dark and navy-on-light treatments) partway through the build.
+The icon alone (no text) was cropped out with Pillow and is now the site's
+actual mark, replacing the placeholder tile-grid SVG built in step 2.
+
+- **Source of truth:** `assets/icons/mark.png` (833×833, transparent,
+  cropped from the navy-wordmark supplied file). Re-derive any other size
+  from this file, not from the original supplied PNGs.
+- **Derived, and wired in:** `mark-192.png` (header/footer `<img>`),
+  `favicon-16/32/48.png`, `apple-touch-icon.png` (180×180, flattened onto
+  white — Apple fills transparency with black otherwise).
+- **Derived, not yet referenced:** `mark-512.png` — kept for a future web
+  app manifest or a maskable Android icon; delete it if that never
+  happens rather than let it go stale.
+- **Cropping pitfall, twice:** padding the bottom of the icon's bounding
+  box by a fraction of its *width* overshot into the wordmark below it
+  both times it was tried (830px-wide icon vs. only a 45px gap before the
+  text). What worked: find the first fully-transparent row after the
+  icon, then the row where the wordmark's ink resumes, and clamp the crop
+  to a small **fixed-pixel** margin inside that gap — never a
+  width-proportional one. If the logo is ever re-cropped, keep that rule.
+- **Brand name correction:** the wordmark reads "Daily Utility Apps", not
+  "Daily Utility" (confirmed independently by the Play Store developer
+  page URL from earlier in the session:
+  `play.google.com/store/apps/developer?id=Daily+Utility+Apps`). Every
+  page title, `site.title`, footer/header `aria-label`, and the logo's
+  own text were corrected to match. "Daily Utility" alone should not
+  reappear as the brand name.
+- **Real tagline adopted:** "Smart Tools for Everyday Life" (from the
+  logo) replaced the placeholder homepage copy ("Simple apps that do one
+  job well") in `_config.yml`'s `description`, the footer tagline, and
+  the placeholder homepage's H1. The step-5 homepage should keep it as
+  the hero's headline or sub-copy, not silently drop it.
+- **Palette already matches:** the logo's blue (icon body) is close
+  enough to `shell.css`'s existing `--brand` (`#0b5fe8` light /
+  `#5b9bff` dark) that no token change was needed. The logo's blue→green
+  gradient is not yet used anywhere in the UI; consider it for the step-5
+  hero or app-page accents, but it isn't required.
 
 ## 5. Page sections
 
-**Homepage.** Each section follows the same pattern: eyebrow label, H2,
-sub-copy, content.
+**Homepage — flagship-first.** Every other app besides the flagship is a
+card, not a page (see "Apps, flagship-first" below for why). Each section
+follows the same pattern: eyebrow label, H2, sub-copy, content.
 
-1. Hero: brand statement, CloudGate backing and store badges.
-2. Apps grid, built from `apps.yml`.
-3. Why Daily Utility: focused, privacy-first, real Australian company
-   (ACN shown), iPhone and Android.
-4. Latest 3 Daily Info posts, filled in automatically.
-5. Closing CTA band with store badges.
+1. Hero: brand statement ("Smart tools for everyday life"), CloudGate
+   backing, a direct link into the flagship.
+2. **Flagship spotlight** — Cloud Storage Backup & Drive gets real space
+   here: a short pitch and both store badges, not just a card.
+3. **More apps** — compact cards for the rest (icon, one line, store
+   button(s) straight to the listing). No per-app page.
+4. Why Daily Utility Apps: focused, privacy-first, real Australian
+   company (ACN shown), iPhone and Android.
+5. Latest 3 Daily Info posts, filled in automatically.
+6. Closing CTA band, flagship store badges.
 
-**App page:** hero with badges above the fold → 3-step how it works →
-feature grid → who it's for → FAQ with schema → security and trust
-section linking to the privacy policy → closing CTA.
+**App page (flagship only, for now):** hero with badges above the fold →
+3-step how it works → feature grid → who it's for → FAQ with schema →
+security and trust section linking to the privacy policy → closing CTA.
+If a "more apps" entry earns its own page later, it reuses this exact
+`app.html` layout — just flip `page: true` and fill in its front matter;
+no new template.
+
+## 5a. Apps, flagship-first
+
+Cloud Storage Backup & Drive is the flagship: its own `app.html` page,
+the header nav link, the "Get the app" button, every Daily Info article's
+call to action, and the homepage spotlight. The other three apps the
+user supplied Play Store links for are real, but get only a card each
+(icon, one line, store button) — a full page per minor app would be thin
+content for no SEO benefit and ongoing upkeep for little payoff.
+
+| App | Package ID | Tier | Notes |
+|---|---|---|---|
+| Cloud Storage Backup & Drive | `com.backup.and.restore.all.apps.photo.backup` | `flagship` | Has an `app.html` page. Apple id `6760700432` (unverified — see open items) |
+| (PDF tool) | `com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader` | `more` | Card only. Real name/description/icon/App Store link not yet supplied |
+| (File/app transfer tool) | `com.transfer.files.transfer.apps.share.app` | `more` | Card only. Same gaps as above |
+| (Data recovery tool) | `com.data.recovery.trashbin.recovery.files` | `more` | Card only. Same gaps as above |
+
+The three "more" apps' real names, one-line descriptions, App Store links
+(if any) and icons are still needed from the user — placeholder names
+derived from the package ID are not going into `apps.yml` until
+confirmed, to avoid shipping copy that has to be walked back. Their
+Google Play links (`play.google.com/store/apps/details?id=<package>`)
+are enough to build the card and its button now; the rest slots in
+without touching the template.
 
 **Daily Info:**
 
@@ -188,7 +269,7 @@ section linking to the privacy policy → closing CTA.
 
 **Keywords**
 
-- Branded: Daily Utility, Cloud Storage Backup & Drive, CloudGate
+- Branded: Daily Utility Apps, Cloud Storage Backup & Drive, CloudGate
   Technologies.
 - Long-tail (the main target): backup photos to cloud iphone, restore
   photos to new android phone, backup and restore all apps android,
@@ -380,9 +461,16 @@ what's there.
       the new domain.
 - [ ] Where the DNS is managed (Cloudflare or the registrar). This
       decides how redirects are done.
-- [ ] Confirm the store IDs in section 2.
-- [ ] The real app icon (PNG) and screenshots. Until they arrive, the
-      page uses CSS device mockups.
+- [ ] Confirm the flagship's Apple id (`6760700432`) is current — the
+      legal template pasted earlier named a different sibling app's ids.
+- [x] ~~The real app icon (PNG)~~ — done, see section 4a. Screenshots for
+      the flagship's app page are still needed; CSS device mockups are
+      the placeholder until then.
+- [ ] For each of the three "more" apps (PDF tool, file-transfer tool,
+      data-recovery tool): real name, one-line description, App Store
+      link if one exists, and an icon. Their Play Store links alone are
+      enough to build a working card; these fill in the rest without a
+      template change.
 - [ ] The GA4 measurement ID (`G-…`) for step 7. Create a GA4 property for
       dailyutilityapps.store; until then analytics is simply left out.
 - [ ] Verify `fixmypcperth.com` (for the preview) and later
@@ -434,3 +522,20 @@ what's there.
 - GitHub's starter `jekyll.yml` (added via the Pages "Configure" button)
   was merged in and then removed: it failed on Ruby 3.1 and duplicated
   `pages.yml`.
+- Installed the `apple-design` skill at `.claude/skills/apple-design/`
+  (excluded from the Jekyll build), so it loads automatically for
+  CSS/motion work in this repo, with a short section mapping its rules
+  to what `shell.css` already does.
+- Fixed a real bug the real logo PNGs exposed: the workflow's "no
+  unrendered Liquid" check grepped the whole `_site`, including binary
+  images — a PNG's compressed bytes coincidentally containing `{{` would
+  have failed every future deploy. Scoped the grep to text file types.
+- Wired in the real logo (section 4a): cropped the icon out of the
+  supplied lockups, replaced the placeholder SVG mark and favicon,
+  corrected the brand name to "Daily Utility Apps" site-wide, and
+  adopted the real tagline "Smart Tools for Everyday Life".
+- Revised the homepage and apps plan to flagship-first (section 5a): only
+  Cloud Storage Backup & Drive gets a full `app.html` page; the other
+  three apps the user linked (PDF tool, file-transfer tool, data-recovery
+  tool — real names not yet supplied) get a homepage/footer card each,
+  reusing `app.html` later if one of them warrants its own page.

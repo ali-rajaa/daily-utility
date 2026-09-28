@@ -248,10 +248,7 @@ h3, .h3 {
 }
 .brand:hover { color: var(--text); }
 
-.logo-mark { width: 2rem; height: 2rem; }
-.logo-mark .lm-bg { fill: var(--brand); }
-.logo-mark .lm-tile { fill: #fff; }
-.logo-mark .lm-tile--dim { fill-opacity: 0.55; }
+.logo-mark { width: 2rem; height: 2rem; display: block; object-fit: contain; }
 
 .logo-word {
   font-size: 1.0625rem;
