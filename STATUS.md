@@ -265,7 +265,12 @@ without touching the template.
   `@id`.
 - Posts and legal pages carry `BreadcrumbList`. The app page, and any
   post with `faqs`, carries `FAQPage`.
-- Ratings are added only once real ones exist.
+- **No star ratings or review scores anywhere on the site** — not a
+  "4.5/5" badge in the app page hero, not in `SoftwareApplication`
+  schema's `aggregateRating`, not on the homepage cards. This is a
+  standing decision (user, 28 Sep), not "until real ones exist" — don't
+  add one even if a real average later becomes available without asking
+  first.
 
 **Keywords**
 
