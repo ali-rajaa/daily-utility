@@ -212,6 +212,11 @@ section linking to the privacy policy → closing CTA.
   fence.** Without it, Jekyll copies them unrendered.
 - **Set Settings → Pages → Source to "GitHub Actions".** If it is left on
   "Deploy from branch", GitHub runs its own `github-pages` build instead.
+- **`pages.yml` is the only deploy workflow.** Don't click **Configure** on
+  the Pages settings screen: it commits GitHub's starter `jekyll.yml`,
+  which pins Ruby 3.1 (can't install our Bundler 4), fails every push,
+  and would race `pages.yml` to deploy. It happened once (commit fd3a8a6)
+  and was removed.
 - **The custom domain is set in Settings → Pages → Custom domain.**
   Actions deployments ignore a `CNAME` file, so the repo has none.
 - **Workflow action versions** are the Node 24 majors: `checkout@v7`,
@@ -426,3 +431,6 @@ what's there.
   street address was removed from the footer (it stays on the legal
   pages and in the Organization schema). "A brand of CloudGate
   Technologies" moved into the footer tagline.
+- GitHub's starter `jekyll.yml` (added via the Pages "Configure" button)
+  was merged in and then removed: it failed on Ruby 3.1 and duplicated
+  `pages.yml`.
