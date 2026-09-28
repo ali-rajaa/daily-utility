@@ -525,47 +525,53 @@ original plan, earned its place — section 4f), `faq-schema`,
 
 ## 5. Page sections
 
-**Homepage — flagship-first.** Every other app besides the flagship is a
-card, not a page (see "Apps, flagship-first" below for why). Each section
-follows the same pattern: eyebrow label, H2, sub-copy, content.
+**Homepage — flagship-first, but every app gets a real page (see 5a).**
+Each section follows the same pattern: eyebrow label, H2, sub-copy,
+content.
 
 1. Hero: brand statement ("Smart tools for everyday life"), CloudGate
    backing, a direct link into the flagship.
 2. **Flagship spotlight** — Cloud Storage Backup & Drive gets real space
    here: a short pitch and both store badges, not just a card.
-3. **More apps** — compact cards for the rest (icon, one line, store
-   button(s) straight to the listing). No per-app page.
+3. **More apps** — compact cards for the rest (icon, one line), each
+   linking to *that app's own page* (not straight to the store — the
+   store badges live on the app page itself, same as the flagship).
 4. Why Daily Utility Apps: focused, privacy-first, real Australian
    company (ACN shown), iPhone and Android.
 5. Latest 3 Daily Info posts, filled in automatically.
 6. Closing CTA band, flagship store badges.
 
-**App page (flagship only, for now):** hero with badges above the fold →
-3-step how it works → feature grid → who it's for → FAQ with schema →
-security and trust section linking to the privacy policy → closing CTA.
-If a "more apps" entry earns its own page later, it reuses this exact
-`app.html` layout — just flip `page: true` and fill in its front matter;
-no new template.
+**App page (all four apps, same template):** hero with badges above the
+fold → 3-step how it works → feature grid → FAQ with schema → security
+and trust section linking to the privacy policy → closing CTA. One
+`app.html` layout, fully driven by each page's own front matter — a
+"more"-tier app's page is shorter/plainer where it has less to say
+(fewer features, a simpler FAQ), not a different template.
 
-## 5a. Apps, flagship-first
+## 5a. Apps — every app gets a page; flagship gets top billing
 
-Cloud Storage Backup & Drive is the flagship: its own `app.html` page,
-the header nav link, the "Get the app" button, every Daily Info article's
-call to action, and the homepage spotlight. The other three apps the
-user supplied Play Store links for are real, but get only a card each
-(icon, one line, store button) — a full page per minor app would be thin
-content for no SEO benefit and ongoing upkeep for little payoff.
+**Corrected 29 Sep (user):** the original plan gave only the flagship a
+real page, with the other three as store-linking cards. That was wrong
+— the user was explicit: every app gets its own page on the site;
+Cloud Storage Backup & Drive is just the *main* one. `tier` in
+`apps.yml` now controls prominence only (header nav link, hero
+spotlight, top billing on the homepage grid), not whether a page
+exists — `page: true` is set on all four, and all four will eventually
+render through the same `app.html` layout. This is also simpler to
+build: it removes the href-branching the old plan needed (internal link
+for the flagship, external store link for everyone else) — every app
+now just links to its own page, full stop.
 
-All four apps' real names, icons and Play listing facts are now
-confirmed — the user sent screenshots of each live Google Play listing
-(28 Sep) and they're in `_data/apps.yml`:
+All four apps' real names, icons and Play listing facts are confirmed —
+the user sent screenshots of each live Google Play listing (28 Sep) and
+they're in `_data/apps.yml`:
 
 | App | Package ID | Tier | Page |
 |---|---|---|---|
-| Cloud Storage Backup & Drive | `com.backup.and.restore.all.apps.photo.backup` | `flagship` | Gets `app.html`. Apple id `6760700432` (still unverified — see open items) |
-| Document Reader: Read All PDF | `com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader` | `more` | Card only |
-| Smartphone All Data Transfer | `com.transfer.files.transfer.apps.share.app` | `more` | Card only |
-| Photo Recover & Data Recovery | `com.data.recovery.trashbin.recovery.files` | `more` | Card only |
+| Cloud Storage Backup & Drive | `com.backup.and.restore.all.apps.photo.backup` | `flagship` | Header nav link, hero spotlight. Apple id confirmed by the user: `6760700432` |
+| Document Reader: Read All PDF | `com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader` | `more` | Own page, footer/grid listing only — no nav link |
+| Smartphone All Data Transfer | `com.transfer.files.transfer.apps.share.app` | `more` | Same |
+| Photo Recover & Data Recovery | `com.data.recovery.trashbin.recovery.files` | `more` | Same |
 
 All four listings confirm the developer is "Daily Utility Apps" — matches
 the brand name correction in section 4a.
@@ -586,16 +592,13 @@ the brand name correction in section 4a.
   counts range from "10+" to "1M+" across the four (showing that
   spread side-by-side would undercut the newer apps anyway).
 - **`built: false` on all four for now.** The data is captured and
-  ready, but nothing links to it yet: the flagship's `app.html` doesn't
-  exist until step 5, and the "more" apps' footer/homepage cards need a
-  template change first (see below) — so nothing changed visually on
-  this push.
-- **Required before wiring the footer/homepage to this data (step 5-6):**
-  the footer's current app-list link (`/<slug>`, i.e. an internal page)
-  only makes sense for `page: true` apps. A `more`-tier card must link
-  straight to `android_url`/`ios_url` instead. Branch on `_app.page`
-  when that template work happens — don't reuse today's href logic
-  unmodified for the "more" apps.
+  ready, but no app page exists yet (that's step 5-6) — flips true per
+  app as each one actually ships, not all at once, so the footer/nav
+  never link to a page that isn't live.
+- **The footer's existing `/<slug>` link logic needs no change** now
+  that every app gets a real page — the href-branching the old plan
+  required (internal link for the flagship, external store link for
+  everyone else) is no longer needed. One code path for all four.
 
 **Daily Info:**
 
@@ -964,3 +967,9 @@ what's there.
   on every jsonify'd value; verified with a real adversarial test
   (built, checked exact `</script` counts, deleted before committing)
   that the fix actually holds, not just that it looks right.
+- Corrected the apps plan (section 5a, user 29 Sep): every app gets its
+  own page, not just the flagship. `apps.yml` now sets `page: true` on
+  all four; `tier` controls prominence (nav link, hero spotlight) only.
+  No template/code change needed -- footer.html's existing `/<slug>`
+  link was already correct for this model, the old plan's planned
+  href-branching is no longer needed.

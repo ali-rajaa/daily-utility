@@ -12,12 +12,20 @@
 # purpose: the site never shows them (STATUS.md section 6, "no star
 # ratings or review scores anywhere on the site").
 #
-# tier: flagship (exactly one) or more.
-# page: true means it has its own page under the app.html layout, and
-#   built controls whether that page has actually been published yet
-#   (same true/false-until-published pattern as fixmypcperth's
-#   suburbs.yml). page: false means it never gets a site page — its card
-#   links straight to its store listing(s) instead.
+# tier: flagship (exactly one) or more. Every app gets its own page under
+#   the app.html layout (user, 28 Sep — corrects the earlier "more apps
+#   are cards only" plan). tier now controls prominence only: the
+#   flagship gets the header nav link, the hero spotlight, and top
+#   billing on the homepage grid; "more" apps still get a real page, just
+#   not that same front-and-centre treatment.
+# page: true for all four, accordingly — every app.yml entry has a real
+#   page (or will). Kept as an explicit field, not assumed, in case a
+#   fifth app is ever added as a store-only listing before its page
+#   exists.
+# built controls whether that page has actually been published yet (same
+#   true/false-until-published pattern as fixmypcperth's suburbs.yml) —
+#   nav/footer never link to a page that isn't live. Flips true per app
+#   as each one ships in step 5-6, not all at once.
 # ios_url is omitted where an app isn't confirmed to exist on iOS.
 
 - slug: cloud-storage-backup-drive
@@ -36,8 +44,8 @@
   icon: /assets/icons/apps/document-reader-pdf-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
   tier: more
-  page: false
-  built: false # flips true once it has a homepage/footer card (step 5-6)
+  page: true
+  built: false # flips true once document-reader-pdf.html ships (step 5-6)
 
 - slug: smartphone-data-transfer
   name: "Smartphone All Data Transfer"
@@ -45,7 +53,7 @@
   icon: /assets/icons/apps/smartphone-data-transfer-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
   tier: more
-  page: false
+  page: true
   built: false
 
 - slug: photo-recover-data-recovery
@@ -54,5 +62,5 @@
   icon: /assets/icons/apps/photo-recover-data-recovery-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
   tier: more
-  page: false
+  page: true
   built: false
