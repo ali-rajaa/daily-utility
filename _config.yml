@@ -4,20 +4,23 @@ description: Simple, focused utility apps for Android and iPhone, from CloudGate
 # ---------------------------------------------------------------------------
 # Site address. Two states; see STATUS.md section 7.
 #
-#   Preview (now)    url: "https://ali-rajaa.github.io"   baseurl: "/daily-utility"   staging: true
-#   Live (cutover)   url: "https://dailyutilityapps.store" baseurl: ""                staging: false
+#   Preview (now)    url: "https://staging.fixmypcperth.com" baseurl: ""  staging: true
+#   Live (cutover)   url: "https://dailyutilityapps.store"   baseurl: ""  staging: false
+#
+# The preview borrows staging.fixmypcperth.com, which fixmypcperth stopped
+# using on 26 Sep 2026. It is temporary: at the cutover the custom domain
+# moves to dailyutilityapps.store and the staging DNS record is deleted.
 #
 # Every internal link goes through relative_url and every full URL through
-# absolute_url, and both read these two values, so the switch is these
-# three lines and nothing else. The custom domain itself is set in the
-# repo's Settings > Pages > Custom domain: Actions deployments ignore a
-# CNAME file.
+# absolute_url, and both read these values, so the switch is these lines
+# and nothing else. The custom domain itself is set in the repo's
+# Settings > Pages > Custom domain: Actions deployments ignore a CNAME file.
 # ---------------------------------------------------------------------------
-url: "https://ali-rajaa.github.io"
-baseurl: "/daily-utility"
+url: "https://staging.fixmypcperth.com"
+baseurl: ""
 
-# true adds noindex to every page, so the preview copy can never be indexed
-# under the github.io address. Set to false only at the cutover.
+# true adds noindex to every page, so the preview copy can never be indexed.
+# Set to false only at the cutover.
 staging: true
 
 # Pages are served without the .html extension: GitHub Pages answers /x

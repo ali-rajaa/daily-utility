@@ -162,8 +162,9 @@ section linking to the privacy policy → closing CTA.
   links.
 - Internal links use `{{ '/path' | relative_url }}`.
 - Every full URL (canonical, OG, sitemap, schema) uses `| absolute_url`.
-  That filter adds `site.url` and `site.baseurl` together. This matters
-  in the preview phase, when `baseurl` is `/daily-utility`.
+  That filter adds `site.url` and `site.baseurl` together, so a future
+  sub-path deployment (a non-empty `baseurl`) would still produce correct
+  URLs.
 - Final routes: `/`, `/cloud-storage-backup-drive`, `/daily-info`,
   `/daily-info/<slug>`, `/privacy-policy`, `/terms-of-service`.
 - `404.html` sets `noindex: true`. `default.html` skips the canonical tag
@@ -209,10 +210,9 @@ section linking to the privacy policy → closing CTA.
 - **The custom domain is set in Settings → Pages → Custom domain.**
   Actions deployments ignore the `CNAME` file. We keep the file only as a
   record.
-- **The workflow deploys from `main`.** The repo has no `main` yet, and
-  its default branch is currently `claude/bold-feynman-c7lqej`. Create
-  `main`, make it the default branch, and deploy only from it. The Pages
-  environment allows the default branch only.
+- **The workflow deploys from `main`.** Make `main` the default branch
+  before choosing GitHub Actions as the Pages source: the Pages
+  environment only allows the branch that is default at that moment.
 - **`exclude:`** covers `Gemfile`, `Gemfile.lock`, `STATUS.md`,
   `.github` and `_launch`.
 - **`.gitignore`** covers `_site/`, `.jekyll-cache/`, `.bundle/` and
@@ -224,12 +224,36 @@ needs no page edits because every link and URL goes through the
 
 | | Preview (build and check) | Live (after cutover) |
 |---|---|---|
-| `url` | `https://ali-rajaa.github.io` | `https://dailyutilityapps.store` |
-| `baseurl` | `/daily-utility` | `""` |
+| `url` | `https://staging.fixmypcperth.com` | `https://dailyutilityapps.store` |
+| `baseurl` | `""` | `""` |
 | `staging` | `true` (noindex on every page) | `false` |
+| Settings → Pages → Custom domain | `staging.fixmypcperth.com` | `dailyutilityapps.store` |
 
-Once the custom domain is set, GitHub redirects the github.io address to
-it, and the preview phase ends.
+**The preview borrows `staging.fixmypcperth.com`.** fixmypcperth deleted
+its own staging site and repo on 26 Sep 2026, so the subdomain was free.
+Nothing points at `dailyutilityapps.store` until the cutover.
+
+One-time setup (owner):
+
+1. **GitHub:**
+   - Settings → General → Default branch → `main`.
+   - Settings → Pages → Source → **GitHub Actions**.
+2. **Cloudflare** (the `fixmypcperth.com` zone) → DNS → Add record:
+   - Type **CNAME**, Name `staging`, Target `ali-rajaa.github.io`.
+   - Proxy status **DNS only** (grey cloud).
+   - DNS only is what lets GitHub issue the HTTPS certificate. It also
+     keeps fixmypcperth's Cloudflare rules (the `.html` rule and bulk
+     redirects) from ever touching the preview.
+3. **GitHub:** Settings → Pages → Custom domain → `staging.fixmypcperth.com`
+   → Save.
+   - Wait for the DNS check to pass, then tick **Enforce HTTPS** (the
+     certificate can take up to about an hour).
+   - If `fixmypcperth.com` is already a verified domain on the GitHub
+     account (it should be from the live launch), the subdomain is covered.
+4. **Deploy:** the site updates whenever `main` changes.
+
+Once a custom domain is set, GitHub redirects the github.io address to
+it.
 
 ## 8. Domain cutover (the old site is being removed)
 
@@ -261,11 +285,18 @@ what's there.
      verification).
    - If the DNS is on Cloudflare, keep the records DNS-only until GitHub
      has issued the certificate.
-5. **In GitHub:** verify the domain in account settings (this prevents
-   takeover), set the custom domain, then turn on Enforce HTTPS once the
-   certificate is ready.
+5. **In GitHub:**
+   - Verify `dailyutilityapps.store` in account settings (this prevents
+     takeover).
+   - Change Settings → Pages → Custom domain from
+     `staging.fixmypcperth.com` to `dailyutilityapps.store`.
+   - Turn on Enforce HTTPS once the certificate is ready.
 6. **Switch the config** to Live (section 7). Check the live site: every
    canonical, the redirects, `/404`, and `/privacy-policy`.
+   - Then delete the `staging` CNAME record from the `fixmypcperth.com`
+     zone in Cloudflare, so the borrowed subdomain is handed back. A
+     leftover record pointing at GitHub Pages with no site behind it is
+     open to subdomain takeover.
 7. **Update the store listings** (privacy, support and marketing URLs) to
    the new addresses.
 8. **Search Console:** keep or add the domain property, submit the new
@@ -279,8 +310,9 @@ what's there.
       4.4.1, committed so CI builds the exact versions tested locally),
       `pages.yml`, `_config.yml` in its Preview state, `main` branch
       pushed.
-  - [ ] *(you)* Settings → General → Default branch → `main`
-  - [ ] *(you)* Settings → Pages → Source → **GitHub Actions**
+  - [ ] *(you)* Preview setup, section 7: default branch `main`, Pages
+        source GitHub Actions, Cloudflare `staging` CNAME (DNS only), then
+        custom domain `staging.fixmypcperth.com` + Enforce HTTPS.
   - `main` still holds only step 1, so its runs fail at "Check built
     output" (no `_site/index.html`) until step 2 reaches `main`. That is
     intended: an empty site must never deploy.
@@ -311,7 +343,7 @@ what's there.
       was done in step 2.)
 - [ ] **8. Validate on Preview:**
   - Build locally.
-  - Check that every canonical includes `/daily-utility`.
+  - Check that every canonical is on `staging.fixmypcperth.com`.
   - Click through every link.
   - Validate the JSON-LD.
   - Run Lighthouse.
@@ -351,3 +383,7 @@ what's there.
   scroll-edge hairline, a menu that grows out of its button, and
   support for reduced motion, reduced transparency and higher contrast.
   Light and dark colour pairs all pass WCAG AA.
+- Preview moved from the github.io project URL to
+  `staging.fixmypcperth.com` (borrowed; handed back at the cutover).
+  `_config.yml` now `url: https://staging.fixmypcperth.com`, `baseurl: ""`,
+  `staging: true`.
