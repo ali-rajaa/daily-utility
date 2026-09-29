@@ -695,6 +695,52 @@ h3, .h3 {
   .hero-glow { display: none; }
 }
 
+/* ---------- App tones ----------
+   Each app has its own colour identity (apps.yml `tone`). A .tone-*
+   class re-points the brand tokens inside its scope, so every component
+   that already uses --brand / --brand-text / --brand-soft (buttons,
+   eyebrows, links, step numbers, icon tiles, trust band, CTA card) takes
+   the app's colour with no per-component rules. The header and footer
+   sit outside any tone scope and stay brand blue. Blue is the brand
+   itself, so .tone-blue needs no overrides.
+
+   All pairs computed against WCAG AA 4.5:1 in both themes (29 Sep):
+   on-brand on brand/hover, brand-text on bg / bg-alt / surface /
+   brand-soft, and body text on brand-soft -- lowest is teal
+   brand-text on its soft tint at 4.85:1. */
+.tone-violet {
+  --brand: #7c3aed; --brand-hover: #6d28d9; --on-brand: #ffffff;
+  --brand-soft: #f3edff; --brand-text: #6d28d9;
+  --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%);
+}
+.tone-teal {
+  --brand: #0f766e; --brand-hover: #115e59; --on-brand: #ffffff;
+  --brand-soft: #e3f5f2; --brand-text: #0f766e;
+  --brand-gradient: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #2dd4bf 100%);
+}
+.tone-rose {
+  --brand: #be123c; --brand-hover: #9f1239; --on-brand: #ffffff;
+  --brand-soft: #fdecef; --brand-text: #be123c;
+  --brand-gradient: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%);
+}
+@media (prefers-color-scheme: dark) {
+  .tone-violet {
+    --brand: #a78bfa; --brand-hover: #c4b5fd; --on-brand: #0a0e16;
+    --brand-soft: #231b3b; --brand-text: #c4b5fd;
+    --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c4b5fd 100%);
+  }
+  .tone-teal {
+    --brand: #2dd4bf; --brand-hover: #5eead4; --on-brand: #0a0e16;
+    --brand-soft: #0d2a29; --brand-text: #5eead4;
+    --brand-gradient: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #5eead4 100%);
+  }
+  .tone-rose {
+    --brand: #fb7185; --brand-hover: #fda4af; --on-brand: #0a0e16;
+    --brand-soft: #361621; --brand-text: #fda4af;
+    --brand-gradient: linear-gradient(135deg, #be123c 0%, #f43f5e 50%, #fda4af 100%);
+  }
+}
+
 /* ---------- App tiles ----------
    _includes/app-tile.html: a white glyph on a coloured rounded square,
    standing in for each app's real icon (the site never shows the actual

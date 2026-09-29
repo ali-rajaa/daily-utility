@@ -26,15 +26,19 @@
 #   true/false-until-published pattern as fixmypcperth's suburbs.yml) —
 #   the homepage grid, footer and "other apps" lists only ever link to a
 #   built page. All four are built as of step 5.
+# short: a compact name for tight spaces (the homepage app orbit).
 # glyph + tone: the app's visual everywhere on the site, via
 #   _includes/app-tile.html (an icon-sprite symbol on a coloured tile).
 #   The real store icons are never used (user, 29 Sep: "never use actual
-#   logo"); tones are defined in shell.css's "App tiles".
+#   logo"); tones are defined in shell.css's "App tiles" (the tile)
+#   and "App tones" (the app's whole colour identity on its own page
+#   and homepage card).
 # ios_url is omitted where an app isn't confirmed to exist on iOS; every
 #   page and card derives "iPhone and Android" vs "Android" from it.
 # Each tagline must match its app page's own `tagline:` front matter.
 
 - slug: cloud-storage-backup-drive
+  short: "Backup & Drive"
   name: "Cloud Storage Backup & Drive"
   tagline: "Cloud backup and restore for your photos, videos, contacts and app data."
   glyph: cloud
@@ -46,6 +50,7 @@
   built: true
 
 - slug: document-reader-pdf
+  short: "Document Reader"
   name: "Document Reader: Read All PDF"
   tagline: "Read PDF, Word, Excel and PowerPoint files in one app."
   glyph: doc
@@ -56,6 +61,7 @@
   built: true
 
 - slug: smartphone-data-transfer
+  short: "Data Transfer"
   name: "Smartphone All Data Transfer"
   tagline: "Transfer photos, videos and files from one phone to another."
   glyph: phone-transfer
@@ -66,6 +72,7 @@
   built: true
 
 - slug: photo-recover-data-recovery
+  short: "Photo Recover"
   name: "Photo Recover & Data Recovery"
   tagline: "Find and restore deleted photos and files from your phone's trash bin."
   glyph: trash-restore

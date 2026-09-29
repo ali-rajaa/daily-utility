@@ -136,6 +136,40 @@
 }
 
 .feature-card h3 { margin-bottom: 0.5rem; font-size: 1.125rem; }
+
+/* Bento (6+ features): three columns, the first feature as a large 2x2
+   tile -- 1 big + 5 small fills a 3x3 grid exactly. Gives the page one
+   clear lead feature instead of six equal boxes. */
+.feature-grid--bento { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.feature-grid--bento .feature-card:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  background: linear-gradient(160deg, var(--brand-soft), var(--surface) 65%);
+}
+.feature-grid--bento .feature-card:first-child .feature-icon {
+  width: 4rem;
+  height: 4rem;
+  padding: 1rem;
+  margin-bottom: auto;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.feature-grid--bento .feature-card:first-child h3 {
+  margin-top: 2rem;
+  font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+}
+.feature-grid--bento .feature-card:first-child p { font-size: 1.0625rem; max-width: 28rem; }
+@media (max-width: 899.98px) {
+  .feature-grid--bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 559.98px) {
+  .feature-grid--bento { grid-template-columns: 1fr; }
+  .feature-grid--bento .feature-card:first-child { grid-column: auto; grid-row: auto; }
+}
 .feature-card p { color: var(--text-2); font-size: 0.9375rem; }
 
 /* ---------- Trust band ---------- */

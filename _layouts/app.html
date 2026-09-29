@@ -61,6 +61,11 @@ has -- never hardcoded, since most of the apps are Android-only.
 </script>
 {% include faq-schema.html faqs=page.faqs %}
 
+{%- comment -%} Everything visible sits inside the app's tone scope
+(shell.css "App tones"): buttons, eyebrows, links, step numbers, icon
+tiles, the trust band and the hero glow all take this app's colour. The
+header and footer stay outside it, in brand blue. {%- endcomment %}
+<div class="tone-{{ _app.tone }}">
 <section class="section app-hero hero-glow-host">
   {% include hero-glow.html %}
   <div class="wrap hero-glow-content app-hero-inner">
@@ -108,7 +113,10 @@ has -- never hardcoded, since most of the apps are Android-only.
       <span class="eyebrow">Features</span>
       <h2>What {{ page.app_name | escape }} does</h2>
     </div>
-    <div class="feature-grid">
+    {%- comment -%} Six or more features: bento layout, the first feature as
+    a large 2x2 tile (3 columns x 3 rows = 1 big + 5 small, no gaps).
+    {%- endcomment %}
+    <div class="feature-grid{% if page.features.size >= 6 %} feature-grid--bento{% endif %}">
       {%- for feature in page.features %}
       <div class="feature-card reveal">
         <svg class="feature-icon" aria-hidden="true"><use href="#i-{{ feature.icon | escape }}"/></svg>
@@ -200,3 +208,4 @@ apply to. {%- endcomment %}
     </div>
   </div>
 </section>
+</div>

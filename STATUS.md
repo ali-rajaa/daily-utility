@@ -1038,6 +1038,43 @@ blog info".
   is "page is blocked from indexing", i.e. the intentional preview
   noindex/robots, which the step 9 `staging: false` switch removes.
 
+## 5e. UI/UX pass: the brand and its apps (29 Sep)
+
+Driven by the ui-ux-pro-max skill (product match "File Manager &
+Transfer": flat/minimal Swiss style, feature showcase, type colour-
+coding; landing match "App Store Style Landing": download CTAs
+throughout, real screenshots) and the user's direction: "focus on the
+brand and its apps".
+
+- **Homepage hero** leads with what the apps do ("Simple apps for your
+  phone's everyday jobs" + a concrete one-line list of the four jobs),
+  primary "Explore our apps", and the flagship's store badges above the
+  fold ("Our flagship:" — not "most popular", which the STATUS 5a review
+  counts contradict: the recovery app has more reviews).
+- **App orbit is now navigation**, not decoration: each app tile is a
+  labelled link to its page (`short:` names in apps.yml). Geometry:
+  ring centre (50%, 43%), r = 38%, centre tile 30%, others 20% at −150°,
+  −30°, 90°; the two upper labels sit above their tiles. Verified by a
+  script that checks every tile/label box for overlap at 1280, 977, 390
+  and 320px — zero overlaps, no page overflow.
+- **Apps bento** replaces the separate spotlight + cards sections: the
+  flagship as one large featured card (tile, badge, tagline, the four
+  capabilities, badges, link) beside three compact horizontal cards.
+- **Per-app colour identity** (shell.css "App tones"): `.tone-violet`,
+  `.tone-teal`, `.tone-rose` re-point the brand tokens, so any component
+  inside takes the app's colour with no per-component CSS. Every app
+  page is wrapped in its tone; homepage cards and orbit links carry
+  theirs. All pairs computed ≥4.5:1 in both themes (lowest 4.85:1).
+- **Why us** is a split layout (intro left, 2×2 icon list right) — breaks
+  the repeated centred-eyebrow + card-grid rhythm.
+- **Closing CTA** shows all four app tiles (links) above the flagship's
+  badges.
+- **App pages:** the filler first step "Get the app" is gone from all
+  four (steps now describe the actual job); pages with 6+ features use a
+  bento feature grid (first feature as a 2×2 lead tile).
+- Still pending for the biggest remaining gain: real app screenshots
+  from the owner → device mockups (never drawn fake screens).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1486,3 +1523,7 @@ what's there.
   index, to avoid the file-vs-folder ambiguity); robots.txt; sitemap.xml;
   share card; full validation incl. an every-link check and Lighthouse
   99/100/100/69 (SEO = intentional preview noindex). Base site complete.
+- UI/UX pass (section 5e): brand-and-apps homepage (orbit as navigation,
+  apps bento, split why-us), per-app colour tones on every app page,
+  filler steps removed, flagship bento features. Overlap-checked orbit,
+  all suites pass.

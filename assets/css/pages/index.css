@@ -1,37 +1,32 @@
 /* ==========================================================================
-   index.css: the homepage (index.html), six sections per STATUS.md
-   section 5.
+   index.css: the homepage (index.html) -- the brand and its four apps.
+   Sections: hero with the app orbit, the apps bento, why us (split),
+   latest Daily Info (article cards live in shell.css), closing CTA.
 
-   Colours are shell.css tokens only. The brand gradient appears as
-   decoration (the spotlight panel, the post-card accent bar), never
-   behind text -- see the contrast note on --brand-2 in shell.css. The
-   hero accent word uses --brand-text, not a gradient fill, for the same
-   reason: the green end of the gradient fails even the 3:1 large-text
-   ratio.
+   Colours are shell.css tokens only. Each app card sits inside its app's
+   .tone-* scope (shell.css "App tones"), so its accents are the app's own
+   colour without any per-app rules here. Gradients are decoration only,
+   never behind text (see --brand-2 in shell.css).
 
    Motion follows the apple-design skill: transform/opacity only, slow
-   drifts of 18s+ (well clear of the ~5s cycle it flags), press feedback
-   on :active, and reduced-motion / more-contrast fallbacks at the end of
-   the file. No backdrop-filter anywhere on this page's own elements
-   (see .cluster-chip for why).
+   floats of 18s+ (well clear of the ~5s cycle it flags), press feedback
+   on :active, reduced-motion and more-contrast fallbacks at the end. No
+   backdrop-filter on this page's own elements: it would be re-blurred
+   every frame over the floating tiles.
    ========================================================================== */
 
-/* ---------- 1. Hero ---------- */
+/* ---------- Hero ---------- */
 
-.home-hero {
-  padding-block: clamp(3rem, 7vw, 6rem) clamp(3.5rem, 8vw, 6.5rem);
-}
+.home-hero { padding-block: clamp(3rem, 7vw, 5.5rem) clamp(3.5rem, 8vw, 6rem); }
 
 .home-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   align-items: center;
   gap: clamp(2rem, 5vw, 4rem);
 }
-
 @media (max-width: 899.98px) {
   .home-hero-grid { grid-template-columns: 1fr; }
-  .home-hero-visual { max-width: 24rem; margin-inline: auto; width: 100%; }
 }
 
 .home-hero-accent { color: var(--brand-text); }
@@ -46,242 +41,228 @@
 
 .home-hero-copy .btn-row { margin-top: 2rem; }
 
-.home-hero-points {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  margin-top: 1.75rem;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9375rem;
+/* The flagship's download badges, above the fold -- the site's first job
+   is installs, so one tap from the first screen to a store. */
+.home-hero-get {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.home-hero-get-label {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
   color: var(--text-2);
 }
-.home-hero-points li { display: inline-flex; align-items: center; gap: 0.4rem; }
-.home-hero-points svg { width: 1.125rem; height: 1.125rem; color: var(--brand-2-text); }
+.home-hero-get-label a { font-weight: 600; }
 
-/* The app cluster: an orbit. The flagship's tile sits at the centre;
-   the three other app tiles and the three capability chips alternate
-   around one ring at even 60-degree steps (tiles at -150, -30 and 90
-   degrees, chips at -90, 30 and 150), so the composition is balanced
-   rather than scattered. Every item is centred on its point with the
-   `translate` property, which leaves `transform` free for the float.
+/* ---------- The app orbit ----------
+   Real navigation: each app is a labelled link. The flagship sits at the
+   ring's centre; the other three sit ON the ring at even 120-degree steps
+   (-150, -30 and 90 degrees). Ring: centre (50%, 43%), radius 38% of the
+   square box -- raised above centre to leave room for the bottom tile's
+   label. Sizes (centre tile 30%, others 20%) were set by checking every
+   label's box against its neighbours: each clears the next tile by at
+   least ~3% of the box at desktop and phone widths. Each link is centred
+   on its point with the `translate` property; the float animates
+   `transform` on an inner span and the hover scales the tile with
+   `scale`, so the three never fight.
+     x = 50 + 38cos(a), y = 43 + 38sin(a)   (y grows downward) */
 
-   Ring radius r = 39% of the box, centre (50%, 50%):
-     x = 50 + 39cos(a), y = 50 + 39sin(a)   (y grows downward)
-   Positions are percentages of a square box, so the whole composition
-   scales as one piece at every width. */
-.cluster {
+.home-hero-visual { display: flex; justify-content: center; }
+
+.orbit {
   position: relative;
   width: min(100%, 26rem);
   aspect-ratio: 1;
-  margin-inline: auto;
+}
+@media (max-width: 899.98px) {
+  /* margin-bottom: room for the bottom tile's label, which sits just
+     past the square box at phone widths. */
+  .orbit { width: min(100%, 21rem); margin-bottom: 1.5rem; }
 }
 
-.cluster-ring,
-.cluster-ring::after {
+.orbit-ring,
+.orbit-ring::after {
   position: absolute;
   border-radius: 50%;
   border: 1px dashed var(--border-strong);
 }
-/* inset 11% = the r=39% orbit every tile and chip sits on. */
-.cluster-ring { inset: 11%; }
-/* A quieter inner ring just outside the centre tile. */
-.cluster-ring::after { content: ""; inset: 22%; border-style: solid; border-color: var(--border); }
+.orbit-ring { left: 12%; top: 5%; width: 76%; aspect-ratio: 1; }
+.orbit-ring::after { content: ""; inset: 22%; border-style: solid; border-color: var(--border); }
 
-.cluster-tile,
-.cluster-chip {
+.orbit-app {
   position: absolute;
+  display: block;
   translate: -50% -50%;
+  border-radius: 23%;
+  color: var(--text);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
+.orbit-app--main { width: 30%; left: 50%; top: 43%; z-index: 2; }
+.orbit-app--1 { width: 20%; left: 17.1%; top: 24%; }
+.orbit-app--2 { width: 20%; left: 82.9%; top: 24%; }
+.orbit-app--3 { width: 20%; left: 50%; top: 81%; }
 
-.cluster-tile { will-change: transform; }
-.cluster-tile .app-tile { width: 100%; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-lg); }
+.orbit-float { display: block; will-change: transform; }
+.orbit-app--main .orbit-float { animation: orbitFloat 22s ease-in-out infinite; }
+.orbit-app--1 .orbit-float { animation: orbitFloat 19s ease-in-out infinite reverse; }
+.orbit-app--2 .orbit-float { animation: orbitFloat 24s ease-in-out infinite; }
+.orbit-app--3 .orbit-float { animation: orbitFloat 21s ease-in-out infinite reverse; }
 
-.cluster-tile--main { width: 36%; left: 50%; top: 50%; z-index: 2; animation: clusterFloat 22s ease-in-out infinite; }
-.cluster-tile--1 { width: 20%; left: 16.2%; top: 30.5%; animation: clusterFloat 19s ease-in-out infinite reverse; }
-.cluster-tile--2 { width: 20%; left: 83.8%; top: 30.5%; animation: clusterFloat 24s ease-in-out infinite; }
-.cluster-tile--3 { width: 20%; left: 50%; top: 89%; animation: clusterFloat 21s ease-in-out infinite reverse; }
-
-@keyframes clusterFloat {
+@keyframes orbitFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
 
-.cluster-chip {
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.8rem;
+.orbit-app .app-tile {
+  width: 100%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-lg);
+  transition: scale 0.25s var(--ease-out);
+}
+.orbit-app:hover .app-tile { scale: 1.06; }
+.orbit-app:active .app-tile { scale: 0.96; transition-duration: 0.1s; }
+
+.orbit-label {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.3rem 0.7rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  /* Solid, not backdrop-filter glass: these sit over the floating tiles
-     and the drifting hero glow, so a blur here would be recomputed every
-     frame for as long as the page is open. */
   background: var(--surface);
-  box-shadow: var(--shadow-md);
-  font: 600 0.8125rem/1 var(--font-heading);
-  letter-spacing: 0.005em;
-  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  font: 600 0.8125rem/1.2 var(--font-heading);
   white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
-.cluster-chip svg { width: 1rem; height: 1rem; color: var(--brand-text); }
+.orbit-app:hover .orbit-label { color: var(--brand-text); border-color: var(--border-strong); }
+/* The two upper tiles label above themselves: below, their labels would
+   crowd the centre tile at phone widths (found by an overlap check). */
+.orbit-app--1 .orbit-label,
+.orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.6rem); }
+@media (max-width: 899.98px) {
+  .orbit-label { top: calc(100% + 0.45rem); padding: 0.25rem 0.55rem; font-size: 0.75rem; }
+  .orbit-app--1 .orbit-label,
+  .orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.45rem); }
+}
 
-.cluster-chip--b { left: 50%; top: 11%; }      /* Contacts, -90deg */
-.cluster-chip--c { left: 83.8%; top: 69.5%; }  /* Restore,   30deg */
-.cluster-chip--a { left: 16.2%; top: 69.5%; }  /* Photos,   150deg */
+/* ---------- Apps bento ----------
+   The flagship as one large featured card; the other three stacked
+   beside it as compact horizontal cards. Two different shapes on
+   purpose: it says "start here" without another heading. */
 
-/* ---------- 2. Flagship spotlight ---------- */
-
-.spotlight {
+.app-bento {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 899.98px) {
+  .app-bento { grid-template-columns: 1fr; }
+}
+
+.bento-feature {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-radius: 1.75rem;
+  background: linear-gradient(160deg, var(--brand-soft), var(--surface) 58%);
+  box-shadow: var(--shadow-sm);
+}
+.bento-feature-top {
+  display: flex;
   align-items: center;
-  gap: clamp(2.5rem, 6vw, 5rem);
+  justify-content: space-between;
+  gap: 1rem;
+}
+.bento-feature-tile { width: 5rem; }
+.bento-badge {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--brand-text);
+  font: 650 0.75rem/1.4 var(--font-heading);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.bento-feature-name {
+  margin-top: 1.5rem;
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  line-height: 1.15;
+}
+.bento-feature-name a { color: var(--text); text-decoration: none; }
+.bento-feature-name a:hover { color: var(--brand-text); }
+.bento-feature-tagline {
+  margin-top: 0.75rem;
+  font-size: 1.0625rem;
+  color: var(--text-2);
 }
 
-@media (max-width: 859.98px) {
-  .spotlight { grid-template-columns: 1fr; }
-}
-
-.spotlight-list {
+.bento-caps {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem 1rem;
-  margin: 1.75rem 0 2rem;
+  margin: 1.75rem 0 0;
   padding: 0;
   list-style: none;
 }
-.spotlight-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-weight: 600;
-}
-.spotlight-list-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  flex-shrink: 0;
+.bento-caps li { display: flex; align-items: center; gap: 0.65rem; font-weight: 600; }
+.bento-caps svg {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.5rem;
   border-radius: var(--radius-sm);
-  background: var(--brand-soft);
+  background: var(--surface);
   color: var(--brand-text);
+  box-shadow: var(--shadow-sm);
 }
-.spotlight-list-icon svg { width: 1.25rem; height: 1.25rem; }
+
+.bento-feature-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 2rem;
+}
 
 .text-link {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
   min-height: 2.75rem;
-  margin-top: 0.75rem;
   font-weight: 600;
   text-decoration: none;
 }
 .text-link svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
 .text-link:hover svg { transform: translateX(3px); }
 
-.spotlight-panel {
-  position: relative;
-  max-width: 28rem;
-  aspect-ratio: 1;
-  margin-inline: auto;
-  border-radius: 2rem;
-  background: var(--brand-gradient);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-  isolation: isolate;
-}
-.spotlight-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.28), transparent 45%),
-    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.18), transparent 35%);
-}
-
-.spotlight-lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.spotlight-lines path {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.6);
-  stroke-width: 2;
-  stroke-dasharray: 6 8;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-}
-/* Deliberately static. A marching-dash animation (stroke-dashoffset) was
-   tried here and removed: it repaints the SVG on the main thread every
-   frame, forever, and measurably starved other transitions of frames
-   (the phone menu's 0.18s close fade took over 350ms). Only transform
-   and opacity animate on this page. */
-
-.spotlight-icon {
-  position: absolute;
-  z-index: 2;
-  width: 34%;
-  left: 33%;
-  top: 33%;
-  /* White ring: the flagship's blue tile would otherwise blend into the
-     blue end of the panel's gradient. */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 6px rgba(255, 255, 255, 0.92), 0 16px 36px rgba(6, 16, 31, 0.3);
-}
-
-/* Fixed colours on purpose: the nodes sit on the gradient in both
-   themes, so they stay white with the light-theme brand blue (4.9:1 on
-   white) rather than following the dark theme's lighter --brand. */
-.spotlight-node {
-  position: absolute;
-  z-index: 1;
+.bento-list {
   display: grid;
-  place-items: center;
-  width: 18%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94);
-  color: #0b5fe8;
-  box-shadow: 0 8px 20px rgba(6, 16, 31, 0.18);
-}
-.spotlight-node svg { width: 46%; height: 46%; }
-.spotlight-node--a { left: 13%; top: 15%; }
-.spotlight-node--b { left: 69%; top: 15%; }
-.spotlight-node--c { left: 13%; top: 67%; }
-.spotlight-node--d { left: 69%; top: 67%; }
-
-/* ---------- 3. More apps ---------- */
-
-.app-grid,
-.value-grid {
-  display: grid;
+  grid-auto-rows: 1fr;
   gap: 1.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.app-grid { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
-.app-grid > li { display: flex; }
+.bento-list > li { display: flex; }
 
-/* The whole card is the link, lifts slightly on hover and presses in on
-   :active (feedback on the press, not release). Article cards share the
-   same behaviour from shell.css (.post-card). */
+/* Compact app card: the whole card is the link, with the app's tone as a
+   left accent edge; lifts on hover, presses in on :active. */
 .app-card {
-  position: relative;
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
   width: 100%;
-  padding: 1.75rem;
+  padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset 3px 0 0 var(--brand), var(--shadow-sm);
   color: var(--text);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
@@ -290,30 +271,22 @@
 .app-card:hover {
   color: var(--text);
   border-color: var(--border-strong);
-  box-shadow: var(--shadow-md);
+  box-shadow: inset 3px 0 0 var(--brand), var(--shadow-md);
   transform: translateY(-3px);
 }
-.app-card:active {
-  transform: scale(0.985);
-  transition-duration: 0.1s;
-}
+.app-card:active { transform: scale(0.985); transition-duration: 0.1s; }
 
-.app-card-icon { width: 4rem; }
-.app-card-name { margin-top: 1.25rem; font-size: 1.1875rem; }
-.app-card-tagline {
-  flex-grow: 1;
-  margin-top: 0.5rem;
-  font-size: 0.9375rem;
-  color: var(--text-2);
-}
-.app-card-footer {
+.app-card-icon { width: 3.5rem; }
+.app-card-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.app-card-name { font: 600 1.125rem/1.3 var(--font-heading); letter-spacing: -0.01em; }
+.app-card-tagline { margin-top: 0.35rem; font-size: 0.9375rem; color: var(--text-2); }
+.app-card-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: auto;
   padding-top: 1rem;
-  border-top: 1px solid var(--border);
   font-size: 0.875rem;
 }
 .app-card-platform { color: var(--text-2); }
@@ -327,32 +300,46 @@
 .app-card-more svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
 .app-card:hover .app-card-more svg { transform: translateX(3px); }
 
-/* ---------- 4. Why Daily Utility Apps ---------- */
+/* ---------- Why us: split layout ---------- */
 
-.value-grid { grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr)); }
-
-.value-card {
-  padding: 1.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
+.why {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
 }
-.value-icon {
+@media (max-width: 899.98px) {
+  .why { grid-template-columns: 1fr; }
+}
+
+.why-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 2.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 599.98px) {
+  .why-list { grid-template-columns: 1fr; gap: 1.75rem; }
+}
+.why-item { display: flex; align-items: flex-start; gap: 1rem; }
+.why-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  margin-bottom: 1.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
   border-radius: var(--radius);
   background: var(--brand-soft);
   color: var(--brand-text);
 }
-.value-icon svg { width: 1.5rem; height: 1.5rem; }
-.value-card h3 { margin-bottom: 0.5rem; font-size: 1.125rem; }
-.value-card p { font-size: 0.9375rem; color: var(--text-2); }
+.why-icon svg { width: 1.375rem; height: 1.375rem; }
+.why-item h3 { margin-bottom: 0.35rem; font-size: 1.0625rem; }
+.why-item p { font-size: 0.9375rem; color: var(--text-2); }
 
-/* ---------- 5. Latest Daily Info ---------- */
+/* ---------- Latest Daily Info ---------- */
 
 .section-head-row {
   display: flex;
@@ -364,10 +351,7 @@
 }
 .section-head-row .section-head { margin-bottom: 0; }
 
-/* Article cards (.post-grid / .post-card) live in shell.css: the
-   Daily Info hub uses them too. */
-
-/* ---------- 6. Closing CTA ---------- */
+/* ---------- Closing CTA ---------- */
 
 .home-cta {
   position: relative;
@@ -393,22 +377,41 @@
     radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 40%),
     radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--brand-2) 22%, transparent), transparent 40%);
 }
-.home-cta .section-sub { margin-top: 0; }
+.home-cta .section-sub { max-width: 36rem; margin-top: 0; }
 .home-cta .store-badges { justify-content: center; }
-.home-cta-icon { width: 4.5rem; }
+
+.home-cta-apps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  list-style: none;
+}
+.home-cta-apps a {
+  display: block;
+  border-radius: 23%;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s var(--ease-out);
+}
+.home-cta-apps a:hover { transform: translateY(-3px); }
+.home-cta-apps a:active { transform: scale(0.95); transition-duration: 0.1s; }
+.home-cta-tile { width: 3.5rem; }
 
 /* ---------- Accessibility preferences ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .cluster-tile { animation: none; }
+  .orbit-float { animation: none !important; }
+  .orbit-app .app-tile { transition: none; }
+  .orbit-app:hover .app-tile, .orbit-app:active .app-tile { scale: none; }
   .app-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-  .app-card:hover, .app-card:active { transform: none; }
+  .app-card:hover, .app-card:active,
+  .home-cta-apps a:hover, .home-cta-apps a:active { transform: none; }
   .text-link:hover svg, .app-card:hover .app-card-more svg { transform: none; }
 }
 
 @media (prefers-contrast: more) {
-  .cluster-chip,
-  .app-card,
-  .value-card { border-color: var(--border-strong); }
+  .orbit-label, .bento-feature, .bento-badge, .app-card { border-color: var(--border-strong); }
   .home-cta::before { display: none; }
 }
