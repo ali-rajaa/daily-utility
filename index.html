@@ -2,7 +2,7 @@
 layout: default
 css: index
 title: "Daily Utility Apps: Phone Backup, Transfer & Recovery Apps"
-description: "Daily Utility Apps makes four focused phone apps: cloud backup, a document reader, phone-to-phone transfer and photo recovery. For Android and iPhone, based in Western Australia."
+description: "Daily Utility Apps makes four focused phone apps: cloud backup, a document reader, phone-to-phone transfer and photo recovery. For Android and iPhone."
 ---
 {%- comment -%}
   Homepage: the brand and its apps. Sections (STATUS.md section 5e):
@@ -30,15 +30,7 @@ description: "Daily Utility Apps makes four focused phone apps: cloud backup, a 
   "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }},
   "name": {{ site.title | jsonify | replace: "/", "\/" }},
   "url": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }},
-  "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify | replace: "/", "\/" }},
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": {{ site.company.address_line1 | jsonify | replace: "/", "\/" }},
-    "addressLocality": {{ site.company.locality | jsonify | replace: "/", "\/" }},
-    "addressRegion": {{ site.company.region | jsonify | replace: "/", "\/" }},
-    "postalCode": {{ site.company.postcode | jsonify | replace: "/", "\/" }},
-    "addressCountry": {{ site.company.country | jsonify | replace: "/", "\/" }}
-  }
+  "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify | replace: "/", "\/" }}
 }
 </script>
 
@@ -154,10 +146,10 @@ description: "Daily Utility Apps makes four focused phone apps: cloud backup, a 
         </div>
       </li>
       <li class="why-item reveal">
-        <span class="why-icon"><svg aria-hidden="true"><use href="#i-pin"/></svg></span>
+        <span class="why-icon"><svg aria-hidden="true"><use href="#i-contacts"/></svg></span>
         <div>
-          <h3>Based in Australia</h3>
-          <p>Daily Utility Apps is an Australian app developer based in {{ site.company.locality }}, Western Australia.</p>
+          <h3>Real support</h3>
+          <p>Questions about one of our apps? Email our support team. The address is at the bottom of every page.</p>
         </div>
       </li>
       <li class="why-item reveal">

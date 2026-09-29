@@ -1075,6 +1075,30 @@ brand and its apps".
 - Still pending for the biggest remaining gain: real app screenshots
   from the owner → device mockups (never drawn fake screens).
 
+## 5f. Hub redesign; "Australia" only on legal pages (29 Sep)
+
+- **Standing rule (user, 29 Sep): "stop mentioning Australia so much —
+  keep it to legal stuff only."** Removed from the homepage description,
+  the "why us" item (now "Real support"), the app hero meta row (now "By
+  Daily Utility Apps"), the app trust band, all four apps' "Who makes
+  it?" FAQ (now: the developer name on the store listing), and the
+  Organization schema's address. Verified on the built site by script:
+  zero mentions outside the legal pages and footer. Same check pattern
+  as the CloudGate rule (section 5c) — re-run both when copy changes.
+- **Daily Info hub redesign** (user: "too basic"): hero is now copy +
+  the newest guide as a large featured card (topic-coloured banner,
+  glyph, title, summary, date, "Read the guide"); stat pills (guides,
+  topics, free to read); a "Browse by topic" grid of all four topics
+  from the new `_data/categories.yml` (glyph, tone, blurb, live count or
+  "Guides coming soon"); per-topic lists appear only once there's more
+  than one article (with one, they'd just repeat the featured card).
+- **Article cards everywhere** now have a topic-coloured banner with the
+  topic glyph in a white disc (categories.yml tone/glyph; a post's own
+  `glyph:` overrides). The glyph uses each tone's light-theme colour on
+  the always-white disc (all ≥5.4:1).
+- **Hero texture**: a static, edge-faded dot grid inside every hero's
+  glow layer (painted once, no animation cost).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1276,6 +1300,7 @@ what's there.
       (`_includes/app-tile.html`; section 5c).
     - **"CloudGate" only on the legal pages and in the footer**
       (section 5c).
+    - **"Australia" only on the legal pages** (section 5f).
     - Nav labels name their destination ("Backup & Drive", "Daily
       Info"); the logo is the way home, so there is no "Home" link.
 - [x] **3. Includes:** `store-badges`, `hero-glow` (not in the original
@@ -1527,3 +1552,5 @@ what's there.
   apps bento, split why-us), per-app colour tones on every app page,
   filler steps removed, flagship bento features. Overlap-checked orbit,
   all suites pass.
+- Hub redesign + topic-coloured article cards + hero texture; "Australia"
+  removed everywhere except legal pages (section 5f). All checks pass.

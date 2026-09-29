@@ -625,6 +625,19 @@ h3, .h3 {
   opacity: 0.8;
 }
 
+/* Texture: a fine static dot grid inside the glow layer, fading out
+   toward the edges. Painted once (no animation), so it adds depth
+   without adding any per-frame work. */
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--text) 16%, transparent) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 65% 45%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 80% at 65% 45%, #000 20%, transparent 75%);
+}
+
 /* Required on the real content inside a .hero-glow-host: an absolutely
    positioned z-index:0 layer (the glow) paints ABOVE plain in-flow
    content per CSS stacking rules, not below it. position:relative +
@@ -805,7 +818,6 @@ h3, .h3 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 1.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -823,12 +835,51 @@ h3, .h3 {
   transform: translateY(-3px);
 }
 .post-card:active { transform: scale(0.985); transition-duration: 0.1s; }
-.post-card::before {
+
+/* Banner: the card's topic colour (its .tone-* scope) as a gradient,
+   with the topic glyph in a white disc. Decorative -- no text on it. */
+.post-card-banner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 8.5rem;
+  background: var(--brand-gradient);
+  overflow: hidden;
+}
+.post-card-banner::before {
   content: "";
   position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  background: var(--brand-gradient);
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.28), transparent 38%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.22) 1px, transparent 1.4px) 0 0 / 16px 16px;
+}
+.post-card-glyph {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2), 0 10px 24px rgba(6, 16, 31, 0.22);
+  transition: transform 0.3s var(--ease-out);
+}
+/* The disc is white in both themes, so the glyph uses each tone's
+   light-theme colour (all >= 5.4:1 on white) rather than the dark
+   theme's paler --brand. */
+.post-card-glyph { color: #0b5fe8; }
+.tone-violet .post-card-glyph { color: #7c3aed; }
+.tone-teal .post-card-glyph { color: #0f766e; }
+.tone-rose .post-card-glyph { color: #be123c; }
+.post-card-glyph svg { width: 50%; height: 50%; }
+.post-card:hover .post-card-glyph { transform: scale(1.06); }
+
+.post-card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1.5rem 1.75rem 1.75rem;
 }
 .post-card-cat {
   align-self: flex-start;
@@ -857,7 +908,7 @@ h3, .h3 {
 
 @media (prefers-reduced-motion: reduce) {
   .post-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-  .post-card:hover, .post-card:active { transform: none; }
+  .post-card:hover, .post-card:active, .post-card:hover .post-card-glyph { transform: none; }
 }
 @media (prefers-contrast: more) {
   .post-card { border-color: var(--border-strong); }

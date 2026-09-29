@@ -1,0 +1,25 @@
+# Daily Info topics (STATUS.md section 5's four categories). A post's
+# `category:` must match one `name` here exactly. Each topic has a glyph
+# (icon-sprite symbol) and a tone (shell.css "App tones") so its article
+# cards and topic card carry a consistent colour and icon; `blurb` is the
+# one-line description on the hub's topic grid. Order = display order.
+
+- name: "Backup & Storage"
+  glyph: cloud
+  tone: blue
+  blurb: "Keep copies of what matters, and free up space on your phone."
+
+- name: "Switching Phones"
+  glyph: phone-transfer
+  tone: teal
+  blurb: "Move to a new phone without leaving anything behind."
+
+- name: "Photos & Media"
+  glyph: photo
+  tone: violet
+  blurb: "Look after your photos and videos, and get them back when they go missing."
+
+- name: "Privacy & Security"
+  glyph: shield
+  tone: rose
+  blurb: "Keep your data private, and understand what your apps can see."
