@@ -1201,6 +1201,25 @@ Contents lists ("On this page" / "In this guide") now fold on phones
 (details/summary, closed by default via scripts.html, open on desktop),
 since 14-18 entries pushed the article a screen down.
 
+## 5k. SEO audit of every page (29 Sep)
+
+Audited a production build (staging: false, url dailyutilityapps.store)
+page by page: indexability, canonical = sitemap URL, title 30-60 and
+description 70-160 (all unique), one H1, heading order, Open Graph and
+Twitter tags, JSON-LD validity (FAQ schema matches visible FAQs,
+breadcrumb ends at the page, BlogPosting headline = H1), image alt and
+dimensions, broken links, generic anchor text, orphan pages, duplicate
+titles/descriptions. Lighthouse SEO: 100 on all 15 indexable pages.
+Changes made:
+- Unique 1200x630 share images for every article, app page and the hub
+  (assets/og/<slug>.png, set via og_image / og_image_alt front matter;
+  default.html and the BlogPosting image use them). Regenerate with the
+  og-pages script after changing a title.
+- Internal links: related lists rebalanced so every article has 5+
+  internal links in; app guides link in-text to the matching articles.
+Open (needs owner input): SoftwareApplication rich results need an
+`offers` price (unconfirmed, so not added) or ratings (never shown).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1670,3 +1689,5 @@ what's there.
   tap targets, consistent hero padding, solid phone menu, safe areas.
 - Six Daily Info articles written and published, 2,500+ words each
   (section 5j); contents lists fold on phones.
+- SEO audit of every page (section 5k): Lighthouse SEO 100 x 15; unique
+  share images; internal linking strengthened.

@@ -36,6 +36,8 @@ faqs:
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 guide_heading: "Reading documents on your phone: a practical guide"
 guide_sub: "The four document types you'll meet most, where they come from, and how to read them comfortably on a small screen."
+og_image: "/assets/og/document-reader-pdf.png"
+og_image_alt: "Document Reader: Read All PDF, an app from Daily Utility Apps"
 ---
 
 ## Why documents end up on your phone
@@ -155,7 +157,7 @@ A phone that collects documents for months quickly becomes hard to search. A lit
 
 - **Rename files you'll need again.** "Car insurance 2026.pdf" is far easier to find later than "doc_83421.pdf".
 - **Use a few simple folders**, such as Home, Work, Travel and Receipts, rather than leaving everything in Downloads.
-- **Delete what you've finished with.** Tickets for past events and attachments you've already read just take up space.
+- **Delete what you've finished with.** Tickets for past events and attachments you've already read just take up space. Our guide to [freeing up phone storage](/daily-info/free-up-phone-storage) has more ways to clear space safely.
 - **Keep a copy of important documents off the phone**, in a cloud drive or on a computer, so they're safe if the phone is lost.
 
 ## Documents worth keeping a copy of

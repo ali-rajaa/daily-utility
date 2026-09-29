@@ -10,10 +10,6 @@ updated: 2026-09-29
 read_min: 13
 slug: check-app-permissions-photos
 glyph: shield
-related:
-  - backup-vs-sync
-  - where-deleted-photos-go-android
-  - free-up-phone-storage
 takeaways:
   - "Both Android and iPhone let you see and change which apps can access your photos, files and contacts."
   - "Where you can, give apps access to selected photos only, rather than your whole library."
@@ -28,6 +24,12 @@ faqs:
     a: "Features that need your photos, such as uploading a picture, will ask for access again or offer a picker. The rest of the app usually works normally. You can always grant access again in your phone's settings."
   - q: "Do backup apps need full access to my photos?"
     a: "A photo backup app needs access to the photos it's backing up, and to back up your whole library it needs access to all of it. That's a reasonable request from an app whose job is backing up your photos; the same request from an app with no obvious need for it deserves a closer look."
+related:
+  - backup-vs-sync
+  - move-photos-android-to-iphone
+  - where-deleted-photos-go-android
+og_image: "/assets/og/check-app-permissions-photos.png"
+og_image_alt: "How to Check Which Apps Can See Your Photos and Files: a Daily Info guide from Daily Utility Apps"
 ---
 
 Every time you install an app, there's a good chance it asks for something: access to your photos, your files, your contacts, your camera or your location. It's easy to tap "Allow" to get past the prompt and get on with using the app. Over months and years, that adds up to dozens of apps with access to some of the most personal information on your phone.

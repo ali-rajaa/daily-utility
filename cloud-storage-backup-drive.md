@@ -48,6 +48,8 @@ faqs:
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 guide_heading: "Backing up your phone: a practical guide"
 guide_sub: "What a backup is, what's worth keeping, and how to make sure yours will actually be there when you need it."
+og_image: "/assets/og/cloud-storage-backup-drive.png"
+og_image_alt: "Cloud Storage Backup & Drive, an app from Daily Utility Apps"
 ---
 
 ## Why phone backups matter
@@ -91,7 +93,7 @@ These three words get used almost interchangeably, but they mean different thing
 
 **Sync** is designed for convenience. When you add a contact on your phone, sync makes it appear on your tablet and computer too. But the same logic applies in reverse: delete a contact on one device, and sync removes it from the others. Sync on its own protects you from losing a device, but not always from losing data.
 
-A **backup** is designed for recovery. It keeps a copy of your data separately, so that if something is lost, deleted or damaged on the phone, you can bring it back.
+A **backup** is designed for recovery. It keeps a copy of your data separately, so that if something is lost, deleted or damaged on the phone, you can bring it back. Our Daily Info guide to [backup vs sync](/daily-info/backup-vs-sync) goes into the difference in more detail.
 
 **Cloud storage** is simply space online where files can live. It's the place a cloud backup is kept, and it can also be somewhere you choose to keep files so they don't have to take up room on the phone.
 
@@ -175,6 +177,8 @@ Other good ways to free space without losing anything:
 - Remove duplicate and near-identical photos, like bursts of the same shot.
 - Check chat apps, which often save every photo and video you're sent, even ones you've looked at once.
 
+For a full walk-through, see our guide on [how to free up storage on your phone without losing anything](/daily-info/free-up-phone-storage).
+
 ## Keeping your backup private
 
 A backup is a copy of some of your most personal information, so it's worth protecting the account it lives in as carefully as the phone itself.
@@ -183,6 +187,7 @@ A backup is a copy of some of your most personal information, so it's worth prot
 - **Turn on two-factor authentication** wherever an account offers it, so a stolen password alone isn't enough to get in.
 - **Lock your phone** with a PIN, pattern, fingerprint or face unlock, so someone who picks it up can't open your apps.
 - **Be wary of messages asking for your login details.** Genuine services don't ask for your password by email or text.
+- **Review which apps can see your photos and files.** Our guide to [checking app permissions](/daily-info/check-app-permissions-photos) shows how on Android and iPhone.
 
 We never sell your personal information, and we never use your files to build advertising profiles. Our [privacy policy](/privacy-policy) explains exactly how your data is handled.
 

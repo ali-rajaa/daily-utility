@@ -36,6 +36,8 @@ faqs:
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 guide_heading: "Getting deleted photos back: a practical guide"
 guide_sub: "Where deleted photos go on an Android phone, where to look first, and what gives you the best chance of getting them back."
+og_image: "/assets/og/photo-recover-data-recovery.png"
+og_image_alt: "Photo Recover & Data Recovery, an app from Daily Utility Apps"
 ---
 
 ## What happens when you delete a photo
@@ -62,7 +64,7 @@ How long a deleted photo waits in the trash depends on the app it was deleted fr
 
 After that time, items in the trash are deleted automatically. Some apps also empty the trash sooner if your phone is running low on storage, and you can empty it yourself at any time, which removes everything in it straight away.
 
-The key point is that the clock starts when you delete the photo. The sooner you look, the more likely it is to still be there.
+The key point is that the clock starts when you delete the photo. The sooner you look, the more likely it is to still be there. For an app-by-app list of where deleted photos go, see our guide, [Where Do Deleted Photos Go on Android?](/daily-info/where-deleted-photos-go-android)
 
 ## Where to look first
 

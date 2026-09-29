@@ -36,6 +36,8 @@ faqs:
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 guide_heading: "Moving files between phones: a practical guide"
 guide_sub: "The ways files can move from one phone to another, what to check before you start, and how to be sure everything arrived."
+og_image: "/assets/og/smartphone-data-transfer.png"
+og_image_alt: "Smartphone All Data Transfer, an app from Daily Utility Apps"
 ---
 
 ## When you need to move files between phones
@@ -112,7 +114,7 @@ A single minute of high-resolution video can take up hundreds of megabytes, and 
 
 ### Photo formats
 
-Most Android phones save photos as JPEG files, which open almost everywhere. iPhones save photos in a format called HEIC by default, which keeps quality high while using less space. Most recent phones and computers can open HEIC files, but some older apps and devices can't. If a photo from an iPhone won't open, the format is the most likely reason.
+Most Android phones save photos as JPEG files, which open almost everywhere. iPhones save photos in a format called HEIC by default, which keeps quality high while using less space. Most recent phones and computers can open HEIC files, but some older apps and devices can't. If a photo from an iPhone won't open, the format is the most likely reason. Our guide to [moving photos between Android and iPhone](/daily-info/move-photos-android-to-iphone) explains the formats and the settings that help.
 
 ## Planning a big move: a simple timeline
 

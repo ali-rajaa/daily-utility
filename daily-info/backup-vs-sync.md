@@ -10,10 +10,6 @@ updated: 2026-09-29
 read_min: 13
 slug: backup-vs-sync
 glyph: sync
-related:
-  - free-up-phone-storage
-  - backup-before-switching-phones
-  - where-deleted-photos-go-android
 takeaways:
   - "Sync keeps the same data on all your devices, including your mistakes: delete something in one place and it can disappear everywhere."
   - "A backup keeps a separate copy you can go back to when something is deleted, damaged or lost."
@@ -28,6 +24,12 @@ faqs:
     a: "It varies by service. Many keep deleted items in a trash or recently deleted folder for around 30 days; Google Photos keeps backed-up items in its trash for 60 days. After that, they're removed automatically."
   - q: "What is the 3-2-1 backup rule?"
     a: "A simple guideline: keep three copies of important data, on two different types of storage, with one copy kept somewhere else, such as in the cloud. For most people with a phone, the phone itself, a cloud backup and a copy on a computer covers it."
+related:
+  - free-up-phone-storage
+  - backup-before-switching-phones
+  - check-app-permissions-photos
+og_image: "/assets/og/backup-vs-sync.png"
+og_image_alt: "Backup vs Sync: What's the Difference and Why It Matters: a Daily Info guide from Daily Utility Apps"
 ---
 
 "Is it backed up?" is one of the most important questions you can ask about your phone, and one of the most misunderstood. Many people believe their photos and files are backed up because they're "in the cloud", only to find out after an accident that what they had was sync, not a backup. The two sound similar, often live in the same apps, and even use the same cloud storage. But they're built for different jobs, and the difference matters most at exactly the moment something goes wrong.

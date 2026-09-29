@@ -59,7 +59,7 @@ css: post
   "@id": {{ _clean_url | absolute_url | append: '#article' | jsonify | replace: "/", "\/" }},
   "headline": {{ page.heading | jsonify | replace: "/", "\/" }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
-  "image": {{ page.image | default: '/assets/og/default.png' | absolute_url | jsonify | replace: "/", "\/" }},
+  "image": {{ page.og_image | default: page.image | default: '/assets/og/default.png' | absolute_url | jsonify | replace: "/", "\/" }},
   "datePublished": {{ page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
   "dateModified": {{ page.updated | default: page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
   "inLanguage": "en-AU",

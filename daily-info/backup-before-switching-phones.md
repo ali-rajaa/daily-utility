@@ -27,6 +27,12 @@ faqs:
     a: "Most things, yes: photos, videos, contacts and calendars move between the two without much trouble, using the setup tools on the new phone or a cloud backup. Some things don't cross over cleanly, such as app purchases, some app data and certain chat histories, so check those individually before you start."
   - q: "Is a memory card a good enough backup?"
     a: "It's better than nothing, but it isn't a real backup on its own. A card sits in the same phone, so it can be lost, damaged or wiped along with it, and cards do fail. Keep at least one copy somewhere other than the phone, such as a cloud storage account."
+related:
+  - move-photos-android-to-iphone
+  - backup-vs-sync
+  - check-app-permissions-photos
+og_image: "/assets/og/backup-before-switching-phones.png"
+og_image_alt: "How to Back Up Your Phone Before Switching to a New One: a Daily Info guide from Daily Utility Apps"
 ---
 
 Switching phones is one of the easiest times to lose something you didn't mean to: a photo album, a saved contact, a chat history, a document you were partway through, or the codes you use to sign in to your email and bank. The new phone arrives, the setup screens move quickly, and it's tempting to assume everything will simply follow you across. Much of it will. The trouble is the part that doesn't, and you usually only notice once the old phone has been wiped or handed on.

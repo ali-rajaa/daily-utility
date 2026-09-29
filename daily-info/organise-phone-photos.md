@@ -11,10 +11,6 @@ read_min: 13
 slug: organise-phone-photos
 glyph: photo
 steps: true
-related:
-  - free-up-phone-storage
-  - where-deleted-photos-go-android
-  - backup-vs-sync
 takeaways:
   - "Back up first, so tidying never risks losing a photo you care about."
   - "Clear the easy clutter first: screenshots, duplicates, bursts and accidental shots."
@@ -29,6 +25,12 @@ faqs:
     a: "Start with the categories that are almost always safe to remove: screenshots, duplicates, burst photos and blurry shots. Most gallery apps let you view these separately, so you can clear hundreds in minutes."
   - q: "How do I hide private photos without deleting them?"
     a: "On an iPhone, you can hide photos in the Photos app, and the Hidden album can be locked. In Google Photos, the Locked Folder keeps photos behind your screen lock. Many Android phone makers also offer a hidden album or secure folder."
+related:
+  - free-up-phone-storage
+  - where-deleted-photos-go-android
+  - check-app-permissions-photos
+og_image: "/assets/og/organise-phone-photos.png"
+og_image_alt: "How to Organise Thousands of Photos on Your Phone: a Daily Info guide from Daily Utility Apps"
 ---
 
 The average phone camera roll grows by hundreds of photos a month: pictures of family and friends, screenshots, receipts, things you wanted to remember, photos of the same sunset taken twelve times. After a few years, it's tens of thousands of pictures, most of which you'll never look at again, and the ones you care about are buried somewhere in the middle.
@@ -161,7 +163,7 @@ Sharing photos is one of the biggest sources of clutter, both in your own librar
 
 ## Hide private photos
 
-Some photos don't belong in a library you might scroll through in front of other people: medical photos, documents, or simply private moments. Rather than deleting them, you can move them somewhere more discreet.
+Some photos don't belong in a library you might scroll through in front of other people: medical photos, documents, or simply private moments. Rather than deleting them, you can move them somewhere more discreet. It's also worth checking [which apps can see your photos](/daily-info/check-app-permissions-photos) at the same time.
 
 - **On an iPhone**, you can hide a photo from the main library. It moves to the **Hidden** album, which can be locked so it needs Face ID, Touch ID or your passcode to open.
 - **In Google Photos**, the **Locked Folder** keeps photos behind your screen lock and out of your main library and search. Be aware that photos in the Locked Folder aren't included in your backup by default, so don't use it as the only home for photos you can't afford to lose.

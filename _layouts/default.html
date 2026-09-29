@@ -58,10 +58,12 @@
   {%- unless _is_404 %}
   <meta property="og:url" content="{{ _clean_url | absolute_url }}">
   {%- endunless %}
-  {%- comment -%} Every page shares one 1200x630 card unless it names its
-  own with "image:" (and "image_alt:") in front matter. {%- endcomment -%}
-  {%- assign _og_img = page.image | default: "/assets/og/default.png" -%}
-  {%- assign _og_alt = page.image_alt | default: "Daily Utility Apps: smart tools for everyday life" %}
+  {%- comment -%} Share image: a page's own 1200x630 card from
+  og_image / og_image_alt (articles, app pages and the Daily Info hub
+  each have one in assets/og/), else its photo (image / image_alt), else
+  the site-wide default card. {%- endcomment -%}
+  {%- assign _og_img = page.og_image | default: page.image | default: "/assets/og/default.png" -%}
+  {%- assign _og_alt = page.og_image_alt | default: page.image_alt | default: "Daily Utility Apps: smart tools for everyday life" %}
   <meta property="og:image" content="{{ _og_img | absolute_url }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">

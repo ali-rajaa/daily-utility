@@ -11,10 +11,6 @@ read_min: 13
 slug: free-up-phone-storage
 glyph: cloud
 steps: true
-related:
-  - backup-vs-sync
-  - organise-phone-photos
-  - where-deleted-photos-go-android
 takeaways:
   - "Check what's actually using your storage before deleting anything; it's rarely what you expect."
   - "Back up photos and videos first, and confirm the backup finished before removing anything from the phone."
@@ -31,6 +27,12 @@ faqs:
     a: "It's space used by the phone's operating system, updates, logs and temporary files. You can't clear most of it directly. Restarting the phone and installing pending updates sometimes reduces it, but it's usually better to free space elsewhere."
   - q: "How much free space should I keep on my phone?"
     a: "There's no official figure, but keeping roughly 10 to 15 percent free gives the phone room for updates, new photos and temporary files, and helps it run smoothly."
+related:
+  - backup-vs-sync
+  - organise-phone-photos
+  - where-deleted-photos-go-android
+og_image: "/assets/og/free-up-phone-storage.png"
+og_image_alt: "How to Free Up Storage on Your Phone Without Losing Anything: a Daily Info guide from Daily Utility Apps"
 ---
 
 A full phone is one of the most common and most frustrating phone problems. The camera refuses to take another picture. An update won't install. Apps slow down or crash. And the warning always seems to arrive at the worst possible moment, halfway through filming something you wanted to keep.

@@ -10,10 +10,6 @@ updated: 2026-09-29
 read_min: 13
 slug: where-deleted-photos-go-android
 glyph: trash-restore
-related:
-  - backup-vs-sync
-  - free-up-phone-storage
-  - organise-phone-photos
 takeaways:
   - "Most Android gallery and file apps move deleted photos to a trash or bin folder first, rather than erasing them straight away."
   - "How long they stay depends on the app: often 30 days, and 60 days for backed-up items in Google Photos."
@@ -28,6 +24,12 @@ faqs:
     a: "Some gallery apps, such as Samsung Gallery, let you turn the recycle bin off. It's usually best to leave it on: it costs a little space but gives you a window to recover photos deleted by mistake."
   - q: "Are photos deleted after a factory reset recoverable?"
     a: "Generally, no. A factory reset erases the phone's storage, and on modern Android phones, which encrypt their storage, the old data can't realistically be read afterwards. Photos from before the reset can only come back from a backup."
+related:
+  - backup-vs-sync
+  - organise-phone-photos
+  - free-up-phone-storage
+og_image: "/assets/og/where-deleted-photos-go-android.png"
+og_image_alt: "Where Do Deleted Photos Go on Android?: a Daily Info guide from Daily Utility Apps"
 ---
 
 You tap delete, confirm, and the photo vanishes from your gallery. It feels instant and final. But on most Android phones, that photo hasn't actually gone anywhere yet. It has simply moved, and for a while at least, it's waiting somewhere you can still reach it.

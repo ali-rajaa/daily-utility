@@ -10,10 +10,6 @@ updated: 2026-09-29
 read_min: 13
 slug: move-photos-android-to-iphone
 glyph: phone-transfer
-related:
-  - backup-before-switching-phones
-  - free-up-phone-storage
-  - organise-phone-photos
 takeaways:
   - "Back up your photos and check the new phone has enough free space before you start."
   - "Apple's Move to iOS app copies photos from Android during iPhone setup; Android phones can copy from an iPhone during their own setup."
@@ -28,6 +24,12 @@ faqs:
     a: "iPhones save photos in the HEIC format by default. Most recent Android phones can open HEIC files, but some older phones and apps can't. Converting them to JPEG, or setting the iPhone to transfer photos in a compatible format, solves it."
   - q: "Do my albums move across too?"
     a: "Sometimes. Some transfer methods keep albums, others bring photos across as one large collection, or turn albums into folders. If your albums matter, check how the method you're using handles them, and expect to tidy up a little afterwards."
+related:
+  - backup-before-switching-phones
+  - organise-phone-photos
+  - free-up-phone-storage
+og_image: "/assets/og/move-photos-android-to-iphone.png"
+og_image_alt: "How to Move Photos From Android to iPhone (and Back): a Daily Info guide from Daily Utility Apps"
 ---
 
 Switching between Android and iPhone used to mean accepting that some things would be left behind. Photos were often the biggest casualty: albums scattered, videos missing, pictures arriving as blurry, compressed copies. Things are much better now. Both Apple and Google provide tools for moving to their phones, cloud photo services work on both platforms, and there are several reliable ways to get your library across in full quality.
@@ -41,6 +43,8 @@ A little preparation makes any transfer smoother, whichever direction you're goi
 **Back up your photos first.** Whatever method you choose, make sure your photos and videos are also backed up somewhere safe, such as cloud storage or a computer. Transfers occasionally stop partway, and a backup means nothing depends on the transfer going perfectly.
 
 **Check the space on the new phone.** Look at how much space your photos and videos take on the old phone (in Settings, under Storage) and make sure the new phone has more than that free. If the new phone has less storage than the old one, you'll need to choose what to move, or keep part of your library in the cloud.
+
+**Make room if you need to.** If the old phone is nearly full, our guide to [freeing up storage without losing anything](/daily-info/free-up-phone-storage) covers the safest ways to clear space first.
 
 **Tidy up.** Moving fewer photos is quicker and leaves you with a tidier library. Delete screenshots you don't need, duplicates and obvious mistakes before you start. Our guide on [organising thousands of photos](/daily-info/organise-phone-photos) has quick ways to do this.
 
