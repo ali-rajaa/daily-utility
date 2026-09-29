@@ -26,6 +26,17 @@
   max-width: calc(42rem + 14rem + 4rem + var(--gutter) * 2);
 }
 
+/* `sections:` is documented as required front matter (STATUS.md
+   section 4), but a page that skips it shouldn't silently render its
+   body squeezed into the 14rem sidebar track -- CSS grid auto-places a
+   lone child into the first column when nothing declares otherwise.
+   :only-child (true exactly when legal.html's {% if page.sections %}
+   left the nav out) spans it across both columns instead. */
+.legal-grid > .legal-body:only-child {
+  grid-column: 1 / -1;
+  max-width: calc(42rem + var(--gutter) * 2);
+}
+
 @media (max-width: 899.98px) {
   .legal-grid { grid-template-columns: 1fr; }
 }

@@ -657,6 +657,53 @@ post-body"` / `class="prose legal-body"`) — `pages/post.css` and
   article (generic, defensible advice; not a claim about the company or
   app's own practices), used to verify `post.html` end-to-end.
 
+## 4i. Post-ship audit of step 4 (29 Sep)
+
+Re-audited step 4 independently after it shipped, rather than trusting
+the verification already recorded above: fresh clean build off the
+actual committed `HEAD` (not the working tree), full `html-validate` +
+JSON-LD re-check, then a round of edge cases the original pass hadn't
+actually exercised. All done with throwaway test pages, built, checked
+and deleted before anything was committed — same discipline as the
+section 4g/4h XSS tests.
+
+**One more real bug found: `legal.html` without `sections:` renders its
+body squeezed into the 224px sidebar column.** `sections` is documented
+as required front matter, but the layout's `{% if page.sections %}`
+around the TOC `<nav>` means a page that skips it still builds cleanly
+— it just silently drops the reader's content into `.legal-grid`'s
+first (14rem) column, because CSS grid auto-places a lone child there
+when nothing says otherwise. Same shape of bug as section 4h's `css:`
+cascade issue: a "this front-matter field is required" assumption that
+nothing actually enforced or defended against. **Fixed generally**: a
+`.legal-grid > .legal-body:only-child { grid-column: 1 / -1; ... }` rule
+in `pages/legal.css` makes the body span full width whenever the TOC
+sibling isn't rendered, so a legal page missing `sections:` degrades to
+a normal single-column page instead of a broken one. Verified both
+ways with throwaway pages: with `sections:` set, the TOC/body two-column
+layout is unchanged (224px + 672px, matching before the fix); without
+it, the body now measures full width (736px) instead of the broken
+224px it measured before.
+
+**Everything else checked came back clean, not just unremarked-on:**
+- An app page with only `android_url` set (no `ios_url`) and no
+  `features`/`how_it_works`/`faqs`: renders exactly one store badge, no
+  empty section shells for the skipped optional blocks, and the
+  `SoftwareApplication` JSON-LD renders alone (no `FAQPage` block).
+- `post.html`'s `related:` field, never actually exercised when it was
+  built: a second throwaway post plus `related: [that-post's-slug]`
+  resolves and links correctly.
+- Re-ran the section 4g adversarial XSS payload
+  (`</script><script>alert(1)</script>`, plus a quote mark and a raw
+  `<b>` tag) through `page.heading` specifically — not just a FAQ
+  answer, which was the only field previously tested this way. Renders
+  fully HTML-entity-escaped in both the visible `<h1>`/breadcrumb and
+  safely inside the `Article`/`BreadcrumbList` JSON-LD; exactly the
+  expected `</script` count, no breakout, `html-validate` clean.
+- Full `shell-test.js` (19) + `responsive-sweep.js` (138) + the
+  dedicated app/post-page Playwright suites (17 + 14) re-run against
+  the final, fixed state: all 188 checks pass.
+
 ## 5. Page sections
 
 **Homepage — flagship-first, but every app gets a real page (see 5a).**
@@ -1136,3 +1183,15 @@ what's there.
   with a throwaway-only page (deleted before committing) since no real
   privacy/terms text exists yet. Zero regressions: both the 19-check
   and 138-check suites still pass after the shell.css changes.
+- Post-ship audit of step 4 (section 4i): re-verified independently
+  against a fresh build of the actual committed `HEAD`, then exercised
+  edge cases the original pass hadn't -- android-only app pages, the
+  unused `related:` post field, and the section 4g XSS payload against
+  `page.heading` specifically. Found one more real bug: a `legal.html`
+  page without `sections:` rendered its body squeezed into the 224px
+  TOC-sidebar column instead of full width (CSS grid auto-placing a
+  lone child, since `sections` being "required" wasn't actually
+  enforced anywhere). Fixed with a `:only-child` grid rule in
+  `pages/legal.css`; verified both with and without `sections:` set.
+  Everything else came back clean: 188 checks total across the shell,
+  responsive, app-page and post-page suites.
