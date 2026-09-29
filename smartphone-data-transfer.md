@@ -38,6 +38,7 @@ guide_heading: "Moving files between phones: a practical guide"
 guide_sub: "The ways files can move from one phone to another, what to check before you start, and how to be sure everything arrived."
 og_image: "/assets/og/smartphone-data-transfer.png"
 og_image_alt: "Smartphone All Data Transfer, an app from Daily Utility Apps"
+updated: 2026-09-29
 ---
 
 ## When you need to move files between phones

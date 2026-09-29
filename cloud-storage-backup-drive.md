@@ -50,6 +50,7 @@ guide_heading: "Backing up your phone: a practical guide"
 guide_sub: "What a backup is, what's worth keeping, and how to make sure yours will actually be there when you need it."
 og_image: "/assets/og/cloud-storage-backup-drive.png"
 og_image_alt: "Cloud Storage Backup & Drive, an app from Daily Utility Apps"
+updated: 2026-09-29
 ---
 
 ## Why phone backups matter

@@ -38,6 +38,7 @@ guide_heading: "Reading documents on your phone: a practical guide"
 guide_sub: "The four document types you'll meet most, where they come from, and how to read them comfortably on a small screen."
 og_image: "/assets/og/document-reader-pdf.png"
 og_image_alt: "Document Reader: Read All PDF, an app from Daily Utility Apps"
+updated: 2026-09-29
 ---
 
 ## Why documents end up on your phone

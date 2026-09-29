@@ -1725,3 +1725,9 @@ what's there.
   flyouts on desktop, fold-out sheet on phones. 26/26 nav tests pass.
 - Header revised: no "Get the app", Guides links straight to the hub,
   no platform labels, Apple-style capsule nav, featured flagship card.
+- Sitemap verified (29 Sep): valid against the sitemaps.org 0.9 schema,
+  exactly the 15 indexable pages, every loc = the page's canonical and
+  returns 200, robots.txt points to it. Fixed lastmod: home, app pages
+  and the hub used the build time (claiming a change on every deploy);
+  they now carry real `updated` dates (the hub takes its newest guide's
+  date), and an undated page gets no lastmod rather than a fake one.

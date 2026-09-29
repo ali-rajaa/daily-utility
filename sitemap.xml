@@ -3,11 +3,23 @@
 {%- comment -%}
   Every HTML page except the 404 and anything with noindex: true
   (STATUS.md section 6). URLs are extensionless (directory pages like
-  /daily-info/ keep their slash), the same form as every canonical. lastmod uses the most specific date a page has:
-  a post's `updated`, a legal page's `last_updated`, else the build time.
+  /daily-info/ keep their slash), the same form as every canonical.
+
+  lastmod is only ever a real date (Google ignores lastmod on sites where
+  it proves inaccurate): a page's `updated`, a legal page's
+  `last_updated`, else its `date`. The Daily Info hub lists the guides,
+  so it takes the newest guide's date when that's later than its own.
+  A page with no date gets no lastmod -- never the build time, which
+  would claim every page changed on every deploy.
   The empty front matter fence above is required, or Jekyll copies this
   file unrendered.
 {%- endcomment -%}
+{%- assign _newest_guide = "" -%}
+{%- assign _guides = site.pages | where: "layout", "post" -%}
+{%- for g in _guides -%}
+  {%- assign _gd = g.updated | default: g.date | date: "%Y-%m-%d" -%}
+  {%- if _gd > _newest_guide -%}{%- assign _newest_guide = _gd -%}{%- endif -%}
+{%- endfor -%}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {%- assign _pages = site.pages | sort: "url" -%}
@@ -16,10 +28,14 @@
   {%- unless p.url contains ".html" or _last == "/" -%}{%- continue -%}{%- endunless -%}
   {%- if p.url == "/404.html" or p.noindex -%}{%- continue -%}{%- endif -%}
   {%- assign _loc = p.url | replace: "/index.html", "/" | replace: ".html", "" -%}
-  {%- assign _mod = p.updated | default: p.last_updated | default: p.date | default: site.time %}
+  {%- assign _mod = p.updated | default: p.last_updated | default: p.date -%}
+  {%- if _mod -%}{%- assign _mod = _mod | date: "%Y-%m-%d" -%}{%- else -%}{%- assign _mod = "" -%}{%- endif -%}
+  {%- if p.url == "/daily-info/" and _newest_guide > _mod -%}{%- assign _mod = _newest_guide -%}{%- endif %}
   <url>
     <loc>{{ _loc | absolute_url }}</loc>
-    <lastmod>{{ _mod | date: "%Y-%m-%d" }}</lastmod>
+    {%- if _mod != "" %}
+    <lastmod>{{ _mod }}</lastmod>
+    {%- endif %}
   </url>
 {%- endfor %}
 </urlset>

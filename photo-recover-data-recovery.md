@@ -38,6 +38,7 @@ guide_heading: "Getting deleted photos back: a practical guide"
 guide_sub: "Where deleted photos go on an Android phone, where to look first, and what gives you the best chance of getting them back."
 og_image: "/assets/og/photo-recover-data-recovery.png"
 og_image_alt: "Photo Recover & Data Recovery, an app from Daily Utility Apps"
+updated: 2026-09-29
 ---
 
 ## What happens when you delete a photo
