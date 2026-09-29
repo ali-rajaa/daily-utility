@@ -4,14 +4,14 @@ Living reference for this repo. It records what we decided and why, so
 no session has to re-derive or re-argue it. Update it whenever a
 decision changes or a phase completes.
 
-**Current state:** Build steps 1 (config), 2 (shell), 3 (includes) and 4
-(layouts: `app`, `post`, `legal`, each with its CSS) are done and
-verified. `main` deploys; work happens on `claude/bold-feynman-c7lqej`
-and is brought to `main` to update the preview. The flagship's real app
-page (`cloud-storage-backup-drive.html`) and one real Daily Info article
-now exist and are live, built as part of verifying the `app` and `post`
-layouts. Next: step 5 (the remaining core pages — homepage, other three
-app pages, privacy, terms, 404).
+**Current state:** Build steps 1–5 are done: config, shell, includes,
+layouts, and the core pages (real homepage, all four app pages, privacy
+policy, terms of service, 404) — section 5b. **Work is committed and
+pushed straight to `main` only** (user, 29 Sep: "from now on ONLY push to
+main"); `main` deploys the preview. The old `claude/bold-feynman-c7lqej`
+branch is no longer used. Next: step 6 (Daily Info hub + articles).
+**Before cutover:** the owner must review the legal pages and all app
+copy against the real store listings (section 10).
 
 ---
 
@@ -649,10 +649,14 @@ post-body"` / `class="prose legal-body"`) — `pages/post.css` and
   contents generated from `sections:` front matter, prose body. No
   hardcoded `canonical:` — uses the same logic as every other page.
 - `cloud-storage-backup-drive.html` — the flagship's real app page, now
-  live (not a placeholder): real features, a real 3-step flow, real
-  FAQs written from how the app actually works (no fabricated
-  ratings/downloads, per the standing decision). `apps.yml`'s `built:`
-  flipped to `true` for it, so nav/footer link to it correctly.
+  live (not a placeholder). `apps.yml`'s `built:` flipped to `true` for
+  it, so nav/footer link to it correctly. **Correction (step 5, 29
+  Sep):** this entry originally said its FAQs were "written from how the
+  app actually works". That was wrong — no store description was ever
+  supplied, and the copy invented specifics (files stay in your own
+  cloud account, a Wi-Fi-only setting, encrypted in transit and at
+  rest). Rewritten in step 5 to claim only the confirmed scope; see
+  section 5b.
 - `daily-info/backup-before-switching-phones.md` — one real Daily Info
   article (generic, defensible advice; not a claim about the company or
   app's own practices), used to verify `post.html` end-to-end.
@@ -772,10 +776,10 @@ the brand name correction in section 4a.
   real 4.8★/10K reviews and the recovery app 3.1★/13K, and download
   counts range from "10+" to "1M+" across the four (showing that
   spread side-by-side would undercut the newer apps anyway).
-- **`built: false` on all four for now.** The data is captured and
-  ready, but no app page exists yet (that's step 5-6) — flips true per
-  app as each one actually ships, not all at once, so the footer/nav
-  never link to a page that isn't live.
+- **`built: true` on all four** as of step 5 (each flipped only when its
+  page shipped). The homepage grid, footer and every app page's "other
+  apps" list read only `built: true` entries, so nothing ever links to a
+  page that isn't live.
 - **The footer's existing `/<slug>` link logic needs no change** now
   that every app gets a real page — the href-branching the old plan
   required (internal link for the flagship, external store link for
@@ -787,6 +791,110 @@ the brand name correction in section 4a.
   & Security.
 - Every post links once to the app page and once to a related post.
 - No invented bylines, review dates or ratings.
+
+## 5b. Step 5: core pages (29 Sep)
+
+User asked to "continue with step 5 and apply properly, make it more
+appealing". Built every remaining core page and redesigned the app
+template, with one rule driving the copy: **claim only what's
+confirmed.** No store "About this app" description was ever supplied for
+any app, so the only confirmed facts are each listing's name, icon and
+package ID, the flagship's scope (backup and restore of photos, videos,
+contacts and app data — section 1), which stores each app is on, and the
+company facts in section 2.
+
+**Homepage (`index.html` + `pages/index.css`)** — the six sections from
+section 5, replacing the step 2 placeholder:
+
+1. Hero: two-tone H1 (accent word in `--brand-text`, *not* gradient text
+   — the green end of the gradient fails even 3:1), primary CTA into the
+   flagship page, "See all our apps", three check-marked facts, and a
+   decorative cluster of the four real app icons with glass capability
+   chips (slow 19–24s float; `aria-hidden` since every icon is named and
+   linked further down).
+2. Flagship spotlight: name, tagline, the four confirmed backup
+   categories, both store badges, and a gradient panel illustrating
+   photos/videos/contacts/app data flowing into the app (dashed lines
+   marching inward; off under reduced motion).
+3. More apps: one card per `tier: more` + `built: true` app, each
+   linking to its own page, platform derived from its store links.
+4. Why us: one job done properly, privacy-first, real Australian company
+   (ACN from `_config.yml`), iPhone and Android.
+5. Latest Daily Info: up to three newest posts, listed automatically.
+6. Closing CTA card with flagship badges.
+- `Organization` JSON-LD with `@id …/#organization` lives here only;
+  `_config.yml`'s `company:` gained `locality`/`region`/`postcode`/
+  `country` for its `PostalAddress`.
+- `#apps` wraps sections 2–3, so the footer's "All apps" lands on the
+  flagship with the rest directly below.
+
+**App pages** — `document-reader-pdf.html`, `smartphone-data-transfer.html`
+and `photo-recover-data-recovery.html` added; all four now `built: true`.
+Every claim traces to the listing title/package ID or company facts.
+The recovery page's FAQ says plainly that no app can promise to recover
+every deleted file.
+
+**`app.html` fixes found while adding Android-only apps** — each would
+have been false on three of the four pages:
+- `"operatingSystem": "iOS, Android"` was hardcoded → now derived from
+  which store URLs the page has.
+- Closing CTA said "Free to download, for iPhone and Android" → now
+  "Available on {platforms}", derived the same way ("free" dropped:
+  never confirmed).
+- Trust band claimed "encrypted in transit and at rest" for every app →
+  now states only company-wide facts (maker + ACN, never selling data,
+  link to the policy); an app-specific sentence goes in optional
+  `trust_text` front matter, only when confirmed for that app.
+- "How it works" H2 was hardcoded "Set up once, it just runs" (wrong for
+  a document reader) → optional `steps_heading` front matter.
+- Header "Get the app" pointed at the flagship's `#download` from every
+  page → on an app page it now targets that page's own `#download`.
+- Visual redesign in `pages/app.css`: haloed hero icon, a meta row
+  (platforms, "Australian company", data never sold — deliberately not
+  "Made in Australia", an origin claim nothing confirms), step cards joined by
+  a dashed rail, icon-tiled feature cards, a new "Other everyday tools"
+  cross-link list, and the closing CTA as a card. Trust band and CTA
+  moved inside an inner wrapper so their backgrounds keep the gutter on
+  phones instead of running edge to edge.
+
+**Flagship copy rewritten** (see the correction in section 4h): removed
+"files stay in your own cloud account", the Wi-Fi-only FAQ and
+"encrypted transfer". **Taglines** in `apps.yml` lost "Automatic",
+"fast and secure" and "in one tap" for the same reason.
+
+**Legal pages (`privacy-policy.md`, `terms-of-service.md`)** — adapted
+from the CloudGate Technologies templates the user pasted on 28 Sep (per
+section 2's "legal text source"). Kept everything that is true of the
+company: entity, ACN, address, Privacy Act/APPs, GDPR bases, rights,
+OAIC complaints, children, governing law (WA), liability cap, ACL, and
+the Privacy Officer named in the template. **CloudGate-product specifics
+were not carried over**, because nothing confirms they apply to these
+apps: AWS storage in the United States, Stripe, Firebase, 100GB/250GB/
+500GB/1TB plans, Vault Lock, 30-day file recovery, 72-hour account
+deletion. Those passages are written conditionally ("where an app stores
+Your Content…", "if an app offers in-app purchases…"), which stays true
+whatever the facts turn out to be. The terms add a backups/recovery
+clause (no app is a substitute for your own copies; recovery can't be
+guaranteed). **These need owner review before cutover** — see section 10.
+- `legal.html` now emits the `BreadcrumbList` section 6 requires (it
+  didn't in step 4), shows a visible breadcrumb, takes `heading:` (H1)
+  separately from the longer `title:`, an optional `lead:`, and a
+  numbered TOC with 44px tap targets. Hero and body share one width so
+  the H1 lines up with the TOC (it floated in a narrower column before).
+  Markdown bodies use `{: .callout}` for key commitments.
+
+**404 (`404.html` + `pages/not-found.css`)** — `noindex: true`, gradient
+404 numeral (decorative, `aria-hidden`; the H1 says it in words), links
+home, to Daily Info and to all four apps. Root-relative links only,
+since GitHub Pages serves it at any depth.
+
+**Also:** `post.html` now emits `BlogPosting` (section 6's type), not
+the more generic `Article`. Icon sprite gained arrow-right, doc,
+transfer, restore, pin, spark, contacts, video and search.
+
+**Known gap until step 6:** `/daily-info` (the hub) doesn't exist yet,
+so the homepage's "All articles", the 404's "Read Daily Info" and the
+header's Daily Info link 404 until step 6 ships it.
 
 ## 6. SEO and routing
 
@@ -999,10 +1107,11 @@ what's there.
       consistent banner). Verified with a real flagship app page and a
       real Daily Info article (both now live), plus a throwaway-only
       page for `legal.html` since no real privacy/terms text exists yet.
-- [ ] **5. Core pages:** homepage, the other three apps' pages, privacy,
-      terms, 404. (`apps.yml` was done in step 4h's corrective work;
-      the flagship's own app page and one Daily Info article already
-      shipped as part of verifying step 4, ahead of schedule.)
+- [x] **5. Core pages:** homepage, all four app pages, privacy, terms,
+      404 (section 5b). Also fixed four `app.html` claims that would have
+      been false on Android-only pages, and rewrote copy that claimed
+      more than is confirmed. Legal text and app copy still need owner
+      review before cutover (section 10).
 - [ ] **6. Daily Info:** the hub, then the 6 articles.
 - [ ] **7. SEO files:** robots, sitemap, OG card, GA4. (The favicon
       was done in step 2.)
@@ -1037,6 +1146,21 @@ what's there.
       see section 5a. Still open: an App Store link for any of the three,
       if one exists (not checked), and taglines better than the
       title-only inference currently in `apps.yml`.
+- [ ] **Owner review of the legal pages (blocks cutover).** They're
+      adapted from the CloudGate templates with CloudGate-product
+      specifics removed (section 5b). Confirm, per app, and add back
+      where true: where stored data is hosted (APP 8 expects the
+      countries named where practicable — the policy currently says only
+      "may be located outside Australia"), which analytics/crash/ad SDKs
+      each app uses, whether any app shows ads or uses ATT tracking,
+      whether any app has accounts or in-app purchases, and concrete
+      retention/deletion periods. Also confirm Raja Imran Shafique is
+      still the Privacy Officer for these apps.
+- [ ] **Owner review of all four app pages (blocks cutover).** Copy is
+      limited to what each listing's title/package ID establishes. Check
+      it against each real store description and add confirmed features
+      (and a `trust_text` where an app has a specific, true privacy
+      point, e.g. how the flagship stores backups).
 - [ ] The GA4 measurement ID (`G-…`) for step 7. Create a GA4 property for
       dailyutilityapps.store; until then analytics is simply left out.
 - [ ] Verify `fixmypcperth.com` (for the preview) and later

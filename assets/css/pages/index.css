@@ -1,0 +1,461 @@
+/* ==========================================================================
+   index.css: the homepage (index.html), six sections per STATUS.md
+   section 5.
+
+   Colours are shell.css tokens only. The brand gradient appears as
+   decoration (the spotlight panel, the post-card accent bar), never
+   behind text -- see the contrast note on --brand-2 in shell.css. The
+   hero accent word uses --brand-text, not a gradient fill, for the same
+   reason: the green end of the gradient fails even the 3:1 large-text
+   ratio.
+
+   Motion follows the apple-design skill: transform/opacity only, slow
+   drifts of 18s+ (well clear of the ~5s cycle it flags), press feedback
+   on :active, and reduced-motion / reduced-transparency / more-contrast
+   fallbacks at the end of the file.
+   ========================================================================== */
+
+/* ---------- 1. Hero ---------- */
+
+.home-hero {
+  padding-block: clamp(3rem, 7vw, 6rem) clamp(3.5rem, 8vw, 6.5rem);
+}
+
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+@media (max-width: 899.98px) {
+  .home-hero-grid { grid-template-columns: 1fr; }
+  .home-hero-visual { max-width: 24rem; margin-inline: auto; width: 100%; }
+}
+
+.home-hero-accent { color: var(--brand-text); }
+
+.home-hero-sub {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.home-hero-copy .btn-row { margin-top: 2rem; }
+
+.home-hero-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 1.75rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+.home-hero-points li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.home-hero-points svg { width: 1.125rem; height: 1.125rem; color: var(--brand-2-text); }
+
+/* The icon cluster: positions are percentages of a square box, so the
+   whole composition scales as one piece at every width. */
+.cluster {
+  position: relative;
+  width: min(100%, 26rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.cluster-ring,
+.cluster-ring::after {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed var(--border-strong);
+}
+.cluster-ring { inset: 8%; }
+.cluster-ring::after { content: ""; inset: 18%; border-style: solid; border-color: var(--border); }
+
+.cluster-tile {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 23%;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  will-change: transform;
+}
+.cluster-tile img { width: 100%; height: 100%; object-fit: cover; }
+
+.cluster-tile--main { width: 42%; left: 29%; top: 29%; z-index: 2; animation: clusterFloat 22s ease-in-out infinite; }
+.cluster-tile--1 { width: 23%; left: 5%; top: 10%; animation: clusterFloat 19s ease-in-out infinite reverse; }
+.cluster-tile--2 { width: 21%; left: 76%; top: 27%; animation: clusterFloat 24s ease-in-out infinite; }
+.cluster-tile--3 { width: 23%; left: 57%; top: 75%; animation: clusterFloat 21s ease-in-out infinite reverse; }
+
+@keyframes clusterFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.cluster-chip {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass);
+  backdrop-filter: blur(14px) saturate(170%);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  box-shadow: var(--shadow-md);
+  font: 600 0.8125rem/1 var(--font-heading);
+  letter-spacing: 0.005em;
+  color: var(--text);
+  white-space: nowrap;
+}
+.cluster-chip svg { width: 1rem; height: 1rem; color: var(--brand-text); }
+
+.cluster-chip--a { left: 0; top: 60%; }
+.cluster-chip--b { left: 46%; top: 5%; }
+.cluster-chip--c { left: 11%; top: 84%; }
+
+/* ---------- 2. Flagship spotlight ---------- */
+
+.spotlight {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 5rem);
+}
+
+@media (max-width: 859.98px) {
+  .spotlight { grid-template-columns: 1fr; }
+}
+
+.spotlight-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+  margin: 1.75rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+.spotlight-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+.spotlight-list-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+.spotlight-list-icon svg { width: 1.25rem; height: 1.25rem; }
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.text-link svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
+.text-link:hover svg { transform: translateX(3px); }
+
+.spotlight-panel {
+  position: relative;
+  max-width: 28rem;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border-radius: 2rem;
+  background: var(--brand-gradient);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  isolation: isolate;
+}
+.spotlight-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.28), transparent 45%),
+    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.18), transparent 35%);
+}
+
+.spotlight-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.spotlight-lines path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2;
+  stroke-dasharray: 6 8;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  animation: spotlightFlow 2s linear infinite;
+}
+/* Dashes march toward the centre: everything flows into the backup. */
+@keyframes spotlightFlow { to { stroke-dashoffset: -28; } }
+
+.spotlight-icon {
+  position: absolute;
+  z-index: 2;
+  width: 34%;
+  left: 33%;
+  top: 33%;
+  border-radius: 23%;
+  box-shadow: 0 12px 32px rgba(6, 16, 31, 0.3);
+}
+
+/* Fixed colours on purpose: the nodes sit on the gradient in both
+   themes, so they stay white with the light-theme brand blue (4.9:1 on
+   white) rather than following the dark theme's lighter --brand. */
+.spotlight-node {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 18%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0b5fe8;
+  box-shadow: 0 8px 20px rgba(6, 16, 31, 0.18);
+}
+.spotlight-node svg { width: 46%; height: 46%; }
+.spotlight-node--a { left: 13%; top: 15%; }
+.spotlight-node--b { left: 69%; top: 15%; }
+.spotlight-node--c { left: 13%; top: 67%; }
+.spotlight-node--d { left: 69%; top: 67%; }
+
+/* ---------- 3. More apps ---------- */
+
+.app-grid,
+.value-grid,
+.post-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.app-grid { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.app-grid > li,
+.post-grid > li { display: flex; }
+
+/* Shared card behaviour: the whole card is the link, lifts slightly on
+   hover and presses in on :active (feedback on the press, not release). */
+.app-card,
+.post-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
+}
+.app-card:hover,
+.post-card:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+.app-card:active,
+.post-card:active {
+  transform: scale(0.985);
+  transition-duration: 0.1s;
+}
+
+.app-card-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 23%;
+  box-shadow: var(--shadow-sm);
+}
+.app-card-name { margin-top: 1.25rem; font-size: 1.1875rem; }
+.app-card-tagline {
+  flex-grow: 1;
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+.app-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.app-card-platform { color: var(--text-2); }
+.app-card-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: var(--brand-text);
+}
+.app-card-more svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
+.app-card:hover .app-card-more svg { transform: translateX(3px); }
+
+/* ---------- 4. Why Daily Utility Apps ---------- */
+
+.value-grid { grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr)); }
+
+.value-card {
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.value-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+.value-icon svg { width: 1.5rem; height: 1.5rem; }
+.value-card h3 { margin-bottom: 0.5rem; font-size: 1.125rem; }
+.value-card p { font-size: 0.9375rem; color: var(--text-2); }
+
+/* ---------- 5. Latest Daily Info ---------- */
+
+.section-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+.section-head-row .section-head { margin-bottom: 0; }
+
+/* auto-fill, not auto-fit: with only one or two articles published the
+   cards keep their natural width instead of stretching across the row. */
+.post-grid { grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+
+.post-card { overflow: hidden; }
+.post-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--brand-gradient);
+}
+.post-card-cat {
+  align-self: flex-start;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  font: 650 0.75rem/1.4 var(--font-heading);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.post-card-title { margin-top: 1rem; font-size: 1.1875rem; }
+.post-card-desc {
+  flex-grow: 1;
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+.post-card-meta {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+/* ---------- 6. Closing CTA ---------- */
+
+.home-cta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+  border-radius: 1.75rem;
+  background: var(--brand-soft);
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Soft brand-coloured light in the two far corners -- kept to the edges
+   so it never sits behind the heading or copy. */
+.home-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 40%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--brand-2) 22%, transparent), transparent 40%);
+}
+.home-cta .section-sub { margin-top: 0; }
+.home-cta .store-badges { justify-content: center; }
+.home-cta-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 23%;
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- Accessibility preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cluster-tile { animation: none; }
+  .spotlight-lines path { animation: none; }
+  .app-card, .post-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .app-card:hover, .post-card:hover,
+  .app-card:active, .post-card:active { transform: none; }
+  .text-link:hover svg, .app-card:hover .app-card-more svg { transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .cluster-chip {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .cluster-chip,
+  .app-card,
+  .post-card,
+  .value-card { border-color: var(--border-strong); }
+  .cluster-chip { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .home-cta::before { display: none; }
+}

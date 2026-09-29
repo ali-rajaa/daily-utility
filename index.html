@@ -1,41 +1,220 @@
 ---
 layout: default
+css: index
 title: "Daily Utility Apps: Smart Tools for Everyday Life"
-description: "Daily Utility Apps builds focused, privacy-first utility apps for iPhone and Android, starting with Cloud Storage Backup & Drive. A brand of CloudGate Technologies."
+description: "Daily Utility Apps builds focused, privacy-first utility apps for iPhone and Android, led by Cloud Storage Backup & Drive. From CloudGate Technologies, Western Australia."
 ---
 {%- comment -%}
-  TEMPORARY. Build step 2 placeholder: exercises the shell (header, footer,
-  section scaffold, buttons, reveal) so it can be checked before anything
-  is built on it. Step 5 replaces this with the five-section homepage.
+  Homepage: the six sections in STATUS.md section 5, in order -- hero,
+  flagship spotlight, more apps, why us, latest Daily Info, closing CTA.
 
-  The store badges below are real, though: the flagship's app page
-  (/cloud-storage-backup-drive) doesn't exist until step 5, so linking
-  "Get the app" to its #download anchor would 404 today. Pulling the
-  flagship's real store URLs from apps.yml instead means this hero
-  actually works right now, not just once step 5 lands.
+  Everything app-specific comes from _data/apps.yml (tier: flagship vs
+  more), and the Daily Info cards list themselves from pages on the post
+  layout, so adding an app or an article never means editing this file.
+  The only per-app copy written here is the flagship's four backup
+  categories, which are the product's confirmed scope (STATUS.md section
+  1), not a feature list anyone has to keep in sync.
+
+  The Organization schema lives here and only here (STATUS.md section 6);
+  every SoftwareApplication and BlogPosting elsewhere points back at its
+  @id rather than repeating it.
 {%- endcomment -%}
-{%- assign flagship = site.data.apps | where: "tier", "flagship" | first %}
-<section class="section hero-glow-host">
+{%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
+{%- assign more_apps = site.data.apps | where: "tier", "more" | where: "built", true -%}
+{%- assign latest_posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }},
+  "name": {{ site.title | jsonify | replace: "/", "\/" }},
+  "legalName": {{ site.company.legal_name | jsonify | replace: "/", "\/" }},
+  "url": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }},
+  "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify | replace: "/", "\/" }},
+  "email": {{ site.company.support_email | jsonify | replace: "/", "\/" }},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ site.company.address_line1 | jsonify | replace: "/", "\/" }},
+    "addressLocality": {{ site.company.locality | jsonify | replace: "/", "\/" }},
+    "addressRegion": {{ site.company.region | jsonify | replace: "/", "\/" }},
+    "postalCode": {{ site.company.postcode | jsonify | replace: "/", "\/" }},
+    "addressCountry": {{ site.company.country | jsonify | replace: "/", "\/" }}
+  }
+}
+</script>
+
+<section class="home-hero hero-glow-host">
   {% include hero-glow.html %}
-  <div class="wrap hero-glow-content">
-    <div class="section-head">
+  <div class="wrap hero-glow-content home-hero-grid">
+    <div class="home-hero-copy">
       <span class="eyebrow">Daily Utility Apps</span>
-      <h1>Smart tools for everyday life</h1>
-      <p class="section-sub">Focused, privacy-first utility apps for iPhone and Android, from CloudGate Technologies. Our flagship app, Cloud Storage Backup &amp; Drive, keeps your photos, videos, contacts and app data safe.</p>
+      <h1>Smart tools for <span class="home-hero-accent">everyday life</span></h1>
+      <p class="home-hero-sub">Focused, privacy-first apps for iPhone and Android, each built to do one everyday job properly. From {{ site.company.legal_name | escape }}, an Australian company based in Western Australia.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="{{ '/' | append: flagship.slug | relative_url }}">Explore {{ flagship.name | escape }}<svg class="btn-icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <a class="btn btn--ghost" href="#apps">See all our apps</a>
+      </div>
+      <ul class="home-hero-points">
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>iPhone &amp; Android</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Australian company</li>
+        <li><svg aria-hidden="true"><use href="#i-check"/></svg>We never sell your data</li>
+      </ul>
     </div>
-    <div class="btn-row">
-      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
-      <a class="btn btn--ghost" href="{{ '/daily-info' | relative_url }}">Read Daily Info</a>
+
+    {%- comment -%} Decorative: the real app icons composed into a cluster.
+    Every icon here is also named and linked properly further down the
+    page, so this block is hidden from assistive tech rather than read out
+    twice. {%- endcomment %}
+    <div class="home-hero-visual" aria-hidden="true">
+      <div class="cluster">
+        <div class="cluster-ring"></div>
+        <div class="cluster-tile cluster-tile--main">
+          <img src="{{ flagship.icon | relative_url }}" width="192" height="192" alt="">
+        </div>
+        {%- for app in more_apps limit: 3 %}
+        <div class="cluster-tile cluster-tile--{{ forloop.index }}">
+          <img src="{{ app.icon | relative_url }}" width="192" height="192" alt="">
+        </div>
+        {%- endfor %}
+        <div class="cluster-chip cluster-chip--a"><svg><use href="#i-photo"/></svg>Photos</div>
+        <div class="cluster-chip cluster-chip--b"><svg><use href="#i-contacts"/></svg>Contacts</div>
+        <div class="cluster-chip cluster-chip--c"><svg><use href="#i-restore"/></svg>Restore</div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section section--alt" id="apps">
+{%- comment -%} #apps wraps both app sections, so the footer's "All apps"
+link lands on the flagship with the rest directly below it. {%- endcomment %}
+<div id="apps">
+  <section class="section section--alt">
+    <div class="wrap spotlight">
+      <div class="spotlight-copy reveal">
+        <span class="eyebrow">Our flagship app</span>
+        <h2>{{ flagship.name | escape }}</h2>
+        <p class="section-sub">{{ flagship.tagline | escape }}</p>
+        <ul class="spotlight-list">
+          <li><span class="spotlight-list-icon"><svg aria-hidden="true"><use href="#i-photo"/></svg></span>Photos</li>
+          <li><span class="spotlight-list-icon"><svg aria-hidden="true"><use href="#i-video"/></svg></span>Videos</li>
+          <li><span class="spotlight-list-icon"><svg aria-hidden="true"><use href="#i-contacts"/></svg></span>Contacts</li>
+          <li><span class="spotlight-list-icon"><svg aria-hidden="true"><use href="#i-folder"/></svg></span>App data</li>
+        </ul>
+        <div class="btn-row">
+          {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
+        </div>
+        <a class="text-link" href="{{ '/' | append: flagship.slug | relative_url }}">See how it works<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </div>
+
+      <div class="spotlight-visual reveal" aria-hidden="true">
+        <div class="spotlight-panel">
+          <div class="spotlight-node spotlight-node--a"><svg><use href="#i-photo"/></svg></div>
+          <div class="spotlight-node spotlight-node--b"><svg><use href="#i-video"/></svg></div>
+          <div class="spotlight-node spotlight-node--c"><svg><use href="#i-contacts"/></svg></div>
+          <div class="spotlight-node spotlight-node--d"><svg><use href="#i-folder"/></svg></div>
+          <svg class="spotlight-lines" viewBox="0 0 400 400" preserveAspectRatio="none">
+            <path d="M88 96 200 200M312 96 200 200M88 304 200 200M312 304 200 200"/>
+          </svg>
+          <img class="spotlight-icon" src="{{ flagship.icon | relative_url }}" width="192" height="192" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- if more_apps.size > 0 %}
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head section-head--center reveal">
+        <span class="eyebrow">More apps</span>
+        <h2>More everyday tools</h2>
+        <p class="section-sub">Each one is small, single-purpose and made by the same team.</p>
+      </div>
+      <ul class="app-grid">
+        {%- for app in more_apps %}
+        <li class="reveal">
+          <a class="app-card" href="{{ '/' | append: app.slug | relative_url }}">
+            <img class="app-card-icon" src="{{ app.icon | relative_url }}" width="192" height="192" alt="" loading="lazy">
+            <h3 class="app-card-name">{{ app.name | escape }}</h3>
+            <p class="app-card-tagline">{{ app.tagline | escape }}</p>
+            <span class="app-card-footer">
+              <span class="app-card-platform">{% if app.ios_url and app.android_url %}iPhone &amp; Android{% elsif app.ios_url %}iPhone{% else %}Android{% endif %}</span>
+              <span class="app-card-more">Learn more<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+            </span>
+          </a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </section>
+  {%- endif %}
+</div>
+
+<section class="section section--alt">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Our apps</span>
-      <h2>Built to do one thing properly</h2>
-      <p class="section-sub">The full homepage arrives in build step 5. This section checks the shared scaffold and the reveal animation.</p>
+      <span class="eyebrow">Why Daily Utility Apps</span>
+      <h2>Small apps, made carefully</h2>
+    </div>
+    <ul class="value-grid">
+      <li class="value-card reveal">
+        <span class="value-icon"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>
+        <h3>One job, done properly</h3>
+        <p>Each app is built around a single everyday task, so it stays quick to open and easy to learn.</p>
+      </li>
+      <li class="value-card reveal">
+        <span class="value-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>
+        <h3>Privacy-first</h3>
+        <p>We never sell your personal information, and we never use your files to build advertising profiles.</p>
+      </li>
+      <li class="value-card reveal">
+        <span class="value-icon"><svg aria-hidden="true"><use href="#i-pin"/></svg></span>
+        <h3>A real Australian company</h3>
+        <p>Made by {{ site.company.legal_name | escape }} <span class="nowrap">({{ site.company.acn }})</span>, based in {{ site.company.locality }}, Western Australia.</p>
+      </li>
+      <li class="value-card reveal">
+        <span class="value-icon"><svg aria-hidden="true"><use href="#i-devices"/></svg></span>
+        <h3>iPhone and Android</h3>
+        <p>Our flagship is on both the App Store and Google Play, and the rest of our apps are on Google Play.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+{%- if latest_posts.size > 0 %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head-row reveal">
+      <div class="section-head">
+        <span class="eyebrow">Daily Info</span>
+        <h2>Guides for everyday phone problems</h2>
+      </div>
+      <a class="btn btn--ghost" href="{{ '/daily-info' | relative_url }}">All articles</a>
+    </div>
+    <ul class="post-grid">
+      {%- for post in latest_posts limit: 3 %}
+      <li class="reveal">
+        <a class="post-card" href="{{ post.url | replace: '.html', '' | relative_url }}">
+          <span class="post-card-cat">{{ post.category | escape }}</span>
+          <h3 class="post-card-title">{{ post.heading | default: post.title | escape }}</h3>
+          <p class="post-card-desc">{{ post.description | escape }}</p>
+          <span class="post-card-meta">
+            <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%-d %b %Y" }}</time>
+            {%- if post.read_min %}<span aria-hidden="true">&middot;</span>{{ post.read_min }} min read{% endif %}
+          </span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="home-cta reveal">
+      <img class="home-cta-icon" src="{{ flagship.icon | relative_url }}" width="192" height="192" alt="">
+      <h2>Back up what matters, today</h2>
+      <p class="section-sub">Get {{ flagship.name | escape }} on {% if flagship.ios_url and flagship.android_url %}iPhone and Android{% elsif flagship.ios_url %}iPhone{% else %}Android{% endif %}.</p>
+      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
     </div>
   </div>
 </section>

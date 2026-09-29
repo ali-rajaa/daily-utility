@@ -1,0 +1,38 @@
+---
+layout: default
+css: not-found
+title: "Page not found | Daily Utility Apps"
+description: "The page you were looking for isn't here. Find our apps and Daily Info guides from here."
+noindex: true
+---
+{%- comment -%}
+  GitHub Pages serves this for any missing path, at any depth, so every
+  link and asset here must be root-relative (relative_url), never
+  relative to the current directory. default.html already drops the
+  canonical and og:url for this page, and noindex keeps it out of search
+  and the sitemap (STATUS.md section 6).
+{%- endcomment -%}
+{%- assign _apps = site.data.apps | where: "built", true -%}
+<section class="section notfound hero-glow-host">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content notfound-inner">
+    <p class="notfound-code" aria-hidden="true">404</p>
+    <h1>This page isn't here</h1>
+    <p class="section-sub">It may have moved, or the link may be mistyped. These will get you back on track.</p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="{{ '/' | relative_url }}">Go to the homepage</a>
+      <a class="btn btn--ghost" href="{{ '/daily-info' | relative_url }}">Read Daily Info</a>
+    </div>
+
+    <ul class="notfound-apps" aria-label="Our apps">
+      {%- for app in _apps %}
+      <li>
+        <a href="{{ '/' | append: app.slug | relative_url }}">
+          <img src="{{ app.icon | relative_url }}" width="192" height="192" alt="">
+          <span>{{ app.name | escape }}</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>

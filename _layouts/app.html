@@ -20,20 +20,32 @@ css: app
   matter (STATUS.md section 4): title, description, css (must be "app"),
   app_name, tagline, icon, ios_url and/or android_url, category,
   features (icon, title, text), how_it_works (3x {title, text}),
-  faqs (q, a).
+  faqs (q, a). Optional: steps_heading (the how-it-works H2), trust_text
+  (an app-specific privacy sentence for the trust band -- only ever
+  something confirmed about that particular app).
 
   The "Get the app" button in the header links to #download -- that id
   must stay on the element wrapping the store badges below (STATUS.md
   section 2's "rules the later steps must keep").
 {%- endcomment -%}
 {%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+{%- comment -%} Platforms come from which store links the page actually
+has -- never hardcoded, since most of the apps are Android-only.
+{%- endcomment -%}
+{%- if page.ios_url and page.android_url -%}
+  {%- assign _os = "iOS, Android" -%}{%- assign _platforms = "iPhone and Android" -%}
+{%- elsif page.ios_url -%}
+  {%- assign _os = "iOS" -%}{%- assign _platforms = "iPhone" -%}
+{%- else -%}
+  {%- assign _os = "Android" -%}{%- assign _platforms = "Android" -%}
+{%- endif -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": {{ page.app_name | jsonify | replace: "/", "\/" }},
   "applicationCategory": {{ page.category | jsonify | replace: "/", "\/" }},
-  "operatingSystem": "iOS, Android",
+  "operatingSystem": {{ _os | jsonify }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
   "image": {{ page.icon | absolute_url | jsonify | replace: "/", "\/" }},
   "url": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }},
@@ -48,7 +60,7 @@ css: app
 <section class="section app-hero hero-glow-host">
   {% include hero-glow.html %}
   <div class="wrap hero-glow-content app-hero-inner">
-    <img class="app-hero-icon" src="{{ page.icon | relative_url }}" width="88" height="88" alt="">
+    <img class="app-hero-icon" src="{{ page.icon | relative_url }}" width="192" height="192" alt="">
     <div class="section-head">
       <span class="eyebrow">{{ page.category | escape }}</span>
       <h1>{{ page.app_name | escape }}</h1>
@@ -57,6 +69,11 @@ css: app
     <div class="btn-row" id="download">
       {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
     </div>
+    <ul class="app-hero-meta">
+      <li><svg aria-hidden="true"><use href="#i-devices"/></svg>{{ _platforms }}</li>
+      <li><svg aria-hidden="true"><use href="#i-pin"/></svg>Australian company</li>
+      <li><svg aria-hidden="true"><use href="#i-shield"/></svg>Your data is never sold</li>
+    </ul>
   </div>
 </section>
 
@@ -65,7 +82,7 @@ css: app
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">How it works</span>
-      <h2>Set up once, it just runs</h2>
+      <h2>{{ page.steps_heading | default: "Three steps to get started" | escape }}</h2>
     </div>
     <ol class="steps">
       {%- for step in page.how_it_works %}
@@ -122,22 +139,60 @@ css: app
 </section>
 {%- endif %}
 
+{%- comment -%} The trust band states only what's true company-wide (who
+makes the app, the privacy policy's no-selling commitment). Anything
+app-specific -- how or where that app stores data -- goes in the page's
+own optional trust_text, so it's never claimed for an app it doesn't
+apply to. {%- endcomment %}
 <section class="section">
-  <div class="wrap wrap--narrow trust-band reveal">
-    <svg class="trust-band-icon" aria-hidden="true"><use href="#i-shield"/></svg>
-    <div>
-      <h2 class="h3">Your data, protected and never sold</h2>
-      <p>{{ page.app_name | escape }} is built by {{ site.company.legal_name | escape }}, an Australian company. Your files are encrypted in transit and at rest, and we never sell your data or use it to build advertising profiles. Read the full <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a>.</p>
+  <div class="wrap wrap--narrow">
+    <div class="trust-band reveal">
+      <span class="trust-band-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>
+      <div>
+        <h2 class="h3">Your privacy comes first</h2>
+        <p>{{ page.app_name | escape }} is made by {{ site.company.legal_name | escape }} <span class="nowrap">({{ site.company.acn }})</span>, an Australian company. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We never sell your personal information, and we never use your files to build advertising profiles. Read the full <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a>.</p>
+      </div>
     </div>
   </div>
 </section>
 
+{%- assign _others = site.data.apps | where: "built", true -%}
+{%- if _others.size > 1 %}
 <section class="section section--alt">
-  <div class="wrap cta-band reveal">
-    <div class="section-head">
-      <h2>Get {{ page.app_name | escape }} today</h2>
-      <p class="section-sub">Free to download, for iPhone and Android.</p>
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">More from Daily Utility Apps</span>
+      <h2>Other everyday tools</h2>
     </div>
-    {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+    <ul class="other-apps">
+      {%- for app in _others %}
+      {%- unless app.name == page.app_name %}
+      <li class="reveal">
+        <a class="other-app" href="{{ '/' | append: app.slug | relative_url }}">
+          <img src="{{ app.icon | relative_url }}" width="192" height="192" alt="" loading="lazy">
+          <span class="other-app-text">
+            <span class="other-app-name">{{ app.name | escape }}</span>
+            <span class="other-app-tagline">{{ app.tagline | escape }}</span>
+          </span>
+          <svg class="other-app-arrow" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+      {%- endunless %}
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band cta-band--card reveal">
+      <img class="cta-band-icon" src="{{ page.icon | relative_url }}" width="192" height="192" alt="">
+      <div class="section-head">
+        <h2>Get {{ page.app_name | escape }}</h2>
+        <p class="section-sub">Available on {{ _platforms }}.</p>
+      </div>
+      {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+    </div>
   </div>
 </section>

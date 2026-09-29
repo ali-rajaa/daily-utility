@@ -5,8 +5,12 @@
 
    Every colour used here is an existing shell.css token already checked
    for contrast (see shell.css's own header comment and STATUS.md); no
-   new colour pairs are introduced in this file.
+   new colour pairs are introduced in this file. FAQ accordion and the
+   base closing CTA band live in shell.css ("Shared page components")
+   because post.html uses them too.
    ========================================================================== */
+
+/* ---------- Hero ---------- */
 
 .app-hero-inner {
   display: flex;
@@ -16,42 +20,87 @@
   gap: 1.5rem;
 }
 
+/* A soft brand-coloured halo behind the icon -- decoration only. */
 .app-hero-icon {
-  width: 5.5rem;
-  height: 5.5rem;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 23%;
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--brand) 10%, transparent),
+    0 0 0 12px color-mix(in srgb, var(--brand) 5%, transparent),
+    var(--shadow-lg);
 }
 
-.app-hero .section-head { max-width: 36rem; }
-.app-hero .section-head--center,
-.app-hero .section-head { margin-inline: auto; }
+.app-hero .section-head {
+  max-width: 38rem;
+  margin-inline: auto;
+  margin-bottom: 0;
+}
+
+.app-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+.app-hero-meta li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.app-hero-meta svg { width: 1.125rem; height: 1.125rem; color: var(--brand-text); }
 
 /* ---------- How it works ---------- */
 
 .steps {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2rem;
-  list-style: none;
+  gap: 1.25rem;
   margin: 0;
   padding: 0;
-  text-align: center;
+  list-style: none;
+  counter-reset: none;
+}
+
+/* A dashed rail joining the three step numbers, desktop only: it reads as
+   one flow left to right, and would make no sense once the steps stack. */
+@media (min-width: 720px) {
+  .steps::before {
+    content: "";
+    position: absolute;
+    top: calc(1.75rem + 1.375rem);
+    left: 16.66%;
+    right: 16.66%;
+    border-top: 2px dashed var(--border-strong);
+  }
 }
 
 @media (max-width: 719.98px) {
-  .steps { grid-template-columns: 1fr; gap: 2.5rem; }
+  .steps { grid-template-columns: 1fr; }
+}
+
+.step {
+  position: relative;
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: center;
 }
 
 .step-number {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   margin-bottom: 1rem;
   border-radius: 50%;
   background: var(--brand);
+  box-shadow: 0 0 0 6px var(--surface);
   color: var(--on-brand);
   font-family: var(--font-heading);
   font-weight: 700;
@@ -59,7 +108,7 @@
 }
 
 .step h3 { margin-bottom: 0.5rem; }
-.step p { color: var(--text-2); }
+.step p { color: var(--text-2); font-size: 0.9375rem; }
 
 /* ---------- Features ---------- */
 
@@ -72,22 +121,23 @@
 .feature-card {
   padding: 1.75rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
 .feature-icon {
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 1rem;
-  color: var(--brand);
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  color: var(--brand-text);
 }
 
-.feature-card h3 { margin-bottom: 0.5rem; }
+.feature-card h3 { margin-bottom: 0.5rem; font-size: 1.125rem; }
 .feature-card p { color: var(--text-2); font-size: 0.9375rem; }
-
-/* FAQ accordion and closing CTA band styles now live in shell.css's
-   "Shared page components" section -- post.html uses them too. */
 
 /* ---------- Trust band ---------- */
 
@@ -95,20 +145,113 @@
   display: flex;
   align-items: flex-start;
   gap: 1.25rem;
-  padding: 1.75rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, transparent);
   border-radius: var(--radius-lg);
   background: var(--brand-soft);
 }
 
 .trust-band-icon {
-  width: 2rem;
-  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
   flex-shrink: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
   color: var(--brand-text);
+  box-shadow: var(--shadow-sm);
 }
+.trust-band-icon svg { width: 1.5rem; height: 1.5rem; }
 
 .trust-band p { margin-top: 0.5rem; color: var(--text-2); }
 
 @media (max-width: 559.98px) {
-  .trust-band { flex-direction: column; align-items: flex-start; }
+  .trust-band { flex-direction: column; }
+}
+
+/* ---------- Other apps ---------- */
+
+.other-apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.other-apps > li { display: flex; }
+
+.other-app {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
+}
+.other-app:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.other-app:active { transform: scale(0.985); transition-duration: 0.1s; }
+
+.other-app img {
+  width: 3.25rem;
+  height: 3.25rem;
+  flex-shrink: 0;
+  border-radius: 23%;
+  box-shadow: var(--shadow-sm);
+}
+.other-app-text { display: flex; flex-direction: column; min-width: 0; }
+.other-app-name { font: 600 1rem/1.3 var(--font-heading); }
+.other-app-tagline {
+  margin-top: 0.2rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.other-app-arrow {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--brand-text);
+  transition: transform 0.2s var(--ease-out);
+}
+.other-app:hover .other-app-arrow { transform: translateX(3px); }
+
+/* ---------- Closing CTA card ---------- */
+
+.cta-band--card {
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+  border-radius: 1.75rem;
+  background: var(--brand-soft);
+}
+.cta-band--card .section-head { margin-bottom: 0; }
+.cta-band-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 23%;
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- Accessibility preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .other-app { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .other-app:hover, .other-app:active, .other-app:hover .other-app-arrow { transform: none; }
+}
+
+@media (prefers-contrast: more) {
+  .step, .feature-card, .other-app, .trust-band { border-color: var(--border-strong); }
 }

@@ -4,63 +4,65 @@
 # STATUS.md section 4). This file only drives the homepage apps grid and
 # the footer's app list.
 #
-# Names, taglines and package IDs below were taken directly from each
-# app's live Google Play listing (screenshots supplied by the user,
-# 28 Sep) — not invented. Taglines are inferred from the listing's title
-# and icon only, not a full "About this app" description, so review them
-# before they go live. No ratings or download counts are stored here on
-# purpose: the site never shows them (STATUS.md section 6, "no star
-# ratings or review scores anywhere on the site").
+# Names and package IDs below were taken directly from each app's live
+# Google Play listing (screenshots supplied by the user, 28 Sep) — not
+# invented. Taglines are inferred from the listing title and package ID
+# only (no "About this app" description was ever supplied), so they
+# claim only what those establish: no "automatic", "fast", "secure" or
+# "one tap" — those were cut in step 5 for exactly that reason. Review
+# them against the real store descriptions. No ratings or download
+# counts are stored here on purpose: the site never shows them (STATUS.md
+# section 6, "no star ratings or review scores anywhere on the site").
 #
 # tier: flagship (exactly one) or more. Every app gets its own page under
 #   the app.html layout (user, 28 Sep — corrects the earlier "more apps
-#   are cards only" plan). tier now controls prominence only: the
-#   flagship gets the header nav link, the hero spotlight, and top
-#   billing on the homepage grid; "more" apps still get a real page, just
-#   not that same front-and-centre treatment.
-# page: true for all four, accordingly — every app.yml entry has a real
-#   page (or will). Kept as an explicit field, not assumed, in case a
-#   fifth app is ever added as a store-only listing before its page
-#   exists.
-# built controls whether that page has actually been published yet (same
+#   are cards only" plan). tier controls prominence only: the flagship
+#   gets the header nav link, the homepage hero and spotlight; "more" apps
+#   get a real page and a homepage card, not that front-and-centre spot.
+# page: true for all four — every entry has a real page. Kept as an
+#   explicit field, not assumed, in case a fifth app is ever added as a
+#   store-only listing before its page exists.
+# built controls whether that page has actually been published (same
 #   true/false-until-published pattern as fixmypcperth's suburbs.yml) —
-#   nav/footer never link to a page that isn't live. Flips true per app
-#   as each one ships in step 5-6, not all at once.
-# ios_url is omitted where an app isn't confirmed to exist on iOS.
+#   the homepage grid, footer and "other apps" lists only ever link to a
+#   built page. All four are built as of step 5.
+# ios_url is omitted where an app isn't confirmed to exist on iOS; every
+#   page and card derives "iPhone and Android" vs "Android" from it.
+# Each tagline must match its app page's own `tagline:` front matter.
 
 - slug: cloud-storage-backup-drive
   name: "Cloud Storage Backup & Drive"
-  tagline: "Automatic cloud backup and restore for your photos, videos, contacts and app data."
+  tagline: "Cloud backup and restore for your photos, videos, contacts and app data."
   icon: /assets/icons/apps/cloud-storage-backup-drive-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.backup.and.restore.all.apps.photo.backup"
   ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
   tier: flagship
   page: true
-  built: true # cloud-storage-backup-drive.html shipped and verified (step 4/5)
+  built: true
 
 - slug: document-reader-pdf
   name: "Document Reader: Read All PDF"
-  tagline: "Read, view and manage PDF, Word, Excel and PowerPoint files in one app."
+  tagline: "Read PDF, Word, Excel and PowerPoint files in one app."
   icon: /assets/icons/apps/document-reader-pdf-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
   tier: more
   page: true
-  built: false # flips true once document-reader-pdf.html ships (step 5-6)
+  built: true
 
 - slug: smartphone-data-transfer
   name: "Smartphone All Data Transfer"
-  tagline: "Transfer photos, videos and files between phones, fast and secure."
+  tagline: "Transfer photos, videos and files from one phone to another."
   icon: /assets/icons/apps/smartphone-data-transfer-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
   tier: more
   page: true
-  built: false
+  built: true
 
 - slug: photo-recover-data-recovery
   name: "Photo Recover & Data Recovery"
-  tagline: "Recover deleted photos and files from your trash bin in one tap."
+  tagline: "Find and restore deleted photos and files from your phone's trash bin."
   icon: /assets/icons/apps/photo-recover-data-recovery-192.png
   android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
   tier: more
   page: true
-  built: false
+  built: true

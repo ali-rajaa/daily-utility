@@ -275,6 +275,7 @@ h3, .h3 {
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
 }
 .btn:active { transform: scale(0.97); }
+.btn svg { width: 1.125rem; height: 1.125rem; }
 
 .btn--primary { background: var(--brand); color: var(--on-brand); }
 .btn--primary:hover { background: var(--brand-hover); color: var(--on-brand); }

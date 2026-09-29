@@ -44,6 +44,12 @@ company:
   acn: "ACN 673 209 553"
   address_line1: "10 Seddon Way"
   address_line2: "Canning Vale WA 6155, Australia"
+  # The same address split into the fields schema.org's PostalAddress
+  # wants (the homepage's Organization JSON-LD).
+  locality: "Canning Vale"
+  region: "WA"
+  postcode: "6155"
+  country: "AU"
   support_email: "support@cloudgate-app.com"
 
 exclude:

@@ -1,0 +1,71 @@
+/* ==========================================================================
+   not-found.css: the 404 page (404.html). shell.css tokens only.
+   ========================================================================== */
+
+.notfound { min-height: calc(100vh - var(--header-h) - 12rem); display: flex; align-items: center; }
+
+.notfound-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.notfound-inner h1 { max-width: 20ch; }
+.notfound-inner .section-sub { max-width: 34rem; }
+.notfound-inner .btn-row { justify-content: center; margin-top: 2rem; }
+
+/* The big numeral is decoration (the H1 says it in words), so it can
+   carry the brand gradient as a text fill: it is hidden from assistive
+   tech and isn't the message. */
+.notfound-code {
+  margin-bottom: 0.5rem;
+  font: 700 clamp(5rem, 3rem + 10vw, 9rem)/0.9 var(--font-heading);
+  letter-spacing: -0.04em;
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.notfound-apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 48rem;
+  margin: clamp(2.5rem, 6vw, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notfound-apps a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease-out;
+}
+.notfound-apps a:hover { color: var(--text); border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.notfound-apps a:active { transform: scale(0.98); }
+.notfound-apps img { width: 2.25rem; height: 2.25rem; border-radius: 23%; flex-shrink: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .notfound-apps a:active { transform: none; }
+}
+
+@media (prefers-contrast: more) {
+  .notfound-code { background: none; color: var(--text); }
+  .notfound-apps a { border-color: var(--border-strong); }
+}

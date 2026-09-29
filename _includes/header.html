@@ -4,9 +4,16 @@
   desktop and mobile menus can never list different links.
 
   Nav labels name what is behind them rather than "Home"; the logo is the
-  way home. "Get the app" goes to the app page's #download section, which
-  app.html must keep.
+  way home. "Get the app" goes to an app page's #download section, which
+  app.html must keep: the current page's own on any app page (so it never
+  sends someone reading about one app to another app's badges), the
+  flagship's everywhere else.
 {%- endcomment -%}
+{%- if page.layout == "app" -%}
+  {%- assign _get_app = "#download" -%}
+{%- else -%}
+  {%- assign _get_app = '/cloud-storage-backup-drive' | relative_url | append: '#download' -%}
+{%- endif %}
 <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
   <div class="wrap header-inner">
@@ -23,7 +30,7 @@
         <li><a class="nav-link" href="{{ '/cloud-storage-backup-drive' | relative_url }}"{% if page.url == "/cloud-storage-backup-drive.html" %} aria-current="page"{% endif %}>Backup &amp; Drive</a></li>
         <li><a class="nav-link" href="{{ '/daily-info' | relative_url }}"{% if page.url == "/daily-info.html" %} aria-current="page"{% elsif page.url contains "/daily-info/" %} aria-current="true"{% endif %}>Daily Info</a></li>
       </ul>
-      <a class="btn btn--primary nav-cta" href="{{ '/cloud-storage-backup-drive' | relative_url }}#download">Get the app</a>
+      <a class="btn btn--primary nav-cta" href="{{ _get_app }}">Get the app</a>
     </nav>
   </div>
 </header>
