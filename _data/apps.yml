@@ -1,5 +1,5 @@
 # Daily Utility Apps portfolio — listing metadata only (name, tagline,
-# icon, store links). Never put page content here: an app with page: true
+# glyph/tone, store links). Never put page content here: an app with page: true
 # gets its full content in its own page's front matter (see app.html in
 # STATUS.md section 4). This file only drives the homepage apps grid and
 # the footer's app list.
@@ -26,6 +26,10 @@
 #   true/false-until-published pattern as fixmypcperth's suburbs.yml) —
 #   the homepage grid, footer and "other apps" lists only ever link to a
 #   built page. All four are built as of step 5.
+# glyph + tone: the app's visual everywhere on the site, via
+#   _includes/app-tile.html (an icon-sprite symbol on a coloured tile).
+#   The real store icons are never used (user, 29 Sep: "never use actual
+#   logo"); tones are defined in shell.css's "App tiles".
 # ios_url is omitted where an app isn't confirmed to exist on iOS; every
 #   page and card derives "iPhone and Android" vs "Android" from it.
 # Each tagline must match its app page's own `tagline:` front matter.
@@ -33,7 +37,8 @@
 - slug: cloud-storage-backup-drive
   name: "Cloud Storage Backup & Drive"
   tagline: "Cloud backup and restore for your photos, videos, contacts and app data."
-  icon: /assets/icons/apps/cloud-storage-backup-drive-192.png
+  glyph: cloud
+  tone: blue
   android_url: "https://play.google.com/store/apps/details?id=com.backup.and.restore.all.apps.photo.backup"
   ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
   tier: flagship
@@ -43,7 +48,8 @@
 - slug: document-reader-pdf
   name: "Document Reader: Read All PDF"
   tagline: "Read PDF, Word, Excel and PowerPoint files in one app."
-  icon: /assets/icons/apps/document-reader-pdf-192.png
+  glyph: doc
+  tone: violet
   android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
   tier: more
   page: true
@@ -52,7 +58,8 @@
 - slug: smartphone-data-transfer
   name: "Smartphone All Data Transfer"
   tagline: "Transfer photos, videos and files from one phone to another."
-  icon: /assets/icons/apps/smartphone-data-transfer-192.png
+  glyph: phone-transfer
+  tone: teal
   android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
   tier: more
   page: true
@@ -61,7 +68,8 @@
 - slug: photo-recover-data-recovery
   name: "Photo Recover & Data Recovery"
   tagline: "Find and restore deleted photos and files from your phone's trash bin."
-  icon: /assets/icons/apps/photo-recover-data-recovery-192.png
+  glyph: trash-restore
+  tone: rose
   android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
   tier: more
   page: true

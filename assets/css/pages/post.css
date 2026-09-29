@@ -61,6 +61,49 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Drawn banner for a post without a photo: the brand gradient (decoration
+   only -- no text sits on it) with the post's glyph in a frosted white
+   disc, framed by two soft rings. Static: nothing here animates. */
+.post-banner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: clamp(10rem, 24vw, 15rem);
+  border-radius: var(--radius-lg);
+  background: var(--brand-gradient);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  isolation: isolate;
+}
+.post-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.22), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(255, 255, 255, 0.16), transparent 45%);
+}
+.post-banner-ring {
+  position: absolute;
+  width: clamp(9rem, 20vw, 13rem);
+  aspect-ratio: 1;
+  border: 1px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+}
+.post-banner-glyph {
+  display: grid;
+  place-items: center;
+  width: clamp(4.5rem, 10vw, 6rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.18), 0 12px 32px rgba(6, 16, 31, 0.25);
+  /* Fixed light-theme brand blue: the disc is white in both themes. */
+  color: #0b5fe8;
+}
+.post-banner-glyph svg { width: 50%; height: 50%; }
+
 /* ---------- Prose body ----------
    Base typography (headings, paragraphs, lists, links) is the shared
    .prose class in shell.css -- post.html applies both classes

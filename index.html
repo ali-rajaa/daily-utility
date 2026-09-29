@@ -2,7 +2,7 @@
 layout: default
 css: index
 title: "Daily Utility Apps: Smart Tools for Everyday Life"
-description: "Daily Utility Apps builds focused, privacy-first utility apps for iPhone and Android, led by Cloud Storage Backup & Drive. From CloudGate Technologies, Western Australia."
+description: "Daily Utility Apps builds focused, privacy-first utility apps for iPhone and Android, led by Cloud Storage Backup & Drive. Based in Western Australia."
 ---
 {%- comment -%}
   Homepage: the six sections in STATUS.md section 5, in order -- hero,
@@ -28,10 +28,8 @@ description: "Daily Utility Apps builds focused, privacy-first utility apps for 
   "@type": "Organization",
   "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }},
   "name": {{ site.title | jsonify | replace: "/", "\/" }},
-  "legalName": {{ site.company.legal_name | jsonify | replace: "/", "\/" }},
   "url": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }},
   "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify | replace: "/", "\/" }},
-  "email": {{ site.company.support_email | jsonify | replace: "/", "\/" }},
   "address": {
     "@type": "PostalAddress",
     "streetAddress": {{ site.company.address_line1 | jsonify | replace: "/", "\/" }},
@@ -49,7 +47,7 @@ description: "Daily Utility Apps builds focused, privacy-first utility apps for 
     <div class="home-hero-copy">
       <span class="eyebrow">Daily Utility Apps</span>
       <h1>Smart tools for <span class="home-hero-accent">everyday life</span></h1>
-      <p class="home-hero-sub">Focused, privacy-first apps for iPhone and Android, each built to do one everyday job properly. From {{ site.company.legal_name | escape }}, an Australian company based in Western Australia.</p>
+      <p class="home-hero-sub">Focused, privacy-first apps for iPhone and Android, each built to do one everyday job properly, by an Australian app developer based in Western Australia.</p>
       <div class="btn-row">
         <a class="btn btn--primary" href="{{ '/' | append: flagship.slug | relative_url }}">Explore {{ flagship.name | escape }}<svg class="btn-icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
         <a class="btn btn--ghost" href="#apps">See all our apps</a>
@@ -61,20 +59,16 @@ description: "Daily Utility Apps builds focused, privacy-first utility apps for 
       </ul>
     </div>
 
-    {%- comment -%} Decorative: the real app icons composed into a cluster.
-    Every icon here is also named and linked properly further down the
-    page, so this block is hidden from assistive tech rather than read out
-    twice. {%- endcomment %}
+    {%- comment -%} Decorative: the app tiles (drawn glyphs, never the real
+    store icons) arranged on an orbit. Every app here is also named and
+    linked properly further down the page, so this block is hidden from
+    assistive tech rather than read out twice. {%- endcomment %}
     <div class="home-hero-visual" aria-hidden="true">
       <div class="cluster">
         <div class="cluster-ring"></div>
-        <div class="cluster-tile cluster-tile--main">
-          <img src="{{ flagship.icon | relative_url }}" width="192" height="192" alt="">
-        </div>
+        <div class="cluster-tile cluster-tile--main">{% include app-tile.html app=flagship %}</div>
         {%- for app in more_apps limit: 3 %}
-        <div class="cluster-tile cluster-tile--{{ forloop.index }}">
-          <img src="{{ app.icon | relative_url }}" width="192" height="192" alt="">
-        </div>
+        <div class="cluster-tile cluster-tile--{{ forloop.index }}">{% include app-tile.html app=app %}</div>
         {%- endfor %}
         <div class="cluster-chip cluster-chip--a"><svg><use href="#i-photo"/></svg>Photos</div>
         <div class="cluster-chip cluster-chip--b"><svg><use href="#i-contacts"/></svg>Contacts</div>
@@ -114,7 +108,7 @@ link lands on the flagship with the rest directly below it. {%- endcomment %}
           <svg class="spotlight-lines" viewBox="0 0 400 400" preserveAspectRatio="none">
             <path d="M88 96 200 200M312 96 200 200M88 304 200 200M312 304 200 200"/>
           </svg>
-          <img class="spotlight-icon" src="{{ flagship.icon | relative_url }}" width="192" height="192" alt="">
+          {% include app-tile.html app=flagship class="spotlight-icon" %}
         </div>
       </div>
     </div>
@@ -132,7 +126,7 @@ link lands on the flagship with the rest directly below it. {%- endcomment %}
         {%- for app in more_apps %}
         <li class="reveal">
           <a class="app-card" href="{{ '/' | append: app.slug | relative_url }}">
-            <img class="app-card-icon" src="{{ app.icon | relative_url }}" width="192" height="192" alt="" loading="lazy">
+            {% include app-tile.html app=app class="app-card-icon" %}
             <h3 class="app-card-name">{{ app.name | escape }}</h3>
             <p class="app-card-tagline">{{ app.tagline | escape }}</p>
             <span class="app-card-footer">
@@ -167,8 +161,8 @@ link lands on the flagship with the rest directly below it. {%- endcomment %}
       </li>
       <li class="value-card reveal">
         <span class="value-icon"><svg aria-hidden="true"><use href="#i-pin"/></svg></span>
-        <h3>A real Australian company</h3>
-        <p>Made by {{ site.company.legal_name | escape }} <span class="nowrap">({{ site.company.acn }})</span>, based in {{ site.company.locality }}, Western Australia.</p>
+        <h3>Based in Australia</h3>
+        <p>Daily Utility Apps is an Australian app developer based in {{ site.company.locality }}, Western Australia.</p>
       </li>
       <li class="value-card reveal">
         <span class="value-icon"><svg aria-hidden="true"><use href="#i-devices"/></svg></span>
@@ -211,7 +205,7 @@ link lands on the flagship with the rest directly below it. {%- endcomment %}
 <section class="section">
   <div class="wrap">
     <div class="home-cta reveal">
-      <img class="home-cta-icon" src="{{ flagship.icon | relative_url }}" width="192" height="192" alt="">
+      {% include app-tile.html app=flagship class="home-cta-icon" %}
       <h2>Back up what matters, today</h2>
       <p class="section-sub">Get {{ flagship.name | escape }} on {% if flagship.ios_url and flagship.android_url %}iPhone and Android{% elsif flagship.ios_url %}iPhone{% else %}Android{% endif %}.</p>
       {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}

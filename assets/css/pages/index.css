@@ -59,8 +59,17 @@
 .home-hero-points li { display: inline-flex; align-items: center; gap: 0.4rem; }
 .home-hero-points svg { width: 1.125rem; height: 1.125rem; color: var(--brand-2-text); }
 
-/* The icon cluster: positions are percentages of a square box, so the
-   whole composition scales as one piece at every width. */
+/* The app cluster: an orbit. The flagship's tile sits at the centre;
+   the three other app tiles and the three capability chips alternate
+   around one ring at even 60-degree steps (tiles at -150, -30 and 90
+   degrees, chips at -90, 30 and 150), so the composition is balanced
+   rather than scattered. Every item is centred on its point with the
+   `translate` property, which leaves `transform` free for the float.
+
+   Ring radius r = 39% of the box, centre (50%, 50%):
+     x = 50 + 39cos(a), y = 50 + 39sin(a)   (y grows downward)
+   Positions are percentages of a square box, so the whole composition
+   scales as one piece at every width. */
 .cluster {
   position: relative;
   width: min(100%, 26rem);
@@ -74,24 +83,24 @@
   border-radius: 50%;
   border: 1px dashed var(--border-strong);
 }
-.cluster-ring { inset: 8%; }
-.cluster-ring::after { content: ""; inset: 18%; border-style: solid; border-color: var(--border); }
+/* inset 11% = the r=39% orbit every tile and chip sits on. */
+.cluster-ring { inset: 11%; }
+/* A quieter inner ring just outside the centre tile. */
+.cluster-ring::after { content: ""; inset: 22%; border-style: solid; border-color: var(--border); }
 
-.cluster-tile {
+.cluster-tile,
+.cluster-chip {
   position: absolute;
-  aspect-ratio: 1;
-  border-radius: 23%;
-  overflow: hidden;
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
-  will-change: transform;
+  translate: -50% -50%;
 }
-.cluster-tile img { width: 100%; height: 100%; object-fit: cover; }
 
-.cluster-tile--main { width: 42%; left: 29%; top: 29%; z-index: 2; animation: clusterFloat 22s ease-in-out infinite; }
-.cluster-tile--1 { width: 23%; left: 5%; top: 10%; animation: clusterFloat 19s ease-in-out infinite reverse; }
-.cluster-tile--2 { width: 21%; left: 76%; top: 27%; animation: clusterFloat 24s ease-in-out infinite; }
-.cluster-tile--3 { width: 23%; left: 57%; top: 75%; animation: clusterFloat 21s ease-in-out infinite reverse; }
+.cluster-tile { will-change: transform; }
+.cluster-tile .app-tile { width: 100%; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-lg); }
+
+.cluster-tile--main { width: 36%; left: 50%; top: 50%; z-index: 2; animation: clusterFloat 22s ease-in-out infinite; }
+.cluster-tile--1 { width: 20%; left: 16.2%; top: 30.5%; animation: clusterFloat 19s ease-in-out infinite reverse; }
+.cluster-tile--2 { width: 20%; left: 83.8%; top: 30.5%; animation: clusterFloat 24s ease-in-out infinite; }
+.cluster-tile--3 { width: 20%; left: 50%; top: 89%; animation: clusterFloat 21s ease-in-out infinite reverse; }
 
 @keyframes clusterFloat {
   0%, 100% { transform: translateY(0); }
@@ -99,7 +108,6 @@
 }
 
 .cluster-chip {
-  position: absolute;
   z-index: 3;
   display: inline-flex;
   align-items: center;
@@ -119,9 +127,9 @@
 }
 .cluster-chip svg { width: 1rem; height: 1rem; color: var(--brand-text); }
 
-.cluster-chip--a { left: 0; top: 60%; }
-.cluster-chip--b { left: 46%; top: 5%; }
-.cluster-chip--c { left: 11%; top: 84%; }
+.cluster-chip--b { left: 50%; top: 11%; }      /* Contacts, -90deg */
+.cluster-chip--c { left: 83.8%; top: 69.5%; }  /* Restore,   30deg */
+.cluster-chip--a { left: 16.2%; top: 69.5%; }  /* Photos,   150deg */
 
 /* ---------- 2. Flagship spotlight ---------- */
 
@@ -222,8 +230,9 @@
   width: 34%;
   left: 33%;
   top: 33%;
-  border-radius: 23%;
-  box-shadow: 0 12px 32px rgba(6, 16, 31, 0.3);
+  /* White ring: the flagship's blue tile would otherwise blend into the
+     blue end of the panel's gradient. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 6px rgba(255, 255, 255, 0.92), 0 16px 36px rgba(6, 16, 31, 0.3);
 }
 
 /* Fixed colours on purpose: the nodes sit on the gradient in both
@@ -293,12 +302,7 @@
   transition-duration: 0.1s;
 }
 
-.app-card-icon {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 23%;
-  box-shadow: var(--shadow-sm);
-}
+.app-card-icon { width: 4rem; }
 .app-card-name { margin-top: 1.25rem; font-size: 1.1875rem; }
 .app-card-tagline {
   flex-grow: 1;
@@ -429,12 +433,7 @@
 }
 .home-cta .section-sub { margin-top: 0; }
 .home-cta .store-badges { justify-content: center; }
-.home-cta-icon {
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 23%;
-  box-shadow: var(--shadow-md);
-}
+.home-cta-icon { width: 4.5rem; }
 
 /* ---------- Accessibility preferences ---------- */
 

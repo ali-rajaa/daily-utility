@@ -695,6 +695,48 @@ h3, .h3 {
   .hero-glow { display: none; }
 }
 
+/* ---------- App tiles ----------
+   _includes/app-tile.html: a white glyph on a coloured rounded square,
+   standing in for each app's real icon (the site never shows the actual
+   app logos). Size comes from the context class (e.g. .app-card-icon
+   sets width); aspect-ratio keeps it square.
+
+   Tones are fixed colours in both themes, like the store badges: a tile
+   is an object with its own colour, not part of the page surface. Every
+   gradient stop keeps the white glyph at 3:1 or better (the WCAG ratio
+   for graphics, computed): blue #3b82f6 3.7:1 / #0b5fe8 5.5:1, violet #a855f7
+   4.0:1 / #7c3aed 5.7:1, teal #0d9488 3.7:1 / #0f766e 5.5:1, rose
+   #f43f5e 3.7:1 / #be123c 6.3:1. */
+
+.app-tile {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  border-radius: 23%;
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 6px 16px rgba(12, 20, 36, 0.18);
+  overflow: hidden;
+}
+/* A soft highlight in the top-left corner, like light on a glossy icon. */
+.app-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 15%, rgba(255, 255, 255, 0.32), transparent 55%);
+}
+.app-tile svg { position: relative; width: 54%; height: 54%; }
+
+.app-tile--blue { background: linear-gradient(145deg, #3b82f6, #0b5fe8); }
+.app-tile--violet { background: linear-gradient(145deg, #a855f7, #7c3aed); }
+.app-tile--teal { background: linear-gradient(145deg, #0d9488, #0f766e); }
+.app-tile--rose { background: linear-gradient(145deg, #f43f5e, #be123c); }
+
+@media (prefers-contrast: more) {
+  .app-tile::before { display: none; }
+}
+
 /* ---------- Shared page components ----------
    FAQ accordion and the closing CTA band: used by both app.html and
    post.html (an article can carry its own FAQ, and every article ends

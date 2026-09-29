@@ -18,7 +18,7 @@ css: app
   layout (section 5a), letting any of them carry hand-written body prose
   is exactly how near-duplicate doorway pages happen. Required front
   matter (STATUS.md section 4): title, description, css (must be "app"),
-  app_name, tagline, icon, ios_url and/or android_url, category,
+  app_name, tagline, ios_url and/or android_url, category,
   features (icon, title, text), how_it_works (3x {title, text}),
   faqs (q, a). Optional: steps_heading (the how-it-works H2), trust_text
   (an app-specific privacy sentence for the trust band -- only ever
@@ -29,6 +29,11 @@ css: app
   section 2's "rules the later steps must keep").
 {%- endcomment -%}
 {%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+{%- comment -%} This page's own apps.yml entry (for its glyph/tone tile),
+found by URL: /document-reader-pdf.html -> document-reader-pdf.
+{%- endcomment -%}
+{%- assign _slug = page.url | remove_first: "/" | remove: ".html" -%}
+{%- assign _app = site.data.apps | where: "slug", _slug | first -%}
 {%- comment -%} Platforms come from which store links the page actually
 has -- never hardcoded, since most of the apps are Android-only.
 {%- endcomment -%}
@@ -47,7 +52,6 @@ has -- never hardcoded, since most of the apps are Android-only.
   "applicationCategory": {{ page.category | jsonify | replace: "/", "\/" }},
   "operatingSystem": {{ _os | jsonify }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
-  "image": {{ page.icon | absolute_url | jsonify | replace: "/", "\/" }},
   "url": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }},
   "publisher": {
     "@type": "Organization",
@@ -60,7 +64,7 @@ has -- never hardcoded, since most of the apps are Android-only.
 <section class="section app-hero hero-glow-host">
   {% include hero-glow.html %}
   <div class="wrap hero-glow-content app-hero-inner">
-    <img class="app-hero-icon" src="{{ page.icon | relative_url }}" width="192" height="192" alt="">
+    {% include app-tile.html app=_app class="app-hero-icon" %}
     <div class="section-head">
       <span class="eyebrow">{{ page.category | escape }}</span>
       <h1>{{ page.app_name | escape }}</h1>
@@ -150,7 +154,7 @@ apply to. {%- endcomment %}
       <span class="trust-band-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>
       <div>
         <h2 class="h3">Your privacy comes first</h2>
-        <p>{{ page.app_name | escape }} is made by {{ site.company.legal_name | escape }} <span class="nowrap">({{ site.company.acn }})</span>, an Australian company. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We never sell your personal information, and we never use your files to build advertising profiles. Read the full <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a>.</p>
+        <p>{{ page.app_name | escape }} is made by Daily Utility Apps, an Australian app developer. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We never sell your personal information, and we never use your files to build advertising profiles. Read the full <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a>.</p>
       </div>
     </div>
   </div>
@@ -169,7 +173,7 @@ apply to. {%- endcomment %}
       {%- unless app.name == page.app_name %}
       <li class="reveal">
         <a class="other-app" href="{{ '/' | append: app.slug | relative_url }}">
-          <img src="{{ app.icon | relative_url }}" width="192" height="192" alt="" loading="lazy">
+          {% include app-tile.html app=app class="other-app-tile" %}
           <span class="other-app-text">
             <span class="other-app-name">{{ app.name | escape }}</span>
             <span class="other-app-tagline">{{ app.tagline | escape }}</span>
@@ -187,7 +191,7 @@ apply to. {%- endcomment %}
 <section class="section">
   <div class="wrap">
     <div class="cta-band cta-band--card reveal">
-      <img class="cta-band-icon" src="{{ page.icon | relative_url }}" width="192" height="192" alt="">
+      {% include app-tile.html app=_app class="cta-band-icon" %}
       <div class="section-head">
         <h2>Get {{ page.app_name | escape }}</h2>
         <p class="section-sub">Available on {{ _platforms }}.</p>

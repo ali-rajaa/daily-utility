@@ -1,0 +1,14 @@
+{%- comment -%}
+  An app's tile: a drawn SVG glyph on a coloured rounded square. Used
+  everywhere an app needs a visual (homepage, app pages, 404) INSTEAD of
+  the real store icon -- the site never shows the actual app logos (user,
+  29 Sep). Each app's glyph (an icon-sprite symbol) and tone (a colour in
+  shell.css's "App tiles") come from _data/apps.yml.
+
+  Params: app (an apps.yml entry), class (optional extra classes that set
+  size/position). Always decorative: the app's name is always given in
+  text next to or near it, so the tile is aria-hidden.
+
+  Usage: {% include app-tile.html app=flagship class="app-card-icon" %}
+{%- endcomment -%}
+<span class="app-tile app-tile--{{ include.app.tone }}{% if include.class %} {{ include.class }}{% endif %}" aria-hidden="true"><svg><use href="#i-{{ include.app.glyph }}"/></svg></span>

@@ -28,7 +28,7 @@ noindex: true
       {%- for app in _apps %}
       <li>
         <a href="{{ '/' | append: app.slug | relative_url }}">
-          <img src="{{ app.icon | relative_url }}" width="192" height="192" alt="">
+          {% include app-tile.html app=app class="notfound-tile" %}
           <span>{{ app.name | escape }}</span>
         </a>
       </li>

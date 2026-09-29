@@ -59,7 +59,7 @@
 }
 .notfound-apps a:hover { color: var(--text); border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
 .notfound-apps a:active { transform: scale(0.98); }
-.notfound-apps img { width: 2.25rem; height: 2.25rem; border-radius: 23%; flex-shrink: 0; }
+.notfound-tile { width: 2.25rem; }
 
 @media (prefers-reduced-motion: reduce) {
   .notfound-apps a:active { transform: none; }

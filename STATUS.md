@@ -97,8 +97,8 @@ daily-utility/
 │   │   │                         # is the 833px master; favicon-*.png,
 │   │   │                         # apple-touch-icon.png and mark-192.png are
 │   │   │                         # derived from it, see section 4a)
-│   │   └── apps/                  # the four real app icons, cropped from
-│   │                             # Play Store screenshots (section 5a)
+│   │                             # (no apps/ folder: the real app icons were
+│   │                             # deleted 29 Sep -- see section 5c)
 │   └── og/default.png             # 1200x630 share card
 ├── index.html                     # layout: default. Homepage
 ├── cloud-storage-backup-drive.html   # layout: app
@@ -761,6 +761,8 @@ they're in `_data/apps.yml`:
 All four listings confirm the developer is "Daily Utility Apps" — matches
 the brand name correction in section 4a.
 
+- **Superseded 29 Sep (section 5c): the site never uses the real app
+  icons.** The note below is kept for history only.
 - **Icons:** cropped from the Play listing screenshots the same way the
   main logo was (Pillow; a tight window around the icon card, bbox by
   distance-from-white, small proportional padding — no bottom-margin
@@ -809,7 +811,8 @@ section 5, replacing the step 2 placeholder:
 1. Hero: two-tone H1 (accent word in `--brand-text`, *not* gradient text
    — the green end of the gradient fails even 3:1), primary CTA into the
    flagship page, "See all our apps", three check-marked facts, and a
-   decorative cluster of the four real app icons with glass capability
+   decorative cluster of the four app tiles (drawn glyphs since 5c —
+   never the real icons) with glass capability
    chips (slow 19–24s float; `aria-hidden` since every icon is named and
    linked further down).
 2. Flagship spotlight: name, tagline, the four confirmed backup
@@ -920,6 +923,65 @@ audience skews toward budget Android phones.
 **Known gap until step 6:** `/daily-info` (the hub) doesn't exist yet,
 so the homepage's "All articles", the 404's "Read Daily Info" and the
 header's Daily Info link 404 until step 6 ships it.
+
+## 5c. Standing rules: no real app logos; CloudGate only in legal + footer (29 Sep)
+
+User, 29 Sep, on seeing the homepage: *"remove actual logos, use similar
+SVGs that represent (never use actual logo), and position correctly …
+cloudgate tech SHOULD only be mentioned in LEGAL and maybe footer NO
+WHERE ELSE."* Both are **standing rules**, not one-off fixes.
+
+**Rule 1 — never the real app icons.** Every app visual is now an
+*app tile* (`_includes/app-tile.html`): a hand-drawn icon-sprite glyph,
+white, on a coloured rounded square. Each app's `glyph` and `tone` live
+in `_data/apps.yml` (the `icon:` field is gone):
+
+| App | Glyph | Tone |
+|---|---|---|
+| Cloud Storage Backup & Drive | `cloud` | blue |
+| Document Reader: Read All PDF | `doc` | violet |
+| Smartphone All Data Transfer | `phone-transfer` (new) | teal |
+| Photo Recover & Data Recovery | `trash-restore` (new) | rose |
+
+- Tones are fixed colours in both themes (like the store badges); every
+  gradient stop keeps the white glyph at ≥3:1, **computed** (3.67–6.29:1),
+  not estimated — two figures first written in the CSS comment were off
+  and were corrected.
+- Replaced in: homepage (hero cluster, spotlight, app cards, closing
+  CTA), `app.html` (hero, other-apps list, closing CTA — it now finds its
+  own `apps.yml` entry from its URL, so app pages carry no icon field),
+  404. `SoftwareApplication` JSON-LD no longer has an `image`.
+- The Daily Info article used the flagship's real icon as its hero and
+  share image. `post.html` now treats `image:` as optional (a real
+  editorial photo only — never an app icon) and otherwise draws a
+  banner: brand gradient + the post's `glyph:` in a white disc.
+- **The eight icon PNGs in `assets/icons/apps/` were deleted** (still in
+  git history), so they can't be served or reused by accident.
+- The site's own brand mark (header, footer, favicons) is unchanged — the
+  rule is about the apps' store icons.
+
+**Hero cluster repositioned** as a true orbit: flagship tile at the
+centre; the three app tiles and three chips alternate around one ring
+(r = 39% of the box) at even 60° steps — tiles at −150°, −30°, 90°, chips
+at −90°, 30°, 150°. Each item is centred on its point with the
+`translate` property, leaving `transform` for the float. Checked at
+1280, 977 and 390px: balanced, no overflow. The spotlight's flagship
+tile got a white ring so it no longer blends into the blue panel.
+
+**Rule 2 — "CloudGate" appears only on the legal pages and in the
+footer.** Removed from: the homepage (meta description, hero sub-copy,
+the "why us" card — now "Based in Australia" / "an Australian app
+developer based in … Western Australia" — and the Organization schema's
+`legalName` and `email`, since the support address is on a cloudgate
+domain), `_config.yml`'s site-wide default description, the trust band
+on every app page ("made by Daily Utility Apps, an Australian app
+developer"), and all four apps' "Who makes it?" FAQ. **Verified on the
+built site by script**: strip the `<footer>`, then search every page —
+zero matches outside `privacy-policy` and `terms-of-service`. Re-run
+that check (strip the footer, search for "cloudgate") whenever copy
+changes.
+- Wording avoids origin claims: "based in Western Australia" (a fact),
+  never "built/made in Australia" (unconfirmed — see section 5b).
 
 ## 6. SEO and routing
 
@@ -1118,6 +1180,10 @@ what's there.
     - Never put `.reveal` on first-screen content (it hides until
       scrolled into view, which would delay the hero's paint).
     - Button and badge groups go in `.btn-row`.
+    - **Never use the real app icons** — app visuals are app tiles
+      (`_includes/app-tile.html`; section 5c).
+    - **"CloudGate" only on the legal pages and in the footer**
+      (section 5c).
     - Nav labels name their destination ("Backup & Drive", "Daily
       Info"); the logo is the way home, so there is no "Home" link.
 - [x] **3. Includes:** `store-badges`, `hero-glow` (not in the original
@@ -1344,3 +1410,10 @@ what's there.
   `pages/legal.css`; verified both with and without `sections:` set.
   Everything else came back clean: 188 checks total across the shell,
   responsive, app-page and post-page suites.
+- Standing rules added (section 5c, user 29 Sep): (1) never the real app
+  icons — replaced everywhere with drawn SVG app tiles (glyph + tone in
+  `apps.yml`), icon PNGs deleted, the article's icon hero replaced with
+  a drawn banner; hero cluster rebuilt as a symmetric orbit. (2)
+  "CloudGate" only on legal pages and in the footer — removed from the
+  homepage, site description, schema, app trust band and app FAQs;
+  verified by script on the built site. All suites pass.

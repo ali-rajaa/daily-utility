@@ -9,7 +9,7 @@ date: 2026-01-15
 updated: 2026-01-15
 read_min: 5
 slug: backup-before-switching-phones
-image: /assets/icons/apps/cloud-storage-backup-drive.png
+glyph: phone-transfer
 faqs:
   - q: "Do I need to back up before switching phones, or does the store do it for me?"
     a: "Some phone makers offer a one-time transfer at setup, but it doesn't always catch everything, and it only runs once. A separate backup means your photos, videos and contacts are safe on an ongoing basis, not just during the switch."

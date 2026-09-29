@@ -14,8 +14,10 @@ css: post
 
   Required front matter (STATUS.md section 4): title, description, css
   (must be "post"), heading, category, date, updated, read_min, slug
-  (must match the filename), image. Body is prose. Optional: faqs,
-  related (a list of other posts' `slug` values).
+  (must match the filename). Body is prose. Optional: image (a real
+  editorial photo -- never an app's store icon), glyph (an icon-sprite
+  name for the drawn banner shown when there's no image; default
+  "spark"), faqs, related (a list of other posts' `slug` values).
 
   Breadcrumbs are hand-written here (not built from a per-post
   breadcrumbs: list, unlike breadcrumb-schema.html's generic usage) --
@@ -43,7 +45,9 @@ css: post
   "@type": "BlogPosting",
   "headline": {{ page.heading | jsonify | replace: "/", "\/" }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
+  {%- if page.image %}
   "image": {{ page.image | absolute_url | jsonify | replace: "/", "\/" }},
+  {%- endif %}
   "datePublished": {{ page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
   "dateModified": {{ page.updated | default: page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
   "author": {
@@ -84,11 +88,18 @@ css: post
     </div>
   </header>
 
-  {%- if page.image %}
   <div class="wrap post-image-wrap">
+  {%- if page.image %}
     <img class="post-image" src="{{ page.image | relative_url }}" alt="" width="1200" height="630" loading="eager">
-  </div>
+  {%- else %}
+    {%- comment -%} No photo: a drawn banner (brand gradient + the post's
+    glyph) instead of borrowing an app icon. Decorative. {%- endcomment %}
+    <div class="post-banner" aria-hidden="true">
+      <span class="post-banner-ring"></span>
+      <span class="post-banner-glyph"><svg><use href="#i-{{ page.glyph | default: 'spark' }}"/></svg></span>
+    </div>
   {%- endif %}
+  </div>
 
   <div class="section">
     <div class="wrap wrap--narrow prose post-body">
