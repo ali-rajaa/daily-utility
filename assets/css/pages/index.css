@@ -259,8 +259,7 @@
 /* ---------- 3. More apps ---------- */
 
 .app-grid,
-.value-grid,
-.post-grid {
+.value-grid {
   display: grid;
   gap: 1.25rem;
   margin: 0;
@@ -268,13 +267,12 @@
   list-style: none;
 }
 .app-grid { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
-.app-grid > li,
-.post-grid > li { display: flex; }
+.app-grid > li { display: flex; }
 
-/* Shared card behaviour: the whole card is the link, lifts slightly on
-   hover and presses in on :active (feedback on the press, not release). */
-.app-card,
-.post-card {
+/* The whole card is the link, lifts slightly on hover and presses in on
+   :active (feedback on the press, not release). Article cards share the
+   same behaviour from shell.css (.post-card). */
+.app-card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -289,15 +287,13 @@
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
 }
-.app-card:hover,
-.post-card:hover {
+.app-card:hover {
   color: var(--text);
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
   transform: translateY(-3px);
 }
-.app-card:active,
-.post-card:active {
+.app-card:active {
   transform: scale(0.985);
   transition-duration: 0.1s;
 }
@@ -368,42 +364,8 @@
 }
 .section-head-row .section-head { margin-bottom: 0; }
 
-/* auto-fill, not auto-fit: with only one or two articles published the
-   cards keep their natural width instead of stretching across the row. */
-.post-grid { grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
-
-.post-card { overflow: hidden; }
-.post-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  background: var(--brand-gradient);
-}
-.post-card-cat {
-  align-self: flex-start;
-  padding: 0.25rem 0.625rem;
-  border-radius: var(--radius-pill);
-  background: var(--brand-soft);
-  color: var(--brand-text);
-  font: 650 0.75rem/1.4 var(--font-heading);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.post-card-title { margin-top: 1rem; font-size: 1.1875rem; }
-.post-card-desc {
-  flex-grow: 1;
-  margin-top: 0.5rem;
-  font-size: 0.9375rem;
-  color: var(--text-2);
-}
-.post-card-meta {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: 1.25rem;
-  font-size: 0.8125rem;
-  color: var(--text-2);
-}
+/* Article cards (.post-grid / .post-card) live in shell.css: the
+   Daily Info hub uses them too. */
 
 /* ---------- 6. Closing CTA ---------- */
 
@@ -439,16 +401,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cluster-tile { animation: none; }
-  .app-card, .post-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-  .app-card:hover, .post-card:hover,
-  .app-card:active, .post-card:active { transform: none; }
+  .app-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .app-card:hover, .app-card:active { transform: none; }
   .text-link:hover svg, .app-card:hover .app-card-more svg { transform: none; }
 }
 
 @media (prefers-contrast: more) {
   .cluster-chip,
   .app-card,
-  .post-card,
   .value-card { border-color: var(--border-strong); }
   .home-cta::before { display: none; }
 }

@@ -28,7 +28,7 @@
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul class="nav-list">
         <li><a class="nav-link" href="{{ '/cloud-storage-backup-drive' | relative_url }}"{% if page.url == "/cloud-storage-backup-drive.html" %} aria-current="page"{% endif %}>Backup &amp; Drive</a></li>
-        <li><a class="nav-link" href="{{ '/daily-info' | relative_url }}"{% if page.url == "/daily-info.html" %} aria-current="page"{% elsif page.url contains "/daily-info/" %} aria-current="true"{% endif %}>Daily Info</a></li>
+        <li><a class="nav-link" href="{{ '/daily-info/' | relative_url }}"{% if page.url == "/daily-info/" %} aria-current="page"{% elsif page.url contains "/daily-info/" %} aria-current="true"{% endif %}>Daily Info</a></li>
       </ul>
       <a class="btn btn--primary nav-cta" href="{{ _get_app }}">Get the app</a>
     </nav>

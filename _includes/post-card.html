@@ -1,0 +1,17 @@
+{%- comment -%}
+  One Daily Info article as a card (styles: shell.css "Article cards").
+  Used by the homepage's latest-articles row and the /daily-info hub.
+  Param: post (a page on the post layout). Renders the <li> itself, so
+  call it inside a <ul class="post-grid">.
+{%- endcomment -%}
+<li class="reveal">
+  <a class="post-card" href="{{ include.post.url | replace: '.html', '' | relative_url }}">
+    <span class="post-card-cat">{{ include.post.category | escape }}</span>
+    <h3 class="post-card-title">{{ include.post.heading | default: include.post.title | escape }}</h3>
+    <p class="post-card-desc">{{ include.post.description | escape }}</p>
+    <span class="post-card-meta">
+      <time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: "%-d %b %Y" }}</time>
+      {%- if include.post.read_min %}<span aria-hidden="true">&middot;</span>{{ include.post.read_min }} min read{% endif %}
+    </span>
+  </a>
+</li>

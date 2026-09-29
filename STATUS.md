@@ -4,12 +4,15 @@ Living reference for this repo. It records what we decided and why, so
 no session has to re-derive or re-argue it. Update it whenever a
 decision changes or a phase completes.
 
-**Current state:** Build steps 1–5 are done: config, shell, includes,
-layouts, and the core pages (real homepage, all four app pages, privacy
-policy, terms of service, 404) — section 5b. **Work is committed and
+**Current state:** The base site is complete — build steps 1–8 are done
+(section 5d): every page, the Daily Info hub, robots.txt, sitemap.xml,
+the share card, and a full validation pass. Only step 9 (cutover to
+dailyutilityapps.store) remains, plus GA4 once an ID exists. **Work is committed and
 pushed straight to `main` only** (user, 29 Sep: "from now on ONLY push to
 main"); `main` deploys the preview. The old `claude/bold-feynman-c7lqej`
-branch is no longer used. Next: step 6 (Daily Info hub + articles).
+branch is no longer used (all merged; the user deletes it in GitHub —
+this environment can't delete branches). Next: improve pages on this
+base; then step 9.
 **Before cutover:** the owner must review the legal pages and all app
 copy against the real store listings (section 10).
 
@@ -102,7 +105,7 @@ daily-utility/
 │   └── og/default.png             # 1200x630 share card
 ├── index.html                     # layout: default. Homepage
 ├── cloud-storage-backup-drive.html   # layout: app
-├── daily-info.html                # layout: default. Blog hub
+├── (hub is daily-info/index.html)  # layout: default. Blog hub, served at /daily-info/
 ├── daily-info/
 │   ├── backup-before-switching-phones.md   # real article, shipped in step 4h;
 │   │                              # .md not .html -- Jekyll only runs kramdown
@@ -983,6 +986,58 @@ changes.
 - Wording avoids origin claims: "based in Western Australia" (a fact),
   never "built/made in Australia" (unconfirmed — see section 5b).
 
+## 5d. Steps 6–8: Daily Info hub, SEO files, validation (29 Sep)
+
+User: "legal is same info as cloudgate for hosting etc, FINISH all pages
+and step 6 … create a robots txt and sitemap … dont make each page for
+blog info".
+
+- **Legal — owner confirmed hosting etc. matches CloudGate.** The privacy
+  policy now states the CloudGate specifics instead of conditional
+  wording: data stored on Amazon Web Services in the United States (and
+  plainly "stored outside Australia"), encryption at rest as well as in
+  transit, Firebase (Google) for analytics and crash reports, AWS and
+  Firebase named as service providers, and the 30-day deleted-file and
+  72-hour account-closure windows. Stripe was not added: these apps
+  have no web billing, only App Store/Google Play purchases.
+- **Daily Info hub — `daily-info/index.html`, served at `/daily-info/`.**
+  Not `daily-info.html` as first planned: a `daily-info.html` file next
+  to the `daily-info/` articles folder makes `/daily-info` ambiguous
+  (the local server redirected it to the folder), and the live preview
+  can't be reached from this environment to prove GitHub Pages resolves
+  it the other way. The directory index works identically on every
+  server. So the hub's canonical is `/daily-info/` (trailing slash — the
+  one deliberate exception to "no trailing slash", since it's a
+  directory), and every link, breadcrumb and schema URL points straight
+  at `/daily-info/` with no redirect hop. The hub lists every post-layout
+  page grouped by category (only categories that have articles), with
+  topic jump links once there's more than one, a `Blog` + `BreadcrumbList`
+  schema, and a closing flagship CTA. Card markup is now one include
+  (`_includes/post-card.html`) and its styles moved to shell.css
+  ("Article cards"), shared with the homepage. The one article moved
+  from "Backup & Restore" (not a planned category) to "Switching Phones".
+- **robots.txt** — preview: `Disallow: /` (on top of per-page noindex);
+  live: `Allow: /` plus the sitemap URL. Switches on `site.staging`.
+- **sitemap.xml** — every HTML page except the 404 and `noindex` pages,
+  extensionless URLs matching the canonicals, `lastmod` from a post's
+  `updated` / a legal page's `last_updated`, else build time. 9 URLs, all
+  verified to resolve.
+- **Share card `assets/og/default.png`** (1200×630) — rendered in the
+  browser from the site's own fonts, brand mark and app-tile glyphs (no
+  real app icons). Every page's og:image pointed at a missing file
+  before this.
+- **Validation (step 8)** — clean build; CI's unrendered-Liquid check;
+  html-validate on all 10 pages; a script checking every internal link
+  and `#anchor` on every page resolves (zero broken — the old dead
+  `/daily-info` links now work), all 16 JSON-LD blocks parse, every
+  preview page carries noindex, CloudGate only in legal/footer, all
+  sitemap URLs resolve, no icon PNG references; shell (19), responsive
+  (138), app-page (17) and post-page (14) browser suites pass; hub
+  checked at desktop and phone. Lighthouse (homepage): performance 99,
+  accessibility 100, best practices 100, SEO 69 — the only SEO failure
+  is "page is blocked from indexing", i.e. the intentional preview
+  noindex/robots, which the step 9 `staging: false` switch removes.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -995,7 +1050,7 @@ changes.
   That filter adds `site.url` and `site.baseurl` together, so a future
   sub-path deployment (a non-empty `baseurl`) would still produce correct
   URLs.
-- Final routes: `/`, `/cloud-storage-backup-drive`, `/daily-info`,
+- Final routes: `/`, the four app pages (`/<slug>`), `/daily-info/`,
   `/daily-info/<slug>`, `/privacy-policy`, `/terms-of-service`.
 - `404.html` sets `noindex: true`. `default.html` skips the canonical tag
   on `/404.html`. The sitemap leaves out the 404 page and any `noindex`
@@ -1203,10 +1258,16 @@ what's there.
       been false on Android-only pages, and rewrote copy that claimed
       more than is confirmed. Legal text and app copy still need owner
       review before cutover (section 10).
-- [ ] **6. Daily Info:** the hub, then the 6 articles.
-- [ ] **7. SEO files:** robots, sitemap, OG card, GA4. (The favicon
-      was done in step 2.)
-- [ ] **8. Validate on Preview:**
+- [x] **6. Daily Info:** the hub at `/daily-info/` (section 5d). More
+      articles deliberately deferred (user, 29 Sep: "dont make each page
+      for blog info") — the hub and homepage list whatever exists.
+- [x] **7. SEO files:** robots.txt, sitemap.xml, `assets/og/default.png`
+      (section 5d). GA4 still waits on a measurement ID (section 10).
+- [x] **8. Validate on Preview:** done (section 5d) — build, CI check,
+      html-validate, every internal link and anchor, JSON-LD, noindex,
+      sitemap, browser suites, Lighthouse 99/100/100/69 (SEO 69 = the
+      intentional preview noindex only). Checklist kept below for re-runs.
+  **8. Validate on Preview:**
   - Build locally with `JEKYLL_ENV=production bundle exec jekyll build`.
     Don't audit the output of `jekyll serve`: it swaps `site.url` for
     `http://localhost:4000`, so every canonical looks wrong.
@@ -1237,7 +1298,10 @@ what's there.
       see section 5a. Still open: an App Store link for any of the three,
       if one exists (not checked), and taglines better than the
       title-only inference currently in `apps.yml`.
-- [ ] **Owner review of the legal pages (blocks cutover).** They're
+- [ ] **Owner review of the legal pages (blocks cutover).** *Partly
+      resolved 29 Sep: owner confirmed hosting etc. is the same as
+      CloudGate — now stated (section 5d). Still confirm per app: any ads
+      / ATT tracking, accounts, in-app purchases.* They're
       adapted from the CloudGate templates with CloudGate-product
       specifics removed (section 5b). Confirm, per app, and add back
       where true: where stored data is hosted (APP 8 expects the
@@ -1417,3 +1481,8 @@ what's there.
   "CloudGate" only on legal pages and in the footer — removed from the
   homepage, site description, schema, app trust band and app FAQs;
   verified by script on the built site. All suites pass.
+- Steps 6–8 done (section 5d): privacy policy states the owner-confirmed
+  CloudGate hosting facts; Daily Info hub at `/daily-info/` (directory
+  index, to avoid the file-vs-folder ambiguity); robots.txt; sitemap.xml;
+  share card; full validation incl. an every-link check and Lighthouse
+  99/100/100/69 (SEO = intentional preview noindex). Base site complete.

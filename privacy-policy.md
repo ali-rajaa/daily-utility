@@ -74,7 +74,7 @@ Apps that back up or store files, such as Cloud Storage Backup & Drive, store th
 - **Usage information:** which features you use, backup or transfer status, and error and crash logs.
 - **Technical information:** IP address, approximate location derived from your IP address, and connection information.
 
-We use this information to operate, secure, troubleshoot and improve the Services.
+We use Firebase, provided by Google, to understand aggregate usage patterns and to receive crash reports. We use this information to operate, secure, troubleshoot and improve the Services.
 
 ## How we use your information {#how-we-use-it}
 
@@ -112,11 +112,14 @@ We do not routinely access or review Your Content. We may access it only where n
 
 ## Storage and security {#storage-security}
 
-Where an app stores Your Content or account data on our systems, it is held on cloud infrastructure operated by our hosting providers, which may be located outside Australia. By using such an app, you consent to that overseas storage and handling. Where personal information is transferred outside Australia, we take reasonable steps to ensure the recipient handles it consistently with the Australian Privacy Principles.
+Your Content and account data are stored on infrastructure operated by Amazon Web Services in the United States.
+
+**Your personal information and Your Content are stored outside Australia.** By using our apps, you consent to that overseas storage and handling. Where personal information is transferred outside Australia, we take reasonable steps to ensure the recipient handles it consistently with the Australian Privacy Principles.
 
 We use technical and organisational measures designed to protect personal information and Your Content, including:
 
 - Encryption of data in transit between your device and our servers using industry-standard TLS
+- Encryption of Your Content and account data at rest on our servers
 - Access controls limiting staff access to systems that hold personal information
 
 No method of transmission or storage is completely secure. We take reasonable steps to protect your information, but we cannot guarantee absolute security.
@@ -125,7 +128,7 @@ No method of transmission or storage is completely secure. We take reasonable st
 
 We disclose personal information only in these circumstances:
 
-- **Service providers:** hosting, analytics, advertising and attribution, crash reporting and customer support providers, each bound by confidentiality obligations and permitted to use the information only to provide services to us.
+- **Service providers:** hosting (Amazon Web Services), analytics and crash reporting (Firebase, provided by Google), advertising and attribution, and customer support providers, each bound by confidentiality obligations and permitted to use the information only to provide services to us.
 - **At your direction:** for example, when you share a file or send it to another device, it becomes available to the person or device you chose.
 - **Legal requirements:** where required by law, subpoena, court order or a lawful request from a government or law enforcement authority.
 - **Protection of rights:** where reasonably necessary to enforce our Terms of Service, investigate suspected fraud or abuse, or protect the rights, property or safety of CloudGate, our users or the public.
@@ -137,8 +140,9 @@ A current list of our service providers is available on request.
 
 We keep account information and Your Content for as long as you use the relevant app, or as long as your account remains active.
 
-- **Deleting content:** when you delete content an app stores for you, we delete it from our systems within a reasonable period, except where the law requires us to keep it.
-- **Closing an account:** when you close an account, we delete or de-identify your personal information and Your Content, except where the law requires us to keep it.
+- **Deleting files:** when you delete a file, it may remain recoverable for a limited period of 30 days before permanent deletion.
+- **Closing an account:** when you close an account, we delete or de-identify your personal information and Your Content within 72 hours, except where retention is required by law.
+- **Inactive accounts:** we do not delete your data solely because your account has been inactive.
 - **Records we must keep:** any transaction records we hold are retained for the period required by Australian taxation and corporations law.
 
 Copies may persist for a short time in routine system backups after deletion, and are overwritten in the ordinary course of operations.

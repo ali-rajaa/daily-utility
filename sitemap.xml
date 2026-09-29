@@ -1,0 +1,25 @@
+---
+---
+{%- comment -%}
+  Every HTML page except the 404 and anything with noindex: true
+  (STATUS.md section 6). URLs are extensionless (directory pages like
+  /daily-info/ keep their slash), the same form as every canonical. lastmod uses the most specific date a page has:
+  a post's `updated`, a legal page's `last_updated`, else the build time.
+  The empty front matter fence above is required, or Jekyll copies this
+  file unrendered.
+{%- endcomment -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- assign _pages = site.pages | sort: "url" -%}
+{%- for p in _pages %}
+  {%- assign _last = p.url | slice: -1, 1 -%}
+  {%- unless p.url contains ".html" or _last == "/" -%}{%- continue -%}{%- endunless -%}
+  {%- if p.url == "/404.html" or p.noindex -%}{%- continue -%}{%- endif -%}
+  {%- assign _loc = p.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+  {%- assign _mod = p.updated | default: p.last_updated | default: p.date | default: site.time %}
+  <url>
+    <loc>{{ _loc | absolute_url }}</loc>
+    <lastmod>{{ _mod | date: "%Y-%m-%d" }}</lastmod>
+  </url>
+{%- endfor %}
+</urlset>

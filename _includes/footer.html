@@ -39,7 +39,7 @@
         {%- for _post in _posts limit: 3 %}
         <li><a href="{{ _post.url | replace: '.html', '' | relative_url }}">{{ _post.heading | default: _post.title | escape }}</a></li>
         {%- endfor %}
-        <li><a href="{{ '/daily-info' | relative_url }}">All articles</a></li>
+        <li><a href="{{ '/daily-info/' | relative_url }}">All articles</a></li>
       </ul>
     </nav>
 

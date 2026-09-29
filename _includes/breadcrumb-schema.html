@@ -1,7 +1,7 @@
 {%- comment -%}
   BreadcrumbList structured data. Param: crumbs, a list of {name, url}
   in order from the homepage down (url is a site-relative path, e.g.
-  "/daily-info" -- this include builds the absolute URL itself, the same
+  "/daily-info/" -- this include builds the absolute URL itself, the same
   way every other full URL on the site is built). Renders nothing if
   crumbs is missing or empty.
 
@@ -10,7 +10,7 @@
   where a page sets, e.g.:
     breadcrumbs:
       - name: "Daily Info"
-        url: "/daily-info"
+        url: "/daily-info/"
       - name: "How to Back Up Your Phone Before Switching"
         url: "/daily-info/backup-before-switching-phones"
 {%- endcomment -%}

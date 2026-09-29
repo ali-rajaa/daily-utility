@@ -4,7 +4,7 @@ css: post
 title: "How to Back Up Your Phone Before Switching to a New One"
 description: "A step-by-step checklist for backing up photos, videos, contacts and app data before you switch to a new phone, so nothing gets left behind."
 heading: "How to Back Up Your Phone Before Switching to a New One"
-category: "Backup & Restore"
+category: "Switching Phones"
 date: 2026-01-15
 updated: 2026-01-15
 read_min: 5

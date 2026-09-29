@@ -1,0 +1,103 @@
+---
+layout: default
+css: blog-hub
+title: "Daily Info: Phone Backup & Storage Guides | Daily Utility Apps"
+description: "Practical guides for everyday phone problems: backing up, switching phones, managing photos and storage, and keeping your data private."
+---
+{%- comment -%}
+  The Daily Info hub (/daily-info). Lists every page on the post layout,
+  newest first, grouped by category -- adding an article never means
+  editing this file. Categories are STATUS.md section 5's four; only
+  categories that actually have articles are shown, so there are never
+  empty sections or dead topic links.
+{%- endcomment -%}
+{%- assign posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+{%- assign by_cat = posts | group_by: "category" -%}
+{%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Daily Info",
+  "url": {{ '/daily-info/' | absolute_url | jsonify | replace: "/", "\/" }},
+  "description": {{ page.description | jsonify | replace: "/", "\/" }},
+  "publisher": {
+    "@type": "Organization",
+    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }}
+  },
+  "blogPost": [
+    {%- for post in posts %}
+    {
+      "@type": "BlogPosting",
+      "headline": {{ post.heading | default: post.title | jsonify | replace: "/", "\/" }},
+      "url": {{ post.url | replace: '.html', '' | absolute_url | jsonify | replace: "/", "\/" }},
+      "datePublished": {{ post.date | date_to_xmlschema | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }} },
+    { "@type": "ListItem", "position": 2, "name": "Daily Info", "item": {{ '/daily-info/' | absolute_url | jsonify | replace: "/", "\/" }} }
+  ]
+}
+</script>
+
+<section class="section hub-hero hero-glow-host">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content">
+    <nav class="hub-crumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Daily Info</span>
+    </nav>
+    <div class="section-head">
+      <span class="eyebrow">Daily Info</span>
+      <h1>Guides for everyday phone problems</h1>
+      <p class="section-sub">Plain-English help with backing up, switching phones, looking after your photos and storage, and keeping your data private.</p>
+    </div>
+    {%- if by_cat.size > 1 %}
+    <nav class="hub-topics" aria-label="Topics">
+      {%- for cat in by_cat %}
+      <a class="hub-topic" href="#{{ cat.name | slugify }}">{{ cat.name | escape }} <span>{{ cat.size }}</span></a>
+      {%- endfor %}
+    </nav>
+    {%- endif %}
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    {%- if posts.size == 0 %}
+    <p class="hub-empty">New guides are on the way.</p>
+    {%- endif %}
+    {%- for cat in by_cat %}
+    <div class="hub-group" id="{{ cat.name | slugify }}">
+      <h2 class="hub-group-title">{{ cat.name | escape }}</h2>
+      <ul class="post-grid">
+        {%- for post in cat.items %}
+        {% include post-card.html post=post %}
+        {%- endfor %}
+      </ul>
+    </div>
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band hub-cta reveal">
+      {% include app-tile.html app=flagship class="hub-cta-tile" %}
+      <div class="section-head">
+        <h2>Back up before you need to</h2>
+        <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data.</p>
+      </div>
+      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
+    </div>
+  </div>
+</section>

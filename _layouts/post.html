@@ -33,7 +33,7 @@ css: post
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Daily Info", "item": {{ '/daily-info' | absolute_url | jsonify | replace: "/", "\/" }} },
+    { "@type": "ListItem", "position": 1, "name": "Daily Info", "item": {{ '/daily-info/' | absolute_url | jsonify | replace: "/", "\/" }} },
     { "@type": "ListItem", "position": 2, "name": {{ page.heading | jsonify | replace: "/", "\/" }}, "item": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }} }
   ]
 }
@@ -68,7 +68,7 @@ css: post
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="{{ '/' | relative_url }}">Home</a>
         <span class="breadcrumbs-sep" aria-hidden="true">/</span>
-        <a href="{{ '/daily-info' | relative_url }}">Daily Info</a>
+        <a href="{{ '/daily-info/' | relative_url }}">Daily Info</a>
         <span class="breadcrumbs-sep" aria-hidden="true">/</span>
         <span aria-current="page">{{ page.heading | escape }}</span>
       </nav>
