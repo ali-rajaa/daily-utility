@@ -51,6 +51,18 @@ company:
   postcode: "6155"
   country: "AU"
   support_email: "support@cloudgate-app.com"
+  # Footer social links (user, 29 Sep). The footer shows an icon for each
+  # one that's set; remove a line to hide that icon.
+  social:
+    - name: "LinkedIn"
+      icon: linkedin
+      url: "https://www.linkedin.com/company/cloud-gate-technologies/"
+    - name: "Facebook"
+      icon: facebook
+      url: "https://www.facebook.com/cloudgatetechnologies"
+    - name: "Instagram"
+      icon: instagram
+      url: "https://www.instagram.com/cloudgatetechnologies/"
 
 exclude:
   - Gemfile

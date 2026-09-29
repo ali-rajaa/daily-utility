@@ -1731,3 +1731,14 @@ what's there.
   and the hub used the build time (claiming a change on every deploy);
   they now carry real `updated` dates (the hub takes its newest guide's
   date), and an undated page gets no lastmod rather than a fake one.
+- App pages redesigned (user, 29 Sep): the pasted long-form guides are
+  gone ("not professional"); each page is front-matter-only with its own
+  sections: hero + quick links, moments (4 situations), how it works,
+  features, with/without comparison, tips + related Daily Info guides,
+  8-9 FAQs, privacy band, other apps, get-the-app card. All copy stays
+  within confirmed scope (situations and general advice, no new
+  features). The 2,500-word rule now applies to Daily Info articles
+  only; app pages are ~860-1,040 words of focused content.
+- Footer: "A product of CloudGate Technologies" and LinkedIn, Facebook,
+  Instagram icons (CloudGate's accounts, site.company.social in
+  _config.yml).

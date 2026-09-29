@@ -858,6 +858,27 @@ h3, .h3 {
 
 .footer-tagline { margin-top: 1.1rem; max-width: 20rem; color: var(--text-2); line-height: 1.6; text-wrap: pretty; }
 .footer-desc { margin-top: 1rem; max-width: 22rem; line-height: 1.65; }
+.footer-maker { margin-top: 1.1rem; font-size: 0.875rem; }
+.footer-maker strong { color: var(--text); font-weight: 600; }
+.footer-social { display: flex; gap: 0.6rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.footer-social a {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  background: var(--surface);
+  color: var(--text-2);
+  box-shadow: var(--shadow-sm);
+  transition: color 0.18s ease, border-color 0.18s ease, transform 0.25s var(--ease-out);
+}
+.footer-social a:hover { color: var(--brand-text); border-color: var(--border-strong); transform: translateY(-2px); }
+.footer-social a:active { transform: scale(0.95); transition-duration: 0.1s; }
+.footer-social svg { width: 1.2rem; height: 1.2rem; }
+@media (prefers-reduced-motion: reduce) {
+  .footer-social a:hover, .footer-social a:active { transform: none; }
+}
 
 .footer-get .store-badges { flex-direction: column; align-items: flex-start; gap: 0.625rem; }
 .footer-get .store-badge { min-width: 10rem; }

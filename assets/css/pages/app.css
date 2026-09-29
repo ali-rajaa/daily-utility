@@ -272,50 +272,161 @@
   .step, .feature-card, .other-app, .trust-band { border-color: var(--border-strong); }
 }
 
-/* ---------- Long-form guide ----------
-   The page's markdown body, with a sticky contents list beside it on
-   desktop and above it on phones. */
+/* ---------- Hero quick links ----------
+   A row of pill links to the page's main sections, so a visitor can
+   jump straight to what they came for. */
 
-.app-guide-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2rem;
+.app-jump {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
 }
-.app-guide-body { max-width: 44rem; min-width: 0; }
-.app-guide-body > h2:first-child { margin-top: 0; }
-.app-guide-body h2 {
-  padding-top: 1.75rem;
-  border-top: 1px solid var(--border);
-  scroll-margin-top: calc(var(--header-h) + 1rem);
-}
-.app-guide-body > h2:first-child { padding-top: 0; border-top: 0; }
-.app-guide-body h3 { color: var(--brand-text); }
-.app-guide-body ul li::marker { color: var(--brand); }
-.app-guide-body table {
-  width: 100%;
-  border-collapse: collapse;
+.app-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  color: var(--text);
   font-size: 0.9375rem;
+  font-weight: 550;
+  text-decoration: none;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
 }
-.app-guide-body th, .app-guide-body td {
-  padding: 0.7rem 0.8rem;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-}
-.app-guide-body thead th { background: var(--brand-soft); color: var(--text); font-family: var(--font-heading); }
+.app-jump a:hover { border-color: var(--brand); color: var(--brand-text); }
+.app-jump a:active { background: var(--brand-soft); }
 
-@media (min-width: 60rem) {
-  .app-guide-grid {
-    grid-template-columns: 16.5rem minmax(0, 1fr);
-    gap: clamp(2.5rem, 5vw, 4.5rem);
-    align-items: start;
-  }
-  .app-guide-toc {
-    position: sticky;
-    top: calc(var(--header-h) + 1.25rem);
-    max-height: calc(100vh - var(--header-h) - 2.5rem);
-    overflow-y: auto;
-  }
+/* Sections the quick links land on sit clear of the sticky header. */
+#moments, #how-it-works, #features, #compare, #tips, #faq { scroll-margin-top: var(--header-h); }
+
+/* ---------- Moments: when to use it ---------- */
+
+.moments {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.moment {
+  position: relative;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* A wash of the app's colour in the corner of each card. */
+.moment::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at 100% 0%, var(--brand-soft), transparent 60%);
+}
+.moment-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.95rem;
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--brand) 80%, transparent);
+}
+.moment-icon svg { width: 1.4rem; height: 1.4rem; }
+.moment h3 { font-size: 1.125rem; }
+.moment p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+
+/* ---------- With / without ---------- */
+
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 56rem;
+  margin-inline: auto;
+}
+@media (max-width: 719.98px) { .compare { grid-template-columns: minmax(0, 1fr); } }
+.compare-col {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+.compare-col--without { background: var(--bg-alt); }
+.compare-col--with {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 60%),
+    var(--surface);
+  border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
+  box-shadow: var(--shadow-md);
+}
+.compare-title { font-size: 1.125rem; }
+.compare-col--without .compare-title { color: var(--text-2); }
+.compare-col--with .compare-title { color: var(--brand-text); }
+.compare ul { display: grid; gap: 0.9rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
+.compare li { display: flex; align-items: flex-start; gap: 0.75rem; line-height: 1.5; }
+.compare-col--without li { color: var(--text-2); }
+.compare-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.05rem;
+  border-radius: 50%;
+}
+.compare-mark svg { width: 0.85rem; height: 0.85rem; stroke-width: 2.6; }
+.compare-col--without .compare-mark { background: var(--border); color: var(--text-2); }
+.compare-col--with .compare-mark { background: var(--brand); color: var(--on-brand); }
+
+/* ---------- Tips + related guides ---------- */
+
+.tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tip {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.tip-num {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  font: 700 1rem/1 var(--font-heading);
+}
+.tip h3 { font-size: 1.0625rem; }
+.tip p { margin-top: 0.4rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+
+.app-guides { margin-top: clamp(3rem, 6vw, 4rem); }
+.app-guides .section-head-row { align-items: center; margin-bottom: 1.5rem; }
+.app-guides-title { font-size: 1.25rem; }
+
+@media (prefers-contrast: more) {
+  .moment, .compare-col, .tip, .app-jump a { border-color: var(--border-strong); }
 }
 
 /* The hero follows the site-wide hero rhythm (shell.css tokens). */

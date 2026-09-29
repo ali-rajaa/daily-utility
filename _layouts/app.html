@@ -8,25 +8,27 @@ css: app
   IMPORTANT: this file's own `css: app` above only affects a page that
   has no `css:` of its own -- Jekyll does NOT cascade a layout's front
   matter down to the pages that use it. Every page on this layout must
-  still set `css: app` itself (as cloud-storage-backup-drive.html does),
+  still set `css: app` itself (as cloud-storage-backup-drive.md does),
   or it renders with shell.css only and no pages/app.css. Confirmed the
   hard way: post.html originally relied on exactly this false cascade
   and pages/post.css silently never loaded.
 
-  Structured parts come from front matter; the page's markdown body is a
-  long-form guide (user, 29 Sep: about 2,500 visible words per app page),
-  written separately for each app so no two pages share body text. Required front
-  matter (STATUS.md section 4): title, description, css (must be "app"),
-  app_name, tagline, ios_url and/or android_url, category,
+  Fully front-matter-driven; the page body is empty (user, 29 Sep: no
+  pasted guide text -- each app page is its own designed page). Required
+  front matter (STATUS.md section 4): title, description, css (must be
+  "app"), app_name, tagline, ios_url and/or android_url, category,
   features (icon, title, text), how_it_works (3x {title, text}),
-  faqs (q, a). Optional: guide_heading and guide_sub (the guide section's
-  H2 and intro), steps_heading (the how-it-works H2), trust_text
-  (an app-specific privacy sentence for the trust band -- only ever
-  something confirmed about that particular app).
+  faqs (q, a). Optional, each adding a section: moments (+
+  moments_heading, moments_sub; 4x {icon, title, text}), compare
+  ({heading, without[], with[], optional without_title / with_title}),
+  tips (+ tips_heading; 3x {title, text}), guides (Daily Info slugs).
+  Also steps_heading and trust_text (an app-specific privacy sentence --
+  only ever something confirmed about that particular app).
 
-  The "Get the app" button in the header links to #download -- that id
-  must stay on the element wrapping the store badges below (STATUS.md
-  section 2's "rules the later steps must keep").
+  Everything written for an app must stay inside what's confirmed about
+  it (STATUS.md section 1): moments describe situations, tips and FAQs
+  give general advice; neither may imply a feature the app isn't known
+  to have. The #download id must stay on the hero's store badges.
 {%- endcomment -%}
 {%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
 {%- comment -%} This page's own apps.yml entry (for its glyph/tone tile),
@@ -34,6 +36,7 @@ found by URL: /document-reader-pdf.html -> document-reader-pdf.
 {%- endcomment -%}
 {%- assign _slug = page.url | remove_first: "/" | remove: ".html" -%}
 {%- assign _app = site.data.apps | where: "slug", _slug | first -%}
+{%- assign _short = _app.short | default: page.app_name -%}
 {%- comment -%} Platforms come from which store links the page actually
 has -- never hardcoded, since most of the apps are Android-only.
 {%- endcomment -%}
@@ -84,7 +87,10 @@ has -- never hardcoded, since most of the apps are Android-only.
 {%- comment -%} Everything visible sits inside the app's tone scope
 (shell.css "App tones"): buttons, eyebrows, links, step numbers, icon
 tiles, the trust band and the hero glow all take this app's colour. The
-header and footer stay outside it, in brand blue. {%- endcomment %}
+header and footer stay outside it, in brand blue. Sections: hero with
+quick links, moments, how it works, features, with/without, tips +
+related guides, FAQ, privacy, other apps, get-the-app card; backgrounds
+alternate down the page. {%- endcomment %}
 <div class="tone-{{ _app.tone }}">
 <section class="section app-hero hero-glow-host">
   {% include hero-glow.html %}
@@ -103,11 +109,40 @@ header and footer stay outside it, in brand blue. {%- endcomment %}
       <li><svg aria-hidden="true"><use href="#i-spark"/></svg>By Daily Utility Apps</li>
       <li><svg aria-hidden="true"><use href="#i-shield"/></svg>Your data is never sold</li>
     </ul>
+    <nav class="app-jump" aria-label="On this page">
+      {%- if page.moments %}<a href="#moments">When to use it</a>{% endif %}
+      {%- if page.how_it_works %}<a href="#how-it-works">How it works</a>{% endif %}
+      {%- if page.features %}<a href="#features">Features</a>{% endif %}
+      {%- if page.faqs %}<a href="#faq">FAQ</a>{% endif %}
+    </nav>
   </div>
 </section>
 
+{%- if page.moments %}
+<section class="section section--alt" id="moments">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">When to use it</span>
+      <h2>{{ page.moments_heading | default: "Made for everyday moments" | escape }}</h2>
+      {%- if page.moments_sub %}
+      <p class="section-sub">{{ page.moments_sub | escape }}</p>
+      {%- endif %}
+    </div>
+    <ul class="moments">
+      {%- for m in page.moments %}
+      <li class="moment reveal">
+        <span class="moment-icon" aria-hidden="true"><svg><use href="#i-{{ m.icon | escape }}"/></svg></span>
+        <h3>{{ m.title | escape }}</h3>
+        <p>{{ m.text | escape }}</p>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}
+
 {%- if page.how_it_works %}
-<section class="section section--alt">
+<section class="section" id="how-it-works">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">How it works</span>
@@ -127,7 +162,7 @@ header and footer stay outside it, in brand blue. {%- endcomment %}
 {%- endif %}
 
 {%- if page.features %}
-<section class="section">
+<section class="section section--alt" id="features">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">Features</span>
@@ -149,51 +184,83 @@ header and footer stay outside it, in brand blue. {%- endcomment %}
 </section>
 {%- endif %}
 
-{%- comment -%} The long-form guide: the page's own markdown body, one
-"## " heading per part, with an "On this page" list built from those
-headings (the same split post.html uses). Only general, accurate advice
-about the job the app does goes here -- never a feature the app isn't
-confirmed to have. {%- endcomment -%}
-{%- assign _gparts = content | split: '<h2 id="' -%}
-{%- if _gparts.size > 1 %}
-<section class="section app-guide" id="guide">
+{%- if page.compare %}
+<section class="section" id="compare">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Guide</span>
-      <h2>{{ page.guide_heading | default: "A practical guide" | escape }}</h2>
-      {%- if page.guide_sub %}
-      <p class="section-sub">{{ page.guide_sub | escape }}</p>
-      {%- endif %}
+      <span class="eyebrow">The difference</span>
+      <h2>{{ page.compare.heading | escape }}</h2>
     </div>
-    <div class="app-guide-grid">
-      <nav class="post-toc app-guide-toc" aria-label="Guide contents">
-        <details class="post-toc-fold" open>
-          <summary class="post-toc-title"><span>In this guide</span><span class="post-toc-count">{{ _gparts.size | minus: 1 }} sections</span><svg class="post-toc-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
-        <ol class="post-toc-list">
-          {%- for part in _gparts offset: 1 %}
-          {%- assign _id = part | split: '"' | first -%}
-          {%- assign _head = part | split: '</h2>' | first | split: '">' | last | strip_html %}
-          <li><a href="#{{ _id }}"><span class="post-toc-num">{{ forloop.index }}</span><span>{{ _head }}</span></a></li>
+    <div class="compare reveal">
+      <div class="compare-col compare-col--without">
+        <h3 class="compare-title">{{ page.compare.without_title | default: "Without it" | escape }}</h3>
+        <ul>
+          {%- for item in page.compare.without %}
+          <li><span class="compare-mark" aria-hidden="true"><svg><use href="#i-x"/></svg></span><span>{{ item | escape }}</span></li>
           {%- endfor %}
-        </ol>
-          </details>
-      </nav>
-      <div class="prose app-guide-body">
-        {{ content | replace: '<table', '<section class="table-scroll" tabindex="0" aria-label="Table, scrolls sideways on small screens"><table' | replace: '</table>', '</table></section>' }}
+        </ul>
+      </div>
+      <div class="compare-col compare-col--with">
+        <h3 class="compare-title">{% if page.compare.with_title %}{{ page.compare.with_title | escape }}{% else %}With {{ _short | escape }}{% endif %}</h3>
+        <ul>
+          {%- for item in page.compare.with %}
+          <li><span class="compare-mark" aria-hidden="true"><svg><use href="#i-check"/></svg></span><span>{{ item | escape }}</span></li>
+          {%- endfor %}
+        </ul>
       </div>
     </div>
   </div>
 </section>
 {%- endif %}
 
-{% include faq-section.html faqs=page.faqs alt=true %}
+{%- if page.tips or page.guides %}
+<section class="section section--alt" id="tips">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">Tips</span>
+      <h2>{{ page.tips_heading | default: "Good to know" | escape }}</h2>
+    </div>
+    {%- if page.tips %}
+    <ol class="tips">
+      {%- for t in page.tips %}
+      <li class="tip reveal">
+        <span class="tip-num" aria-hidden="true">{{ forloop.index }}</span>
+        <div>
+          <h3>{{ t.title | escape }}</h3>
+          <p>{{ t.text | escape }}</p>
+        </div>
+      </li>
+      {%- endfor %}
+    </ol>
+    {%- endif %}
+    {%- if page.guides %}
+    <div class="app-guides">
+      <div class="section-head-row reveal">
+        <h3 class="app-guides-title">Related guides from Daily Info</h3>
+        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
+      </div>
+      <ul class="post-grid">
+        {%- for slug in page.guides %}
+        {%- assign _g = site.pages | where: "layout", "post" | where: "slug", slug | first -%}
+        {%- if _g %}
+        {% include post-card.html post=_g %}
+        {%- endif %}
+        {%- endfor %}
+      </ul>
+    </div>
+    {%- endif %}
+  </div>
+</section>
+{%- endif %}
+
+{% include faq-section.html faqs=page.faqs id="faq" %}
 
 {%- comment -%} The trust band states only what's true company-wide (who
 makes the app, the privacy policy's no-selling commitment). Anything
 app-specific -- how or where that app stores data -- goes in the page's
 own optional trust_text, so it's never claimed for an app it doesn't
 apply to. {%- endcomment %}
-<section class="section">
+<section class="section section--alt">
   <div class="wrap wrap--narrow">
     <div class="trust-band reveal">
       <span class="trust-band-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>
@@ -207,7 +274,7 @@ apply to. {%- endcomment %}
 
 {%- assign _others = site.data.apps | where: "built", true -%}
 {%- if _others.size > 1 %}
-<section class="section section--alt">
+<section class="section">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">More from Daily Utility Apps</span>
@@ -216,7 +283,7 @@ apply to. {%- endcomment %}
     <ul class="other-apps">
       {%- for app in _others %}
       {%- unless app.name == page.app_name %}
-      <li class="reveal">
+      <li class="reveal tone-{{ app.tone }}">
         <a class="other-app" href="{{ '/' | append: app.slug | relative_url }}">
           {% include app-tile.html app=app class="other-app-tile" %}
           <span class="other-app-text">
@@ -233,7 +300,7 @@ apply to. {%- endcomment %}
 </section>
 {%- endif %}
 
-<section class="section">
+<section class="section app-cta-section">
   <div class="wrap">
     <div class="cta-band cta-band--card reveal">
       {% include app-tile.html app=_app class="cta-band-icon" %}
