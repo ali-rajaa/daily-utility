@@ -71,6 +71,16 @@
       });
     });
 
+    // Plain links in the bar (Guides): hovering one closes any open menu,
+    // the way moving to a non-menu item does on apple.com.
+    Array.prototype.forEach.call(header.querySelectorAll('.nav-link--page'), function (a) {
+      a.parentElement.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || !desktop.matches) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(closeSubs, 120);
+      });
+    });
+
     header.addEventListener('pointerenter', function (e) {
       if (e.pointerType === 'mouse') clearTimeout(hoverTimer);
     });

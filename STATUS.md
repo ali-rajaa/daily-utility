@@ -1240,6 +1240,16 @@ User asked for useful links instead of vague ones, and Apple-style design.
 - CloudGate still never appears in the header: "Contact support" jumps
   to the footer's support links.
 
+Revision (user, 29 Sep): "Get the app" removed from the header; Guides
+is now a plain link straight to the hub (no drop-down); no iPhone/Android
+labels in the menu (platforms stay on app pages and the availability
+table). The three items share one Apple-style capsule (segmented
+control): the open menu or current section sits on a raised white pill.
+The Apps menu features the flagship as a tinted card with the other
+three beside it (arrows slide in on hover); Help is four icon cards.
+Focus rings show for keyboard focus only, never after a mouse click.
+Touch screens get 44px items in the capsule.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1713,3 +1723,5 @@ what's there.
   share images; internal linking strengthened.
 - Header rebuilt (section 5l): Apps / Guides / Help menus, Apple-style
   flyouts on desktop, fold-out sheet on phones. 26/26 nav tests pass.
+- Header revised: no "Get the app", Guides links straight to the hub,
+  no platform labels, Apple-style capsule nav, featured flagship card.

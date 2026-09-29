@@ -441,42 +441,44 @@ h3, .h3 {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
 }
 
 .nav-list {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Menu triggers are <button>s styled as nav links. */
+/* The three items: Apps and Help are <button>s that open menus, Guides
+   is a plain link to the hub. */
 .nav-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   min-height: 2.5rem;
-  padding: 0.5rem 0.875rem;
+  padding: 0.5rem 1rem;
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--text-2);
-  font: 550 0.9375rem/1.2 var(--font);
+  font: 560 0.9375rem/1.2 var(--font);
+  letter-spacing: -0.005em;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition: color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
 }
-.nav-link:hover, .nav-link[aria-expanded="true"] { color: var(--text); background: var(--bg-alt); }
-.nav-link:active { background: var(--border); }
-.nav-link.is-current { color: var(--text); font-weight: 650; }
-.nav-chevron { width: 0.95rem; height: 0.95rem; transition: transform 0.25s var(--ease-out); }
-.nav-link[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
-.nav-cta { white-space: nowrap; }
+.nav-link:hover { color: var(--text); }
+/* Keyboard focus only -- a mouse click never leaves a ring behind. */
+.nav-link:focus:not(:focus-visible) { outline: none; }
+.nav-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.nav-chevron, .nav-go { width: 0.9rem; height: 0.9rem; opacity: 0.7; transition: transform 0.25s var(--ease-out), opacity 0.18s ease; }
+.nav-link[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); opacity: 1; }
+.nav-go { width: 0.85rem; height: 0.85rem; opacity: 0; transform: translateX(-0.25rem); margin-right: -0.4rem; }
+.nav-link--page:hover .nav-go { opacity: 0.8; transform: none; }
 
 .nav-toggle { display: none; }
 
@@ -489,37 +491,90 @@ h3, .h3 {
   text-transform: uppercase;
   color: var(--text-2);
 }
-.nav-apps, .nav-topics, .nav-help, .nav-quick { margin: 0; padding: 0; list-style: none; }
+.nav-apps, .nav-help, .nav-quick { margin: 0; padding: 0; list-style: none; }
 
-.nav-app, .nav-topic, .nav-help-link {
+/* App rows: tile, name and tagline, with an arrow that slides in on
+   hover. Each row sits in its app's tone. */
+.nav-app, .nav-help-link {
+  position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.9rem;
   padding: 0.75rem;
   border-radius: var(--radius);
   color: var(--text);
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.18s ease, transform 0.25s var(--ease-out);
 }
-.nav-app:hover, .nav-topic:hover, .nav-help-link:hover,
+.nav-app:hover, .nav-help-link:hover,
 .nav-app[aria-current], .nav-help-link[aria-current] { background: var(--bg-alt); color: var(--text); }
-.nav-app:active, .nav-topic:active, .nav-help-link:active { background: var(--border); }
+.nav-app:active, .nav-help-link:active { transform: scale(0.98); transition-duration: 0.1s; }
 
 .nav-app-tile { width: 2.75rem; flex-shrink: 0; }
-.nav-app-text, .nav-topic-text { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
-.nav-app-name, .nav-topic-name { font: 650 0.975rem/1.3 var(--font-heading); letter-spacing: -0.005em; }
-.nav-app-desc, .nav-topic-blurb { font-size: 0.8625rem; line-height: 1.45; color: var(--text-2); }
-.nav-app-platform {
-  align-self: flex-start;
-  margin-top: 0.3rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-pill);
-  background: var(--brand-soft);
+.nav-app-text, .nav-help-text { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; flex-grow: 1; }
+.nav-app-name, .nav-help-name { font: 650 0.975rem/1.3 var(--font-heading); letter-spacing: -0.008em; }
+.nav-app-desc, .nav-help-desc { font-size: 0.8625rem; line-height: 1.45; color: var(--text-2); }
+.nav-app-arrow {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
   color: var(--brand-text);
-  font-size: 0.75rem;
-  font-weight: 600;
+  opacity: 0;
+  transform: translateX(-0.35rem);
+  transition: opacity 0.2s ease, transform 0.25s var(--ease-out);
 }
-.nav-topic-icon {
+.nav-app:hover .nav-app-arrow, .nav-app:focus-visible .nav-app-arrow { opacity: 1; transform: none; }
+
+/* The flagship, featured: a larger card washed in its colour. */
+.nav-app--featured {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--border));
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 60%),
+    var(--brand-soft);
+  overflow: hidden;
+  isolation: isolate;
+}
+.nav-app--featured:hover, .nav-app--featured[aria-current] {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--brand) 24%, transparent), transparent 60%),
+    var(--brand-soft);
+}
+.nav-app--featured .nav-app-tile { width: 3.75rem; }
+.nav-app--featured .nav-app-name { font-size: 1.1875rem; letter-spacing: -0.015em; }
+.nav-app--featured .nav-app-desc { font-size: 0.9375rem; }
+.nav-app-badge {
+  align-self: flex-start;
+  margin-bottom: 0.2rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--brand-text);
+  font: 650 0.6875rem/1.2 var(--font-heading);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-sm);
+}
+.nav-app-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--brand-text);
+}
+.nav-app-more svg { width: 1rem; height: 1rem; transition: transform 0.25s var(--ease-out); }
+.nav-app--featured:hover .nav-app-more svg { transform: translateX(3px); }
+
+/* Help: icon chips on cards. */
+.nav-help-link { align-items: flex-start; border: 1px solid transparent; }
+.nav-help-link:hover { border-color: var(--border); }
+.nav-help-icon, .nav-quick-icon {
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -529,37 +584,25 @@ h3, .h3 {
   background: var(--brand-soft);
   color: var(--brand-text);
 }
-.nav-topic-icon svg { width: 1.2rem; height: 1.2rem; }
+.nav-help-icon svg, .nav-quick-icon svg { width: 1.15rem; height: 1.15rem; }
 
 .nav-quick a {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   min-height: 2.75rem;
-  padding: 0.5rem 0.6rem;
-  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius);
   color: var(--text);
   font-size: 0.9375rem;
+  font-weight: 550;
   line-height: 1.35;
   text-decoration: none;
+  transition: background-color 0.18s ease;
 }
-.nav-quick a:hover, .nav-quick a[aria-current] { background: var(--bg-alt); color: var(--text); }
-.nav-quick svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; color: var(--brand-text); }
-.nav-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 2.75rem;
-  margin-top: 0.5rem;
-  padding-inline: 0.6rem;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  color: var(--brand-text);
-  text-decoration: none;
-}
-.nav-more svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
-.nav-more:hover svg { transform: translateX(3px); }
+.nav-quick a:hover { background: var(--bg-alt); color: var(--text); }
+.nav-quick-icon { width: 2.1rem; height: 2.1rem; border-radius: 0.7rem; }
+.nav-quick-icon svg { width: 1rem; height: 1rem; }
 
 /* Dims the page while a desktop flyout is open (scripts.html sets
    .nav-flyout-open on <html>). Sits just under the header. */
@@ -581,6 +624,27 @@ h3, .h3 {
    mid-animation reverses it from where it is. */
 @media (min-width: 760px) {
   .header-inner { position: static; }
+
+  /* The three items share one capsule, like a segmented control: the
+     open menu or the current section sits on a raised white pill. */
+  .nav-list {
+    gap: 0.125rem;
+    padding: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--bg-alt) 72%, transparent);
+  }
+  .nav-link { min-height: 2.5rem; padding: 0.5rem 1rem; }
+  .nav-link:hover { background: color-mix(in srgb, var(--surface) 70%, transparent); }
+  .nav-link[aria-expanded="true"], .nav-link.is-current, .nav-link[aria-current] {
+    color: var(--text);
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgba(12, 20, 36, 0.08), 0 2px 8px -2px rgba(12, 20, 36, 0.12);
+  }
+  .nav-link:active { transform: scale(0.97); transition-duration: 0.1s; }
+  /* Touch screens wide enough for this layout (tablets, phones held
+     sideways): full 44px targets. The capsule still fits the bar. */
+  @media (pointer: coarse) { .nav-link { min-height: 2.75rem; } }
 
   .nav-menu {
     position: absolute;
@@ -617,10 +681,18 @@ h3, .h3 {
   }
   .nav-menu-inner--help { grid-template-columns: minmax(0, 1fr); }
   .nav-menu-side { padding-left: 2.5rem; border-left: 1px solid var(--border); }
-  .nav-apps, .nav-topics, .nav-help { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1rem; }
-  .nav-help { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .nav-app, .nav-topic, .nav-help-link { margin-inline: -0.75rem; }
-  .nav-quick a, .nav-more { margin-inline: -0.6rem; }
+  /* Apps: the flagship card on the left, the other three stacked beside it. */
+  .nav-apps {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    grid-auto-rows: auto;
+    gap: 0.25rem 1.25rem;
+  }
+  .nav-apps-featured { grid-row: span 3; }
+  .nav-help { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+  .nav-help-link { flex-direction: column; gap: 0.85rem; height: 100%; padding: 1.1rem; background: var(--bg-alt); }
+  .nav-help-link:hover { background: var(--surface); box-shadow: var(--shadow-md); }
+  .nav-quick a { margin-inline: -0.6rem; }
 
   /* No JavaScript: the flyouts still open on hover and keyboard focus. */
   html:not(.js) .nav-item:hover .nav-menu,
@@ -715,7 +787,7 @@ h3, .h3 {
   }
   .js .nav-list { flex-direction: column; align-items: stretch; gap: 0; }
   .js .nav-item + .nav-item { border-top: 1px solid var(--border); }
-  .js .nav-trigger {
+  .js .nav-trigger, .js .nav-link--page {
     justify-content: space-between;
     width: 100%;
     min-height: 3.25rem;
@@ -725,21 +797,26 @@ h3, .h3 {
     font-size: 1.0625rem;
     font-weight: 600;
   }
-  .js .nav-trigger:hover, .js .nav-trigger[aria-expanded="true"] { background: transparent; }
-  .js .nav-trigger:active { background: var(--bg-alt); }
-  .js .nav-chevron { width: 1.1rem; height: 1.1rem; color: var(--text-2); }
+  .js .nav-link:active { background: var(--bg-alt); }
+  .js .nav-chevron, .js .nav-go { width: 1.1rem; height: 1.1rem; margin: 0; opacity: 1; transform: none; color: var(--text-2); }
+  .js .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+  .js .nav-link--page[aria-current] { color: var(--brand-text); }
 
   .js .nav-menu { display: none; }
   .js .nav-trigger[aria-expanded="true"] + .nav-menu { display: block; }
   .nav-menu-inner { padding: 0 0 0.75rem; }
   .nav-menu-label { margin: 0.5rem; }
-  .nav-app, .nav-topic, .nav-help-link { align-items: center; padding: 0.55rem 0.5rem; }
+  .nav-app, .nav-help-link { align-items: center; padding: 0.55rem 0.5rem; }
   .nav-app-tile { width: 2.5rem; }
-  .nav-app-desc, .nav-topic-blurb { display: none; }
-  .nav-app-platform { margin-top: 0.15rem; }
+  .nav-app-desc, .nav-help-desc, .nav-app-more, .nav-app-badge { display: none; }
+  .nav-app-arrow { opacity: 1; transform: none; color: var(--text-2); }
+  /* The featured flagship becomes a compact, tinted row. */
+  .nav-app--featured { flex-direction: row; align-items: center; gap: 0.9rem; padding: 0.55rem 0.5rem; margin-bottom: 0.25rem; }
+  .nav-app--featured .nav-app-tile { width: 2.5rem; }
+  .nav-app--featured .nav-app-name { font-size: 0.975rem; }
+  .nav-help-icon { width: 2.25rem; height: 2.25rem; }
   .nav-menu-side { margin-top: 0.75rem; }
-  .nav-quick a, .nav-more { padding-inline: 0.5rem; }
-  .js .nav-cta { width: 100%; }
+  .nav-quick a { padding-inline: 0.5rem; }
 
   html:not(.js) .header-inner {
     height: auto;
@@ -1327,10 +1404,12 @@ h3, .h3 {
   .btn:active { transform: none; }
   .reveal-ready .reveal { transform: none; transition: opacity 0.3s ease; }
   .js .site-nav, .js .nav-open .site-nav { transform: none; }
-  .nav-toggle-bars::before, .nav-toggle-bars::after, .nav-chevron, .nav-more svg { transition: none; }
+  .nav-toggle-bars::before, .nav-toggle-bars::after, .nav-chevron, .nav-go,
+  .nav-app-arrow, .nav-app-more svg, .nav-app, .nav-help-link { transition: none; }
   .nav-menu, .nav-trigger[aria-expanded="true"] + .nav-menu,
-  .nav-menu-inner > *, .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > * { transform: none; }
-  .nav-more:hover svg { transform: none; }
+  .nav-menu-inner > *, .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > *,
+  .nav-link:active, .nav-app:active, .nav-help-link:active,
+  .nav-app--featured:hover .nav-app-more svg, .nav-link--page:hover .nav-go { transform: none; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
