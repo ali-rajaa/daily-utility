@@ -88,6 +88,23 @@
     setActive();
   }
 
+  /* ---- Contents lists fold on phones ----
+     Open by default in the HTML (so they work without JavaScript); on
+     narrow screens they start closed and close again after a link is
+     tapped, and they reopen if the window widens to the desktop layout. */
+  var folds = document.querySelectorAll('.post-toc-fold');
+  if (folds.length) {
+    var wide = window.matchMedia('(min-width: 60rem)');
+    var syncFolds = function () { folds.forEach(function (d) { d.open = wide.matches; }); };
+    syncFolds();
+    if (wide.addEventListener) wide.addEventListener('change', syncFolds);
+    folds.forEach(function (d) {
+      d.addEventListener('click', function (e) {
+        if (!wide.matches && e.target.closest('a')) d.open = false;
+      });
+    });
+  }
+
   /* ---- Share button ----
      The phone's share sheet where there is one, else copy the link. */
   document.querySelectorAll('[data-share-url]').forEach(function (btn) {

@@ -1167,15 +1167,36 @@ h3, .h3 {
   background: var(--surface);
   box-shadow: var(--shadow-sm);
 }
+/* The list folds on phones (a long guide would otherwise push the
+   article a screen further down) and stays open on desktop, where
+   scripts.html keeps it open. */
+.post-toc-fold > summary { list-style: none; }
+.post-toc-fold > summary::-webkit-details-marker { display: none; }
 .post-toc-title {
-  display: block;
-  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  margin: -0.5rem 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   font: 650 0.75rem/1 var(--font-heading);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-2);
 }
-.post-toc-list { margin: 0; padding: 0; list-style: none; }
+.post-toc-count { margin-left: auto; font-weight: 500; letter-spacing: 0.02em; text-transform: none; }
+.post-toc-chevron { width: 1.1rem; height: 1.1rem; flex-shrink: 0; transition: transform 0.2s var(--ease-out); }
+.post-toc-fold[open] .post-toc-chevron { transform: rotate(180deg); }
+.post-toc-title:focus-visible { outline-offset: 2px; border-radius: var(--radius-sm); }
+.post-toc-list { margin: 0.75rem 0 0; padding: 0; list-style: none; }
+@media (min-width: 60rem) {
+  .post-toc-title { min-height: 0; margin: 0; cursor: default; pointer-events: none; }
+  .post-toc-count, .post-toc-chevron { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-toc-chevron { transition: none; }
+}
 .post-toc-list { font-size: 0.9rem; }
 .post-toc-list a {
   display: flex;

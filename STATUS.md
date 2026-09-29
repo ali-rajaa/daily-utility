@@ -1183,6 +1183,24 @@ phone menu). Fixed:
   (@media (hover: none)); :active press feedback kept.
 - Store badges: consistent 1rem size, 44px minimum, 12px minimum text.
 
+## 5j. Six Daily Info articles published (29 Sep)
+
+The six placeholders are now full articles on the post layout (indexable
+at cutover, in the sitemap, feed and Blog schema), each 2,500+ words of
+body text measured in the browser (2,555-2,710), with takeaways, FAQs
+(FAQPage schema) and related links:
+- free-up-phone-storage (Backup & Storage, 14 steps)
+- backup-vs-sync (Backup & Storage)
+- move-photos-android-to-iphone (Switching Phones)
+- where-deleted-photos-go-android (Photos & Media)
+- organise-phone-photos (Photos & Media, 16 steps)
+- check-app-permissions-photos (Privacy & Security)
+General, accurate guidance only; app mentions stay within confirmed scope.
+The `upcoming` layout stays for future placeholders.
+Contents lists ("On this page" / "In this guide") now fold on phones
+(details/summary, closed by default via scripts.html, open on desktop),
+since 14-18 entries pushed the article a screen down.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1650,3 +1668,5 @@ what's there.
   footer without ACN or Daily Info (section 5h). All checks pass.
 - Mobile QA pass (section 5i): no horizontal scroll at any width, 44px
   tap targets, consistent hero padding, solid phone menu, safe areas.
+- Six Daily Info articles written and published, 2,500+ words each
+  (section 5j); contents lists fold on phones.

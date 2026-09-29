@@ -167,7 +167,8 @@ confirmed to have. {%- endcomment -%}
     </div>
     <div class="app-guide-grid">
       <nav class="post-toc app-guide-toc" aria-label="Guide contents">
-        <span class="post-toc-title">In this guide</span>
+        <details class="post-toc-fold" open>
+          <summary class="post-toc-title"><span>In this guide</span><span class="post-toc-count">{{ _gparts.size | minus: 1 }} sections</span><svg class="post-toc-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
         <ol class="post-toc-list">
           {%- for part in _gparts offset: 1 %}
           {%- assign _id = part | split: '"' | first -%}
@@ -175,6 +176,7 @@ confirmed to have. {%- endcomment -%}
           <li><a href="#{{ _id }}"><span class="post-toc-num">{{ forloop.index }}</span><span>{{ _head }}</span></a></li>
           {%- endfor %}
         </ol>
+          </details>
       </nav>
       <div class="prose app-guide-body">
         {{ content | replace: '<table', '<section class="table-scroll" tabindex="0" aria-label="Table, scrolls sideways on small screens"><table' | replace: '</table>', '</table></section>' }}

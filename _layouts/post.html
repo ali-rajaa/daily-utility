@@ -159,7 +159,8 @@ css: post
 
         {%- if _sections > 1 %}
         <nav class="post-toc" aria-label="On this page">
-          <span class="post-toc-title">On this page</span>
+          <details class="post-toc-fold" open>
+          <summary class="post-toc-title"><span>On this page</span><span class="post-toc-count">{{ _sections }} sections</span><svg class="post-toc-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
           <ol class="post-toc-list">
             {%- for part in _parts offset: 1 %}
             {%- assign _id = part | split: '"' | first -%}
@@ -170,6 +171,7 @@ css: post
             <li><a href="#faq"><span class="post-toc-num" aria-hidden="true">?</span><span>Questions people ask</span></a></li>
             {%- endif %}
           </ol>
+          </details>
         </nav>
         {%- endif %}
       </div>
