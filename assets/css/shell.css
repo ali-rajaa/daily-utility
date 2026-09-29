@@ -607,7 +607,7 @@ h3, .h3 {
   line-height: 1.6;
 }
 
-/* ---------- Hero glow (decorative SVG mesh gradient) ---------- */
+/* ---------- Hero glow (decorative gradient mesh) ---------- */
 
 .hero-glow-host {
   position: relative;
@@ -635,26 +635,57 @@ h3, .h3 {
   z-index: 1;
 }
 
-/* Slow, low-amplitude drift -- ~18s per blob, well clear of the ~5s
+/* Each blob is a plain div: a radial gradient (soft-edged by itself, so
+   no blur filter) centred on its left/top point by the `translate`
+   property, leaving `transform` free for the drift. Transform-only
+   animation of a promoted layer is composited on the GPU with no
+   per-frame repaint -- the SVG-filter version this replaced ran the
+   page at ~12fps (see _includes/hero-glow.html).
+
+   Slow, low-amplitude drift -- ~18s+ per blob, well clear of the ~5s
    (0.2Hz) cycle Apple's own motion guidance flags as uncomfortable.
    Each blob gets its own duration/direction so the group reads as one
    organic field rather than three shapes moving in lockstep. */
-.hero-glow-blob { transform-origin: center; will-change: transform; }
-.hero-glow-blob--a { animation: heroGlowDriftA 19s ease-in-out infinite; }
-.hero-glow-blob--b { animation: heroGlowDriftB 23s ease-in-out infinite; }
-.hero-glow-blob--c { animation: heroGlowDriftC 27s ease-in-out infinite; }
+.hero-glow-blob {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  will-change: transform;
+}
+.hero-glow-blob--a {
+  left: 18%;
+  top: 22%;
+  width: max(53%, 24rem);
+  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--brand) 55%, transparent), color-mix(in srgb, var(--brand) 22%, transparent) 50%, transparent);
+  animation: heroGlowDriftA 19s ease-in-out infinite;
+}
+.hero-glow-blob--b {
+  left: 82%;
+  top: 70%;
+  width: max(60%, 26rem);
+  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--brand-2) 45%, transparent), color-mix(in srgb, var(--brand-2) 18%, transparent) 50%, transparent);
+  animation: heroGlowDriftB 23s ease-in-out infinite;
+}
+.hero-glow-blob--c {
+  left: 63%;
+  top: 15%;
+  width: max(40%, 18rem);
+  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--accent) 35%, transparent), color-mix(in srgb, var(--accent) 14%, transparent) 50%, transparent);
+  animation: heroGlowDriftC 27s ease-in-out infinite;
+}
 
 @keyframes heroGlowDriftA {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(3%, 4%) scale(1.08); }
+  50% { transform: translate(6%, 8%) scale(1.08); }
 }
 @keyframes heroGlowDriftB {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-4%, -3%) scale(1.06); }
+  50% { transform: translate(-8%, -6%) scale(1.06); }
 }
 @keyframes heroGlowDriftC {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-2%, 3%) scale(0.94); }
+  50% { transform: translate(-4%, 6%) scale(0.94); }
 }
 
 @media (prefers-reduced-motion: reduce) {

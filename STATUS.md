@@ -892,6 +892,31 @@ since GitHub Pages serves it at any depth.
 the more generic `Article`. Icon sprite gained arrow-right, doc,
 transfer, restore, pin, spark, contacts, video and search.
 
+**Performance bug found in browser testing, fixed (12fps → 61fps).**
+After the first step 5 push, the shell suite's phone-menu tests failed
+consistently on the new homepage (Escape / tap-outside "didn't close
+the menu"). Instrumenting the test showed the logic was fine — 350ms
+after Escape the panel was still mid-fade at opacity 0.016, i.e. a
+0.18s transition starved of frames. Measured with a rAF counter: the
+homepage rendered at **12fps** vs 61fps on the privacy page. Cause,
+isolated by switching each animation off in turn: the step 3
+`hero-glow` include animated SVG circles under an `feGaussianBlur`
+(stdDeviation 70) — SVG filters aren't GPU-composited, so the blur was
+re-rasterised on the CPU every frame, on the homepage *and every app
+page*. Fixed at the root: `hero-glow.html` is now three plain divs with
+CSS `radial-gradient` backgrounds (already soft-edged, so no blur
+needed), centred with the individual `translate` property and drifting
+via `transform` only — GPU-composited, no per-frame repaint. Same look,
+same classes, same reduced-motion/transparency/contrast fallbacks. Also
+removed two new-in-step-5 costs that broke the apple-design skill's
+"animate only transform and opacity" rule: the spotlight's marching
+dashes (`stroke-dashoffset`, a main-thread repaint every frame) and
+`backdrop-filter` on the hero chips (blur recomputed every frame over
+moving layers). Result: homepage and app pages 61fps; shell suite
+passes 3/3 consecutive runs; responsive sweep, app-page and post-page
+suites all pass. Relevant for real users, not just the test: these apps'
+audience skews toward budget Android phones.
+
 **Known gap until step 6:** `/daily-info` (the hub) doesn't exist yet,
 so the homepage's "All articles", the 404's "Read Daily Info" and the
 header's Daily Info link 404 until step 6 ships it.

@@ -11,8 +11,9 @@
 
    Motion follows the apple-design skill: transform/opacity only, slow
    drifts of 18s+ (well clear of the ~5s cycle it flags), press feedback
-   on :active, and reduced-motion / reduced-transparency / more-contrast
-   fallbacks at the end of the file.
+   on :active, and reduced-motion / more-contrast fallbacks at the end of
+   the file. No backdrop-filter anywhere on this page's own elements
+   (see .cluster-chip for why).
    ========================================================================== */
 
 /* ---------- 1. Hero ---------- */
@@ -106,9 +107,10 @@
   padding: 0.45rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: var(--surface-glass);
-  backdrop-filter: blur(14px) saturate(170%);
-  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  /* Solid, not backdrop-filter glass: these sit over the floating tiles
+     and the drifting hero glow, so a blur here would be recomputed every
+     frame for as long as the page is open. */
+  background: var(--surface);
   box-shadow: var(--shadow-md);
   font: 600 0.8125rem/1 var(--font-heading);
   letter-spacing: 0.005em;
@@ -207,10 +209,12 @@
   stroke-dasharray: 6 8;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-  animation: spotlightFlow 2s linear infinite;
 }
-/* Dashes march toward the centre: everything flows into the backup. */
-@keyframes spotlightFlow { to { stroke-dashoffset: -28; } }
+/* Deliberately static. A marching-dash animation (stroke-dashoffset) was
+   tried here and removed: it repaints the SVG on the main thread every
+   frame, forever, and measurably starved other transitions of frames
+   (the phone menu's 0.18s close fade took over 350ms). Only transform
+   and opacity animate on this page. */
 
 .spotlight-icon {
   position: absolute;
@@ -436,19 +440,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cluster-tile { animation: none; }
-  .spotlight-lines path { animation: none; }
   .app-card, .post-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
   .app-card:hover, .post-card:hover,
   .app-card:active, .post-card:active { transform: none; }
   .text-link:hover svg, .app-card:hover .app-card-more svg { transform: none; }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .cluster-chip {
-    background: var(--surface);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
 }
 
 @media (prefers-contrast: more) {
@@ -456,6 +451,5 @@
   .app-card,
   .post-card,
   .value-card { border-color: var(--border-strong); }
-  .cluster-chip { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
   .home-cta::before { display: none; }
 }
