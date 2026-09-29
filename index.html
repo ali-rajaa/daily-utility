@@ -123,7 +123,7 @@ faqs:
 
 {%- comment -%} Start here: the everyday job each app is for, in plain
 words. Cards come from apps.yml's task / task_text. {%- endcomment %}
-<section class="section">
+<section class="section" id="start">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">Start here</span>
@@ -240,7 +240,7 @@ words. Cards come from apps.yml's task / task_text. {%- endcomment %}
 {%- comment -%} Where each app is available: straight from which store
 links apps.yml has, so it can never claim a platform an app isn't on.
 {%- endcomment %}
-<section class="section section--alt">
+<section class="section section--alt" id="availability">
   <div class="wrap">
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">Availability</span>
@@ -287,7 +287,7 @@ links apps.yml has, so it can never claim a platform an app isn't on.
 </section>
 {%- endif %}
 
-{% include faq-section.html faqs=page.faqs alt=true heading="Questions about our apps" sub="Straight answers about what each app does and where to get it." %}
+{% include faq-section.html faqs=page.faqs alt=true id="faq" heading="Questions about our apps" sub="Straight answers about what each app does and where to get it." %}
 
 <section class="section">
   <div class="wrap">

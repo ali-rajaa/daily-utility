@@ -417,15 +417,16 @@ h3, .h3 {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0 1px 0 transparent;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
 }
 .site-header.is-scrolled {
   box-shadow: 0 1px 0 var(--border), 0 8px 24px -16px rgba(12, 20, 36, 0.35);
 }
+/* A menu is open: the bar and its flyout read as one solid surface. */
+.site-header.menu-open { background: var(--bg); box-shadow: 0 1px 0 var(--border); }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-header { background: var(--bg); }
-  .js .site-nav { background: var(--surface); }
 }
 
 .header-inner {
@@ -452,27 +453,193 @@ h3, .h3 {
   list-style: none;
 }
 
+/* Menu triggers are <button>s styled as nav links. */
 .nav-link {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2.5rem;
   padding: 0.5rem 0.875rem;
+  border: 0;
   border-radius: var(--radius-pill);
+  background: transparent;
   color: var(--text-2);
-  font-size: 0.9375rem;
-  font-weight: 550;
+  font: 550 0.9375rem/1.2 var(--font);
   text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
-.nav-link:hover { color: var(--text); background: var(--bg-alt); }
-.nav-link[aria-current] { color: var(--text); font-weight: 650; }
-.nav-link, .nav-cta { white-space: nowrap; }
+.nav-link:hover, .nav-link[aria-expanded="true"] { color: var(--text); background: var(--bg-alt); }
+.nav-link:active { background: var(--border); }
+.nav-link.is-current { color: var(--text); font-weight: 650; }
+.nav-chevron { width: 0.95rem; height: 0.95rem; transition: transform 0.25s var(--ease-out); }
+.nav-link[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+.nav-cta { white-space: nowrap; }
 
 .nav-toggle { display: none; }
 
-/* Phones. The menu is one list for every screen size; below 760px it
-   becomes a panel that grows out of the menu button (transform-origin top
-   right) and leaves the same way. Transitions, not keyframes, so a second
-   tap mid-animation reverses it from where it is. Everything here is gated
-   on .js (set in <head>): without JavaScript the links stay on screen. */
+/* ---------- Menu panels (shared by desktop flyouts and the phone sheet) ---------- */
+
+.nav-menu-label {
+  margin-bottom: 0.75rem;
+  font: 650 0.75rem/1 var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.nav-apps, .nav-topics, .nav-help, .nav-quick { margin: 0; padding: 0; list-style: none; }
+
+.nav-app, .nav-topic, .nav-help-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+.nav-app:hover, .nav-topic:hover, .nav-help-link:hover,
+.nav-app[aria-current], .nav-help-link[aria-current] { background: var(--bg-alt); color: var(--text); }
+.nav-app:active, .nav-topic:active, .nav-help-link:active { background: var(--border); }
+
+.nav-app-tile { width: 2.75rem; flex-shrink: 0; }
+.nav-app-text, .nav-topic-text { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.nav-app-name, .nav-topic-name { font: 650 0.975rem/1.3 var(--font-heading); letter-spacing: -0.005em; }
+.nav-app-desc, .nav-topic-blurb { font-size: 0.8625rem; line-height: 1.45; color: var(--text-2); }
+.nav-app-platform {
+  align-self: flex-start;
+  margin-top: 0.3rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.nav-topic-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.8rem;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+.nav-topic-icon svg { width: 1.2rem; height: 1.2rem; }
+
+.nav-quick a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+.nav-quick a:hover, .nav-quick a[aria-current] { background: var(--bg-alt); color: var(--text); }
+.nav-quick svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; color: var(--brand-text); }
+.nav-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  padding-inline: 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--brand-text);
+  text-decoration: none;
+}
+.nav-more svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
+.nav-more:hover svg { transform: translateX(3px); }
+
+/* Dims the page while a desktop flyout is open (scripts.html sets
+   .nav-flyout-open on <html>). Sits just under the header. */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  background: rgba(8, 12, 20, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+}
+.nav-flyout-open .nav-scrim { opacity: 1; visibility: visible; transition: opacity 0.25s ease, visibility 0s; }
+
+/* ---------- Desktop: full-width flyouts ----------
+   Like apple.com's global nav: the panel drops from the bar across the
+   full width, and its content settles in a beat after the surface.
+   Opacity and transform only, as transitions, so a second hover or click
+   mid-animation reverses it from where it is. */
+@media (min-width: 760px) {
+  .header-inner { position: static; }
+
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 28px 48px -28px rgba(8, 12, 20, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.18s ease, transform 0.28s var(--ease-out), visibility 0s linear 0.28s;
+  }
+  .nav-trigger[aria-expanded="true"] + .nav-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.2s ease, transform 0.32s var(--ease-out), visibility 0s;
+  }
+  .nav-menu-inner > * {
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition: opacity 0.2s ease, transform 0.3s var(--ease-out);
+  }
+  .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > * { opacity: 1; transform: none; }
+  .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > :nth-child(2) { transition-delay: 0.05s; }
+
+  .nav-menu-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: 2.5rem;
+    padding-block: 1.75rem 2.25rem;
+  }
+  .nav-menu-inner--help { grid-template-columns: minmax(0, 1fr); }
+  .nav-menu-side { padding-left: 2.5rem; border-left: 1px solid var(--border); }
+  .nav-apps, .nav-topics, .nav-help { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1rem; }
+  .nav-help { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .nav-app, .nav-topic, .nav-help-link { margin-inline: -0.75rem; }
+  .nav-quick a, .nav-more { margin-inline: -0.6rem; }
+
+  /* No JavaScript: the flyouts still open on hover and keyboard focus. */
+  html:not(.js) .nav-item:hover .nav-menu,
+  html:not(.js) .nav-item:focus-within .nav-menu,
+  html:not(.js) .nav-item:hover .nav-menu-inner > *,
+  html:not(.js) .nav-item:focus-within .nav-menu-inner > * { opacity: 1; visibility: visible; transform: none; }
+}
+@media (min-width: 760px) and (max-width: 979.98px) {
+  .nav-menu-inner { grid-template-columns: minmax(0, 1fr) 14rem; gap: 1.5rem; }
+  .nav-menu-side { padding-left: 1.5rem; }
+  .nav-help { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- Phones: a sheet with fold-out sections ----------
+   The sheet grows out of the menu button (transform-origin top right)
+   and leaves the same way; each menu inside it folds open in place.
+   Transitions, not keyframes, so a second tap mid-animation reverses it
+   from where it is. Gated on .js (set in <head>): without JavaScript
+   the links stay on screen. */
 
 @media (max-width: 759.98px) {
   .js .nav-toggle {
@@ -521,7 +688,10 @@ h3, .h3 {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
-    padding: 0.75rem;
+    max-height: calc(100dvh - var(--header-h) - 1.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.5rem 0.75rem 0.75rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     /* Solid, not glass. The panel lives inside the header, which is
@@ -543,8 +713,32 @@ h3, .h3 {
     transform: none;
     transition: opacity 0.18s ease, transform 0.22s var(--ease-out), visibility 0s;
   }
-  .js .nav-list { flex-direction: column; align-items: stretch; gap: 0.125rem; }
-  .js .nav-link { padding: 0.875rem 1rem; font-size: 1.0625rem; color: var(--text); }
+  .js .nav-list { flex-direction: column; align-items: stretch; gap: 0; }
+  .js .nav-item + .nav-item { border-top: 1px solid var(--border); }
+  .js .nav-trigger {
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .js .nav-trigger:hover, .js .nav-trigger[aria-expanded="true"] { background: transparent; }
+  .js .nav-trigger:active { background: var(--bg-alt); }
+  .js .nav-chevron { width: 1.1rem; height: 1.1rem; color: var(--text-2); }
+
+  .js .nav-menu { display: none; }
+  .js .nav-trigger[aria-expanded="true"] + .nav-menu { display: block; }
+  .nav-menu-inner { padding: 0 0 0.75rem; }
+  .nav-menu-label { margin: 0.5rem; }
+  .nav-app, .nav-topic, .nav-help-link { align-items: center; padding: 0.55rem 0.5rem; }
+  .nav-app-tile { width: 2.5rem; }
+  .nav-app-desc, .nav-topic-blurb { display: none; }
+  .nav-app-platform { margin-top: 0.15rem; }
+  .nav-menu-side { margin-top: 0.75rem; }
+  .nav-quick a, .nav-more { padding-inline: 0.5rem; }
   .js .nav-cta { width: 100%; }
 
   html:not(.js) .header-inner {
@@ -559,6 +753,8 @@ h3, .h3 {
     gap: 0.5rem;
   }
   html:not(.js) .nav-link { padding-inline: 0.5rem; }
+  html:not(.js) .nav-menu { display: none; }
+  html:not(.js) .nav-item:focus-within .nav-menu { display: block; }
 }
 
 /* ---------- Footer ---------- */
@@ -1131,12 +1327,14 @@ h3, .h3 {
   .btn:active { transform: none; }
   .reveal-ready .reveal { transform: none; transition: opacity 0.3s ease; }
   .js .site-nav, .js .nav-open .site-nav { transform: none; }
-  .nav-toggle-bars::before, .nav-toggle-bars::after { transition: none; }
+  .nav-toggle-bars::before, .nav-toggle-bars::after, .nav-chevron, .nav-more svg { transition: none; }
+  .nav-menu, .nav-trigger[aria-expanded="true"] + .nav-menu,
+  .nav-menu-inner > *, .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > * { transform: none; }
+  .nav-more:hover svg { transform: none; }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
-  .js .site-nav { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
 @media (prefers-contrast: more) {

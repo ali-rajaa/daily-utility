@@ -23,42 +23,102 @@
     }).observe(sentinel);
   }
 
-  /* ---- Phone menu ----
-     One function sets the state, so the class, aria-expanded and the
-     button label never disagree. Closes on a link tap, a tap outside,
-     Escape (focus returns to the button), focus leaving the header, and
-     the window widening past the breakpoint where the button disappears. */
+  /* ---- Navigation ----
+     Two layers, each with one function that sets its state, so classes
+     and aria attributes never disagree:
+     - setSheet: the phone sheet behind the menu button.
+     - setSub: one menu (Apps, Guides, Help). On desktop it's a flyout
+       with the page dimmed behind it; in the phone sheet it folds open.
+     Desktop flyouts open on click, or on hover after a short intent
+     delay (so a pointer passing over the bar doesn't flash them), and
+     close when the pointer leaves the header, on Escape (focus returns
+     to the trigger), on a click outside, when focus leaves the menu, or
+     when a link inside is followed. Crossing the breakpoint resets both. */
   var toggle = document.getElementById('nav-toggle');
   var nav = document.getElementById('site-nav');
-  if (header && toggle && nav) {
-    var isOpen = function () { return header.classList.contains('nav-open'); };
-    var setMenu = function (open, returnFocus) {
+  var root = document.documentElement;
+  if (header && nav) {
+    var desktop = window.matchMedia('(min-width: 760px)');
+    var triggers = Array.prototype.slice.call(header.querySelectorAll('.nav-trigger'));
+    var openSub = null;
+    var openedAt = 0;
+    var hoverTimer = null;
+
+    var setSub = function (trigger, open, returnFocus) {
+      if (open && openSub && openSub !== trigger) setSub(openSub, false);
+      trigger.setAttribute('aria-expanded', String(open));
+      if (open) { openSub = trigger; openedAt = Date.now(); }
+      else if (openSub === trigger) openSub = null;
+      var flyout = !!openSub && desktop.matches;
+      header.classList.toggle('menu-open', flyout);
+      root.classList.toggle('nav-flyout-open', flyout);
+      if (!open && returnFocus) trigger.focus();
+    };
+    var closeSubs = function () { if (openSub) setSub(openSub, false); };
+
+    triggers.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var isOpenNow = t.getAttribute('aria-expanded') === 'true';
+        // A click right after hover opened this menu confirms it rather
+        // than immediately closing it again.
+        if (isOpenNow && desktop.matches && Date.now() - openedAt < 400) return;
+        setSub(t, !isOpenNow);
+      });
+      t.parentElement.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || !desktop.matches) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () { setSub(t, true); }, openSub ? 0 : 140);
+      });
+    });
+
+    header.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'mouse') clearTimeout(hoverTimer);
+    });
+    header.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse' || !desktop.matches) return;
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(closeSubs, 220);
+    });
+
+    var scrim = document.getElementById('nav-scrim');
+    if (scrim) scrim.addEventListener('click', closeSubs);
+
+    // The phone sheet.
+    var sheetOpen = function () { return header.classList.contains('nav-open'); };
+    var setSheet = function (open, returnFocus) {
+      if (!toggle) return;
       header.classList.toggle('nav-open', open);
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (!open) closeSubs();
       if (!open && returnFocus) toggle.focus();
     };
-
-    toggle.addEventListener('click', function () { setMenu(!isOpen()); });
+    if (toggle) toggle.addEventListener('click', function () { setSheet(!sheetOpen()); });
 
     nav.addEventListener('click', function (e) {
-      if (e.target.closest('a')) setMenu(false);
+      if (e.target.closest('a')) { closeSubs(); setSheet(false); }
     });
 
     document.addEventListener('click', function (e) {
-      if (isOpen() && !header.contains(e.target)) setMenu(false);
+      if (header.contains(e.target)) return;
+      if (openSub && desktop.matches) closeSubs();
+      if (sheetOpen()) setSheet(false);
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && isOpen()) setMenu(false, true);
+      if (e.key !== 'Escape') return;
+      if (openSub && (desktop.matches || !sheetOpen())) { setSub(openSub, false, true); return; }
+      if (sheetOpen()) setSheet(false, true);
     });
 
     header.addEventListener('focusout', function (e) {
-      if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setMenu(false);
+      var to = e.relatedTarget;
+      if (!to) return;
+      if (!header.contains(to)) { closeSubs(); if (sheetOpen()) setSheet(false); return; }
+      if (openSub && desktop.matches && !openSub.parentElement.contains(to)) closeSubs();
     });
 
-    var desktop = window.matchMedia('(min-width: 760px)');
-    var onBreakpoint = function (e) { if (e.matches) setMenu(false); };
+    var onBreakpoint = function () { closeSubs(); setSheet(false); };
     if (desktop.addEventListener) desktop.addEventListener('change', onBreakpoint);
     else if (desktop.addListener) desktop.addListener(onBreakpoint);
   }

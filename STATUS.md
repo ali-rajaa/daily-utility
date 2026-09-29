@@ -1220,6 +1220,26 @@ Changes made:
 Open (needs owner input): SoftwareApplication rich results need an
 `offers` price (unconfirmed, so not added) or ratings (never shown).
 
+## 5l. Header rebuilt: Apps, Guides, Help (29 Sep)
+
+User asked for useful links instead of vague ones, and Apple-style design.
+- Three menus named for their contents: Apps (all four apps with tile,
+  tagline and platform, plus "Not sure which app?" /#start, "Where to
+  get each app" /#availability, "Compare all apps" /#apps), Guides (the
+  four topics -> hub anchors, the three latest guides, "All N guides"),
+  Help (FAQ /#faq, Contact support -> footer #support, Privacy, Terms).
+  Plus "Get the app". All lists build from the data files.
+- Desktop: full-width flyouts under the bar, like apple.com: hover with
+  a 140ms intent delay or click, content settles a beat after the panel,
+  the bar turns solid and the page dims behind (scrim, click to close).
+  Closes on pointer leaving the header, Escape (focus back to trigger),
+  outside click, focus leaving the menu. Transitions only (interruptible).
+- Phones: the sheet holds fold-out sections (one open at a time), scrolls
+  within the screen, 44px+ rows. Without JS, menus open on hover/focus.
+- Reduced motion drops the movement; triggers show current section.
+- CloudGate still never appears in the header: "Contact support" jumps
+  to the footer's support links.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1691,3 +1711,5 @@ what's there.
   (section 5j); contents lists fold on phones.
 - SEO audit of every page (section 5k): Lighthouse SEO 100 x 15; unique
   share images; internal linking strengthened.
+- Header rebuilt (section 5l): Apps / Guides / Help menus, Apple-style
+  flyouts on desktop, fold-out sheet on phones. 26/26 nav tests pass.
