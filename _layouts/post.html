@@ -36,7 +36,8 @@ css: post
 {%- assign _glyph = page.glyph | default: _cat.glyph | default: "spark" -%}
 {%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
 {%- assign _words = content | strip_html | number_of_words -%}
-{%- assign _parts = content | split: '<h2 id="' -%}
+{%- assign _body = content | replace: '<table', '<section class="table-scroll" tabindex="0" aria-label="Table, scrolls sideways on small screens"><table' | replace: '</table>', '</table></section>' -%}
+{%- assign _parts = _body | split: '<h2 id="' -%}
 {%- assign _sections = _parts.size | minus: 1 -%}
 {%- assign _org_id = '/' | absolute_url | append: '#organization' -%}
 <script type="application/ld+json">

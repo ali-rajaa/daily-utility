@@ -17,7 +17,7 @@
 
 /* ---------- Hero ---------- */
 
-.home-hero { padding-block: clamp(3rem, 7vw, 5.5rem) clamp(3.5rem, 8vw, 6rem); }
+.home-hero { padding-block: var(--space-hero-top) var(--space-hero-bottom); }
 
 .home-hero-grid {
   display: grid;
@@ -146,6 +146,13 @@
   .orbit-label { top: calc(100% + 0.45rem); padding: 0.25rem 0.55rem; font-size: 0.75rem; }
   .orbit-app--1 .orbit-label,
   .orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.45rem); }
+}
+/* Small phones: the upper tiles sit near the screen edges, so their
+   centred labels would poke past the gutter. Anchor each label to its
+   tile's outer edge instead (left tile: left edge; right tile: right). */
+@media (max-width: 29.99rem) {
+  .orbit-app--1 .orbit-label { left: 0; translate: 0 0; }
+  .orbit-app--2 .orbit-label { left: auto; right: 0; translate: 0 0; }
 }
 
 /* ---------- Apps bento ----------
@@ -501,6 +508,7 @@
 .avail-app {
   display: inline-flex;
   align-items: center;
+  min-height: 2.75rem;
   gap: 0.8rem;
   color: var(--text);
   font: 650 1rem/1.3 var(--font-heading);
@@ -519,7 +527,7 @@
   font-weight: 600;
   white-space: nowrap;
 }
-.avail-yes { background: var(--brand-soft); color: var(--brand-text); text-decoration: none; }
+.avail-yes { min-height: 2.75rem; background: var(--brand-soft); color: var(--brand-text); text-decoration: none; }
 .avail-yes:hover { color: var(--brand-hover); }
 .avail-yes svg { width: 1rem; height: 1rem; stroke-width: 2.5; }
 .avail-no { color: var(--text-2); border: 1px dashed var(--border-strong); }

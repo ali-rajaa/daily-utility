@@ -317,3 +317,6 @@
     overflow-y: auto;
   }
 }
+
+/* The hero follows the site-wide hero rhythm (shell.css tokens). */
+.app-hero { padding-block: var(--space-hero-top) var(--space-hero-bottom); }

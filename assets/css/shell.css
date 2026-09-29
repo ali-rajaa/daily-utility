@@ -63,6 +63,10 @@
   --gutter: clamp(1rem, 4vw, 2rem);
   --header-h: 4rem;
   --space-section: clamp(4rem, 9vw, 7rem);
+  /* One hero rhythm for every page type (home, hub, app, article, legal):
+     48px above / 56px below on phones, growing on larger screens. */
+  --space-hero-top: clamp(3rem, 7vw, 5.5rem);
+  --space-hero-bottom: clamp(3.5rem, 8vw, 6rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
   color-scheme: light dark;
@@ -215,7 +219,10 @@ h3, .h3 {
   width: 100%;
   max-width: calc(var(--wrap) + var(--gutter) * 2);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  /* The viewport meta uses viewport-fit=cover, so on a notched phone in
+     landscape the page runs under the notch: the gutter grows to at least
+     the safe-area inset on that side. */
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
 }
 
 /* A narrower reading column for prose-heavy content (FAQ, trust copy,
@@ -267,6 +274,7 @@ h3, .h3 {
   border-radius: var(--radius-pill);
   font: 600 1rem/1.2 var(--font);
   letter-spacing: -0.005em;
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
   user-select: none;
@@ -309,6 +317,8 @@ h3, .h3 {
 .store-badge {
   display: inline-flex;
   align-items: center;
+  min-height: 2.75rem;
+  font-size: 1rem;
   gap: 0.625rem;
   padding: 0.5rem 1rem;
   border-radius: var(--radius-sm);
@@ -331,7 +341,7 @@ h3, .h3 {
   line-height: 1.15;
 }
 .store-badge-text small {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.75);
 }
 .store-badge-text strong {
@@ -366,6 +376,7 @@ h3, .h3 {
 .brand {
   display: inline-flex;
   align-items: center;
+  min-height: 2.75rem;
   gap: 0.625rem;
   border-radius: var(--radius-sm);
   color: var(--text);
@@ -513,13 +524,12 @@ h3, .h3 {
     padding: 0.75rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    /* Glass, matching the header it grows out of: a bigger floating
-       surface than the header bar, so it gets the same blur but leans on
-       shadow-lg (already stronger than the header's) to read as the
-       thicker of the two materials. */
-    background: var(--surface-glass);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
+    /* Solid, not glass. The panel lives inside the header, which is
+       already a backdrop-filter layer, and a blur nested in another
+       blur can't see the page behind it -- so the hero's headline showed
+       through the links. A translucent surface stacked on another also
+       loses legibility; the shadow alone lifts the panel. */
+    background: var(--surface);
     box-shadow: var(--shadow-lg);
     transform-origin: top right;
     opacity: 0;
@@ -573,7 +583,7 @@ h3, .h3 {
   .footer-brand, .footer-get { grid-column: auto; }
 }
 
-.footer-tagline { margin-top: 1.1rem; max-width: 20rem; color: var(--text-2); line-height: 1.6; }
+.footer-tagline { margin-top: 1.1rem; max-width: 20rem; color: var(--text-2); line-height: 1.6; text-wrap: pretty; }
 .footer-desc { margin-top: 1rem; max-width: 22rem; line-height: 1.65; }
 
 .footer-get .store-badges { flex-direction: column; align-items: flex-start; gap: 0.625rem; }
@@ -598,6 +608,13 @@ h3, .h3 {
   list-style: none;
 }
 .footer-links a { color: var(--text-2); text-decoration: none; }
+/* Touch screens: each footer link is a full 44px-tall row (the list gap
+   shrinks to keep the column about as tall as before). */
+@media (pointer: coarse), (max-width: 759.98px) {
+  .footer-links { gap: 0; }
+  .footer-links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .footer-head { margin-bottom: 0.25rem; }
+}
 .footer-links a:hover { color: var(--text); text-decoration: underline; }
 
 .footer-legal {
@@ -1068,6 +1085,33 @@ h3, .h3 {
 
 .prose strong { font-weight: 600; }
 
+/* Tables in long-form content are wrapped (by app.html / post.html) in
+   .table-scroll: on a narrow phone a wide table scrolls sideways inside
+   its own box instead of making the whole page scroll. */
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.table-scroll:focus-visible { outline-offset: 2px; }
+/* Scroll shadows: a soft edge appears on whichever side has more table
+   to see, and disappears once you reach that end (pure CSS; the
+   "local" layers scroll with the content and cover the shadows). */
+.table-scroll {
+  background:
+    linear-gradient(to right, var(--surface) 40%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--surface) 40%, transparent) right / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(12, 20, 36, 0.16), transparent) left / 0.85rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(12, 20, 36, 0.16), transparent) right / 0.85rem 100% no-repeat scroll,
+    var(--surface);
+}
+.table-scroll th, .table-scroll td { line-height: 1.5; }
+.table-scroll table { min-width: 32rem; margin: 0; }
+.table-scroll tr:last-child > * { border-bottom: 0; }
+
 /* ---------- Reveal on scroll ----------
    Content is only hidden once scripts.html has confirmed the observer that
    reveals it is running (.reveal-ready). Never put .reveal on anything in
@@ -1137,8 +1181,8 @@ h3, .h3 {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
-  min-height: 2.5rem;
-  padding: 0.45rem 0.6rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.6rem;
   border-radius: var(--radius-sm);
   color: var(--text-2);
   font-size: 0.9375rem;
@@ -1171,4 +1215,34 @@ h3, .h3 {
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-pill);
   font-weight: 600;
+}
+
+/* ---------- Touch screens: no "stuck" hover lifts ----------
+   On phones, :hover sticks to whatever was last tapped, so a card that
+   lifts on hover stays lifted after you come back to the page. With no
+   hovering pointer, cards stay put; the :active press feedback still
+   runs. html raises specificity above the page stylesheets' rules. */
+@media (hover: none) {
+  html .post-card:hover:not(:active),
+  html .task-card:hover:not(:active),
+  html .app-card:hover:not(:active),
+  html .other-app:hover:not(:active),
+  html a.topic-card:hover:not(:active),
+  html .hub-featured-card:hover:not(:active),
+  html .post-topic-link:hover:not(:active),
+  html .home-cta-apps a:hover:not(:active) { transform: none; }
+  html .post-card:hover .post-card-glyph,
+  html .hub-featured-card:hover .hub-featured-glyph { transform: none; }
+}
+
+/* Breadcrumb links: a full 44px tap height on touch screens, without
+   changing how the row looks. */
+@media (pointer: coarse), (max-width: 759.98px) {
+  .breadcrumbs a, .hub-crumbs a, .legal-crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.25rem;
+    margin: -0.625rem -0.25rem;
+  }
 }

@@ -1160,6 +1160,29 @@ expanded to 10 steps (~2,870 body words, 5 FAQs, 12 min read).
   Apps, Support & legal, Get the app (badges + trademark credit);
   bottom row copyright. No ACN, no Daily Info column.
 
+## 5i. Mobile QA pass (29 Sep)
+
+Measured with a Playwright audit of every page type at 320, 360, 375,
+390, 414 and 430px (overflow, 16px gutters, 44px tap targets, clipping,
+type sizes/leading, section padding, button styles, link semantics, the
+phone menu). Fixed:
+- Guide tables made two app pages scroll sideways at 320px: tables in
+  long-form content are now wrapped (app.html / post.html) in a
+  .table-scroll box that scrolls on its own, with scroll-shadow cues.
+- Tap targets under 44px: contents links (40px), footer links (20px),
+  breadcrumbs, the logo link, availability-table links and pills.
+- Homepage orbit labels crossed the 16px gutter at 320-375px: the upper
+  labels now anchor to their tile's outer edge on small phones.
+- Phone menu panel was translucent inside the translucent header, so the
+  hero headline showed through its links: now a solid surface.
+- Hero padding differed by page type (40/48/64px): one token pair,
+  --space-hero-top / --space-hero-bottom (48/56px on phones).
+- Safe-area insets: .wrap gutters respect env(safe-area-inset-*) since
+  the viewport uses viewport-fit=cover.
+- Card hover lifts no longer stick after a tap on touch screens
+  (@media (hover: none)); :active press feedback kept.
+- Store badges: consistent 1rem size, 44px minimum, 12px minimum text.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1625,3 +1648,5 @@ what's there.
 - Homepage to 8 sections with FAQ; 2,500+ word guides on all four app
   pages; 6 coming-soon article placeholders (noindex); CloudGate-style
   footer without ACN or Daily Info (section 5h). All checks pass.
+- Mobile QA pass (section 5i): no horizontal scroll at any width, 44px
+  tap targets, consistent hero padding, solid phone menu, safe areas.

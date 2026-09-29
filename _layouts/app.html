@@ -177,7 +177,7 @@ confirmed to have. {%- endcomment -%}
         </ol>
       </nav>
       <div class="prose app-guide-body">
-        {{ content }}
+        {{ content | replace: '<table', '<section class="table-scroll" tabindex="0" aria-label="Table, scrolls sideways on small screens"><table' | replace: '</table>', '</table></section>' }}
       </div>
     </div>
   </div>

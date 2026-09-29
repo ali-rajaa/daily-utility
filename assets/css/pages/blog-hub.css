@@ -8,7 +8,7 @@
 
 /* ---------- Hero: copy left, featured guide right ---------- */
 
-.hub-hero { padding-block: clamp(3rem, 7vw, 5.5rem) clamp(3.5rem, 8vw, 6rem); }
+.hub-hero { padding-block: var(--space-hero-top) var(--space-hero-bottom); }
 
 .hub-hero-grid {
   display: grid;

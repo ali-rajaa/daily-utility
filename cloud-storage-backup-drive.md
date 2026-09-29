@@ -82,7 +82,7 @@ Cloud Storage Backup & Drive is built around exactly these four things: your pho
 
 These three words get used almost interchangeably, but they mean different things, and the difference matters when something goes wrong.
 
-| | What it does | What happens if you delete something |
+| Term | What it does | What happens if you delete something |
 |---|---|---|
 | **Backup** | Keeps a separate copy of your data | The backup copy is still there to restore |
 | **Sync** | Keeps the same data identical across devices | The deletion is usually copied everywhere |

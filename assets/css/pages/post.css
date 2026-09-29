@@ -34,7 +34,7 @@
 /* ---------- Hero ---------- */
 
 .post-hero {
-  padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+  padding: var(--space-hero-top) 0 var(--space-hero-bottom);
   border-bottom: 1px solid var(--border);
 }
 
