@@ -1,0 +1,48 @@
+---
+layout: default
+css: legal
+---
+{%- comment -%}
+  Privacy/terms layout. Chains to default.html.
+
+  Every page on this layout must set `css: legal` in its OWN front
+  matter (this file's `css: legal` above does not cascade -- see
+  app.html's header comment for why).
+
+  Required front matter (STATUS.md section 4): title, description,
+  css (must be "legal"), last_updated, sections (a list of {id, label}).
+  The body is prose written as .md (so kramdown runs); every body
+  heading must carry kramdown's inline ID syntax, e.g.
+  `## Data we collect {#data-we-collect}`, matching one of the
+  `sections` entries below, so the table of contents generated here
+  always links to a heading that actually exists -- a hand-typed TOC
+  would drift the moment a heading was renamed and nobody updated the
+  list separately.
+
+  No hardcoded canonical: here -- legal pages use the same canonical
+  logic as every other page (default.html).
+{%- endcomment -%}
+<section class="section legal-hero">
+  <div class="wrap wrap--narrow">
+    <h1>{{ page.title | escape }}</h1>
+    <p class="legal-updated">Last updated {{ page.last_updated | date: "%-d %B %Y" }}</p>
+  </div>
+</section>
+
+<div class="section legal-layout">
+  <div class="wrap legal-grid">
+    {%- if page.sections %}
+    <nav class="legal-toc" aria-label="Table of contents">
+      <p class="legal-toc-head">On this page</p>
+      <ul>
+        {%- for item in page.sections %}
+        <li><a href="#{{ item.id }}">{{ item.label | escape }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+    {%- endif %}
+    <div class="prose legal-body">
+      {{ content }}
+    </div>
+  </div>
+</div>

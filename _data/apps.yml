@@ -36,7 +36,7 @@
   ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
   tier: flagship
   page: true
-  built: false # flips true once cloud-storage-backup-drive.html ships (step 5)
+  built: true # cloud-storage-backup-drive.html shipped and verified (step 4/5)
 
 - slug: document-reader-pdf
   name: "Document Reader: Read All PDF"

@@ -4,10 +4,14 @@ Living reference for this repo. It records what we decided and why, so
 no session has to re-derive or re-argue it. Update it whenever a
 decision changes or a phase completes.
 
-**Current state:** Build steps 1 (config) and 2 (shell) are done,
-verified, and **live on https://staging.fixmypcperth.com** (noindex).
-`main` deploys; work happens on `claude/bold-feynman-c7lqej` and is
-brought to `main` to update the preview. Next: step 3 (includes).
+**Current state:** Build steps 1 (config), 2 (shell), 3 (includes) and 4
+(layouts: `app`, `post`, `legal`, each with its CSS) are done and
+verified. `main` deploys; work happens on `claude/bold-feynman-c7lqej`
+and is brought to `main` to update the preview. The flagship's real app
+page (`cloud-storage-backup-drive.html`) and one real Daily Info article
+now exist and are live, built as part of verifying the `app` and `post`
+layouts. Next: step 5 (the remaining core pages — homepage, other three
+app pages, privacy, terms, 404).
 
 ---
 
@@ -65,6 +69,8 @@ daily-utility/
 │   ├── footer.html
 │   ├── scripts.html
 │   ├── logo.html                  # brand mark + wordmark, used by header and footer
+│   ├── icon-sprite.html           # hidden SVG <symbol> sprite, included once in
+│   │                              # default.html; use as <use href="#i-name"/>
 │   ├── store-badges.html          # params: ios_url, android_url
 │   ├── hero-glow.html             # SVG gradient-mesh glow; pair with
 │   │                              # .hero-glow-host/-content (section 4f)
@@ -98,14 +104,16 @@ daily-utility/
 ├── cloud-storage-backup-drive.html   # layout: app
 ├── daily-info.html                # layout: default. Blog hub
 ├── daily-info/
-│   ├── backup-before-switching-phones.html
-│   ├── free-up-phone-storage.html
-│   ├── automatic-photo-backup-iphone-vs-android.html
-│   ├── app-data-backup-new-phone.html
-│   ├── is-cloud-backup-safe.html
-│   └── cloud-vs-local-backup.html
-├── privacy-policy.html            # layout: legal
-├── terms-of-service.html          # layout: legal
+│   ├── backup-before-switching-phones.md   # real article, shipped in step 4h;
+│   │                              # .md not .html -- Jekyll only runs kramdown
+│   │                              # over markdown-extension files (section 4)
+│   ├── free-up-phone-storage.md
+│   ├── automatic-photo-backup-iphone-vs-android.md
+│   ├── app-data-backup-new-phone.md
+│   ├── is-cloud-backup-safe.md
+│   └── cloud-vs-local-backup.md
+├── privacy-policy.md               # layout: legal (.md, not .html -- prose body)
+├── terms-of-service.md            # layout: legal
 ├── 404.html                       # layout: default, noindex: true
 ├── robots.txt                     # Liquid, needs an empty front matter fence
 └── sitemap.xml                    # Liquid, needs an empty front matter fence
@@ -125,18 +133,28 @@ page is a plain page with a layout, as in fixmypcperth.
 
 ## 4. Layouts and required front matter
 
-Each specialized layout sets `css:` in its own front matter. Jekyll passes
-that value down to every page that uses the layout, so pages never repeat
-it. `default.html` loads `shell.css`, then `pages/<css>.css` only when
-`css:` is set. There is no silent fallback: the homepage sets
-`css: index` and the hub sets `css: blog-hub` themselves.
+**Every page sets its own `css:`, always — a layout's own `css:` does
+NOT cascade to the pages that use it.** Jekyll doesn't merge a layout's
+front matter into the pages rendered through it; each specialized
+layout's `css: app`/`css: post`/`css: legal` only covers the
+never-happens case of a page on that layout that skips setting `css:`
+itself. This was found the hard way in step 4 (29 Sep): the first real
+Daily Info post set `layout: post` only, assuming the layout's `css:
+post` would apply, and `pages/post.css` silently never loaded — nothing
+errored, sections just weren't styled and would have shipped unstyled
+if a screenshot hadn't been checked before a scroll-triggered image bug
+led to it being found. `default.html` loads `shell.css`, then
+`pages/<css>.css` only when the *page's own* `css:` is set. There is no
+silent fallback: the homepage sets `css: index`, the hub sets `css:
+blog-hub`, and every app/post/legal page sets `css: app`/`post`/`legal`
+itself, same as the layout file does.
 
 | Layout | Used by | Required front matter |
 |---|---|---|
 | `default` | Homepage, Daily Info hub, 404 | `title`, `description`. Optional: `css`, `image`, `image_alt`, `noindex` |
-| `app` (`css: app`) | App landing pages | `title`, `description`, `app_name`, `tagline`, `icon`, `ios_url`, `android_url`, `category`, `features` (icon, title, text), `how_it_works` (3 steps: title, text), `faqs` (q, a). **No body content.** |
-| `post` (`css: post`) | Daily Info articles | `title`, `description`, `heading`, `category`, `date`, `updated`, `read_min`, `slug` (must match the filename), `image`. The body is prose. Optional: `faqs`, `related` |
-| `legal` (`css: legal`) | Privacy, terms | `title`, `description`, `last_updated`, `sections` (id, label). Each body `<h2>` uses the matching `id` |
+| `app` | App landing pages | `title`, `description`, `css: app`, `app_name`, `tagline`, `icon`, `ios_url`, `android_url`, `category`, `features` (icon, title, text), `how_it_works` (3 steps: title, text), `faqs` (q, a). **No body content.** |
+| `post` | Daily Info articles | `title`, `description`, `css: post`, `heading`, `category`, `date`, `updated`, `read_min`, `slug` (must match the filename), `image`. The body is prose (written as `.md`, not `.html` — Jekyll only runs Markdown through kramdown for markdown-extension files). Optional: `faqs`, `related` (a list of other posts' `slug` values). Body `##` headings must not start with a digit — kramdown's auto-generated `id` would start with a digit too, which fails HTML validation; write "Step 1: ..." not "1. ...". |
+| `legal` | Privacy, terms | `title`, `description`, `css: legal`, `last_updated`, `sections` (id, label). Each body `<h2>` uses the matching `id` |
 
 - **App pages are fully driven by front matter.** This stops similar app
   pages from drifting into near-duplicates (doorway pages), which is the
@@ -523,6 +541,122 @@ Step 3 is now complete: `store-badges`, `hero-glow` (not in the
 original plan, earned its place — section 4f), `faq-schema`,
 `breadcrumb-schema`.
 
+## 4h. Step 4 finished: `app`, `post`, `legal` layouts (29 Sep)
+
+Built and verified all three remaining layouts and their CSS, each
+exercised with a real (or, for legal, throwaway-only) page rather than
+trusted on inspection alone: build → check for unrendered Liquid →
+`html-validate` → parse every JSON-LD block with Python's `json.loads`
+→ re-run the adversarial XSS test from section 4g against the new
+schema output → serve locally → Playwright checks (structure,
+interactive behaviour, touch targets) → screenshots in light/dark/
+mobile → full `shell-test.js` (19 checks) + `responsive-sweep.js` (138
+checks) regression to confirm the shared shell.css edits broke nothing.
+Every layer came back clean, but three real bugs surfaced along the
+way — this only found them because each one was actually exercised
+end-to-end, not because the code looked wrong on review:
+
+1. **`app.html` didn't escape plain-text output.** `page.app_name`,
+   `step.title`, `feature.text`, `item.q`/`item.a`, etc. were output
+   raw (`{{ page.app_name }}`, not `{{ page.app_name | escape }}`).
+   Harmless while every app's name happens to avoid `&`/`<`/`>`, but
+   Cloud Storage Backup & Drive's own name has an `&` in it, and
+   `html-validate` correctly flagged the resulting raw `&` in text
+   nodes as invalid HTML. Fixed by adding `| escape` to every plain
+   (non-`jsonify`) output in the layout — the JSON-LD block was already
+   safe via the section 4g `jsonify | replace` pattern, this was only
+   about the visible HTML.
+
+2. **The documented "layouts cascade `css:` to their pages" mechanism
+   is false.** Section 4 said "each layout sets `css:` in its own
+   front matter and every page using it inherits it" — Jekyll does not
+   actually do this; a layout's front matter is not merged into the
+   pages rendered through it. This went unnoticed while building
+   `app.html` because the one page built on it,
+   `cloud-storage-backup-drive.html`, happened to also set `css: app`
+   on itself. It surfaced for real on the first Daily Info post, which
+   set only `layout: post` (trusting the documented cascade) —
+   `pages/post.css` silently never loaded, no error, sections just
+   rendered unstyled. **Fixed at the root**, not patched around: every
+   page must now set its own `css:` matching its layout, exactly like
+   `default.html`-layout pages (homepage, hub) already did. Corrected
+   the false claim in `default.html`'s, `app.html`'s and `post.html`'s
+   own header comments and in section 4's table above, and added
+   `css: post` to the real post's front matter.
+
+3. **A square source image blown up huge as a post's hero.** The real
+   post's `image:` front matter pointed at the app's (square) icon file
+   — there's no real editorial photography for Daily Info yet.
+   `.post-image` had `width: 100%; height: auto`, so with no CSS
+   aspect-ratio constraint the browser sized it by its own native
+   ratio, not the 1200×630 the `width`/`height` HTML attributes implied
+   — a giant, nearly-square image dwarfing the rest of the article
+   (caught by screenshot, not by any validator). **Fixed generally**,
+   not just for this one image: `.post-image` now sets
+   `aspect-ratio: 1200 / 630; object-fit: cover`, so any future source
+   image displays as a consistent banner regardless of its own native
+   shape, rather than depending on every image being pre-cropped
+   exactly right.
+
+Two more corrections, smaller but worth recording:
+
+- **Markdown content must be written in `.md` files, not `.html`.**
+  The first draft of the sample post was `.html` with front matter and
+  Markdown-syntax body content; Jekyll only runs kramdown over
+  markdown-extension files, so the `## Heading` lines rendered as
+  literal text, not real `<h2>` tags. Renamed to `.md`; documented in
+  section 4's table.
+- **A body `##` heading must not start with a digit.** kramdown
+  auto-generates each heading's `id` from its text, and an id starting
+  with a digit (from `## 1. Do the thing`) fails `html-validate`'s
+  `valid-id` rule. Reworded the sample post's step headings to "Step 1:
+  ..." instead of "1. ...". Documented in section 4's table so the next
+  article doesn't repeat it.
+
+**Refactor while building `post.html`:** the FAQ accordion and closing
+CTA band markup (`.faq-list`/`.faq-item`/`.faq-q`/`.faq-chevron`/
+`.faq-a`, `.cta-band`) is shared between `app.html` and `post.html`, so
+those rules moved out of `pages/app.css` into shell.css's new "Shared
+page components" section rather than being duplicated into
+`pages/post.css`. Likewise, the prose typography `post.html` and
+`legal.html` both need (headings, paragraphs, lists, links inside
+hand-written body content) is now a shared `.prose` class in shell.css,
+applied alongside each layout's own body class (`class="prose
+post-body"` / `class="prose legal-body"`) — `pages/post.css` and
+`pages/legal.css` only add what's actually different between the two
+(post: blockquote/code; legal: the TOC-anchor scroll offset).
+
+**What got built, concretely:**
+
+- `_includes/icon-sprite.html` — a hidden SVG sprite of 9 hand-drawn
+  24×24 stroke icons (cloud, shield, sync, devices, photo, auto, folder,
+  check, chevron-down), included once in `default.html`. Referenced as
+  `<svg><use href="#i-name"/></svg>` wherever an icon is needed, instead
+  of a third-party icon font/CDN or repeating full path data per use.
+- `_layouts/app.html` + `assets/css/pages/app.css` — hero (icon, name,
+  tagline, store badges), 3-step how-it-works, feature grid (icon
+  cards), FAQ accordion with schema, trust band linking to the privacy
+  policy, closing CTA band. Fully front-matter-driven, no body content,
+  same doorway-page reasoning as fixmypcperth's `suburb.html`.
+- `_layouts/post.html` + `assets/css/pages/post.css` — breadcrumb (both
+  visible nav and `BreadcrumbList` JSON-LD, hand-written for the fixed
+  Home > Daily Info > article shape rather than a per-post front-matter
+  list), title/category/date/read-time, hero image, prose body,
+  optional FAQ and related-articles sections, `Article` JSON-LD, closing
+  CTA band.
+- `_layouts/legal.html` + `assets/css/pages/legal.css` — title,
+  last-updated line, a sticky (desktop) / static (mobile) table of
+  contents generated from `sections:` front matter, prose body. No
+  hardcoded `canonical:` — uses the same logic as every other page.
+- `cloud-storage-backup-drive.html` — the flagship's real app page, now
+  live (not a placeholder): real features, a real 3-step flow, real
+  FAQs written from how the app actually works (no fabricated
+  ratings/downloads, per the standing decision). `apps.yml`'s `built:`
+  flipped to `true` for it, so nav/footer link to it correctly.
+- `daily-info/backup-before-switching-phones.md` — one real Daily Info
+  article (generic, defensible advice; not a claim about the company or
+  app's own practices), used to verify `post.html` end-to-end.
+
 ## 5. Page sections
 
 **Homepage — flagship-first, but every app gets a real page (see 5a).**
@@ -810,9 +944,18 @@ what's there.
       plan, earned its place — section 4f), `faq-schema`,
       `breadcrumb-schema` (section 4g — found and fixed a real
       `</script>`-breakout bug in the JSON-LD escaping here).
-- [ ] **4. Layouts:** `app`, `post` and `legal`, each with its CSS.
-- [ ] **5. Core pages:** `apps.yml`, homepage, app page, privacy, terms,
-      404.
+- [x] **4. Layouts:** `app`, `post` and `legal`, each with its CSS
+      (section 4h — found and fixed three real bugs: unescaped HTML
+      output in `app.html`, the false "layouts cascade `css:`"
+      assumption that left `post.css` silently unloaded, and a post
+      hero image rendering at its raw square size instead of a
+      consistent banner). Verified with a real flagship app page and a
+      real Daily Info article (both now live), plus a throwaway-only
+      page for `legal.html` since no real privacy/terms text exists yet.
+- [ ] **5. Core pages:** homepage, the other three apps' pages, privacy,
+      terms, 404. (`apps.yml` was done in step 4h's corrective work;
+      the flagship's own app page and one Daily Info article already
+      shipped as part of verifying step 4, ahead of schedule.)
 - [ ] **6. Daily Info:** the hub, then the 6 articles.
 - [ ] **7. SEO files:** robots, sitemap, OG card, GA4. (The favicon
       was done in step 2.)
@@ -973,3 +1116,23 @@ what's there.
   No template/code change needed -- footer.html's existing `/<slug>`
   link was already correct for this model, the old plan's planned
   href-branching is no longer needed.
+- Step 4 complete: `app.html`, `post.html`, `legal.html` and their CSS
+  built and verified end-to-end (section 4h). Found and fixed three
+  real bugs along the way, each caught by actually exercising the
+  layout rather than reviewing it: unescaped plain-text output in
+  `app.html` (a raw `&` in "Backup & Drive" failed `html-validate`);
+  the documented "layout front matter cascades `css:` to its pages"
+  behaviour turned out to be false, so `pages/post.css` silently never
+  loaded on the first real post (fixed at the root: every page now sets
+  its own `css:`, and the false claim was corrected everywhere it was
+  written down); and a post's hero image rendered at its raw square
+  size instead of a banner, fixed generally with `aspect-ratio` +
+  `object-fit: cover` rather than just for that one image. Shared the
+  FAQ/CTA-band and prose typography CSS between layouts instead of
+  duplicating it (shell.css's new "Shared page components" and
+  `.prose`). Shipped two real pages in the process: the flagship's app
+  page (`cloud-storage-backup-drive.html`, `apps.yml`'s `built:` now
+  `true` for it) and one real Daily Info article. Verified `legal.html`
+  with a throwaway-only page (deleted before committing) since no real
+  privacy/terms text exists yet. Zero regressions: both the 19-check
+  and 138-check suites still pass after the shell.css changes.

@@ -1,0 +1,114 @@
+/* ==========================================================================
+   app.css: the app landing page layout (_layouts/app.html). Every app
+   (flagship or "more" tier, section 5a) shares this one stylesheet, so a
+   change here is consistent across all four pages, not per-app drift.
+
+   Every colour used here is an existing shell.css token already checked
+   for contrast (see shell.css's own header comment and STATUS.md); no
+   new colour pairs are introduced in this file.
+   ========================================================================== */
+
+.app-hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.app-hero-icon {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.app-hero .section-head { max-width: 36rem; }
+.app-hero .section-head--center,
+.app-hero .section-head { margin-inline: auto; }
+
+/* ---------- How it works ---------- */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+@media (max-width: 719.98px) {
+  .steps { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--on-brand);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.0625rem;
+}
+
+.step h3 { margin-bottom: 0.5rem; }
+.step p { color: var(--text-2); }
+
+/* ---------- Features ---------- */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+  gap: 1.25rem;
+}
+
+.feature-card {
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.feature-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 1rem;
+  color: var(--brand);
+}
+
+.feature-card h3 { margin-bottom: 0.5rem; }
+.feature-card p { color: var(--text-2); font-size: 0.9375rem; }
+
+/* FAQ accordion and closing CTA band styles now live in shell.css's
+   "Shared page components" section -- post.html uses them too. */
+
+/* ---------- Trust band ---------- */
+
+.trust-band {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border-radius: var(--radius-lg);
+  background: var(--brand-soft);
+}
+
+.trust-band-icon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  color: var(--brand-text);
+}
+
+.trust-band p { margin-top: 0.5rem; color: var(--text-2); }
+
+@media (max-width: 559.98px) {
+  .trust-band { flex-direction: column; align-items: flex-start; }
+}

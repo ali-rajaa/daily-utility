@@ -1,0 +1,150 @@
+---
+layout: default
+css: post
+---
+{%- comment -%}
+  Daily Info article layout. Chains to default.html.
+
+  IMPORTANT: every post must set `css: post` in its OWN front matter,
+  same as this layout does -- Jekyll does not cascade a layout's front
+  matter down to the pages using it, so this file's `css: post` above
+  only covers a page with no `css:` of its own (in practice, none: every
+  post needs pages/post.css). See app.html's header comment for how this
+  was found (post.css silently never loaded on the first real post).
+
+  Required front matter (STATUS.md section 4): title, description, css
+  (must be "post"), heading, category, date, updated, read_min, slug
+  (must match the filename), image. Body is prose. Optional: faqs,
+  related (a list of other posts' `slug` values).
+
+  Breadcrumbs are hand-written here (not built from a per-post
+  breadcrumbs: list, unlike breadcrumb-schema.html's generic usage) --
+  Home > Daily Info > <heading> never varies in shape for a post, so
+  there's nothing a front-matter field would let an author change
+  correctly; it would only be one more way for a post to drift from the
+  others (the same doorway-page reasoning app.html's header comment
+  gives for front-matter-only pages).
+{%- endcomment -%}
+{%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Daily Info", "item": {{ '/daily-info' | absolute_url | jsonify | replace: "/", "\/" }} },
+    { "@type": "ListItem", "position": 2, "name": {{ page.heading | jsonify | replace: "/", "\/" }}, "item": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }} }
+  ]
+}
+</script>
+{%- if page.faqs %}{% include faq-schema.html faqs=page.faqs %}{% endif -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ page.heading | jsonify | replace: "/", "\/" }},
+  "description": {{ page.description | jsonify | replace: "/", "\/" }},
+  "image": {{ page.image | absolute_url | jsonify | replace: "/", "\/" }},
+  "datePublished": {{ page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
+  "dateModified": {{ page.updated | default: page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
+  "author": {
+    "@type": "Organization",
+    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }}
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }}
+  },
+  "mainEntityOfPage": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }}
+}
+</script>
+
+<article>
+  <header class="section post-hero">
+    <div class="wrap wrap--narrow">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+        <a href="{{ '/daily-info' | relative_url }}">Daily Info</a>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+        <span aria-current="page">{{ page.heading | escape }}</span>
+      </nav>
+      <span class="eyebrow">{{ page.category | escape }}</span>
+      <h1>{{ page.heading | escape }}</h1>
+      <div class="post-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
+        {%- if page.updated and page.updated != page.date %}
+        <span class="post-meta-sep" aria-hidden="true">&middot;</span>
+        <span>Updated {{ page.updated | date: "%-d %B %Y" }}</span>
+        {%- endif %}
+        {%- if page.read_min %}
+        <span class="post-meta-sep" aria-hidden="true">&middot;</span>
+        <span>{{ page.read_min }} min read</span>
+        {%- endif %}
+      </div>
+    </div>
+  </header>
+
+  {%- if page.image %}
+  <div class="wrap post-image-wrap">
+    <img class="post-image" src="{{ page.image | relative_url }}" alt="" width="1200" height="630" loading="eager">
+  </div>
+  {%- endif %}
+
+  <div class="section">
+    <div class="wrap wrap--narrow prose post-body">
+      {{ content }}
+    </div>
+  </div>
+
+  {%- if page.faqs %}
+  <section class="section section--alt">
+    <div class="wrap wrap--narrow">
+      <div class="section-head section-head--center reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions people ask</h2>
+      </div>
+      <div class="faq-list reveal">
+        {%- for item in page.faqs %}
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>{{ item.q | escape }}</span>
+            <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </summary>
+          <div class="faq-a"><p>{{ item.a | escape }}</p></div>
+        </details>
+        {%- endfor %}
+      </div>
+    </div>
+  </section>
+  {%- endif %}
+
+  {%- if page.related %}
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <div class="section-head reveal">
+        <span class="eyebrow">Keep reading</span>
+        <h2>Related articles</h2>
+      </div>
+      <ul class="related-list reveal">
+        {%- for slug in page.related %}
+        {%- assign _related = site.pages | where: "layout", "post" | where: "slug", slug | first -%}
+        {%- if _related %}
+        <li><a class="related-link" href="{{ _related.url | replace: '.html', '' | relative_url }}">{{ _related.heading | default: _related.title | escape }}</a></li>
+        {%- endif %}
+        {%- endfor %}
+      </ul>
+    </div>
+  </section>
+  {%- endif %}
+
+  <section class="section section--alt">
+    <div class="wrap cta-band reveal">
+      <div class="section-head">
+        <h2>Get Cloud Storage Backup &amp; Drive</h2>
+        <p class="section-sub">Free to download, for iPhone and Android.</p>
+      </div>
+      {%- assign flagship = site.data.apps | where: "tier", "flagship" | first %}
+      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
+    </div>
+  </section>
+</article>

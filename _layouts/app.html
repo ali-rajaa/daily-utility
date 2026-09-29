@@ -1,0 +1,143 @@
+---
+layout: default
+css: app
+---
+{%- comment -%}
+  App landing page layout. Chains to default.html.
+
+  IMPORTANT: this file's own `css: app` above only affects a page that
+  has no `css:` of its own -- Jekyll does NOT cascade a layout's front
+  matter down to the pages that use it. Every page on this layout must
+  still set `css: app` itself (as cloud-storage-backup-drive.html does),
+  or it renders with shell.css only and no pages/app.css. Confirmed the
+  hard way: post.html originally relied on exactly this false cascade
+  and pages/post.css silently never loaded.
+
+  Fully front-matter-driven, no body content -- the same reasoning
+  fixmypcperth uses for suburb.html: with four apps now sharing this one
+  layout (section 5a), letting any of them carry hand-written body prose
+  is exactly how near-duplicate doorway pages happen. Required front
+  matter (STATUS.md section 4): title, description, css (must be "app"),
+  app_name, tagline, icon, ios_url and/or android_url, category,
+  features (icon, title, text), how_it_works (3x {title, text}),
+  faqs (q, a).
+
+  The "Get the app" button in the header links to #download -- that id
+  must stay on the element wrapping the store badges below (STATUS.md
+  section 2's "rules the later steps must keep").
+{%- endcomment -%}
+{%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": {{ page.app_name | jsonify | replace: "/", "\/" }},
+  "applicationCategory": {{ page.category | jsonify | replace: "/", "\/" }},
+  "operatingSystem": "iOS, Android",
+  "description": {{ page.description | jsonify | replace: "/", "\/" }},
+  "image": {{ page.icon | absolute_url | jsonify | replace: "/", "\/" }},
+  "url": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }},
+  "publisher": {
+    "@type": "Organization",
+    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }}
+  }
+}
+</script>
+{% include faq-schema.html faqs=page.faqs %}
+
+<section class="section app-hero hero-glow-host">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content app-hero-inner">
+    <img class="app-hero-icon" src="{{ page.icon | relative_url }}" width="88" height="88" alt="">
+    <div class="section-head">
+      <span class="eyebrow">{{ page.category | escape }}</span>
+      <h1>{{ page.app_name | escape }}</h1>
+      <p class="section-sub">{{ page.tagline | escape }}</p>
+    </div>
+    <div class="btn-row" id="download">
+      {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+    </div>
+  </div>
+</section>
+
+{%- if page.how_it_works %}
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">How it works</span>
+      <h2>Set up once, it just runs</h2>
+    </div>
+    <ol class="steps">
+      {%- for step in page.how_it_works %}
+      <li class="step reveal">
+        <span class="step-number">{{ forloop.index }}</span>
+        <h3>{{ step.title | escape }}</h3>
+        <p>{{ step.text | escape }}</p>
+      </li>
+      {%- endfor %}
+    </ol>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.features %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">Features</span>
+      <h2>What {{ page.app_name | escape }} does</h2>
+    </div>
+    <div class="feature-grid">
+      {%- for feature in page.features %}
+      <div class="feature-card reveal">
+        <svg class="feature-icon" aria-hidden="true"><use href="#i-{{ feature.icon | escape }}"/></svg>
+        <h3>{{ feature.title | escape }}</h3>
+        <p>{{ feature.text | escape }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.faqs %}
+<section class="section section--alt">
+  <div class="wrap wrap--narrow">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>Questions people ask</h2>
+    </div>
+    <div class="faq-list reveal">
+      {%- for item in page.faqs %}
+      <details class="faq-item">
+        <summary class="faq-q">
+          <span>{{ item.q | escape }}</span>
+          <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </summary>
+        <div class="faq-a"><p>{{ item.a | escape }}</p></div>
+      </details>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+<section class="section">
+  <div class="wrap wrap--narrow trust-band reveal">
+    <svg class="trust-band-icon" aria-hidden="true"><use href="#i-shield"/></svg>
+    <div>
+      <h2 class="h3">Your data, protected and never sold</h2>
+      <p>{{ page.app_name | escape }} is built by {{ site.company.legal_name | escape }}, an Australian company. Your files are encrypted in transit and at rest, and we never sell your data or use it to build advertising profiles. Read the full <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap cta-band reveal">
+    <div class="section-head">
+      <h2>Get {{ page.app_name | escape }} today</h2>
+      <p class="section-sub">Free to download, for iPhone and Android.</p>
+    </div>
+    {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+  </div>
+</section>

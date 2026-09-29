@@ -75,9 +75,11 @@
   <meta name="theme-color" content="#0a0e16" media="(prefers-color-scheme: dark)">
 
   {%- comment -%} shell.css first, then the page's own stylesheet, so a page
-  can build on the shared tokens. Layouts set css: in their own front
-  matter (app, post, legal) and every page using them inherits it; pages
-  on this layout directly set it themselves. No css: means shell only.
+  can build on the shared tokens. Every page sets its own css: matching
+  its layout (app, post, legal each need it set on every page that uses
+  them, not just on the layout file -- Jekyll doesn't cascade a layout's
+  front matter down to its pages, confirmed when pages/post.css silently
+  never loaded on the first real post). No css: means shell only.
   The ?v= stamp changes on every build, so browsers never keep a stale
   copy after a deploy. {%- endcomment -%}
   {%- assign _v = site.time | date: "%s" %}
@@ -92,6 +94,7 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
+{% include icon-sprite.html %}
 {% include header.html %}
 <main id="main" tabindex="-1">
 {{ content }}
