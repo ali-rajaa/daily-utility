@@ -242,9 +242,15 @@
     gap: clamp(2.5rem, 5vw, 4.5rem);
     align-items: start;
   }
-  .post-aside {
+  /* The aside runs the full height of the article; the promo card
+     scrolls away and the contents list stays pinned below the header. */
+  .post-aside { align-self: stretch; }
+  .post-toc {
     position: sticky;
-    top: calc(var(--header-h) + 1.75rem);
+    top: calc(var(--header-h) + 1.25rem);
+    max-height: calc(100vh - var(--header-h) - 2.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }
 /* On narrow screens the contents list sits above the article and the app
@@ -271,12 +277,13 @@
   color: var(--text-2);
 }
 .post-toc-list { margin: 0; padding: 0; list-style: none; }
+.post-toc-list { font-size: 0.9rem; }
 .post-toc-list a {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
-  min-height: 2.75rem;
-  padding: 0.55rem 0.6rem;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.6rem;
   border-radius: var(--radius-sm);
   color: var(--text-2);
   font-size: 0.9375rem;

@@ -1133,6 +1133,12 @@ Technical SEO:
 - All titles <= 60 characters, descriptions 70-160, one H1 per page, no
   skipped heading levels (checked by script).
 
+Article length rule (user, 29 Sep): every Daily Info article carries at
+least 2,500 visible words of genuine guidance in its body (not counting
+header, footer or FAQ). General phone advice only; never new claims
+about our apps beyond their confirmed scope. The first article was
+expanded to 10 steps (~2,870 body words, 5 FAQs, 12 min read).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1592,3 +1598,6 @@ what's there.
   tiles, section/step cards, sticky contents, takeaways, share, FAQ
   cards; technical SEO pass on every page (feed, schema, meta, titles).
   html-validate clean, links/anchors clean, all four suites pass.
+- Backup-before-switching article expanded to 10 steps, ~2,870 body
+  words (user's 2,500-word minimum), 5 FAQs; contents list is now the
+  only pinned element in the article sidebar.

@@ -148,6 +148,14 @@ css: post
   <div class="section post-main">
     <div class="wrap post-grid-layout">
       <div class="post-aside">
+
+        <div class="post-promo tone-{{ flagship.tone }}">
+          {% include app-tile.html app=flagship class="post-promo-tile" %}
+          <p class="post-promo-name">{{ flagship.name | escape }}</p>
+          <p class="post-promo-text">Backs up your photos, videos, contacts and app data.</p>
+          <a class="btn btn--primary post-promo-btn" href="{{ '/' | append: flagship.slug | relative_url }}">See the app<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+
         {%- if _sections > 1 %}
         <nav class="post-toc" aria-label="On this page">
           <span class="post-toc-title">On this page</span>
@@ -163,13 +171,6 @@ css: post
           </ol>
         </nav>
         {%- endif %}
-
-        <div class="post-promo tone-{{ flagship.tone }}">
-          {% include app-tile.html app=flagship class="post-promo-tile" %}
-          <p class="post-promo-name">{{ flagship.name | escape }}</p>
-          <p class="post-promo-text">Backs up your photos, videos, contacts and app data.</p>
-          <a class="btn btn--primary post-promo-btn" href="{{ '/' | append: flagship.slug | relative_url }}">See the app<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-        </div>
       </div>
 
       <div class="post-content">
