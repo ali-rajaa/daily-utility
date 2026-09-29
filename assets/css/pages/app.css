@@ -271,3 +271,49 @@
 @media (prefers-contrast: more) {
   .step, .feature-card, .other-app, .trust-band { border-color: var(--border-strong); }
 }
+
+/* ---------- Long-form guide ----------
+   The page's markdown body, with a sticky contents list beside it on
+   desktop and above it on phones. */
+
+.app-guide-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+.app-guide-body { max-width: 44rem; min-width: 0; }
+.app-guide-body > h2:first-child { margin-top: 0; }
+.app-guide-body h2 {
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+.app-guide-body > h2:first-child { padding-top: 0; border-top: 0; }
+.app-guide-body h3 { color: var(--brand-text); }
+.app-guide-body ul li::marker { color: var(--brand); }
+.app-guide-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.app-guide-body th, .app-guide-body td {
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.app-guide-body thead th { background: var(--brand-soft); color: var(--text); font-family: var(--font-heading); }
+
+@media (min-width: 60rem) {
+  .app-guide-grid {
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .app-guide-toc {
+    position: sticky;
+    top: calc(var(--header-h) + 1.25rem);
+    max-height: calc(100vh - var(--header-h) - 2.5rem);
+    overflow-y: auto;
+  }
+}

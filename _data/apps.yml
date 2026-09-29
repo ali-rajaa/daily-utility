@@ -36,6 +36,9 @@
 # ios_url is omitted where an app isn't confirmed to exist on iOS; every
 #   page and card derives "iPhone and Android" vs "Android" from it.
 # Each tagline must match its app page's own `tagline:` front matter.
+# task / task_text: the homepage "What do you need to do?" cards -- the
+#   everyday job the app is for, in the user's words, restating only the
+#   confirmed scope above.
 
 - slug: cloud-storage-backup-drive
   short: "Backup & Drive"
@@ -45,6 +48,8 @@
   tone: blue
   android_url: "https://play.google.com/store/apps/details?id=com.backup.and.restore.all.apps.photo.backup"
   ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
+  task: "Back up my photos, videos and contacts"
+  task_text: "Keep a copy of what matters off your phone, and restore it when you need it, even on a new phone."
   tier: flagship
   page: true
   built: true
@@ -56,6 +61,8 @@
   glyph: doc
   tone: violet
   android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
+  task: "Open a PDF, Word, Excel or PowerPoint file"
+  task_text: "Read the documents that arrive by email, chat or download, without a different app for each format."
   tier: more
   page: true
   built: true
@@ -67,6 +74,8 @@
   glyph: phone-transfer
   tone: teal
   android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
+  task: "Move my files to another phone"
+  task_text: "Send photos, videos and files from one phone to another when you switch or share."
   tier: more
   page: true
   built: true
@@ -78,6 +87,8 @@
   glyph: trash-restore
   tone: rose
   android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
+  task: "Get back a photo I deleted"
+  task_text: "Look through your phone's trash bin and restore the deleted photos and files still there."
   tier: more
   page: true
   built: true

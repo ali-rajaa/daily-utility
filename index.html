@@ -3,6 +3,23 @@ layout: default
 css: index
 title: "Daily Utility Apps: Phone Backup, Transfer & Recovery Apps"
 description: "Daily Utility Apps makes four focused phone apps: cloud backup, a document reader, phone-to-phone transfer and photo recovery. For Android and iPhone."
+faqs:
+  - q: "What is Daily Utility Apps?"
+    a: "We make four focused phone apps: Cloud Storage Backup & Drive, Document Reader: Read All PDF, Smartphone All Data Transfer and Photo Recover & Data Recovery. Each one is built around a single everyday job, so it stays simple to use."
+  - q: "Which app should I use to back up my phone?"
+    a: "Cloud Storage Backup & Drive. It backs up your photos, videos, contacts and app data, and lets you restore them when you need them, including onto a new phone."
+  - q: "Are your apps available on iPhone?"
+    a: "Our flagship, Cloud Storage Backup & Drive, is on the Apple App Store for iPhone as well as on Google Play for Android. Our other three apps are currently on Google Play for Android."
+  - q: "How do I move my photos and files to a new phone?"
+    a: "Smartphone All Data Transfer moves photos, videos and files from one phone to another. If you also want an ongoing copy of your photos, videos, contacts and app data, back them up with Cloud Storage Backup & Drive before you switch. Our Daily Info guide to backing up before switching phones walks through the whole process."
+  - q: "Can I get back a photo I deleted by mistake?"
+    a: "Often, if you act quickly. Photo Recover & Data Recovery looks for deleted photos and files that are still in your phone's trash bin and restores them. No app can promise to recover everything: once a file has left the trash, it may be gone for good, so the sooner you look, the better."
+  - q: "What files can Document Reader open?"
+    a: "PDF, Word, Excel and PowerPoint files, all in one app, so you don't need a different app for each type of document."
+  - q: "Do you sell my data or use it for advertising?"
+    a: "No. We never sell your personal information, and we never use your files to build advertising profiles. Our privacy policy has the full details."
+  - q: "How do I get help with one of your apps?"
+    a: "Email our support team. The address is in the footer of every page on this site, under Support & legal."
 ---
 {%- comment -%}
   Homepage: the brand and its apps. Sections (STATUS.md section 5e):
@@ -23,6 +40,9 @@ description: "Daily Utility Apps makes four focused phone apps: cloud backup, a 
 {%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
 {%- assign more_apps = site.data.apps | where: "tier", "more" | where: "built", true -%}
 {%- assign latest_posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+{%- assign upcoming_posts = site.pages | where: "layout", "upcoming" | sort: "heading" -%}
+{%- assign home_posts = latest_posts | concat: upcoming_posts -%}
+{%- assign built_apps = site.data.apps | where: "built", true -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -96,6 +116,35 @@ description: "Daily Utility Apps makes four focused phone apps: cloud backup, a 
         {%- endfor %}
       </div>
     </nav>
+  </div>
+</section>
+
+{% include faq-schema.html faqs=page.faqs %}
+
+{%- comment -%} Start here: the everyday job each app is for, in plain
+words. Cards come from apps.yml's task / task_text. {%- endcomment %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">Start here</span>
+      <h2>What do you need to do today?</h2>
+      <p class="section-sub">Pick the job, and we'll point you to the app built for it.</p>
+    </div>
+    <ul class="task-grid">
+      {%- for app in built_apps %}
+      <li class="tone-{{ app.tone }} reveal">
+        <a class="task-card" href="{{ '/' | append: app.slug | relative_url }}">
+          <span class="task-top">
+            {% include app-tile.html app=app class="task-tile" %}
+            <span class="task-num" aria-hidden="true">0{{ forloop.index }}</span>
+          </span>
+          <span class="task-title">{{ app.task | escape }}</span>
+          <span class="task-text">{{ app.task_text | escape }}</span>
+          <span class="task-app">Use {{ app.short | escape }}<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
   </div>
 </section>
 
@@ -188,8 +237,39 @@ description: "Daily Utility Apps makes four focused phone apps: cloud backup, a 
   </div>
 </section>
 
-{%- if latest_posts.size > 0 %}
+{%- comment -%} Where each app is available: straight from which store
+links apps.yml has, so it can never claim a platform an app isn't on.
+{%- endcomment %}
 <section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">Availability</span>
+      <h2>Where to get each app</h2>
+      <p class="section-sub">Every app, the job it does, and the stores you'll find it on.</p>
+    </div>
+    <div class="avail reveal">
+      <table class="avail-table">
+        <caption class="visually-hidden">Daily Utility Apps and the platforms each is available on</caption>
+        <thead>
+          <tr><th scope="col">App</th><th scope="col">What it does</th><th scope="col">iPhone</th><th scope="col">Android</th></tr>
+        </thead>
+        <tbody>
+          {%- for app in built_apps %}
+          <tr class="tone-{{ app.tone }}">
+            <th scope="row"><a class="avail-app" href="{{ '/' | append: app.slug | relative_url }}">{% include app-tile.html app=app class="avail-tile" %}<span>{{ app.name | escape }}</span></a></th>
+            <td class="avail-what">{{ app.tagline | escape }}</td>
+            <td data-label="iPhone">{% if app.ios_url %}<a class="avail-yes" href="{{ app.ios_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-check"/></svg>App Store</a>{% else %}<span class="avail-no">Not yet</span>{% endif %}</td>
+            <td data-label="Android">{% if app.android_url %}<a class="avail-yes" href="{{ app.android_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-check"/></svg>Google Play</a>{% else %}<span class="avail-no">Not yet</span>{% endif %}</td>
+          </tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{%- if latest_posts.size > 0 %}
+<section class="section">
   <div class="wrap">
     <div class="section-head-row reveal">
       <div class="section-head">
@@ -199,13 +279,15 @@ description: "Daily Utility Apps makes four focused phone apps: cloud backup, a 
       <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All articles</a>
     </div>
     <ul class="post-grid">
-      {%- for post in latest_posts limit: 3 %}
+      {%- for post in home_posts limit: 3 %}
       {% include post-card.html post=post %}
       {%- endfor %}
     </ul>
   </div>
 </section>
 {%- endif %}
+
+{% include faq-section.html faqs=page.faqs alt=true heading="Questions about our apps" sub="Straight answers about what each app does and where to get it." %}
 
 <section class="section">
   <div class="wrap">

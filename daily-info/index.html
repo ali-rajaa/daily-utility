@@ -15,6 +15,8 @@ description: "Practical guides for everyday phone problems: backing up, switchin
 {%- assign posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
 {%- assign featured = posts | first -%}
 {%- assign by_cat = posts | group_by: "category" -%}
+{%- assign upcoming = site.pages | where: "layout", "upcoming" | sort: "heading" -%}
+{%- assign soon_by_cat = upcoming | group_by: "category" -%}
 {%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
 <script type="application/ld+json">
 {
@@ -65,7 +67,9 @@ description: "Practical guides for everyday phone problems: backing up, switchin
       <ul class="hub-stats">
         <li><strong>{{ posts.size }}</strong> {% if posts.size == 1 %}guide{% else %}guides{% endif %}</li>
         <li><strong>{{ site.data.categories.size }}</strong> topics</li>
-        <li><strong>Free</strong> to read</li>
+        {%- if upcoming.size > 0 %}
+        <li><strong>{{ upcoming.size }}</strong> on the way</li>
+        {%- endif %}
       </ul>
     </div>
 
@@ -103,8 +107,11 @@ description: "Practical guides for everyday phone problems: backing up, switchin
       {%- for cat in site.data.categories %}
       {%- assign _group = by_cat | where: "name", cat.name | first -%}
       {%- assign _count = _group.size | default: 0 -%}
+      {%- assign _soon = soon_by_cat | where: "name", cat.name | first -%}
+      {%- assign _soon_count = _soon.size | default: 0 -%}
       <li class="tone-{{ cat.tone }} reveal">
-        {%- if _count > 0 %}
+        {%- assign _any = _count | plus: _soon_count -%}
+        {%- if _any > 0 %}
         <a class="topic-card" href="#{{ cat.name | slugify }}">
         {%- else %}
         <div class="topic-card topic-card--soon">
@@ -112,8 +119,8 @@ description: "Practical guides for everyday phone problems: backing up, switchin
           <span class="topic-icon"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg></span>
           <span class="topic-name">{{ cat.name | escape }}</span>
           <span class="topic-blurb">{{ cat.blurb | escape }}</span>
-          <span class="topic-count">{% if _count > 0 %}{{ _count }} {% if _count == 1 %}guide{% else %}guides{% endif %}<svg aria-hidden="true"><use href="#i-arrow-right"/></svg>{% else %}Guides coming soon{% endif %}</span>
-        {%- if _count > 0 %}
+          <span class="topic-count">{% if _count > 0 %}{{ _count }} {% if _count == 1 %}guide{% else %}guides{% endif %}{% if _soon_count > 0 %} &middot; {{ _soon_count }} coming soon{% endif %}<svg aria-hidden="true"><use href="#i-arrow-right"/></svg>{% elsif _soon_count > 0 %}{{ _soon_count }} coming soon{% else %}Guides coming soon{% endif %}</span>
+        {%- if _any > 0 %}
         </a>
         {%- else %}
         </div>
@@ -124,27 +131,27 @@ description: "Practical guides for everyday phone problems: backing up, switchin
   </div>
 </section>
 
-{%- comment -%} Per-topic lists. With a single article they would only
-repeat the featured card, so they appear once there's more than one --
-but each topic's anchor always exists for the topic grid's links.
-{%- endcomment %}
+{%- comment -%} Per-topic lists: published guides first, then the
+planned ones (upcoming layout, marked "Coming soon"). {%- endcomment %}
 <section class="section hub-groups">
   <div class="wrap">
     {%- for cat in site.data.categories %}
     {%- assign _group = by_cat | where: "name", cat.name | first -%}
-    {%- if _group %}
+    {%- assign _soon = soon_by_cat | where: "name", cat.name | first -%}
+    {%- if _group or _soon %}
     <div class="hub-group tone-{{ cat.tone }}" id="{{ cat.name | slugify }}">
-      {%- if posts.size > 1 %}
       <div class="hub-group-head">
         <span class="topic-icon"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg></span>
         <h2 class="hub-group-title">{{ cat.name | escape }}</h2>
       </div>
       <ul class="post-grid">
-        {%- for post in _group.items %}
+        {%- if _group %}{% for post in _group.items %}
         {% include post-card.html post=post %}
-        {%- endfor %}
+        {%- endfor %}{% endif %}
+        {%- if _soon %}{% for post in _soon.items %}
+        {% include post-card.html post=post %}
+        {%- endfor %}{% endif %}
       </ul>
-      {%- endif %}
     </div>
     {%- endif %}
     {%- endfor %}

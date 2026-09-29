@@ -13,14 +13,14 @@ css: app
   hard way: post.html originally relied on exactly this false cascade
   and pages/post.css silently never loaded.
 
-  Fully front-matter-driven, no body content -- the same reasoning
-  fixmypcperth uses for suburb.html: with four apps now sharing this one
-  layout (section 5a), letting any of them carry hand-written body prose
-  is exactly how near-duplicate doorway pages happen. Required front
+  Structured parts come from front matter; the page's markdown body is a
+  long-form guide (user, 29 Sep: about 2,500 visible words per app page),
+  written separately for each app so no two pages share body text. Required front
   matter (STATUS.md section 4): title, description, css (must be "app"),
   app_name, tagline, ios_url and/or android_url, category,
   features (icon, title, text), how_it_works (3x {title, text}),
-  faqs (q, a). Optional: steps_heading (the how-it-works H2), trust_text
+  faqs (q, a). Optional: guide_heading and guide_sub (the guide section's
+  H2 and intro), steps_heading (the how-it-works H2), trust_text
   (an app-specific privacy sentence for the trust band -- only ever
   something confirmed about that particular app).
 
@@ -149,27 +149,42 @@ header and footer stay outside it, in brand blue. {%- endcomment %}
 </section>
 {%- endif %}
 
-{%- if page.faqs %}
-<section class="section section--alt">
-  <div class="wrap wrap--narrow">
+{%- comment -%} The long-form guide: the page's own markdown body, one
+"## " heading per part, with an "On this page" list built from those
+headings (the same split post.html uses). Only general, accurate advice
+about the job the app does goes here -- never a feature the app isn't
+confirmed to have. {%- endcomment -%}
+{%- assign _gparts = content | split: '<h2 id="' -%}
+{%- if _gparts.size > 1 %}
+<section class="section app-guide" id="guide">
+  <div class="wrap">
     <div class="section-head section-head--center reveal">
-      <span class="eyebrow">FAQ</span>
-      <h2>Questions people ask</h2>
+      <span class="eyebrow">Guide</span>
+      <h2>{{ page.guide_heading | default: "A practical guide" | escape }}</h2>
+      {%- if page.guide_sub %}
+      <p class="section-sub">{{ page.guide_sub | escape }}</p>
+      {%- endif %}
     </div>
-    <div class="faq-list reveal">
-      {%- for item in page.faqs %}
-      <details class="faq-item">
-        <summary class="faq-q">
-          <span>{{ item.q | escape }}</span>
-          <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
-        </summary>
-        <div class="faq-a"><p>{{ item.a | escape }}</p></div>
-      </details>
-      {%- endfor %}
+    <div class="app-guide-grid">
+      <nav class="post-toc app-guide-toc" aria-label="Guide contents">
+        <span class="post-toc-title">In this guide</span>
+        <ol class="post-toc-list">
+          {%- for part in _gparts offset: 1 %}
+          {%- assign _id = part | split: '"' | first -%}
+          {%- assign _head = part | split: '</h2>' | first | split: '">' | last | strip_html %}
+          <li><a href="#{{ _id }}"><span class="post-toc-num">{{ forloop.index }}</span><span>{{ _head }}</span></a></li>
+          {%- endfor %}
+        </ol>
+      </nav>
+      <div class="prose app-guide-body">
+        {{ content }}
+      </div>
     </div>
   </div>
 </section>
 {%- endif %}
+
+{% include faq-section.html faqs=page.faqs alt=true %}
 
 {%- comment -%} The trust band states only what's true company-wide (who
 makes the app, the privacy policy's no-selling commitment). Anything

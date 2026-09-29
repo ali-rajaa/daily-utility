@@ -1,0 +1,104 @@
+---
+layout: default
+css: post
+---
+{%- comment -%}
+  A planned Daily Info article that isn't written yet (user, 29 Sep:
+  "make placeholders for next 6 articles"). Shows the title, what the
+  guide will cover and where to go meanwhile.
+
+  Placeholders are kept out of search on purpose: each page must set
+  `noindex: true` (default.html reads it; the sitemap skips it), and
+  being on this layout, not "post", keeps it out of feed.xml, the Blog
+  schema and "latest" lists. To publish: write the body (2,500+ words,
+  STATUS.md section 5g), switch to `layout: post`, remove noindex, and
+  add read_min.
+
+  Front matter: title, description, css (post), heading, category,
+  slug, noindex: true, outline (list of planned section titles),
+  optional glyph and app (an apps.yml slug to point readers to).
+{%- endcomment -%}
+{%- assign _cat = site.data.categories | where: "name", page.category | first -%}
+{%- assign _tone = _cat.tone | default: "blue" -%}
+{%- assign _glyph = page.glyph | default: _cat.glyph | default: "spark" -%}
+{%- assign _app = site.data.apps | where: "slug", page.app | first -%}
+{%- assign _published = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+<article class="tone-{{ _tone }}">
+  <header class="post-hero hero-glow-host">
+    {% include hero-glow.html %}
+    <div class="wrap hero-glow-content post-hero-grid">
+      <div class="post-hero-copy">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="{{ '/' | relative_url }}">Home</a>
+          <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+          <a href="{{ '/daily-info/' | relative_url }}">Daily Info</a>
+          <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+          <span aria-current="page">{{ page.heading | escape }}</span>
+        </nav>
+        <span class="post-topic"><svg aria-hidden="true"><use href="#i-{{ _cat.glyph | default: 'spark' }}"/></svg>{{ page.category | escape }}</span>
+        <span class="soon-pill">Coming soon</span>
+        <h1>{{ page.heading | escape }}</h1>
+        <p class="post-lead">{{ page.description | escape }}</p>
+      </div>
+      <div class="post-hero-visual">
+        <div class="post-banner" aria-hidden="true">
+          <span class="post-banner-ring post-banner-ring--outer"></span>
+          <span class="post-banner-ring"></span>
+          <span class="post-banner-glyph"><svg><use href="#i-{{ _glyph }}"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="wrap wrap--narrow">
+      <div class="soon-note">
+        <span class="post-note-icon" aria-hidden="true"><svg><use href="#i-spark"/></svg></span>
+        <div>
+          <h2 class="h3">This guide is being written</h2>
+          <p>We're working on it now. Here's what it will cover{% if _published.size > 0 %}, and some guides you can read in the meantime{% endif %}.</p>
+        </div>
+      </div>
+
+      {%- if page.outline %}
+      <h2 class="soon-outline-title">What this guide will cover</h2>
+      <ol class="soon-outline">
+        {%- for item in page.outline %}
+        <li><span class="post-toc-num" aria-hidden="true">{{ forloop.index }}</span><span>{{ item | escape }}</span></li>
+        {%- endfor %}
+      </ol>
+      {%- endif %}
+
+      {%- if _app %}
+      <a class="soon-app tone-{{ _app.tone }}" href="{{ '/' | append: _app.slug | relative_url }}">
+        {% include app-tile.html app=_app class="soon-app-tile" %}
+        <span class="soon-app-text">
+          <span class="soon-app-label">The app for this job</span>
+          <span class="soon-app-name">{{ _app.name | escape }}</span>
+          <span class="soon-app-tagline">{{ _app.tagline | escape }}</span>
+        </span>
+        <svg class="soon-app-arrow" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      </a>
+      {%- endif %}
+    </div>
+  </div>
+
+  {%- if _published.size > 0 %}
+  <section class="section section--alt">
+    <div class="wrap">
+      <div class="section-head-row reveal">
+        <div class="section-head">
+          <span class="eyebrow">Read now</span>
+          <h2>Guides you can read today</h2>
+        </div>
+        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
+      </div>
+      <ul class="post-grid">
+        {%- for p in _published limit: 3 %}
+        {% include post-card.html post=p %}
+        {%- endfor %}
+      </ul>
+    </div>
+  </section>
+  {%- endif %}
+</article>

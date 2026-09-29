@@ -71,7 +71,7 @@
     var targets = [];
     tocLinks.forEach(function (a) {
       var el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
-      if (el) targets.push({ link: a, el: el.closest('section') || el });
+      if (el) targets.push({ link: a, el: el.closest('.post-section') || el });
     });
     var setActive = function () {
       var current = null;

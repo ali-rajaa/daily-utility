@@ -226,27 +226,7 @@ css: post
     </div>
   </div>
 
-  {%- if page.faqs %}
-  <section class="section section--alt" id="faq">
-    <div class="wrap wrap--narrow">
-      <div class="section-head section-head--center reveal">
-        <span class="eyebrow">FAQ</span>
-        <h2>Questions people ask</h2>
-      </div>
-      <div class="faq-list faq-list--cards reveal">
-        {%- for item in page.faqs %}
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>{{ item.q | escape }}</span>
-            <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
-          </summary>
-          <div class="faq-a"><p>{{ item.a | escape }}</p></div>
-        </details>
-        {%- endfor %}
-      </div>
-    </div>
-  </section>
-  {%- endif %}
+{% include faq-section.html faqs=page.faqs alt=true id="faq" %}
 
   {%- comment -%} Keep reading: the posts named in `related`, else other
   posts in the same topic, else the newest others. Hidden when this is

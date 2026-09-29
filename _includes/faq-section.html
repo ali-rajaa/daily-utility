@@ -1,0 +1,31 @@
+{%- comment -%}
+  A visible FAQ section (shell.css FAQ cards). Params: faqs (list of
+  {q, a}), optional heading (default "Questions people ask"), sub,
+  id, and alt (true for the alternate section background). Pair it with
+  faq-schema.html, which writes the same questions as FAQPage data --
+  the visible and structured answers must always match.
+{%- endcomment -%}
+{%- if include.faqs and include.faqs.size > 0 %}
+<section class="section{% if include.alt %} section--alt{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %}>
+  <div class="wrap wrap--narrow">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>{{ include.heading | default: "Questions people ask" | escape }}</h2>
+      {%- if include.sub %}
+      <p class="section-sub">{{ include.sub | escape }}</p>
+      {%- endif %}
+    </div>
+    <div class="faq-list reveal">
+      {%- for item in include.faqs %}
+      <details class="faq-item">
+        <summary class="faq-q">
+          <span>{{ item.q | escape }}</span>
+          <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+        </summary>
+        <div class="faq-a"><p>{{ item.a | escape }}</p></div>
+      </details>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}

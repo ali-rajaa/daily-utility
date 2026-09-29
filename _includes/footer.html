@@ -1,62 +1,58 @@
 {%- comment -%}
-  Site footer, one copy for every page.
+  Site footer, one copy for every page. Laid out like the CloudGate
+  Storage footer the user supplied as reference (29 Sep): brand block
+  with a short description, two link columns, a "Get the app" column
+  with the store badges, and a bottom row with the copyright on the
+  left.
 
-  Apps and Daily Info list themselves: an app appears once its entry in
-  _data/apps.yml has built: true, and the three newest articles appear
-  from whatever pages use the post layout. Adding either never means
-  editing this file.
-
-  The legal row is kept to two short lines: the company name and ACN
-  (Australian companies show their ACN on public documents), and the
-  Apple/Google credit their badge guidelines ask for wherever the badges
-  appear. The street address lives on the legal pages and in the
-  Organization schema, not here.
+  The apps list itself: an app appears once its _data/apps.yml entry has
+  built: true. Daily Info isn't repeated here (user, 29 Sep); it's in
+  the header. No ACN or address (user, 29 Sep): those stay on the legal
+  pages. CloudGate may be named here and on the legal pages only.
+  The Apple/Google credit sits under the badges it belongs to, as their
+  badge guidelines ask.
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
-{%- assign _posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+{%- assign _flagship = site.data.apps | where: "tier", "flagship" | first -%}
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-brand">
       <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
         {%- include logo.html -%}
       </a>
-      <p class="footer-tagline">Smart tools for everyday life. A brand of CloudGate Technologies.</p>
+      <p class="footer-tagline">Simple apps for your phone's everyday jobs.<br>Back up. Open. Move. Recover.</p>
+      <p class="footer-desc">Cloud backup, a document reader, phone-to-phone transfer and photo recovery, each built to do one job properly.</p>
     </div>
 
     <nav class="footer-col" aria-label="Apps">
       <p class="footer-head">Apps</p>
       <ul class="footer-links">
         {%- for _app in _apps %}
-        <li><a href="{{ '/' | append: _app.slug | relative_url }}">{{ _app.name | escape }}</a></li>
+        <li><a href="{{ '/' | append: _app.slug | relative_url }}">{{ _app.short | default: _app.name | escape }}</a></li>
         {%- endfor %}
-        <li><a href="{{ '/' | relative_url }}#apps">All apps</a></li>
       </ul>
     </nav>
 
-    <nav class="footer-col" aria-label="Daily Info">
-      <p class="footer-head">Daily Info</p>
+    <nav class="footer-col" aria-label="Support and legal">
+      <p class="footer-head">Support &amp; legal</p>
       <ul class="footer-links">
-        {%- for _post in _posts limit: 3 %}
-        <li><a href="{{ _post.url | replace: '.html', '' | relative_url }}">{{ _post.heading | default: _post.title | escape }}</a></li>
-        {%- endfor %}
-        <li><a href="{{ '/daily-info/' | relative_url }}">All articles</a></li>
-      </ul>
-    </nav>
-
-    <nav class="footer-col" aria-label="Company">
-      <p class="footer-head">Company</p>
-      <ul class="footer-links">
+        <li><a href="mailto:{{ site.company.support_email }}">Contact support</a></li>
         <li><a href="{{ '/privacy-policy' | relative_url }}">Privacy Policy</a></li>
         <li><a href="{{ '/terms-of-service' | relative_url }}">Terms of Service</a></li>
-        <li><a href="mailto:{{ site.company.support_email }}">Contact support</a></li>
       </ul>
     </nav>
+
+    <div class="footer-col footer-get">
+      <p class="footer-head">Get the app</p>
+      {% include store-badges.html ios_url=_flagship.ios_url android_url=_flagship.android_url class="footer-badges" %}
+      <p class="footer-trademarks">App Store is a service mark of Apple Inc. Google Play is a trademark of Google LLC.</p>
+    </div>
   </div>
 
   <div class="wrap">
     <div class="footer-legal">
-      <p>&copy; {{ site.time | date: "%Y" }} {{ site.company.legal_name }} <span class="nowrap">({{ site.company.acn }})</span></p>
-      <p>App Store is a service mark of Apple Inc. Google Play is a trademark of Google LLC.</p>
+      <p>&copy; {{ site.time | date: "%Y" }} {{ site.company.legal_name }}. All rights reserved.</p>
+      <p>Apps for iPhone and Android.</p>
     </div>
   </div>
 </footer>

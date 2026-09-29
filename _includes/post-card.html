@@ -1,7 +1,8 @@
 {%- comment -%}
   One Daily Info article as a card (styles: shell.css "Article cards").
   Used by the homepage's latest-articles row and the /daily-info/ hub.
-  Param: post (a page on the post layout). Renders the <li> itself, so
+  Param: post (a page on the post or upcoming layout; an upcoming one
+  shows "Coming soon" instead of a date). Renders the <li> itself, so
   call it inside a <ul class="post-grid">.
 
   The card's banner takes its topic's tone and glyph from
@@ -18,8 +19,12 @@
       <h3 class="post-card-title">{{ include.post.heading | default: include.post.title | escape }}</h3>
       <p class="post-card-desc">{{ include.post.description | escape }}</p>
       <span class="post-card-meta">
+        {%- if include.post.layout == "upcoming" %}
+        <span class="post-card-soon">Coming soon</span>
+        {%- else %}
         <time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: "%-d %b %Y" }}</time>
         {%- if include.post.read_min %}<span aria-hidden="true">&middot;</span>{{ include.post.read_min }} min read{% endif %}
+        {%- endif %}
       </span>
     </div>
   </a>

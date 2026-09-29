@@ -1139,6 +1139,27 @@ header, footer or FAQ). General phone advice only; never new claims
 about our apps beyond their confirmed scope. The first article was
 expanded to 10 steps (~2,870 body words, 5 FAQs, 12 min read).
 
+## 5h. Homepage sections, app guides, placeholders, footer (29 Sep)
+
+- Homepage now has 8 sections: hero, "What do you need to do today?"
+  task cards (apps.yml task / task_text), apps bento, why us,
+  availability table (from store links, so it can't claim a platform an
+  app isn't on), Daily Info, FAQ (8 questions + FAQPage schema), CTA.
+- App pages: each .md page now carries a long-form guide (its markdown
+  body), rendered by app.html with an "In this guide" contents list.
+  Every app page is over 2,500 visible words in <main> (measured in the
+  browser). Guides are general, accurate advice about the job the app
+  does; app claims stay within the confirmed scope. Pages renamed
+  .html -> .md (URLs unchanged).
+- Shared includes: faq-section.html (visible FAQ) beside faq-schema.html.
+- 6 placeholder articles on the new `upcoming` layout: noindex, not in
+  sitemap/feed/Blog schema; shown as "Coming soon" cards on the hub
+  (per topic), the homepage row and topic counts. To publish one: write
+  2,500+ words, switch to layout: post, drop noindex, add date/read_min.
+- Footer rebuilt like the CloudGate Storage footer: brand + description,
+  Apps, Support & legal, Get the app (badges + trademark credit);
+  bottom row copyright. No ACN, no Daily Info column.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1601,3 +1622,6 @@ what's there.
 - Backup-before-switching article expanded to 10 steps, ~2,870 body
   words (user's 2,500-word minimum), 5 FAQs; contents list is now the
   only pinned element in the article sidebar.
+- Homepage to 8 sections with FAQ; 2,500+ word guides on all four app
+  pages; 6 coming-soon article placeholders (noindex); CloudGate-style
+  footer without ACN or Daily Info (section 5h). All checks pass.
