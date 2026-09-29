@@ -1099,6 +1099,40 @@ brand and its apps".
 - **Hero texture**: a static, edge-faded dot grid inside every hero's
   glow layer (painted once, no animation cost).
 
+## 5g. Article page redesign + technical SEO pass (29 Sep)
+
+Article layout (_layouts/post.html, pages/post.css):
+- The whole article takes its topic's tone (categories.yml).
+- Split hero: topic chip, H1, lead (the description), byline/date/read
+  time; drawn banner with stat tiles counted from the article itself
+  (read time, number of steps/sections, FAQ count). Never outside
+  numbers.
+- Body split on its H2s into section cards (Liquid, no JS). `steps: true`
+  numbers them on a dashed rail with "Step N of M" labels. Closing note
+  goes in `<aside class="post-note" markdown="1">`.
+- Sticky "On this page" contents (built from the same H2 split, active
+  section highlighted) and a flagship card on desktop; optional
+  `takeaways:` box ("The short version"); share button (native share
+  sheet or copy link); reading-progress bar (CSS scroll timeline only).
+- Keep reading: related / same-topic / newest posts, plus the four topic
+  cards. CTA: "Back up your phone automatically" (confirmed scope only;
+  the old unconfirmed "Free to download" line is gone).
+- FAQ (shared, shell.css) is now cards with a rounded keyboard ring.
+  .cta-band--card and .section-head-row moved to shell.css. New
+  .tone-blue restores brand blue inside another tone. Header glass is
+  more opaque (0.94) so text scrolling under it no longer shows through.
+
+Technical SEO:
+- Head: twitter:title/description, og:image:type, article:section and
+  article:author on posts, Atom feed link (feed.xml, new).
+- JSON-LD: WebSite + ItemList of apps on the homepage; BreadcrumbList on
+  app pages; SoftwareApplication gains author, inLanguage, installUrl;
+  BlogPosting gains @id, image (share card), inLanguage, articleSection,
+  wordCount, timeRequired, named author/publisher with logo, isPartOf.
+  Post breadcrumbs now start at Home.
+- All titles <= 60 characters, descriptions 70-160, one H1 per page, no
+  skipped heading levels (checked by script).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1554,3 +1588,7 @@ what's there.
   all suites pass.
 - Hub redesign + topic-coloured article cards + hero texture; "Australia"
   removed everywhere except legal pages (section 5f). All checks pass.
+- Article page redesign (section 5g): topic-toned split hero with stat
+  tiles, section/step cards, sticky contents, takeaways, share, FAQ
+  cards; technical SEO pass on every page (feed, schema, meta, titles).
+  html-validate clean, links/anchors clean, all four suites pass.

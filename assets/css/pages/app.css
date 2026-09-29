@@ -259,13 +259,7 @@
 
 /* ---------- Closing CTA card ---------- */
 
-.cta-band--card {
-  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem);
-  border-radius: 1.75rem;
-  background: var(--brand-soft);
-}
-.cta-band--card .section-head { margin-bottom: 0; }
-.cta-band-icon { width: 4.5rem; }
+/* .cta-band--card now lives in shell.css (shared with post.html). */
 
 /* ---------- Accessibility preferences ---------- */
 

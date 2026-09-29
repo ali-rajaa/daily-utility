@@ -1,0 +1,33 @@
+---
+---
+{%- comment -%}
+  Atom feed of the Daily Info articles (linked from every page's head).
+  Lists itself from pages on the post layout, newest first. The empty
+  front matter fence above is required, or Jekyll copies this file
+  unrendered.
+{%- endcomment -%}
+{%- assign _posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+{%- assign _newest = _posts | first -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-AU">
+  <title>Daily Info from {{ site.title | xml_escape }}</title>
+  <subtitle>Practical guides for everyday phone problems.</subtitle>
+  <id>{{ '/daily-info/' | absolute_url }}</id>
+  <link rel="alternate" type="text/html" href="{{ '/daily-info/' | absolute_url }}"/>
+  <link rel="self" type="application/atom+xml" href="{{ '/feed.xml' | absolute_url }}"/>
+  <updated>{{ _newest.updated | default: _newest.date | default: site.time | date_to_xmlschema }}</updated>
+  <author><name>{{ site.title | xml_escape }}</name><uri>{{ '/' | absolute_url }}</uri></author>
+  <icon>{{ '/assets/icons/mark-192.png' | absolute_url }}</icon>
+{%- for p in _posts %}
+  {%- assign _u = p.url | replace: '.html', '' | absolute_url %}
+  <entry>
+    <title>{{ p.heading | default: p.title | xml_escape }}</title>
+    <id>{{ _u }}</id>
+    <link rel="alternate" type="text/html" href="{{ _u }}"/>
+    <published>{{ p.date | date_to_xmlschema }}</published>
+    <updated>{{ p.updated | default: p.date | date_to_xmlschema }}</updated>
+    <category term="{{ p.category | xml_escape }}"/>
+    <summary>{{ p.description | xml_escape }}</summary>
+  </entry>
+{%- endfor %}
+</feed>

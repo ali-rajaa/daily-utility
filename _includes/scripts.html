@@ -63,6 +63,49 @@
     else if (desktop.addListener) desktop.addListener(onBreakpoint);
   }
 
+  /* ---- Article contents: highlight the section being read ----
+     The link for the last section whose top has passed the upper third
+     of the screen gets .is-active (and aria-current). */
+  var tocLinks = document.querySelectorAll('.post-toc-list a');
+  if (tocLinks.length && 'IntersectionObserver' in window) {
+    var targets = [];
+    tocLinks.forEach(function (a) {
+      var el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+      if (el) targets.push({ link: a, el: el.closest('section') || el });
+    });
+    var setActive = function () {
+      var current = null;
+      var line = window.innerHeight * 0.35;
+      targets.forEach(function (t) { if (t.el.getBoundingClientRect().top <= line) current = t; });
+      targets.forEach(function (t) {
+        var on = t === current;
+        t.link.classList.toggle('is-active', on);
+        if (on) t.link.setAttribute('aria-current', 'true'); else t.link.removeAttribute('aria-current');
+      });
+    };
+    var spy = new IntersectionObserver(setActive, { rootMargin: '-35% 0px -60% 0px' });
+    targets.forEach(function (t) { spy.observe(t.el); });
+    setActive();
+  }
+
+  /* ---- Share button ----
+     The phone's share sheet where there is one, else copy the link. */
+  document.querySelectorAll('[data-share-url]').forEach(function (btn) {
+    var label = btn.querySelector('.post-share-text');
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-share-url');
+      var title = btn.getAttribute('data-share-title');
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(function () {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function () {
+          if (label) label.textContent = 'Link copied';
+          setTimeout(function () { if (label) label.textContent = 'Share this guide'; }, 2000);
+        }, function () {});
+      }
+    });
+  });
+
   /* ---- Reveal on scroll ----
      .reveal-ready (which hides .reveal content) is added only after the
      observer that shows it again exists. If anything here fails, the

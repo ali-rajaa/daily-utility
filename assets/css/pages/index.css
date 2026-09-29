@@ -341,15 +341,7 @@
 
 /* ---------- Latest Daily Info ---------- */
 
-.section-head-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-}
-.section-head-row .section-head { margin-bottom: 0; }
+/* .section-head-row now lives in shell.css (shared with post.html). */
 
 /* ---------- Closing CTA ---------- */
 

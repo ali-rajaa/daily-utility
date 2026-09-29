@@ -53,10 +53,30 @@ has -- never hardcoded, since most of the apps are Android-only.
   "operatingSystem": {{ _os | jsonify }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
   "url": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }},
+  "inLanguage": "en",
+  {%- if page.android_url or page.ios_url %}
+  "installUrl": {{ page.android_url | default: page.ios_url | jsonify | replace: "/", "\/" }},
+  {%- endif %}
+  "author": {
+    "@type": "Organization",
+    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }},
+    "name": {{ site.title | jsonify }}
+  },
   "publisher": {
     "@type": "Organization",
-    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }}
+    "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }},
+    "name": {{ site.title | jsonify }}
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }} },
+    { "@type": "ListItem", "position": 2, "name": {{ page.app_name | jsonify | replace: "/", "\/" }}, "item": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }} }
+  ]
 }
 </script>
 {% include faq-schema.html faqs=page.faqs %}

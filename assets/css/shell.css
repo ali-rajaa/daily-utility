@@ -39,7 +39,7 @@
   --brand-2-text: #0a7a47;
   --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #0f9ed6 45%, var(--brand-2) 100%);
   --accent: #06b6d4;
-  --glass: rgba(255, 255, 255, 0.72);
+  --glass: rgba(255, 255, 255, 0.94);
 
   --shadow-sm: 0 1px 2px rgba(12, 20, 36, 0.06), 0 1px 3px rgba(12, 20, 36, 0.08);
   --shadow-md: 0 4px 12px rgba(12, 20, 36, 0.08), 0 12px 32px rgba(12, 20, 36, 0.08);
@@ -85,7 +85,7 @@
     --brand-2: #2ce68c;
     --brand-2-text: #34e59a;
     --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #43b8f0 45%, var(--brand-2) 100%);
-    --glass: rgba(10, 14, 22, 0.72);
+    --glass: rgba(10, 14, 22, 0.94);
     --surface-glass: rgba(20, 27, 41, 0.78);
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -721,6 +721,13 @@ h3, .h3 {
    on-brand on brand/hover, brand-text on bg / bg-alt / surface /
    brand-soft, and body text on brand-soft -- lowest is teal
    brand-text on its soft tint at 4.85:1. */
+/* Blue is the brand's own colour: .tone-blue restores it inside another
+   tone (e.g. the flagship's card inside a teal article). */
+.tone-blue {
+  --brand: #0b5fe8; --brand-hover: #0848b8; --on-brand: #ffffff;
+  --brand-soft: #e8f0ff; --brand-text: #0a52c9;
+  --brand-gradient: linear-gradient(135deg, #0b5fe8 0%, #0f9ed6 45%, #16b871 100%);
+}
 .tone-violet {
   --brand: #7c3aed; --brand-hover: #6d28d9; --on-brand: #ffffff;
   --brand-soft: #f3edff; --brand-text: #6d28d9;
@@ -737,6 +744,11 @@ h3, .h3 {
   --brand-gradient: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%);
 }
 @media (prefers-color-scheme: dark) {
+  .tone-blue {
+    --brand: #5b9bff; --brand-hover: #7db0ff; --on-brand: #06101f;
+    --brand-soft: #16233b; --brand-text: #7db0ff;
+    --brand-gradient: linear-gradient(135deg, #5b9bff 0%, #43b8f0 45%, #2ce68c 100%);
+  }
   .tone-violet {
     --brand: #a78bfa; --brand-hover: #c4b5fd; --on-brand: #0a0e16;
     --brand-soft: #231b3b; --brand-text: #c4b5fd;
@@ -923,46 +935,72 @@ h3, .h3 {
    accordion: native keyboard support and screen-reader semantics for
    free, and it degrades to "just works" with zero JavaScript. */
 
-.faq-list { display: flex; flex-direction: column; }
+.faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
+/* Each question is its own card; the open one lifts slightly and takes
+   the page's colour on its edge. */
 .faq-item {
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.faq-item:first-child { border-top: 1px solid var(--border); }
+.faq-item:hover { border-color: var(--border-strong); }
+.faq-item[open] {
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--border));
+  box-shadow: var(--shadow-md);
+}
 
 .faq-q {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.125rem 0.25rem;
+  padding: 1.125rem 1.25rem;
   min-height: 2.75rem;
+  border-radius: inherit;
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 1.0625rem;
+  line-height: 1.4;
   cursor: pointer;
   list-style: none;
   -webkit-tap-highlight-color: transparent;
 }
 .faq-q::-webkit-details-marker { display: none; }
 .faq-q:hover { color: var(--brand-text); }
+/* The keyboard ring follows the card's rounded shape, drawn inside it. */
+.faq-q:focus { outline: none; }
+.faq-q:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+  border-radius: var(--radius-lg);
+}
 
 .faq-chevron {
-  width: 1.25rem;
-  height: 1.25rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.4rem;
   flex-shrink: 0;
-  color: var(--text-2);
-  transition: transform 0.2s var(--ease-out);
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  transition: transform 0.25s var(--ease-out);
 }
 .faq-item[open] .faq-chevron { transform: rotate(180deg); }
 
 .faq-a {
-  padding: 0 0.25rem 1.25rem;
+  padding: 0 1.25rem 1.25rem;
   color: var(--text-2);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .faq-chevron { transition: none; }
+  .faq-chevron, .faq-item { transition: none; }
+}
+@media (prefers-contrast: more) {
+  .faq-item { border-color: var(--border-strong); }
 }
 
 .cta-band {
@@ -973,6 +1011,24 @@ h3, .h3 {
   gap: 1.5rem;
 }
 .cta-band .store-badges { justify-content: center; }
+.cta-band--card {
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+  border-radius: 1.75rem;
+  background: var(--brand-soft);
+}
+.cta-band--card .section-head { margin-bottom: 0; }
+.cta-band-icon { width: 4.5rem; }
+
+/* A section heading with an action (e.g. "All guides") on the right. */
+.section-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+.section-head-row .section-head { margin-bottom: 0; }
 
 /* ---------- Prose ----------
    Shared hand-written body-content typography: post.html's article body
