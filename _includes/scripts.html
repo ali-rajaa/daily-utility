@@ -193,6 +193,20 @@
     });
   });
 
+  /* ---- Swipe shelves ----
+     On phones the homepage job cards sit in a sideways shelf that snaps
+     to each card. Tabbing to a link in a half-hidden card scrolls the
+     link into view, then the snap pulls the shelf back to the previous
+     card, leaving the focused link off screen. Snapping the focused
+     card itself into place keeps it in view. */
+  document.querySelectorAll('.jobs-grid').forEach(function (shelf) {
+    shelf.addEventListener('focusin', function (e) {
+      if (shelf.scrollWidth <= shelf.clientWidth) return;
+      var card = e.target.closest('.jobs-grid > li');
+      if (card) card.scrollIntoView({ block: 'nearest', inline: 'start' });
+    });
+  });
+
   /* ---- Reveal on scroll ----
      .reveal-ready (which hides .reveal content) is added only after the
      observer that shows it again exists. If anything here fails, the

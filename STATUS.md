@@ -1224,7 +1224,7 @@ Open (needs owner input): SoftwareApplication rich results need an
 
 User asked for useful links instead of vague ones, and Apple-style design.
 - Three menus named for their contents: Apps (all four apps with tile,
-  tagline and platform, plus "Not sure which app?" /#start, "Where to
+  tagline and platform, plus "Not sure which app?" /#which, "Where to
   get each app" /#availability, "Compare all apps" /#apps), Guides (the
   four topics -> hub anchors, the three latest guides, "All N guides"),
   Help (FAQ /#faq, Contact support -> footer #support, Privacy, Terms).
@@ -1299,6 +1299,19 @@ them repeats. User asked for a professional overhaul with at least
   (longer content, shorter phone page than before); axe clean in both
   themes at 1440 and 390; CLS 0; no sideways scroll at 320-1440; all
   internal links and anchors resolve; full test suite passes.
+- **Follow-up check (30 Sep), three fixes.** Two claims above were
+  wrong when first written, and are now true:
+  - The link check covered the homepage only. The header's "Not sure
+    which app you need?" link on every page still pointed to /#start,
+    which the rebuild removed. It now points to /#which.
+  - Tabbing did not scroll the shelf: Chrome scrolled the link into
+    view and the mandatory snap pulled the shelf back, leaving the
+    second card's link off screen. A focusin handler in scripts.html
+    now snaps the focused card into place.
+  - Separately, axe on every page found the backup-vs-sync comparison
+    table had an empty first header cell. It's now "Situation".
+  After the fixes, axe is clean on all 16 pages in both themes at 1440
+  and 390, and every internal link and anchor on the site resolves.
 
 ## 6. SEO and routing
 

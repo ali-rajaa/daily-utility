@@ -44,7 +44,7 @@ A backup keeps a separate copy for recovery. It saves a copy of your data so tha
 
 Sync is for convenience and a backup is for recovery. You usually need both, and problems start when one is mistaken for the other.
 
-| | Sync | Backup |
+| Situation | Sync | Backup |
 |---|---|---|
 | Main purpose | Keep data identical across devices | Keep a copy you can restore from |
 | If you add something | It appears everywhere | It's added to the backup next time it runs |
