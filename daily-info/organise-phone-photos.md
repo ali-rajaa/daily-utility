@@ -189,7 +189,7 @@ Set a reminder for the first weekend of each month, and do this:
 4. Add photos to your long-term albums, like trips or people.
 5. Check your backup is still running and up to date.
 
-Done regularly, it takes minutes, and your camera roll stays manageable no matter how many photos you take.
+Done regularly, it takes minutes, and your camera roll stays manageable however many photos you take.
 
 ## Keep your library safe as it grows
 

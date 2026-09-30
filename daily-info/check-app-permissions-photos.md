@@ -157,7 +157,7 @@ Both platforms offer family tools that help. On iPhone, **Family Sharing** and *
 
 Whatever tools you use, the same principles apply: review which apps can access photos, camera, microphone and location, prefer limited access over full access, and talk with children about why an app asking for their photos or contacts is worth a second thought.
 
-## Other permissions worth reviewing
+## Other permissions to review
 
 While you're checking photos and files, look at the other sensitive permissions too.
 

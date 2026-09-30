@@ -34,7 +34,7 @@ og_image_alt: "How to Move Photos From Android to iPhone (and Back): a Daily Inf
 
 Switching between Android and iPhone used to mean accepting that some things would be left behind. Photos were often the biggest casualty: albums scattered, videos missing, pictures arriving as blurry, compressed copies. Things are much better now. Both Apple and Google provide tools for moving to their phones, cloud photo services work on both platforms, and there are several reliable ways to get your library across in full quality.
 
-This guide covers the practical options for moving photos and videos from Android to iPhone, and from iPhone to Android, what to check before you start, and how to make sure everything arrived before you say goodbye to the old phone.
+This guide covers the practical options for moving photos and videos from Android to iPhone, and from iPhone to Android, what to check before you start, and how to make sure everything arrived before you part with the old phone.
 
 ## Before you start
 
