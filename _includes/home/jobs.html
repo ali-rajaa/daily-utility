@@ -1,0 +1,48 @@
+{%- comment -%}
+  "Which kind of app do you need?": what each kind of app does, when to use
+  it and whether it leaves a copy to go back to, then the order to use them
+  in when switching phones. Copy lives in _data/home.yml (jobs, switch);
+  each job links to its app from apps.yml, so a renamed app renames here.
+{%- endcomment -%}
+<section class="section home-jobs" id="which" aria-labelledby="which-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="which-title">Which kind of app do you need?</h2>
+      <p class="section-sub">Backing up, transferring and recovering sound alike, but each solves a different problem. This is what each one does, when to reach for it and whether it leaves you a copy to go back to.</p>
+    </div>
+
+    <ul class="jobs-grid">
+      {%- for job in site.data.home.jobs %}
+      {%- assign app = site.data.apps | where: "slug", job.app | first %}
+      <li class="job tone-{{ app.tone }} reveal">
+        <div class="job-head">
+          {% include app-tile.html app=app class="job-tile" %}
+          <h3>{{ job.name | escape }}</h3>
+        </div>
+        <dl class="job-facts">
+          <div><dt>What it does</dt><dd>{{ job.does | escape }}</dd></div>
+          <div><dt>When to use it</dt><dd>{{ job.when | escape }}</dd></div>
+          <div><dt>Does it keep a copy?</dt><dd>{{ job.keeps_copy | escape }}</dd></div>
+        </dl>
+        <a class="job-link" href="{{ '/' | append: app.slug | relative_url }}">Use {{ app.short | escape }}<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </li>
+      {%- endfor %}
+    </ul>
+
+    <div class="switch reveal">
+      <div class="switch-intro">
+        <h3>Switching phones? Use them in this order</h3>
+        <p>Switching phones is one of the easiest times to lose something. The setup screens move quickly, and what didn't come across usually shows up only after the old phone is wiped.</p>
+        <a class="app-more" href="{{ '/daily-info/backup-before-switching-phones' | relative_url }}">Read the full switching checklist<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </div>
+      <ol class="switch-steps">
+        {%- for step in site.data.home.switch %}
+        <li>
+          <h4>{{ step.title | escape }}</h4>
+          <p>{{ step.text | escape }}</p>
+        </li>
+        {%- endfor %}
+      </ol>
+    </div>
+  </div>
+</section>

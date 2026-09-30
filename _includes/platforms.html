@@ -1,0 +1,7 @@
+{%- comment -%}
+  The platforms an app is on, in words, derived from which store links
+  _data/apps.yml has -- so no page can ever claim a platform an app isn't
+  on. Param: app (an apps.yml entry). Renders plain text, no markup.
+  Usage: {% include platforms.html app=flagship %}
+{%- endcomment -%}
+{%- if include.app.ios_url and include.app.android_url -%}iPhone and Android{%- elsif include.app.ios_url -%}iPhone{%- else -%}Android{%- endif -%}

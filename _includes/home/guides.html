@@ -1,0 +1,33 @@
+{%- comment -%}
+  Latest Daily Info: the three newest articles (post-card.html), with the
+  four topics from _data/categories.yml as jump links into the hub's topic
+  groups (the hub gives each group id="{{ name | slugify }}").
+  Param: posts (pages on the post layout, newest first; upcoming pages
+  may follow and render as "Coming soon").
+{%- endcomment -%}
+{%- if include.posts.size > 0 %}
+<section class="section home-guides" aria-labelledby="guides-title">
+  <div class="wrap">
+    <div class="section-head-row reveal">
+      <div class="section-head">
+        <h2 id="guides-title">Guides for everyday phone problems</h2>
+        <p class="section-sub">Daily Info is our free library of plain-English guides to the problems these apps are built around. Each guide is useful whether or not you use our apps.</p>
+      </div>
+      <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
+    </div>
+    <ul class="post-grid">
+      {%- for post in include.posts limit: 3 %}
+      {% include post-card.html post=post %}
+      {%- endfor %}
+    </ul>
+    <nav class="guide-topics reveal" aria-label="Guide topics">
+      <span class="guide-topics-label">Browse by topic</span>
+      <ul>
+        {%- for cat in site.data.categories %}
+        <li><a class="tone-{{ cat.tone }}" href="{{ '/daily-info/' | relative_url }}#{{ cat.name | slugify }}"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg>{{ cat.name | escape }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+  </div>
+</section>
+{%- endif %}

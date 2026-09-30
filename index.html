@@ -12,6 +12,10 @@ faqs:
     a: "Our flagship, Cloud Storage Backup & Drive, is on the Apple App Store for iPhone as well as on Google Play for Android. Our other three apps are currently on Google Play for Android."
   - q: "How do I move my photos and files to a new phone?"
     a: "Smartphone All Data Transfer moves photos, videos and files from one phone to another. If you also want an ongoing copy of your photos, videos, contacts and app data, back them up with Cloud Storage Backup & Drive before you switch. Our Daily Info guide to backing up before switching phones walks through the whole process."
+  - q: "What's the difference between a backup and a transfer?"
+    a: "A transfer moves photos, videos and files from one phone to another. A backup keeps a separate copy off your phone that you can restore later, onto the same phone or a new one. When you switch phones it's worth doing both: back up first, then move what you need."
+  - q: "Where are my backed-up files stored?"
+    a: "Cloud Storage Backup & Drive stores what you back up on Amazon Web Services servers in the United States. Files are encrypted on the way there and while they're stored. The privacy policy has the details."
   - q: "Can I get back a photo I deleted by mistake?"
     a: "Often, if you act quickly. Photo Recover & Data Recovery looks for deleted photos and files that are still in your phone's trash bin and restores them. No app can promise to recover everything: once a file has left the trash, it may be gone for good, so the sooner you look, the better."
   - q: "What files can Document Reader open?"
@@ -23,286 +27,39 @@ faqs:
 updated: 2026-09-29
 ---
 {%- comment -%}
-  Homepage: the brand and its apps. Sections (STATUS.md section 5e):
-  hero (what the apps do + the app orbit as real navigation), the apps
-  bento (flagship featured, the rest beside it, each in its own tone),
-  why us (split layout), latest Daily Info, closing CTA.
+  Homepage. Seven parts, most of them includes in _includes/home/, in the
+  order a first-time visitor needs them: what this is (hero), which app to
+  use (apps), how the jobs differ and when to use each (jobs), how data is
+  handled (privacy), the guide library (guides), questions, then one
+  closing action.
 
-  Everything app-specific comes from _data/apps.yml, and the Daily Info
-  cards list themselves from pages on the post layout, so adding an app
-  or an article never means editing this file. The only per-app copy
-  written here is the flagship's four backup categories -- its confirmed
-  scope (STATUS.md section 1).
-
-  The Organization schema lives here and only here (STATUS.md section 6);
-  every SoftwareApplication and BlogPosting elsewhere points back at its
-  @id rather than repeating it.
+  Content comes from data, not this file: apps from _data/apps.yml, the
+  repeating homepage copy from _data/home.yml, company details from
+  _config.yml, articles from pages on the post layout. Adding an app or an
+  article never means editing this file.
 {%- endcomment -%}
-{%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
-{%- assign more_apps = site.data.apps | where: "tier", "more" | where: "built", true -%}
-{%- assign latest_posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
-{%- assign upcoming_posts = site.pages | where: "layout", "upcoming" | sort: "heading" -%}
-{%- assign home_posts = latest_posts | concat: upcoming_posts -%}
-{%- assign built_apps = site.data.apps | where: "built", true -%}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }},
-  "name": {{ site.title | jsonify | replace: "/", "\/" }},
-  "url": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }},
-  "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify | replace: "/", "\/" }}
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": {{ '/' | absolute_url | append: '#website' | jsonify | replace: "/", "\/" }},
-  "name": {{ site.title | jsonify }},
-  "url": {{ '/' | absolute_url | jsonify | replace: "/", "\/" }},
-  "description": {{ page.description | jsonify | replace: "/", "\/" }},
-  "inLanguage": "en-AU",
-  "publisher": { "@id": {{ '/' | absolute_url | append: '#organization' | jsonify | replace: "/", "\/" }} }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Apps by Daily Utility Apps",
-  "itemListElement": [
-    {%- assign _built = site.data.apps | where: "built", true -%}
-    {%- for app in _built %}
-    { "@type": "ListItem", "position": {{ forloop.index }}, "name": {{ app.name | jsonify | replace: "/", "\/" }}, "url": {{ '/' | append: app.slug | absolute_url | jsonify | replace: "/", "\/" }} }{% unless forloop.last %},{% endunless %}
-    {%- endfor %}
-  ]
-}
-</script>
+{%- assign apps = site.data.apps | where: "built", true -%}
+{%- assign flagship = apps | where: "tier", "flagship" | first -%}
+{%- assign others = apps | where: "tier", "more" -%}
+{%- assign posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
+{%- assign upcoming = site.pages | where: "layout", "upcoming" | sort: "heading" -%}
+{%- assign guide_cards = posts | concat: upcoming -%}
 
-<section class="home-hero hero-glow-host">
-  {% include hero-glow.html %}
-  <div class="wrap hero-glow-content home-hero-grid">
-    <div class="home-hero-copy">
-      <span class="eyebrow">Daily Utility Apps</span>
-      <h1>Simple apps for your phone's <span class="home-hero-accent">everyday jobs</span></h1>
-      <p class="home-hero-sub">Back up your photos, open your documents, move to a new phone and get deleted files back. Four focused apps, each built to do one job properly.</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="#apps">Explore our apps<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read Daily Info</a>
-      </div>
-      <div class="home-hero-get">
-        <p class="home-hero-get-label">Our flagship: <a href="{{ '/' | append: flagship.slug | relative_url }}">{{ flagship.name | escape }}</a></p>
-        {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
-      </div>
-    </div>
+{% include home/schema.html apps=apps %}
+{% include home/hero.html flagship=flagship others=others %}
+{% include home/apps.html flagship=flagship others=others %}
+{% include home/jobs.html %}
+{% include home/privacy.html %}
+{% include home/guides.html posts=guide_cards %}
+{% include faq-section.html faqs=page.faqs id="faq" alt=true split=true heading="Questions about our apps" sub="What each app does, where to get it and how your data is handled." %}
 
-    {%- comment -%} The app orbit is real navigation, not decoration: each
-    tile is a labelled link to its app's page. The flagship sits at the
-    centre; the others sit on one ring at even 120-degree steps. The
-    label is the link's accessible name (the tile itself is
-    aria-hidden). {%- endcomment %}
-    <nav class="home-hero-visual" aria-label="Our apps">
-      <div class="orbit">
-        <div class="orbit-ring" aria-hidden="true"></div>
-        <a class="orbit-app orbit-app--main tone-{{ flagship.tone }}" href="{{ '/' | append: flagship.slug | relative_url }}">
-          <span class="orbit-float">{% include app-tile.html app=flagship %}</span>
-          <span class="orbit-label">{{ flagship.short | escape }}</span>
-        </a>
-        {%- for app in more_apps limit: 3 %}
-        <a class="orbit-app orbit-app--{{ forloop.index }} tone-{{ app.tone }}" href="{{ '/' | append: app.slug | relative_url }}">
-          <span class="orbit-float">{% include app-tile.html app=app %}</span>
-          <span class="orbit-label">{{ app.short | escape }}</span>
-        </a>
-        {%- endfor %}
-      </div>
-    </nav>
-  </div>
-</section>
-
-{% include faq-schema.html faqs=page.faqs %}
-
-{%- comment -%} Start here: the everyday job each app is for, in plain
-words. Cards come from apps.yml's task / task_text. {%- endcomment %}
-<section class="section" id="start">
+<section class="section" aria-labelledby="start-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Start here</span>
-      <h2>What do you need to do today?</h2>
-      <p class="section-sub">Pick the job, and we'll point you to the app built for it.</p>
-    </div>
-    <ul class="task-grid">
-      {%- for app in built_apps %}
-      <li class="tone-{{ app.tone }} reveal">
-        <a class="task-card" href="{{ '/' | append: app.slug | relative_url }}">
-          <span class="task-top">
-            {% include app-tile.html app=app class="task-tile" %}
-            <span class="task-num" aria-hidden="true">0{{ forloop.index }}</span>
-          </span>
-          <span class="task-title">{{ app.task | escape }}</span>
-          <span class="task-text">{{ app.task_text | escape }}</span>
-          <span class="task-app">Use {{ app.short | escape }}<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
-        </a>
-      </li>
-      {%- endfor %}
-    </ul>
-  </div>
-</section>
-
-<section class="section section--alt" id="apps">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Our apps</span>
-      <h2>Four apps, one job each</h2>
-      <p class="section-sub">Small, focused and made by the same team. Start with the one you need.</p>
-    </div>
-
-    <div class="app-bento">
-      <article class="bento-feature tone-{{ flagship.tone }} reveal">
-        <div class="bento-feature-top">
-          {% include app-tile.html app=flagship class="bento-feature-tile" %}
-          <span class="bento-badge">Flagship</span>
-        </div>
-        <h3 class="bento-feature-name"><a href="{{ '/' | append: flagship.slug | relative_url }}">{{ flagship.name | escape }}</a></h3>
-        <p class="bento-feature-tagline">{{ flagship.tagline | escape }}</p>
-        <ul class="bento-caps">
-          <li><svg aria-hidden="true"><use href="#i-photo"/></svg>Photos</li>
-          <li><svg aria-hidden="true"><use href="#i-video"/></svg>Videos</li>
-          <li><svg aria-hidden="true"><use href="#i-contacts"/></svg>Contacts</li>
-          <li><svg aria-hidden="true"><use href="#i-folder"/></svg>App data</li>
-        </ul>
-        <div class="bento-feature-actions">
-          {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
-          <a class="text-link" href="{{ '/' | append: flagship.slug | relative_url }}">See how it works<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-        </div>
-      </article>
-
-      <ul class="bento-list">
-        {%- for app in more_apps %}
-        <li class="tone-{{ app.tone }} reveal">
-          <a class="app-card" href="{{ '/' | append: app.slug | relative_url }}">
-            {% include app-tile.html app=app class="app-card-icon" %}
-            <span class="app-card-body">
-              <span class="app-card-name">{{ app.name | escape }}</span>
-              <span class="app-card-tagline">{{ app.tagline | escape }}</span>
-              <span class="app-card-meta">
-                <span class="app-card-platform">{% if app.ios_url and app.android_url %}iPhone &amp; Android{% elsif app.ios_url %}iPhone{% else %}Android{% endif %}</span>
-                <span class="app-card-more">Learn more<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
-              </span>
-            </span>
-          </a>
-        </li>
-        {%- endfor %}
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap why">
-    <div class="why-intro reveal">
-      <span class="eyebrow">Why Daily Utility Apps</span>
-      <h2>Small apps that do one job each</h2>
-      <p class="section-sub">Each app does its one job, and none of them sells your personal information.</p>
-    </div>
-    <ul class="why-list">
-      <li class="why-item reveal">
-        <span class="why-icon"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>
-        <div>
-          <h3>One job, done properly</h3>
-          <p>Each app is built around a single everyday task, so it stays quick to open and easy to learn.</p>
-        </div>
-      </li>
-      <li class="why-item reveal">
-        <span class="why-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>
-        <div>
-          <h3>Your data isn't sold</h3>
-          <p>We never sell your personal information, and we never use your files to build advertising profiles.</p>
-        </div>
-      </li>
-      <li class="why-item reveal">
-        <span class="why-icon"><svg aria-hidden="true"><use href="#i-contacts"/></svg></span>
-        <div>
-          <h3>Real support</h3>
-          <p>Questions about one of our apps? Email our support team. The address is at the bottom of every page.</p>
-        </div>
-      </li>
-      <li class="why-item reveal">
-        <span class="why-icon"><svg aria-hidden="true"><use href="#i-devices"/></svg></span>
-        <div>
-          <h3>iPhone and Android</h3>
-          <p>Our flagship is on both the App Store and Google Play, and the rest of our apps are on Google Play.</p>
-        </div>
-      </li>
-    </ul>
-  </div>
-</section>
-
-{%- comment -%} Where each app is available: straight from which store
-links apps.yml has, so it can never claim a platform an app isn't on.
-{%- endcomment %}
-<section class="section section--alt" id="availability">
-  <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Availability</span>
-      <h2>Where to get each app</h2>
-      <p class="section-sub">Every app, the job it does, and the stores you'll find it on.</p>
-    </div>
-    <div class="avail reveal">
-      <table class="avail-table">
-        <caption class="visually-hidden">Daily Utility Apps and the platforms each is available on</caption>
-        <thead>
-          <tr><th scope="col">App</th><th scope="col">What it does</th><th scope="col">iPhone</th><th scope="col">Android</th></tr>
-        </thead>
-        <tbody>
-          {%- for app in built_apps %}
-          <tr class="tone-{{ app.tone }}">
-            <th scope="row"><a class="avail-app" href="{{ '/' | append: app.slug | relative_url }}">{% include app-tile.html app=app class="avail-tile" %}<span>{{ app.name | escape }}</span></a></th>
-            <td class="avail-what">{{ app.tagline | escape }}</td>
-            <td data-label="iPhone">{% if app.ios_url %}<a class="avail-yes" href="{{ app.ios_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-check"/></svg>App Store</a>{% else %}<span class="avail-no">Not yet</span>{% endif %}</td>
-            <td data-label="Android">{% if app.android_url %}<a class="avail-yes" href="{{ app.android_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-check"/></svg>Google Play</a>{% else %}<span class="avail-no">Not yet</span>{% endif %}</td>
-          </tr>
-          {%- endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-{%- if latest_posts.size > 0 %}
-<section class="section">
-  <div class="wrap">
-    <div class="section-head-row reveal">
-      <div class="section-head">
-        <span class="eyebrow">Daily Info</span>
-        <h2>Guides for everyday phone problems</h2>
-      </div>
-      <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All articles</a>
-    </div>
-    <ul class="post-grid">
-      {%- for post in home_posts limit: 3 %}
-      {% include post-card.html post=post %}
-      {%- endfor %}
-    </ul>
-  </div>
-</section>
-{%- endif %}
-
-{% include faq-section.html faqs=page.faqs alt=true id="faq" heading="Questions about our apps" sub="Straight answers about what each app does and where to get it." %}
-
-<section class="section">
-  <div class="wrap">
-    <div class="home-cta reveal">
-      <ul class="home-cta-apps">
-        {%- for app in site.data.apps %}
-        {%- if app.built %}
-        <li><a href="{{ '/' | append: app.slug | relative_url }}" aria-label="{{ app.name | escape }}">{% include app-tile.html app=app class="home-cta-tile" %}</a></li>
-        {%- endif %}
-        {%- endfor %}
-      </ul>
-      <h2>The right app for the job</h2>
-      <p class="section-sub">Start with our flagship, {{ flagship.name | escape }}, on {% if flagship.ios_url and flagship.android_url %}iPhone and Android{% elsif flagship.ios_url %}iPhone{% else %}Android{% endif %}.</p>
-      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
+    <div class="home-cta tone-{{ flagship.tone }} reveal">
+      {% include app-tile.html app=flagship class="home-cta-tile" %}
+      <h2 id="start-title">Start with a backup</h2>
+      <p class="section-sub">If you install one of our apps, make it {{ flagship.name | escape }}. A copy of your photos, videos, contacts and app data off your phone makes every other job safer, from clearing space to switching phones. It's on {% include platforms.html app=flagship %}.</p>
+      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url app=flagship.short %}
     </div>
   </div>
 </section>

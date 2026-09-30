@@ -1,0 +1,28 @@
+{%- comment -%}
+  "How we handle your data": specific commitments from privacy-policy.md
+  (via _data/home.yml privacy) rather than general promises. Standing
+  rules (STATUS.md 5c, 5f): no company name, support address or location
+  here -- those stay on the legal pages and in the footer.
+{%- endcomment -%}
+<section class="section section--alt home-privacy" aria-labelledby="privacy-title">
+  <div class="wrap privacy-layout">
+    <div class="privacy-intro reveal">
+      <h2 id="privacy-title">How we handle your data</h2>
+      <p class="section-sub">These are the commitments in our privacy policy, in plain words. The policy itself covers every app and this website.</p>
+      <div class="privacy-links">
+        <a class="app-more" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </div>
+    </div>
+    <ul class="privacy-list">
+      {%- for item in site.data.home.privacy %}
+      <li class="privacy-item reveal">
+        <span class="privacy-icon"><svg aria-hidden="true"><use href="#i-{{ item.icon }}"/></svg></span>
+        <div>
+          <h3>{{ item.title | escape }}</h3>
+          <p>{{ item.text | escape }}</p>
+        </div>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>

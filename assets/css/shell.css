@@ -1085,7 +1085,7 @@ h3, .h3 {
 /* ---------- App tiles ----------
    _includes/app-tile.html: a white glyph on a coloured rounded square,
    standing in for each app's real icon (the site never shows the actual
-   app logos). Size comes from the context class (e.g. .app-card-icon
+   app logos). Size comes from the context class (e.g. .app-item-tile
    sets width); aspect-ratio keeps it square.
 
    Tones are fixed colours in both themes, like the store badges: a tile
@@ -1335,6 +1335,25 @@ h3, .h3 {
 .cta-band--card .section-head { margin-bottom: 0; }
 .cta-band-icon { width: 4.5rem; }
 
+/* FAQ beside its heading (faq-section.html split=true, the homepage):
+   the heading stays in view while the questions scroll on wide screens,
+   and stacks above them on phones and tablets. */
+.faq-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+.faq-split > .section-head {
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
+  margin-bottom: 0;
+}
+@media (max-width: 899.98px) {
+  .faq-split { grid-template-columns: 1fr; gap: 0; }
+  .faq-split > .section-head { position: static; margin-bottom: clamp(2rem, 4vw, 3rem); }
+}
+
 /* A section heading with an action (e.g. "All guides") on the right. */
 .section-head-row {
   display: flex;
@@ -1543,13 +1562,10 @@ h3, .h3 {
    runs. html raises specificity above the page stylesheets' rules. */
 @media (hover: none) {
   html .post-card:hover:not(:active),
-  html .task-card:hover:not(:active),
-  html .app-card:hover:not(:active),
   html .other-app:hover:not(:active),
   html a.topic-card:hover:not(:active),
   html .hub-featured-card:hover:not(:active),
-  html .post-topic-link:hover:not(:active),
-  html .home-cta-apps a:hover:not(:active) { transform: none; }
+  html .post-topic-link:hover:not(:active) { transform: none; }
   html .post-card:hover .post-card-glyph,
   html .hub-featured-card:hover .hub-featured-glyph { transform: none; }
 }

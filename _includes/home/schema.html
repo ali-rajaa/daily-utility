@@ -1,0 +1,41 @@
+{%- comment -%}
+  Homepage structured data. The Organization lives here and only here;
+  every SoftwareApplication and BlogPosting elsewhere points back at its
+  @id rather than repeating it. Deliberately no legal name, address,
+  email or social profiles: STATUS.md 5c and 5f keep the company name and
+  location to the legal pages and footer, schema included.
+{%- endcomment -%}
+{%- assign _home = '/' | absolute_url -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": {{ _home | append: '#organization' | jsonify }},
+      "name": {{ site.title | jsonify }},
+      "url": {{ _home | jsonify }},
+      "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify }}
+    },
+    {
+      "@type": "WebSite",
+      "@id": {{ _home | append: '#website' | jsonify }},
+      "name": {{ site.title | jsonify }},
+      "url": {{ _home | jsonify }},
+      "description": {{ page.description | jsonify }},
+      "inLanguage": "en-AU",
+      "publisher": { "@id": {{ _home | append: '#organization' | jsonify }} }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Apps by Daily Utility Apps",
+      "itemListElement": [
+        {%- for app in include.apps %}
+        { "@type": "ListItem", "position": {{ forloop.index }}, "name": {{ app.name | jsonify }}, "url": {{ '/' | append: app.slug | absolute_url | jsonify }} }{% unless forloop.last %},{% endunless %}
+        {%- endfor %}
+      ]
+    }
+  ]
+}
+</script>
+{% include faq-schema.html faqs=page.faqs %}

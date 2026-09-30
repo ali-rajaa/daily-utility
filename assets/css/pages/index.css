@@ -1,18 +1,18 @@
 /* ==========================================================================
-   index.css: the homepage (index.html) -- the brand and its four apps.
-   Sections: hero with the app orbit, the apps bento, why us (split),
-   latest Daily Info (article cards live in shell.css), closing CTA.
+   index.css: the homepage (index.html + _includes/home/).
+   Order: hero with the app orbit, the apps (flagship feature + three
+   cards), backup/transfer/recover/read compared with the switching-phones
+   order, how data is handled, latest Daily Info, FAQ (split, shell.css),
+   closing CTA.
 
-   Colours are shell.css tokens only. Each app card sits inside its app's
-   .tone-* scope (shell.css "App tones"), so its accents are the app's own
-   colour without any per-app rules here. Gradients are decoration only,
-   never behind text (see --brand-2 in shell.css).
+   Colours are shell.css tokens only. Every app card and job card sits in
+   its app's .tone-* scope (shell.css "App tones"), so accents take the
+   app's colour, in both themes, with no per-app rules here. Gradients are
+   decoration only, never behind text.
 
    Motion follows the apple-design skill: transform/opacity only, slow
-   floats of 18s+ (well clear of the ~5s cycle it flags), press feedback
-   on :active, reduced-motion and more-contrast fallbacks at the end. No
-   backdrop-filter on this page's own elements: it would be re-blurred
-   every frame over the floating tiles.
+   floats of 18s+, press feedback on :active, hover lifts only where a
+   pointer can hover, reduced-motion and more-contrast fallbacks at the end.
    ========================================================================== */
 
 /* ---------- Hero ---------- */
@@ -41,20 +41,6 @@
 
 .home-hero-copy .btn-row { margin-top: 2rem; }
 
-/* The flagship's download badges, above the fold -- the site's first job
-   is installs, so one tap from the first screen to a store. */
-.home-hero-get {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.home-hero-get-label {
-  margin-bottom: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--text-2);
-}
-.home-hero-get-label a { font-weight: 600; }
-
 /* ---------- The app orbit ----------
    Real navigation: each app is a labelled link. The flagship sits at the
    ring's centre; the other three sit ON the ring at even 120-degree steps
@@ -74,11 +60,6 @@
   position: relative;
   width: min(100%, 26rem);
   aspect-ratio: 1;
-}
-@media (max-width: 899.98px) {
-  /* margin-bottom: room for the bottom tile's label, which sits just
-     past the square box at phone widths. */
-  .orbit { width: min(100%, 21rem); margin-bottom: 1.5rem; }
 }
 
 .orbit-ring,
@@ -142,213 +123,425 @@
    crowd the centre tile at phone widths (found by an overlap check). */
 .orbit-app--1 .orbit-label,
 .orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.6rem); }
+
+/* Phones and small tablets: the orbit becomes one row of four labelled
+   tiles under the buttons, so the first screen reaches the apps instead
+   of a large decoration. Same links, same order (flagship first). */
 @media (max-width: 899.98px) {
-  .orbit-label { top: calc(100% + 0.45rem); padding: 0.25rem 0.55rem; font-size: 0.75rem; }
+  .home-hero-visual { justify-content: stretch; }
+  .orbit {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 30rem;
+    aspect-ratio: auto;
+  }
+  .orbit-ring { display: none; }
+  .orbit-app,
+  .orbit-app--main, .orbit-app--1, .orbit-app--2, .orbit-app--3 {
+    position: static;
+    translate: none;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.25rem;
+    text-align: center;
+  }
+  .orbit-float { animation: none; }
+  .orbit-app .app-tile { width: 3.5rem; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-md); }
+  .orbit-label,
   .orbit-app--1 .orbit-label,
-  .orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.45rem); }
-}
-/* Small phones: the upper tiles sit near the screen edges, so their
-   centred labels would poke past the gutter. Anchor each label to its
-   tile's outer edge instead (left tile: left edge; right tile: right). */
-@media (max-width: 29.99rem) {
-  .orbit-app--1 .orbit-label { left: 0; translate: 0 0; }
-  .orbit-app--2 .orbit-label { left: auto; right: 0; translate: 0 0; }
+  .orbit-app--2 .orbit-label {
+    position: static;
+    translate: none;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    white-space: normal;
+  }
 }
 
-/* ---------- Apps bento ----------
-   The flagship as one large featured card; the other three stacked
-   beside it as compact horizontal cards. Two different shapes on
-   purpose: it says "start here" without another heading. */
+/* ---------- Apps ---------- */
 
-.app-bento {
+.apps-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: stretch;
   gap: 1.25rem;
 }
-@media (max-width: 899.98px) {
-  .app-bento { grid-template-columns: 1fr; }
+@media (max-width: 959.98px) {
+  .apps-grid { grid-template-columns: 1fr; }
 }
 
-.bento-feature {
+.app-feature {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: clamp(1.75rem, 4vw, 2.5rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
   border: 1px solid var(--border);
-  border-radius: 1.75rem;
-  background: linear-gradient(160deg, var(--brand-soft), var(--surface) 58%);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  isolation: isolate;
 }
-.bento-feature-top {
+/* A wash of the app's colour behind the tile only, never behind text. */
+.app-feature::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 9rem;
+  z-index: -1;
+  background: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%);
+}
+.app-feature-top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 1.5rem;
 }
-.bento-feature-tile { width: 5rem; }
-.bento-badge {
-  padding: 0.3rem 0.75rem;
-  border: 1px solid var(--border);
+.app-feature-tile { width: 4.5rem; }
+.app-flag {
+  padding: 0.4rem 0.7rem;
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: var(--brand-soft);
   color: var(--brand-text);
-  font: 650 0.75rem/1.4 var(--font-heading);
-  letter-spacing: 0.06em;
+  font: 650 0.75rem/1 var(--font-heading);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.bento-feature-name {
-  margin-top: 1.5rem;
-  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-  line-height: 1.15;
-}
-.bento-feature-name a { color: var(--text); text-decoration: none; }
-.bento-feature-name a:hover { color: var(--brand-text); }
-.bento-feature-tagline {
-  margin-top: 0.75rem;
-  font-size: 1.0625rem;
-  color: var(--text-2);
-}
 
-.bento-caps {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem 1rem;
-  margin: 1.75rem 0 0;
+.app-name { font-size: 1.125rem; }
+.app-feature .app-name { font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem); }
+.app-name a {
+  /* a full 44px+ tap height without changing the heading's spacing */
+  display: inline-block;
+  padding-block: 0.6875rem;
+  margin-block: -0.6875rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.app-name a:hover { color: var(--brand-text); }
+.app-job {
+  margin-top: 0.4rem;
+  font-weight: 600;
+  color: var(--brand-text);
+}
+.app-text {
+  margin-top: 0.5rem;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.app-item .app-job, .app-item .app-text { font-size: 0.9375rem; }
+
+.app-feats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
   padding: 0;
   list-style: none;
 }
-.bento-caps li { display: flex; align-items: center; gap: 0.65rem; font-weight: 600; }
-.bento-caps svg {
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0.5rem;
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--brand-text);
-  box-shadow: var(--shadow-sm);
+.app-feats li {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg-alt);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
-.bento-feature-actions {
+.app-platform {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin-top: auto;
-  padding-top: 2rem;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-2);
 }
+.app-platform svg { width: 1rem; height: 1rem; flex-shrink: 0; }
 
-.text-link {
+.app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.25rem;
+}
+.app-feature .app-actions { margin-top: auto; padding-top: 1.75rem; }
+
+/* Arrow text link used across the page ("Learn more", "Use Backup & Drive"). */
+.app-more,
+.job-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.35rem;
   min-height: 2.75rem;
   font-weight: 600;
+  color: var(--brand-text);
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
-.text-link svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
-.text-link:hover svg { transform: translateX(3px); }
+.app-more svg, .job-link svg { width: 1rem; height: 1rem; flex-shrink: 0; transition: transform 0.2s var(--ease-out); }
+.app-more:hover svg, .job-link:hover svg { transform: translateX(3px); }
 
-.bento-list {
+.apps-list {
   display: grid;
-  grid-auto-rows: 1fr;
   gap: 1.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.bento-list > li { display: flex; }
-
-/* Compact app card: the whole card is the link, with the app's tone as a
-   left accent edge; lifts on hover, presses in on :active. */
-.app-card {
+.apps-list > li { display: flex; }
+.app-item {
   display: flex;
   align-items: flex-start;
-  gap: 1.25rem;
+  gap: 1rem;
   width: 100%;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.app-item-tile { width: 3.25rem; }
+.app-item-body { flex: 1; min-width: 0; }
+.app-item-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 1rem;
+}
+.app-moments {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.app-moments h4 { font: 600 1rem/1.35 var(--font-heading); letter-spacing: -0.01em; }
+.app-moments ul { display: grid; gap: 0.75rem; margin: 0.9rem 0 0; padding: 0; list-style: none; }
+.app-moments li { display: flex; gap: 0.6rem; font-size: 0.9375rem; line-height: 1.55; color: var(--text-2); }
+.app-moments li svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--brand-text); }
+.app-moments strong { color: var(--text); font-weight: 600; }
+
+.app-item-foot .app-platform,
+.app-item-foot .app-actions { margin-top: 0; }
+@media (max-width: 479.98px) {
+  .app-item { flex-direction: column; padding: 1.25rem; }
+}
+
+/* ---------- Back up, transfer, recover or read ---------- */
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 1099.98px) {
+  .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Phones: a swipeable shelf instead of four stacked cards. The next card
+   peeks in so it's obvious there's more; each card snaps into place.
+   Every card stays in the page (and the tab order), just side by side. */
+@media (max-width: 599.98px) {
+  .jobs-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 84%;
+    gap: 0.875rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0.25rem var(--gutter) 1rem;
+    scrollbar-width: none;
+  }
+  .jobs-grid::-webkit-scrollbar { display: none; }
+  .jobs-grid > .job { scroll-snap-align: start; }
+}
+.job {
+  display: flex;
+  flex-direction: column;
   padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: inset 3px 0 0 var(--brand), var(--shadow-sm);
-  color: var(--text);
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
+  box-shadow: inset 0 3px 0 var(--brand);
 }
-.app-card:hover {
-  color: var(--text);
-  border-color: var(--border-strong);
-  box-shadow: inset 3px 0 0 var(--brand), var(--shadow-md);
-  transform: translateY(-3px);
-}
-.app-card:active { transform: scale(0.985); transition-duration: 0.1s; }
-
-.app-card-icon { width: 3.5rem; }
-.app-card-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-.app-card-name { font: 600 1.125rem/1.3 var(--font-heading); letter-spacing: -0.01em; }
-.app-card-tagline { margin-top: 0.35rem; font-size: 0.9375rem; color: var(--text-2); }
-.app-card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.job-head { display: flex; align-items: center; gap: 0.75rem; }
+.job-tile { width: 2.5rem; }
+.job-head h3 { font-size: 1.25rem; }
+.job-facts {
+  display: grid;
   gap: 1rem;
-  margin-top: auto;
-  padding-top: 1rem;
-  font-size: 0.875rem;
+  flex-grow: 1;
+  margin: 1.25rem 0 0;
 }
-.app-card-platform { color: var(--text-2); }
-.app-card-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-weight: 600;
+.job-facts dt {
+  font: 650 0.75rem/1.3 var(--font-heading);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--brand-text);
 }
-.app-card-more svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
-.app-card:hover .app-card-more svg { transform: translateX(3px); }
+.job-facts dd {
+  margin: 0.3rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.job-link { margin-top: 1rem; }
 
-/* ---------- Why us: split layout ---------- */
+/* Switching phones: the three apps in the order the guide recommends. */
+.switch {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-alt);
+}
+@media (max-width: 859.98px) {
+  .switch { grid-template-columns: 1fr; }
+}
+.switch-intro h3 { font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); }
+.switch-intro p { margin-top: 0.75rem; color: var(--text-2); line-height: 1.6; }
+.switch-intro .app-more { margin-top: 0.5rem; }
+.switch-steps {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.switch-steps li {
+  position: relative;
+  padding-left: 3rem;
+  counter-increment: step;
+}
+.switch-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -0.1rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--on-brand);
+  font: 650 0.9375rem/1 var(--font-heading);
+}
+.switch-steps h4 { font: 600 1.0625rem/1.35 var(--font-heading); letter-spacing: -0.01em; }
+.switch-steps p { margin-top: 0.3rem; font-size: 0.9375rem; line-height: 1.6; color: var(--text-2); }
 
-.why {
+/* ---------- How we handle your data ---------- */
+
+.privacy-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(2rem, 6vw, 5rem);
   align-items: start;
+  gap: clamp(2rem, 5vw, 4rem);
 }
 @media (max-width: 899.98px) {
-  .why { grid-template-columns: 1fr; }
+  .privacy-layout { grid-template-columns: 1fr; }
 }
-
-.why-list {
+.privacy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin-top: 1.25rem;
+}
+.privacy-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2rem 2.5rem;
+  gap: 1.75rem 2rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 @media (max-width: 599.98px) {
-  .why-list { grid-template-columns: 1fr; gap: 1.75rem; }
+  .privacy-list { grid-template-columns: 1fr; }
 }
-.why-item { display: flex; align-items: flex-start; gap: 1rem; }
-.why-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.privacy-item { display: flex; align-items: flex-start; gap: 1rem; }
+.privacy-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
   width: 2.75rem;
   height: 2.75rem;
-  flex-shrink: 0;
   border-radius: var(--radius);
   background: var(--brand-soft);
   color: var(--brand-text);
 }
-.why-icon svg { width: 1.375rem; height: 1.375rem; }
-.why-item h3 { margin-bottom: 0.35rem; font-size: 1.0625rem; }
-.why-item p { font-size: 0.9375rem; color: var(--text-2); }
+.privacy-icon svg { width: 1.375rem; height: 1.375rem; }
+.privacy-item h3 { font-size: 1.0625rem; }
+.privacy-item p { margin-top: 0.35rem; font-size: 0.9375rem; line-height: 1.6; color: var(--text-2); }
 
 /* ---------- Latest Daily Info ---------- */
 
-/* .section-head-row now lives in shell.css (shared with post.html). */
+.home-guides .section-head { max-width: 42rem; }
+.guide-topics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 2rem;
+}
+.guide-topics-label { font-size: 0.875rem; font-weight: 600; color: var(--text-2); }
+.guide-topics ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.guide-topics a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
+}
+.guide-topics a svg { width: 1rem; height: 1rem; color: var(--brand-text); }
+.guide-topics a:hover { border-color: var(--brand); color: var(--brand-text); }
+.guide-topics a:active { transform: scale(0.97); }
+
+/* Phones: each guide becomes a compact row (glyph beside the text)
+   instead of a tall banner card. The hub keeps its full cards. */
+@media (max-width: 599.98px) {
+  .home-guides .post-card { flex-direction: row; }
+  .home-guides .post-card-banner { width: 5.5rem; height: auto; flex-shrink: 0; }
+  .home-guides .post-card-glyph { width: 2.75rem; height: 2.75rem; box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2); }
+  .home-guides .post-card-body { padding: 1rem 1.125rem 1.125rem; }
+  .home-guides .post-card-title { margin-top: 0.6rem; font-size: 1.0625rem; }
+  .home-guides .post-card-desc { display: none; }
+}
 
 /* ---------- Closing CTA ---------- */
 
@@ -376,27 +569,9 @@
     radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 40%),
     radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--brand-2) 22%, transparent), transparent 40%);
 }
-.home-cta .section-sub { max-width: 36rem; margin-top: 0; }
+.home-cta .section-sub { max-width: 38rem; margin-top: 0; }
 .home-cta .store-badges { justify-content: center; }
-
-.home-cta-apps {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin: 0 0 0.25rem;
-  padding: 0;
-  list-style: none;
-}
-.home-cta-apps a {
-  display: block;
-  border-radius: 23%;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 0.2s var(--ease-out);
-}
-.home-cta-apps a:hover { transform: translateY(-3px); }
-.home-cta-apps a:active { transform: scale(0.95); transition-duration: 0.1s; }
-.home-cta-tile { width: 3.5rem; }
+.home-cta-tile { width: 4rem; }
 
 /* ---------- Accessibility preferences ---------- */
 
@@ -404,156 +579,11 @@
   .orbit-float { animation: none !important; }
   .orbit-app .app-tile { transition: none; }
   .orbit-app:hover .app-tile, .orbit-app:active .app-tile { scale: none; }
-  .app-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-  .app-card:hover, .app-card:active,
-  .home-cta-apps a:hover, .home-cta-apps a:active { transform: none; }
-  .text-link:hover svg, .app-card:hover .app-card-more svg { transform: none; }
+  .app-more:hover svg, .job-link:hover svg { transform: none; }
+  .guide-topics a:active { transform: none; }
 }
 
 @media (prefers-contrast: more) {
-  .orbit-label, .bento-feature, .bento-badge, .app-card { border-color: var(--border-strong); }
-  .home-cta::before { display: none; }
-}
-
-/* ---------- Start here: task cards ----------
-   One card per app, phrased as the job you want done. Each card is in
-   its app's tone. */
-
-.task-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.task-grid > li { display: flex; }
-
-.task-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  color: var(--text);
-  text-decoration: none;
-  overflow: hidden;
-  isolation: isolate;
-  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.3s var(--ease-out);
-}
-/* A soft wash of the app's colour in the top corner. */
-.task-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(circle at 100% 0%, var(--brand-soft), transparent 55%);
-}
-.task-card:hover { color: var(--text); border-color: var(--brand); box-shadow: var(--shadow-md); transform: translateY(-4px); }
-.task-card:active { transform: scale(0.98); transition-duration: 0.1s; }
-
-.task-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.task-tile { width: 3rem; }
-.task-num {
-  font: 700 0.8125rem/1 var(--font-heading);
-  letter-spacing: 0.08em;
-  color: var(--text-2);
-}
-.task-title {
-  margin-top: 1.25rem;
-  font: 650 1.125rem/1.3 var(--font-heading);
-  letter-spacing: -0.01em;
-}
-.task-text { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.55; flex-grow: 1; }
-.task-app {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 1.25rem;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  color: var(--brand-text);
-}
-.task-app svg { width: 1rem; height: 1rem; transition: transform 0.25s var(--ease-out); }
-.task-card:hover .task-app svg { transform: translateX(3px); }
-
-/* ---------- Availability table ---------- */
-
-.avail {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-}
-.avail-table { width: 100%; border-collapse: collapse; }
-.avail-table th, .avail-table td {
-  padding: 1rem 1.25rem;
-  text-align: left;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--border);
-}
-.avail-table tbody tr:last-child > * { border-bottom: 0; }
-.avail-table thead th {
-  background: var(--bg-alt);
-  font: 650 0.75rem/1 var(--font-heading);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-2);
-}
-.avail-app {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  gap: 0.8rem;
-  color: var(--text);
-  font: 650 1rem/1.3 var(--font-heading);
-  text-decoration: none;
-}
-.avail-app:hover { color: var(--brand-text); }
-.avail-tile { width: 2.5rem; flex-shrink: 0; }
-.avail-what { color: var(--text-2); font-size: 0.9375rem; }
-.avail-yes, .avail-no {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.75rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.875rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.avail-yes { min-height: 2.75rem; background: var(--brand-soft); color: var(--brand-text); text-decoration: none; }
-.avail-yes:hover { color: var(--brand-hover); }
-.avail-yes svg { width: 1rem; height: 1rem; stroke-width: 2.5; }
-.avail-no { color: var(--text-2); border: 1px dashed var(--border-strong); }
-
-/* Phones: each app becomes a stacked card instead of a wide table row. */
-@media (max-width: 47.99rem) {
-  .avail-table thead { display: none; }
-  .avail-table, .avail-table tbody, .avail-table tr, .avail-table th, .avail-table td { display: block; }
-  .avail-table tr { padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--border); }
-  .avail-table tbody tr:last-child { border-bottom: 0; }
-  .avail-table th, .avail-table td { padding: 0; border: 0; }
-  .avail-table td { margin-top: 0.6rem; }
-  .avail-table td[data-label] { display: inline-block; margin-right: 0.5rem; }
-  .avail-table td[data-label]::before {
-    content: attr(data-label) ": ";
-    display: block;
-    margin-bottom: 0.3rem;
-    font-size: 0.75rem;
-    color: var(--text-2);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .task-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-  .task-card:hover, .task-card:active, .task-card:hover .task-app svg { transform: none; }
-}
-@media (prefers-contrast: more) {
-  .task-card, .avail { border-color: var(--border-strong); }
+  .orbit-label, .app-feature, .app-item, .job, .switch, .app-feats li, .guide-topics a { border-color: var(--border-strong); }
+  .app-feature::before, .home-cta::before { display: none; }
 }

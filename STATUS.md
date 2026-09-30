@@ -1250,6 +1250,56 @@ three beside it (arrows slide in on hover); Help is four icon cards.
 Focus rings show for keyboard focus only, never after a mouse click.
 Touch screens get 44px items in the capsule.
 
+## 5m. Homepage rebuilt: one pass through the apps, sourced content (30 Sep)
+
+The old homepage listed the same four apps five times (hero orbit, task
+cards, app cards, an availability table, closing tiles) in eight
+sections: 6,664px on a laptop, 10,382px on a phone, 1,076 words, many of
+them repeats. User asked for a professional overhaul with at least
+1,000 words of quality content.
+
+**Structure** (`index.html` is now front matter plus one include per part):
+
+| Part | File | What it holds |
+|---|---|---|
+| Structured data | `_includes/home/schema.html` | Organization, WebSite, ItemList in one `@graph`; FAQPage via `faq-schema.html` |
+| Hero | `_includes/home/hero.html` | h1, one line, "See the apps" + "Read Daily Info"; the orbit (becomes a 4-tile row under 900px) |
+| Apps | `_includes/home/apps.html` | flagship feature card (features, its app page's `moments`, both badges) + three app cards (job, one line, features, platform, Google Play, Learn more) |
+| Which kind of app | `_includes/home/jobs.html` | back up / transfer / recover / read: what it does, when, does it keep a copy; then "Switching phones? Use them in this order" |
+| Your data | `_includes/home/privacy.html` | four commitments from the privacy policy |
+| Guides | `_includes/home/guides.html` | three newest articles + topic links into the hub |
+| FAQ | `faq-section.html split=true` | 10 questions (2 new: backup vs transfer, where backups are stored) |
+| Closing | inline in `index.html` | "Start with a backup", flagship badges once |
+
+- **Content lives in data.** `_data/home.yml` (jobs, switch, privacy),
+  `_data/apps.yml` `features:` (copied from each app page's feature
+  titles), and the flagship card reads `moments` straight from its app
+  page's front matter. Every statement is sourced; the source is noted
+  in `home.yml`. One unsupported claim written during the build ("most
+  lost photos go missing on the day a phone is replaced") was caught and
+  replaced with the switching guide's own wording.
+- **New shared bits:** `_includes/platforms.html` ("iPhone and Android" /
+  "Android" from the store links; replaces three copies of that logic),
+  `store-badges.html app=` (per-app accessible names, so four "Get it on
+  Google Play" links are distinguishable), `faq-section.html split=true`
+  and `.faq-split` in shell.css (other pages unchanged).
+- **Removed:** section eyebrows and the 01-04 numbers on the homepage,
+  hero store badges, the availability table ("Not yet" x3), the task
+  cards and the old "why us" list. index.css rewritten: 17.8KB -> 17.7KB
+  while adding three new sections.
+- **Phones:** the four comparison cards are a swipeable snap row (next
+  card peeks in; tabbing scrolls a card into view); guides are compact
+  rows. App names have a 44px tap height.
+- **Standing rules re-checked (5c, 5f):** the first draft put the company
+  name, Canning Vale / Western Australia, the support email and the
+  parent company's address and social profiles on the homepage and in
+  its schema. All removed; the strip-footer script finds zero
+  "CloudGate" or "Australia" outside the legal pages.
+- **Result:** 1,631 words, 7 parts; 7,090px laptop / ~10,100px phone
+  (longer content, shorter phone page than before); axe clean in both
+  themes at 1440 and 390; CLS 0; no sideways scroll at 320-1440; all
+  internal links and anchors resolve; full test suite passes.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1742,3 +1792,6 @@ what's there.
 - Footer: "A product of CloudGate Technologies" and LinkedIn, Facebook,
   Instagram icons (CloudGate's accounts, site.company.social in
   _config.yml).
+- 30 Sep: homepage rebuilt (section 5m): seven parts from includes and
+  data files, 1,631 words of sourced content, the four apps shown once,
+  standing rules 5c/5f re-verified.

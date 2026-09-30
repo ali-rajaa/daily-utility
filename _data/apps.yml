@@ -36,9 +36,10 @@
 # ios_url is omitted where an app isn't confirmed to exist on iOS; every
 #   page and card derives "iPhone and Android" vs "Android" from it.
 # Each tagline must match its app page's own `tagline:` front matter.
-# task / task_text: the homepage "What do you need to do?" cards -- the
-#   everyday job the app is for, in the user's words, restating only the
-#   confirmed scope above.
+# task / task_text: the everyday job the app is for, in the user's words,
+#   restating only the confirmed scope above (homepage app cards).
+# features: short labels for the homepage app cards, copied from the
+#   feature titles on the app's own page -- nothing that page doesn't say.
 
 - slug: cloud-storage-backup-drive
   short: "Backup & Drive"
@@ -50,6 +51,7 @@
   ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
   task: "Back up my photos, videos and contacts"
   task_text: "Keep a copy of what matters off your phone, and restore it when you need it, even on a new phone."
+  features: ["Photos", "Videos", "Contacts", "App data", "Restore"]
   tier: flagship
   page: true
   built: true
@@ -63,6 +65,7 @@
   android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
   task: "Open a PDF, Word, Excel or PowerPoint file"
   task_text: "Read the documents that arrive by email, chat or download, without a different app for each format."
+  features: ["PDF", "Word", "Excel", "PowerPoint"]
   tier: more
   page: true
   built: true
@@ -76,6 +79,7 @@
   android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
   task: "Move my files to another phone"
   task_text: "Send photos, videos and files from one phone to another when you switch or share."
+  features: ["Photos and videos", "Files", "Phone to phone"]
   tier: more
   page: true
   built: true
@@ -89,6 +93,7 @@
   android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
   task: "Get back a photo I deleted"
   task_text: "Look through your phone's trash bin and restore the deleted photos and files still there."
+  features: ["Deleted photos", "Deleted files", "Restore to your phone"]
   tier: more
   page: true
   built: true

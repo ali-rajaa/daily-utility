@@ -1,0 +1,76 @@
+{%- comment -%}
+  The apps, once. This replaces three older sections (task cards, app cards
+  and an availability table) that each listed the same four apps. Each
+  card carries everything those sections said: the job it's for, what it
+  covers, the phones it runs on and a direct store link.
+  Cards are not whole-card links: they hold store buttons, and a link
+  inside a link is invalid. The name and "Learn more" link to the app page.
+  Params: flagship, others (apps.yml entries).
+{%- endcomment -%}
+<section class="section section--alt home-apps" id="apps" aria-labelledby="apps-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="apps-title">Pick the app for the job</h2>
+      <p class="section-sub">Each app says what it's for, which phones it runs on and where to download it. Start with the one you need today.</p>
+    </div>
+
+    <div class="apps-grid">
+      {%- assign f = include.flagship %}
+      <article class="app-feature tone-{{ f.tone }} reveal" aria-labelledby="app-{{ f.slug }}">
+        <div class="app-feature-top">
+          {% include app-tile.html app=f class="app-feature-tile" %}
+          <span class="app-flag">Flagship</span>
+        </div>
+        <h3 class="app-name" id="app-{{ f.slug }}"><a href="{{ '/' | append: f.slug | relative_url }}">{{ f.name | escape }}</a></h3>
+        <p class="app-job">{{ f.task | escape }}</p>
+        <p class="app-text">{{ f.task_text | escape }}</p>
+        <ul class="app-feats" aria-label="What it covers">
+          {%- for feat in f.features %}<li>{{ feat | escape }}</li>{% endfor -%}
+        </ul>
+        {%- comment -%} The moments it's for, read straight from the app page's
+        own front matter (moments_heading / moments), so the two never drift. {%- endcomment -%}
+        {%- assign f_page = site.pages | where: "app_name", f.name | first %}
+        {%- if f_page.moments %}
+        <div class="app-moments">
+          <h4>{{ f_page.moments_heading | escape }}</h4>
+          <ul>
+            {%- for m in f_page.moments %}
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>{{ m.title | escape }}.</strong> {{ m.text | escape }}</span></li>
+            {%- endfor %}
+          </ul>
+        </div>
+        {%- endif %}
+        <p class="app-platform"><svg aria-hidden="true"><use href="#i-devices"/></svg>{% include platforms.html app=f %}</p>
+        <div class="app-actions">
+          {% include store-badges.html ios_url=f.ios_url android_url=f.android_url app=f.short %}
+          <a class="app-more" href="{{ '/' | append: f.slug | relative_url }}">See how it works<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </article>
+
+      <ul class="apps-list">
+        {%- for app in include.others %}
+        <li class="reveal">
+          <article class="app-item tone-{{ app.tone }}" aria-labelledby="app-{{ app.slug }}">
+            {% include app-tile.html app=app class="app-item-tile" %}
+            <div class="app-item-body">
+              <h3 class="app-name" id="app-{{ app.slug }}"><a href="{{ '/' | append: app.slug | relative_url }}">{{ app.name | escape }}</a></h3>
+              <p class="app-job">{{ app.task | escape }}</p>
+              <p class="app-text">{{ app.task_text | escape }}</p>
+              <ul class="app-feats" aria-label="What it covers">
+                {%- for feat in app.features %}<li>{{ feat | escape }}</li>{% endfor -%}
+              </ul>
+              <div class="app-item-foot">
+                <p class="app-platform"><svg aria-hidden="true"><use href="#i-devices"/></svg>{% include platforms.html app=app %}</p>
+                <div class="app-actions">
+                  {% include store-badges.html ios_url=app.ios_url android_url=app.android_url app=app.short class="store-badges--compact" %}
+                  <a class="app-more" href="{{ '/' | append: app.slug | relative_url }}">Learn more<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+                </div>
+              </div>
+            </div>
+          </article>
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
