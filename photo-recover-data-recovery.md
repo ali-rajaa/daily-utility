@@ -1,7 +1,7 @@
 ---
 layout: app
 css: app
-title: "Photo Recover & Data Recovery — Restore Deleted Photos"
+title: "Photo Recover & Data Recovery: Restore Deleted Photos"
 description: "Photo Recover & Data Recovery helps you find and restore deleted photos and files from your Android phone's trash bin. From Daily Utility Apps."
 app_name: "Photo Recover & Data Recovery"
 tagline: "Find and restore deleted photos and files from your phone's trash bin."
@@ -11,7 +11,7 @@ updated: 2026-09-29
 og_image: "/assets/og/photo-recover-data-recovery.png"
 og_image_alt: "Photo Recover & Data Recovery, an app from Daily Utility Apps"
 
-moments_heading: "For the moment your stomach drops"
+moments_heading: "For the moment you realise it's gone"
 moments_sub: "Deleted photos often wait in the trash for a while before they're gone for good. That's your window."
 moments:
   - icon: photo
@@ -88,6 +88,6 @@ faqs:
     a: "It's currently on Google Play for Android. If an iPhone version is released, you'll find the App Store link on this page."
   - q: "Who makes Photo Recover & Data Recovery?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Is my data sold or used for advertising?"
+  - q: "Do you sell my data or use my files for advertising?"
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 ---

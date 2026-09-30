@@ -1,7 +1,7 @@
 ---
 layout: app
 css: app
-title: "Cloud Storage Backup & Drive — Photo, Video & Contact Backup"
+title: "Cloud Storage Backup & Drive: Photo, Video & Contact Backup"
 description: "Cloud Storage Backup & Drive backs up your photos, videos, contacts and app data so you can restore them when you need them. For iPhone and Android."
 app_name: "Cloud Storage Backup & Drive"
 tagline: "Cloud backup and restore for your photos, videos, contacts and app data."
@@ -12,7 +12,7 @@ updated: 2026-09-29
 og_image: "/assets/og/cloud-storage-backup-drive.png"
 og_image_alt: "Cloud Storage Backup & Drive, an app from Daily Utility Apps"
 
-moments_heading: "Made for the moments that matter"
+moments_heading: "When a backup matters most"
 moments_sub: "A backup is worth the most on the day something goes wrong. These are the days it's for."
 moments:
   - icon: phone-transfer
@@ -23,7 +23,7 @@ moments:
     text: "Your backup doesn't live on the phone, so losing the phone doesn't have to mean losing what was on it."
   - icon: folder
     title: "When storage runs low"
-    text: "With your photos and videos backed up, clearing space on your phone stops being a gamble."
+    text: "With your photos and videos backed up, you can clear space on your phone without guessing."
   - icon: contacts
     title: "Keeping family memories safe"
     text: "The photos and videos you can never take again, kept somewhere other than the phone in your pocket."
@@ -49,7 +49,7 @@ features:
     text: "Back up your contacts, so a new phone doesn't mean rebuilding your address book."
   - icon: folder
     title: "App data"
-    text: "Back up app data as well as your media, not just what's in your gallery."
+    text: "Back up app data as well as your photos and videos."
   - icon: restore
     title: "Restore"
     text: "Bring what you've backed up back onto your phone, or onto a new one."
@@ -100,6 +100,6 @@ faqs:
     a: "Yes. Back up your old phone first and confirm the backup is complete, then restore onto the new phone, and only reset the old one once everything you need is there."
   - q: "Who makes Cloud Storage Backup & Drive?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Is my data sold or used for advertising?"
+  - q: "Do you sell my data or use my files for advertising?"
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 ---

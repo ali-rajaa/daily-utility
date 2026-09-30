@@ -1,7 +1,7 @@
 ---
 layout: app
 css: app
-title: "Document Reader: Read All PDF — Open PDF, Word & Excel"
+title: "Document Reader: Read All PDF, for PDF, Word & Excel"
 description: "Document Reader: Read All PDF opens PDF, Word, Excel and PowerPoint files on your Android phone, all in one app. From Daily Utility Apps."
 app_name: "Document Reader: Read All PDF"
 tagline: "Read PDF, Word, Excel and PowerPoint files in one app."
@@ -12,7 +12,7 @@ og_image: "/assets/og/document-reader-pdf.png"
 og_image_alt: "Document Reader: Read All PDF, an app from Daily Utility Apps"
 
 moments_heading: "For every document that lands on your phone"
-moments_sub: "Documents arrive from everywhere now. One reader means you're ready for all of them."
+moments_sub: "Documents arrive by email, chat and download. One reader opens all of them."
 moments:
   - icon: doc
     title: "An attachment from work"
@@ -42,7 +42,7 @@ features:
     text: "Open and read PDF documents on your phone."
   - icon: folder
     title: "Word, Excel and PowerPoint"
-    text: "Read Office documents, spreadsheets and presentations too, not just PDFs."
+    text: "Read Word documents, Excel spreadsheets and PowerPoint presentations as well as PDFs."
   - icon: check
     title: "One app for all of them"
     text: "Keep one reader for every common document type instead of a different app for each."
@@ -85,6 +85,6 @@ faqs:
     a: "It's currently on Google Play for Android. If an iPhone version is released, you'll find the App Store link on this page."
   - q: "Who makes Document Reader: Read All PDF?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Is my data sold or used for advertising?"
+  - q: "Do you sell my data or use my files for advertising?"
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 ---

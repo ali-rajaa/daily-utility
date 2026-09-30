@@ -1,7 +1,7 @@
 ---
 layout: app
 css: app
-title: "Smartphone All Data Transfer — Move Photos, Videos & Files"
+title: "Smartphone All Data Transfer: Move Photos, Videos & Files"
 description: "Smartphone All Data Transfer moves your photos, videos and files from one phone to another. For Android, from Daily Utility Apps."
 app_name: "Smartphone All Data Transfer"
 tagline: "Transfer photos, videos and files from one phone to another."
@@ -12,11 +12,11 @@ og_image: "/assets/og/smartphone-data-transfer.png"
 og_image_alt: "Smartphone All Data Transfer, an app from Daily Utility Apps"
 
 moments_heading: "When files need to get from one phone to another"
-moments_sub: "Chat apps and email weren't built for moving a camera roll. This app was."
+moments_sub: "Chat apps and email struggle with a whole camera roll. This app moves photos, videos and files directly."
 moments:
   - icon: phone-transfer
     title: "Setting up a new phone"
-    text: "Bring your photos, videos and files across so the new phone feels like yours from day one."
+    text: "Bring your photos, videos and files across so the new phone has them from the start."
   - icon: photo
     title: "Sharing holiday photos"
     text: "Everyone took pictures. Get them all onto one phone without a hundred chat messages."
@@ -25,7 +25,7 @@ moments:
     text: "The clip that's far too big to email, moved straight to the phone that needs it."
   - icon: contacts
     title: "Helping family switch"
-    text: "Moving a parent's or grandparent's photos to their new phone, without the stress."
+    text: "Moving a parent's or grandparent's photos to their new phone."
 
 steps_heading: "Move to a new phone in three steps"
 how_it_works:
@@ -42,7 +42,7 @@ features:
     text: "Move your gallery to another phone without hunting for a cable."
   - icon: folder
     title: "Files"
-    text: "Transfer your other files too, not just what's in the gallery."
+    text: "Transfer other files as well as your gallery."
   - icon: transfer
     title: "Phone to phone"
     text: "Made for the moment you switch phones or share with someone nearby."
@@ -86,6 +86,6 @@ faqs:
     a: "It's currently on Google Play for Android. If an iPhone version is released, you'll find the App Store link on this page."
   - q: "Who makes Smartphone All Data Transfer?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Is my data sold or used for advertising?"
+  - q: "Do you sell my data or use my files for advertising?"
     a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
 ---
