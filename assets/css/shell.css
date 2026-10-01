@@ -1421,9 +1421,64 @@ h3, .h3 {
     radial-gradient(farthest-side at 100% 50%, rgba(12, 20, 36, 0.16), transparent) right / 0.85rem 100% no-repeat scroll,
     var(--surface);
 }
-.table-scroll th, .table-scroll td { line-height: 1.5; }
-.table-scroll table { min-width: 32rem; margin: 0; }
+/* Cells: left-aligned and top-aligned so a wrapped cell reads as one
+   block, with hairlines between rows. The header row sits on a tinted
+   band in smaller, lighter text; the first column names each row, so
+   it carries the weight. */
+.table-scroll table {
+  width: 100%;
+  min-width: 32rem;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.table-scroll th, .table-scroll td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border);
+}
+.table-scroll thead th {
+  padding-block: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--bg-alt);
+}
+.table-scroll tbody td:first-child { font-weight: 600; }
 .table-scroll tr:last-child > * { border-bottom: 0; }
+
+/* Phones: once scripts.html has labelled the cells, each row becomes a
+   card. The first cell is its title; every other cell gets its column
+   heading as a small label above it, so nothing sits off screen. */
+@media (max-width: 599.98px) {
+  .table-scroll:has(> .is-stackable) { overflow: visible; background: var(--surface); }
+  .table-scroll table.is-stackable { min-width: 0; font-size: 1rem; }
+  .is-stackable thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .is-stackable tbody,
+  .is-stackable tr,
+  .is-stackable td { display: block; }
+  .is-stackable tr { padding: 1rem 1.125rem; border-bottom: 1px solid var(--border); }
+  .is-stackable tbody tr:last-child { border-bottom: 0; }
+  .table-scroll .is-stackable td { padding: 0; border: 0; }
+  .is-stackable td + td { margin-top: 0.625rem; }
+  .is-stackable td + td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+}
 
 /* ---------- Reveal on scroll ----------
    Content is only hidden once scripts.html has confirmed the observer that

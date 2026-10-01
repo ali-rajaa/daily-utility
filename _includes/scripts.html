@@ -207,6 +207,40 @@
     });
   });
 
+  /* ---- Tables ----
+     Label each cell with its column heading, so on phones (shell.css)
+     every row can stack as a card instead of hiding columns off to the
+     side. Without this the table simply scrolls sideways. */
+  document.querySelectorAll('.table-scroll table').forEach(function (table) {
+    var heads = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) {
+      return th.textContent.trim();
+    });
+    if (!heads.length) return;
+    table.querySelectorAll('tbody tr').forEach(function (tr) {
+      Array.prototype.forEach.call(tr.children, function (cell, i) {
+        if (heads[i]) cell.setAttribute('data-label', heads[i]);
+      });
+    });
+    table.classList.add('is-stackable');
+
+    /* Stacked, the box no longer scrolls, so it drops the "scrolls
+       sideways" label and its tab stop until the screen widens again. */
+    var wrap = table.parentNode;
+    var label = wrap.getAttribute('aria-label');
+    var phone = window.matchMedia('(max-width: 599.98px)');
+    var sync = function () {
+      if (phone.matches) {
+        wrap.removeAttribute('tabindex');
+        wrap.setAttribute('aria-label', 'Table');
+      } else {
+        wrap.setAttribute('tabindex', '0');
+        wrap.setAttribute('aria-label', label);
+      }
+    };
+    sync();
+    if (phone.addEventListener) phone.addEventListener('change', sync);
+  });
+
   /* ---- Reveal on scroll ----
      .reveal-ready (which hides .reveal content) is added only after the
      observer that shows it again exists. If anything here fails, the
