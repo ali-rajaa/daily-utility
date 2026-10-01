@@ -1313,6 +1313,51 @@ them repeats. User asked for a professional overhaul with at least
   After the fixes, axe is clean on all 16 pages in both themes at 1440
   and 390, and every internal link and anchor on the site resolves.
 
+## 5n. One colour system across the site (1 Oct)
+
+User: "we need to have consistent colour theme, its kinda messed up".
+An audit of every colour in the CSS found five inconsistencies:
+
+- **Hero glows mixed colour families.** Every hero drew the logo's green
+  and cyan next to the page's own tone, so a violet page glowed violet,
+  cyan and green at once.
+- **The tone gradients were built differently.** Blue swept blue to cyan
+  to green; violet, teal and rose stayed in one colour. In dark mode they
+  switched to pale pastels (blue went light blue to mint), so banners
+  glared on the dark page, while app tiles kept fixed colours.
+- **Numbered badges had two treatments.** App pages and the homepage
+  used solid --brand; article step numbers used the gradient with white
+  text, which in dark mode sat on a pale gradient (about 2.8:1 at the
+  blue end). That broke the rule in section 3 that the gradient never
+  goes behind text.
+- **Icon chips had two treatments.** Topic icons followed the theme
+  (pastel with a dark glyph in dark mode); app-page moment icons used
+  the gradient with a white glyph.
+- **Topic colours borrowed the wrong apps.** Photos & Media was violet,
+  the Document Reader colour, while the photo app (Photo Recover) is rose.
+
+The rule now (shell.css "App tones" has the full version): one colour
+family per tone, in three roles.
+
+- **Controls and markers** (buttons, links, numbered badges, check
+  bullets, the reading-progress bar) use --brand / --on-brand. They
+  change with the theme and are contrast-checked.
+- **Illustrations** (app tiles, guide banners, topic and moment icon
+  chips, the byline mark) use the new --tone-gradient with a white
+  glyph, or --tone-deep for a glyph on a white disc. They're the same
+  in both themes, and every stop is the tile's own value.
+- **Hero glows** use --brand plus --glow-b / --glow-c, lighter shades of
+  the same colour. Only pages outside a tone (home, Daily Info, legal,
+  404) keep the logo's green and cyan; --brand-gradient is now used
+  only by the 404 numeral.
+- **Topic colours** follow the app: Backup & Storage blue, Switching
+  Phones teal, Photos & Media rose (was violet), Privacy & Security
+  violet (was rose; no app of its own).
+
+The 11 share images for apps and articles were regenerated with the same
+glow colours (the hub's keeps the logo colours). The full suite passes,
+and axe is clean on all 16 pages in both themes at 1440 and 390.
+
 ## 6. SEO and routing
 
 **URLs**

@@ -1,7 +1,10 @@
 # Daily Info topics (STATUS.md section 5's four categories). A post's
 # `category:` must match one `name` here exactly. Each topic has a glyph
 # (icon-sprite symbol) and a tone (shell.css "App tones") so its article
-# cards and topic card carry a consistent colour and icon; `blurb` is the
+# cards and topic card carry a consistent colour and icon. A topic takes
+# the colour of the app it's about: backup blue, switching teal (Data
+# Transfer), photos rose (Photo Recover). Privacy has no app of its own
+# and takes the remaining violet; `blurb` is the
 # one-line description on the hub's topic grid. Order = display order.
 
 - name: "Backup & Storage"
@@ -16,10 +19,10 @@
 
 - name: "Photos & Media"
   glyph: photo
-  tone: violet
+  tone: rose
   blurb: "Look after your photos and videos, and get them back when they go missing."
 
 - name: "Privacy & Security"
   glyph: shield
-  tone: rose
+  tone: violet
   blurb: "Keep your data private, and understand what your apps can see."

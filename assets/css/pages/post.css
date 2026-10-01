@@ -21,7 +21,7 @@
     right: 0;
     z-index: 49;
     height: 3px;
-    background: var(--brand-gradient);
+    background: var(--brand);
     transform-origin: 0 50%;
     transform: scaleX(0);
     animation: post-progress linear both;
@@ -122,7 +122,7 @@
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 50%;
-  background: var(--brand-gradient);
+  background: var(--tone-gradient);
   color: #fff;
 }
 .post-byline-mark svg { width: 1rem; height: 1rem; }
@@ -148,7 +148,7 @@
   max-height: 22rem;
   width: 100%;
   border-radius: 1.75rem;
-  background: var(--brand-gradient);
+  background: var(--tone-gradient);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   isolation: isolate;
@@ -187,14 +187,11 @@
   border-radius: 1.6rem;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.16), 0 18px 40px rgba(6, 16, 31, 0.28);
-  color: #0b5fe8;
+  /* The disc is white in both themes, so the glyph uses the tone's
+     fixed --tone-deep (all >= 5.4:1 on white). */
+  color: var(--tone-deep);
   transform: rotate(-6deg);
 }
-/* The disc is white in both themes, so its glyph keeps each tone's
-   light-theme value (all >= 4.5:1 on white). */
-.tone-violet .post-banner-glyph { color: #7c3aed; }
-.tone-teal .post-banner-glyph { color: #0f766e; }
-.tone-rose .post-banner-glyph { color: #be123c; }
 .post-banner-glyph svg { width: 52%; height: 52%; }
 
 .post-stats {
@@ -355,11 +352,10 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 0.9rem;
-  background: var(--brand-gradient);
-  color: #fff;
+  background: var(--brand);
+  color: var(--on-brand);
   font: 700 1.125rem/1 var(--font-heading);
   box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--brand) 70%, transparent);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 /* The rail between numbered steps. */
 .post-body--steps .post-section + .post-section::before {

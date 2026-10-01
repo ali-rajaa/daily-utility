@@ -338,9 +338,9 @@
   height: 3rem;
   margin-bottom: 1.25rem;
   border-radius: 0.95rem;
-  background: var(--brand-gradient);
+  background: var(--tone-gradient);
   color: #fff;
-  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--brand) 80%, transparent);
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--tone-deep) 80%, transparent);
 }
 .moment-icon svg { width: 1.4rem; height: 1.4rem; }
 .moment h3 { font-size: 1.125rem; }

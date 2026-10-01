@@ -41,6 +41,18 @@
   --accent: #06b6d4;
   --glass: rgba(255, 255, 255, 0.94);
 
+  /* Illustration colours (see "App tones" below): app tiles, guide
+     banners and icon chips. Fixed in both themes, like the store
+     badges, and always carry a white glyph. Blue is the default. */
+  --tone-light: #3b82f6;
+  --tone-deep: #0b5fe8;
+  --tone-gradient: linear-gradient(145deg, #3b82f6, #0b5fe8);
+  /* Hero glow, second and third blobs (the first is --brand). Outside
+     a tone these are the logo's green and cyan; each tone swaps in
+     lighter shades of its own colour. */
+  --glow-b: var(--brand-2);
+  --glow-c: var(--accent);
+
   --shadow-sm: 0 1px 2px rgba(12, 20, 36, 0.06), 0 1px 3px rgba(12, 20, 36, 0.08);
   --shadow-md: 0 4px 12px rgba(12, 20, 36, 0.08), 0 12px 32px rgba(12, 20, 36, 0.08);
   --shadow-lg: 0 12px 24px rgba(12, 20, 36, 0.1), 0 32px 64px rgba(12, 20, 36, 0.12);
@@ -993,14 +1005,14 @@ h3, .h3 {
   left: 82%;
   top: 70%;
   width: max(60%, 26rem);
-  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--brand-2) 45%, transparent), color-mix(in srgb, var(--brand-2) 18%, transparent) 50%, transparent);
+  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--glow-b) 45%, transparent), color-mix(in srgb, var(--glow-b) 18%, transparent) 50%, transparent);
   animation: heroGlowDriftB 23s ease-in-out infinite;
 }
 .hero-glow-blob--c {
   left: 63%;
   top: 15%;
   width: max(40%, 18rem);
-  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--accent) 35%, transparent), color-mix(in srgb, var(--accent) 14%, transparent) 50%, transparent);
+  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--glow-c) 35%, transparent), color-mix(in srgb, var(--glow-c) 14%, transparent) 50%, transparent);
   animation: heroGlowDriftC 27s ease-in-out infinite;
 }
 
@@ -1025,60 +1037,73 @@ h3, .h3 {
 }
 
 /* ---------- App tones ----------
-   Each app has its own colour identity (apps.yml `tone`). A .tone-*
-   class re-points the brand tokens inside its scope, so every component
-   that already uses --brand / --brand-text / --brand-soft (buttons,
-   eyebrows, links, step numbers, icon tiles, trust band, CTA card) takes
-   the app's colour with no per-component rules. The header and footer
-   sit outside any tone scope and stay brand blue. Blue is the brand
-   itself, so .tone-blue needs no overrides.
+   Each app has its own colour (apps.yml `tone`), and each Daily Info
+   topic borrows the colour of the app it relates to (categories.yml).
+   A .tone-* class re-points the colour tokens inside its scope, so every
+   component takes the tone with no per-component rules. The header and
+   footer sit outside any tone scope and stay brand blue.
 
-   All pairs computed against WCAG AA 4.5:1 in both themes (29 Sep):
+   One colour family per tone, used in three roles, so the same kind of
+   thing always looks the same:
+   - Controls and markers (buttons, links, numbered badges, check
+     bullets): --brand / --on-brand / --brand-text / --brand-soft. These
+     change with the theme: deep in light, lighter in dark.
+   - Illustrations (app tiles, guide banners, icon chips): --tone-gradient
+     with a white glyph, or --tone-deep for a glyph on a white disc.
+     These stay the same in both themes, like a printed object.
+   - Hero glow: --brand plus --glow-b / --glow-c, lighter shades of the
+     same colour. Only pages outside a tone (home, Daily Info, legal,
+     404) show the logo's green and cyan.
+
+   All text pairs computed against WCAG AA 4.5:1 in both themes (29 Sep):
    on-brand on brand/hover, brand-text on bg / bg-alt / surface /
    brand-soft, and body text on brand-soft -- lowest is teal
-   brand-text on its soft tint at 4.85:1. */
-/* Blue is the brand's own colour: .tone-blue restores it inside another
-   tone (e.g. the flagship's card inside a teal article). */
+   brand-text on its soft tint at 4.85:1. White glyphs on every
+   --tone-gradient stop are 3:1 or better (see App tiles). */
 .tone-blue {
   --brand: #0b5fe8; --brand-hover: #0848b8; --on-brand: #ffffff;
   --brand-soft: #e8f0ff; --brand-text: #0a52c9;
-  --brand-gradient: linear-gradient(135deg, #0b5fe8 0%, #0f9ed6 45%, #16b871 100%);
+  --tone-light: #3b82f6; --tone-deep: #0b5fe8;
+  --tone-gradient: linear-gradient(145deg, #3b82f6, #0b5fe8);
+  --glow-b: #60a5fa; --glow-c: #93c5fd;
 }
 .tone-violet {
   --brand: #7c3aed; --brand-hover: #6d28d9; --on-brand: #ffffff;
   --brand-soft: #f3edff; --brand-text: #6d28d9;
-  --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%);
+  --tone-light: #a855f7; --tone-deep: #7c3aed;
+  --tone-gradient: linear-gradient(145deg, #a855f7, #7c3aed);
+  --glow-b: #c084fc; --glow-c: #d8b4fe;
 }
 .tone-teal {
   --brand: #0f766e; --brand-hover: #115e59; --on-brand: #ffffff;
   --brand-soft: #e3f5f2; --brand-text: #0f766e;
-  --brand-gradient: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #2dd4bf 100%);
+  --tone-light: #0d9488; --tone-deep: #0f766e;
+  --tone-gradient: linear-gradient(145deg, #0d9488, #0f766e);
+  --glow-b: #2dd4bf; --glow-c: #5eead4;
 }
 .tone-rose {
   --brand: #be123c; --brand-hover: #9f1239; --on-brand: #ffffff;
   --brand-soft: #fdecef; --brand-text: #be123c;
-  --brand-gradient: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%);
+  --tone-light: #f43f5e; --tone-deep: #be123c;
+  --tone-gradient: linear-gradient(145deg, #f43f5e, #be123c);
+  --glow-b: #fb7185; --glow-c: #fda4af;
 }
 @media (prefers-color-scheme: dark) {
   .tone-blue {
     --brand: #5b9bff; --brand-hover: #7db0ff; --on-brand: #06101f;
     --brand-soft: #16233b; --brand-text: #7db0ff;
-    --brand-gradient: linear-gradient(135deg, #5b9bff 0%, #43b8f0 45%, #2ce68c 100%);
   }
   .tone-violet {
     --brand: #a78bfa; --brand-hover: #c4b5fd; --on-brand: #0a0e16;
     --brand-soft: #231b3b; --brand-text: #c4b5fd;
-    --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c4b5fd 100%);
   }
   .tone-teal {
     --brand: #2dd4bf; --brand-hover: #5eead4; --on-brand: #0a0e16;
     --brand-soft: #0d2a29; --brand-text: #5eead4;
-    --brand-gradient: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #5eead4 100%);
   }
   .tone-rose {
     --brand: #fb7185; --brand-hover: #fda4af; --on-brand: #0a0e16;
     --brand-soft: #361621; --brand-text: #fda4af;
-    --brand-gradient: linear-gradient(135deg, #be123c 0%, #f43f5e 50%, #fda4af 100%);
   }
 }
 
@@ -1171,7 +1196,7 @@ h3, .h3 {
   display: grid;
   place-items: center;
   height: 8.5rem;
-  background: var(--brand-gradient);
+  background: var(--tone-gradient);
   overflow: hidden;
 }
 .post-card-banner::before {
@@ -1193,13 +1218,9 @@ h3, .h3 {
   box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2), 0 10px 24px rgba(6, 16, 31, 0.22);
   transition: transform 0.3s var(--ease-out);
 }
-/* The disc is white in both themes, so the glyph uses each tone's
-   light-theme colour (all >= 5.4:1 on white) rather than the dark
-   theme's paler --brand. */
-.post-card-glyph { color: #0b5fe8; }
-.tone-violet .post-card-glyph { color: #7c3aed; }
-.tone-teal .post-card-glyph { color: #0f766e; }
-.tone-rose .post-card-glyph { color: #be123c; }
+/* The disc is white in both themes, so the glyph uses the tone's fixed
+   --tone-deep (all >= 5.4:1 on white) rather than the theme's --brand. */
+.post-card-glyph { color: var(--tone-deep); }
 .post-card-glyph svg { width: 50%; height: 50%; }
 .post-card:hover .post-card-glyph { transform: scale(1.06); }
 

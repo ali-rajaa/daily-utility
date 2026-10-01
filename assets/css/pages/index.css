@@ -567,7 +567,7 @@
   z-index: -1;
   background:
     radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 40%),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--brand-2) 22%, transparent), transparent 40%);
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--glow-b) 22%, transparent), transparent 40%);
 }
 .home-cta .section-sub { max-width: 38rem; margin-top: 0; }
 .home-cta .store-badges { justify-content: center; }
