@@ -1,16 +1,18 @@
 {%- comment -%}
-  Site footer, one copy for every page. Laid out like the CloudGate
-  Storage footer the user supplied as reference (29 Sep): brand block
-  with a short description, two link columns, a "Get the app" column
-  with the store badges, and a bottom row with the copyright on the
-  left.
+  Site footer, one copy for every page: brand block with a short
+  description, two link columns, a "Get the app" column with the store
+  badges, and a bottom row with the copyright on the left.
 
   The apps list itself: an app appears once its _data/apps.yml entry has
   built: true. Daily Info isn't repeated here (user, 29 Sep); it's in
-  the header. No ACN or address (user, 29 Sep): those stay on the legal
-  pages. CloudGate may be named here and on the legal pages only: the
-  "A product of CloudGate Technologies" line and the social icons
-  (site.company.social in _config.yml) are CloudGate's (user, 29 Sep).
+  the header.
+
+  Daily Utility Apps is presented as its own company (user, 3 Oct): the
+  operating company's name, ACN, address and support email appear on
+  the legal pages only, never here. So the copyright names the site,
+  and "Contact support" opens the Contact section of the Terms of
+  Service, which carries the email address.
+
   The Apple/Google credit sits under the badges it belongs to, as their
   badge guidelines ask.
 {%- endcomment -%}
@@ -24,14 +26,6 @@
       </a>
       <p class="footer-tagline">Simple apps for your phone's everyday jobs.</p>
       <p class="footer-desc">Cloud backup, a document reader, phone-to-phone transfer and photo recovery.</p>
-      <p class="footer-maker">A product of <strong>CloudGate Technologies</strong></p>
-      {%- if site.company.social and site.company.social.size > 0 %}
-      <ul class="footer-social" aria-label="CloudGate Technologies on social media">
-        {%- for s in site.company.social %}
-        <li><a href="{{ s.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ s.name }} (opens in a new tab)"><svg aria-hidden="true"><use href="#i-{{ s.icon }}"/></svg></a></li>
-        {%- endfor %}
-      </ul>
-      {%- endif %}
     </div>
 
     <nav class="footer-col" aria-label="Apps">
@@ -46,7 +40,7 @@
     <nav class="footer-col" id="support" aria-label="Support and legal">
       <p class="footer-head">Support &amp; legal</p>
       <ul class="footer-links">
-        <li><a href="mailto:{{ site.company.support_email }}">Contact support</a></li>
+        <li><a href="{{ '/terms-of-service' | relative_url }}#contact">Contact support</a></li>
         <li><a href="{{ '/privacy-policy' | relative_url }}">Privacy Policy</a></li>
         <li><a href="{{ '/terms-of-service' | relative_url }}">Terms of Service</a></li>
       </ul>
@@ -61,7 +55,7 @@
 
   <div class="wrap">
     <div class="footer-legal">
-      <p>&copy; {{ site.time | date: "%Y" }} {{ site.company.legal_name }}. All rights reserved.</p>
+      <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
       <p>Apps for iPhone and Android.</p>
     </div>
   </div>

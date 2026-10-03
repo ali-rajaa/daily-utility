@@ -927,7 +927,11 @@ audience skews toward budget Android phones.
 so the homepage's "All articles", the 404's "Read Daily Info" and the
 header's Daily Info link 404 until step 6 ships it.
 
-## 5c. Standing rules: no real app logos; CloudGate only in legal + footer (29 Sep)
+## 5c. Standing rules: no real app logos; CloudGate only in legal (29 Sep, tightened 3 Oct)
+
+> **Superseded in part (3 Oct, section 5o):** CloudGate is now named on
+> the legal pages ONLY, not in the footer. Rule 2 below records the
+> 29 Sep version.
 
 User, 29 Sep, on seeing the homepage: *"remove actual logos, use similar
 SVGs that represent (never use actual logo), and position correctly …
@@ -1357,6 +1361,40 @@ family per tone, in three roles.
 The 11 share images for apps and articles were regenerated with the same
 glow colours (the hub's keeps the logo colours). The full suite passes,
 and axe is clean on all 16 pages in both themes at 1440 and 390.
+
+## 5o. Daily Utility as its own company: CloudGate on legal pages only (3 Oct)
+
+User, 3 Oct: *"we need to remove all cloudgate traces, keep it ONLY IN
+LEGAL so socials etc, remove powered BY, ITS ITS OWN COMPANY"*. This
+replaces rule 2 of section 5c (which still allowed the footer). It's a
+**standing rule**.
+
+The footer was the only place left. It's changed on every page:
+- Removed "A product of CloudGate Technologies" and CloudGate's
+  LinkedIn, Facebook and Instagram icons, along with their sprite
+  symbols, CSS and the `company.social` settings.
+- The copyright now reads "© {year} Daily Utility Apps", from
+  `site.title`, not the operating company's legal name.
+- "Contact support" (footer and the Help menu) opens
+  `/terms-of-service#contact` instead of a `mailto:`. The support
+  address is on a cloudgate-app.com domain, so it appears on the legal
+  pages only. **If a Daily Utility support address is set up, put it in
+  `company.support_email` and the footer can go back to a mailto.**
+- The homepage FAQ "How do I get help" now points to that section.
+- The privacy policy's meta description no longer reads "CloudGate
+  Technologies, publisher of Daily Utility Apps". The policy and terms
+  themselves still name the company, ACN and address: they're the legal
+  entity those documents bind, and the privacy policy has to say who
+  handles personal information.
+- `_config.yml`'s `company:` block is commented as legal-pages-only and
+  trimmed to what those pages use.
+- Source comments that mentioned the sibling CloudGate site were
+  reworded.
+
+**Check, no longer stripping the footer:** search every built page
+except privacy-policy and terms-of-service for "cloudgate", "Pty",
+"ACN", the address, "product of", "powered by" and the social networks.
+Result: zero matches. Re-run it whenever copy or the footer changes.
 
 ## 6. SEO and routing
 

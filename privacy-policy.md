@@ -3,7 +3,7 @@ layout: legal
 css: legal
 title: "Privacy Policy | Daily Utility Apps"
 heading: "Privacy Policy"
-description: "How CloudGate Technologies, publisher of Daily Utility Apps, collects, uses, stores and protects your personal information across our apps and this website."
+description: "How Daily Utility Apps collects, uses, stores and protects your personal information across our apps and this website."
 lead: "What information our apps and this website collect, how we use and store it, who we share it with, and the rights you have over your personal information and your files."
 last_updated: 2026-09-29
 sections:
