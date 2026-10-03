@@ -24,8 +24,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {%- assign _pages = site.pages | sort: "url" -%}
 {%- for p in _pages %}
-  {%- assign _last = p.url | slice: -1, 1 -%}
-  {%- unless p.url contains ".html" or _last == "/" -%}{%- continue -%}{%- endunless -%}
+  {%- comment -%} Only pages written as HTML or Markdown (not this file,
+    the feed, robots.txt or stylesheets), never the 404 or a noindex page. {%- endcomment -%}
+  {%- assign _ext = p.name | split: "." | last -%}
+  {%- unless _ext == "html" or _ext == "md" -%}{%- continue -%}{%- endunless -%}
   {%- if p.url == "/404.html" or p.noindex -%}{%- continue -%}{%- endif -%}
   {%- assign _loc = p.url | replace: "/index.html", "/" | replace: ".html", "" -%}
   {%- assign _mod = p.updated | default: p.last_updated | default: p.date -%}

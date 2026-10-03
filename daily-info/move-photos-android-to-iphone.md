@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/move-photos-android-to-iphone
 css: post
 title: "How to Move Photos From Android to iPhone (and Back)"
 description: "The practical ways to move photos and videos between Android and iPhone, and what to check so nothing gets left behind or loses quality."
@@ -28,7 +29,7 @@ related:
   - backup-before-switching-phones
   - organise-phone-photos
   - free-up-phone-storage
-og_image: "/assets/og/move-photos-android-to-iphone.png"
+og_image: "/assets/og/move-photos-android-to-iphone.jpg"
 og_image_alt: "How to Move Photos From Android to iPhone (and Back): a Daily Info guide from Daily Utility Apps"
 ---
 
@@ -44,9 +45,9 @@ Back up your photos first. Whatever method you choose, make sure your photos and
 
 Check the space on the new phone. Look at how much space your photos and videos take on the old phone (in Settings, under Storage) and make sure the new phone has more than that free. If the new phone has less storage than the old one, you'll need to choose what to move, or keep part of your library in the cloud.
 
-Make room if you need to. If the old phone is nearly full, our guide to [freeing up storage without losing anything](/daily-info/free-up-phone-storage) covers the safest ways to clear space first.
+Make room if you need to. If the old phone is nearly full, our guide to [freeing up storage without losing anything]({{ '/daily-info/free-up-phone-storage' | relative_url }}) covers the safest ways to clear space first.
 
-Tidy up. Moving fewer photos is quicker and leaves you with a tidier library. Delete screenshots you don't need, duplicates and obvious mistakes before you start. Our guide on [organising thousands of photos](/daily-info/organise-phone-photos) has quick ways to do this.
+Tidy up. Moving fewer photos is quicker and leaves you with a tidier library. Delete screenshots you don't need, duplicates and obvious mistakes before you start. Our guide on [organising thousands of photos]({{ '/daily-info/organise-phone-photos' | relative_url }}) has quick ways to do this.
 
 Charge both phones and use Wi-Fi. Large libraries take a while to move, and some methods use a lot of data. Plug both phones in and keep them on a good Wi-Fi connection.
 
@@ -144,7 +145,7 @@ This route takes a little more effort, but it has a big advantage: you end up wi
 
 Transfer apps move photos, videos and files directly between two phones, usually over a local wireless connection, without uploading everything to the internet first. They're useful when both phones are in the same room, especially for large video files, and when you've already set up the new phone.
 
-As with any method, keep both phones charged and nearby, choose what to send before you start, and check everything arrived before deleting anything from the old phone. Our own [Smartphone All Data Transfer](/smartphone-data-transfer) app moves photos, videos and files from one phone to another on Android.
+As with any method, keep both phones charged and nearby, choose what to send before you start, and check everything arrived before deleting anything from the old phone. Our own [Smartphone All Data Transfer]({{ '/smartphone-data-transfer' | relative_url }}) app moves photos, videos and files from one phone to another on Android.
 
 ## Why not use chat or email?
 
@@ -210,10 +211,10 @@ If anything's missing, the old phone still has it. Move the missing items across
 
 Don't rush to reset the old phone. Keep it, untouched, for a week or two while you use the new one. It's common to discover a missing album or a folder of videos several days after switching, and with the old phone still intact, fixing it takes minutes.
 
-When you're finally ready, follow the steps in our guide to [backing up before switching phones](/daily-info/backup-before-switching-phones), which covers signing out of your accounts and resetting the old phone safely.
+When you're finally ready, follow the steps in our guide to [backing up before switching phones]({{ '/daily-info/backup-before-switching-phones' | relative_url }}), which covers signing out of your accounts and resetting the old phone safely.
 
 <aside class="post-note" markdown="1">
 
-Whichever way you move, a backup means nothing depends on the transfer going perfectly. [Cloud Storage Backup & Drive](/cloud-storage-backup-drive), on both iPhone and Android, backs up your photos, videos, contacts and app data and lets you restore them when you need them, including on a new phone.
+Whichever way you move, a backup means nothing depends on the transfer going perfectly. [Cloud Storage Backup & Drive]({{ '/cloud-storage-backup-drive' | relative_url }}), on both iPhone and Android, backs up your photos, videos, contacts and app data and lets you restore them when you need them, including on a new phone.
 
 </aside>

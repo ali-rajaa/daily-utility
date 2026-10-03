@@ -30,7 +30,7 @@ css: post
   Breadcrumbs are hand-written: Home > Daily Info > <heading> never
   varies in shape for a post.
 {%- endcomment -%}
-{%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+{%- assign _clean_url = page.url -%}
 {%- assign _cat = site.data.categories | where: "name", page.category | first -%}
 {%- assign _tone = _cat.tone | default: "blue" -%}
 {%- assign _glyph = page.glyph | default: _cat.glyph | default: "spark" -%}
@@ -59,7 +59,7 @@ css: post
   "@id": {{ _clean_url | absolute_url | append: '#article' | jsonify | replace: "/", "\/" }},
   "headline": {{ page.heading | jsonify | replace: "/", "\/" }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
-  "image": {{ page.og_image | default: page.image | default: '/assets/og/default.png' | absolute_url | jsonify | replace: "/", "\/" }},
+  "image": {{ page.og_image | default: page.image | default: '/assets/og/default.jpg' | absolute_url | jsonify | replace: "/", "\/" }},
   "datePublished": {{ page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
   "dateModified": {{ page.updated | default: page.date | date_to_xmlschema | jsonify | replace: "/", "\/" }},
   "inLanguage": "en-AU",
@@ -103,16 +103,12 @@ css: post
         <h1>{{ page.heading | escape }}</h1>
         <p class="post-lead">{{ page.description | escape }}</p>
         <div class="post-meta">
-          <span class="post-byline"><img class="post-byline-mark" src="{{ '/assets/icons/mark-192.png' | relative_url }}" width="30" height="30" alt="">By {{ site.title }}</span>
+          <span class="post-byline">{% include brand-mark.html class="post-byline-mark" size="30" %}By {{ site.title }}</span>
           <span class="post-meta-sep" aria-hidden="true">&middot;</span>
           <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
           {%- if page.updated and page.updated != page.date %}
           <span class="post-meta-sep" aria-hidden="true">&middot;</span>
           <span>Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: "%-d %B %Y" }}</time></span>
-          {%- endif %}
-          {%- if page.read_min %}
-          <span class="post-meta-sep" aria-hidden="true">&middot;</span>
-          <span>{{ page.read_min }} min read</span>
           {%- endif %}
         </div>
       </div>
@@ -190,7 +186,7 @@ css: post
 
         <div class="prose post-body{% if page.steps %} post-body--steps{% endif %}">
           {%- comment -%} Each H2 and everything up to the next one becomes a
-          section card. A closing <aside class="post-note" aria-label="In summary"> is kept out of
+          section. A closing <aside class="post-note" aria-label="In summary"> is kept out of
           the last card and rendered after it. {%- endcomment %}
           <div class="post-intro">{{ _parts.first | strip }}</div>
           {%- for part in _parts offset: 1 %}
@@ -251,12 +247,11 @@ css: post
       {%- if p.url != page.url and p.category != page.category -%}{%- assign _more = _more | push: p -%}{%- endif -%}
     {%- endfor -%}
   {%- endif %}
-  <section class="section">
+  <section class="section" aria-labelledby="more-title">
     <div class="wrap">
       <div class="section-head-row reveal">
         <div class="section-head">
-          <span class="eyebrow">Keep reading</span>
-          <h2>More from Daily Info</h2>
+          <h2 id="more-title">More from Daily Info</h2>
         </div>
         <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
       </div>
@@ -270,7 +265,7 @@ css: post
       <ul class="post-topics reveal">
         {%- for c in site.data.categories %}
         <li class="tone-{{ c.tone }}">
-          <a class="post-topic-link" href="{{ '/daily-info/' | relative_url }}#topics">
+          <a class="post-topic-link" href="{{ '/daily-info/' | relative_url }}#{{ c.name | slugify }}">
             <span class="post-topic-icon" aria-hidden="true"><svg><use href="#i-{{ c.glyph }}"/></svg></span>
             <span class="post-topic-text"><span class="post-topic-name">{{ c.name | escape }}</span><span class="post-topic-blurb">{{ c.blurb | escape }}</span></span>
           </a>
@@ -285,8 +280,8 @@ css: post
       <div class="cta-band cta-band--card post-cta tone-{{ flagship.tone }} reveal">
         {% include app-tile.html app=flagship class="cta-band-icon" %}
         <div class="section-head">
-          <h2>Back up your phone automatically</h2>
-          <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data. On {% if flagship.ios_url and flagship.android_url %}iPhone and Android{% elsif flagship.ios_url %}iPhone{% else %}Android{% endif %}.</p>
+          <h2>Keep a copy off your phone</h2>
+          <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data, ready to restore when you need them. Free on {% include platforms.html app=flagship %}.</p>
         </div>
         {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
       </div>

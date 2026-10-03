@@ -1,5 +1,6 @@
 ---
 layout: app
+permalink: /document-reader-pdf
 css: app
 title: "Document Reader: Read All PDF, for PDF, Word & Excel"
 description: "Document Reader: Read All PDF opens PDF, Word, Excel and PowerPoint files on your Android phone in one app. From Daily Utility Apps."
@@ -8,7 +9,7 @@ tagline: "Read PDF, Word, Excel and PowerPoint files in one app."
 android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
 category: "Productivity"
 updated: 2026-09-29
-og_image: "/assets/og/document-reader-pdf.png"
+og_image: "/assets/og/document-reader-pdf.jpg"
 og_image_alt: "Document Reader: Read All PDF, an app from Daily Utility Apps"
 
 moments_heading: "For every document that lands on your phone"

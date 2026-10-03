@@ -31,6 +31,13 @@ timezone: Australia/Perth
 
 plugins: []
 
+# Stylesheets are written as plain CSS in .scss files (assets/css/) so
+# Jekyll's built-in Sass compiles them to minified .css at build time.
+# The source keeps every comment; the served file has none.
+sass:
+  style: compressed
+  sourcemap: never
+
 # Fail the build on a Liquid or front matter mistake instead of shipping a
 # page with the mistake rendered into it. strict_variables stays off on
 # purpose: optional front matter (css, image, noindex) is read as unset.

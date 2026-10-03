@@ -1,0 +1,105 @@
+---
+layout: default
+permalink: /about
+css: about
+title: "About Daily Utility Apps: Four Focused Phone Apps"
+description: "Daily Utility Apps makes four free phone apps, each built around one everyday job: backing up, reading documents, moving files and getting deleted photos back."
+---
+{%- comment -%}
+  About page (3 Oct). Every statement here is already made elsewhere on
+  the site, never new: the four apps and their jobs (_data/apps.yml and
+  the homepage FAQ), free to download (owner, 3 Oct), the privacy
+  commitments (privacy-policy.md, via _data/home.yml) and Daily Info's
+  own description. No company history, team or location: none of that is
+  confirmed, and the operating company is named on the legal pages only
+  (STATUS.md section 5o).
+{%- endcomment -%}
+{%- assign apps = site.data.apps | where: "built", true -%}
+<section class="section about-hero hero-glow-host" aria-labelledby="about-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content about-hero-grid">
+    <div class="about-hero-copy">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+        <span aria-current="page">About</span>
+      </nav>
+      <h1 id="about-title">About Daily Utility Apps</h1>
+      <p class="about-lead">We make four focused phone apps: cloud backup, a document reader, phone-to-phone transfer and photo recovery. Each one is built around a single everyday job, so it stays simple to use.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="#apps">See the apps<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read Daily Info</a>
+      </div>
+    </div>
+    <div class="about-hero-visual" aria-hidden="true">
+      {%- for app in apps %}
+      <span class="about-hero-cell tone-{{ app.tone }}">{% include app-tile.html app=app class="about-hero-tile" %}<span class="about-hero-name">{{ app.short | escape }}</span></span>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="apps" aria-labelledby="apps-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="apps-title">What we make</h2>
+      <p class="section-sub">One app for each job. All of them are free to download.</p>
+    </div>
+    <ul class="about-apps">
+      {%- for app in apps %}
+      <li class="about-app tone-{{ app.tone }} reveal">
+        {% include app-tile.html app=app class="about-app-tile" %}
+        <div class="about-app-text">
+          <h3><a href="{{ '/' | append: app.slug | relative_url }}">{{ app.name | escape }}</a></h3>
+          <p class="about-app-job">{{ app.task | escape }}</p>
+          <p>{{ app.task_text | escape }}</p>
+        </div>
+        <p class="about-app-platform"><svg aria-hidden="true"><use href="#i-phone"/></svg>Free on {% include platforms.html app=app %}</p>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="work-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="work-title">How we work</h2>
+    </div>
+    <ul class="about-principles">
+      <li class="reveal">
+        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-grid"/></svg></span>
+        <h3>One job per app</h3>
+        <p>Backing up, reading documents, moving files and getting deleted photos back are different jobs, so each has its own app. That keeps every app simple to use.</p>
+      </li>
+      <li class="reveal">
+        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-phone"/></svg></span>
+        <h3>Free to download</h3>
+        <p>All four apps are free to download from Google Play, and Cloud Storage Backup &amp; Drive from the App Store as well.</p>
+      </li>
+      <li class="reveal">
+        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+        <h3>Your data isn't sold</h3>
+        <p>We don't sell your personal information, and we don't use your files to build advertising profiles. The <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a> covers every app and this website.</p>
+      </li>
+      <li class="reveal">
+        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>
+        <h3>Guides for everyone</h3>
+        <p><a href="{{ '/daily-info/' | relative_url }}">Daily Info</a> is our free library of plain-English guides to everyday phone problems. Each guide is useful whether or not you use our apps.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="contact-title">
+  <div class="wrap">
+    <div class="cta-band cta-band--card reveal">
+      <span class="about-cta-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span>
+      <div class="section-head">
+        <h2 id="contact-title">Questions about an app?</h2>
+        <p class="section-sub">Our support team's email address is in the Contact section of our Terms of Service.</p>
+      </div>
+      <a class="btn btn--primary" href="{{ '/terms-of-service' | relative_url }}#contact">Contact support<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+    </div>
+  </div>
+</section>

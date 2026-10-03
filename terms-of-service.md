@@ -1,5 +1,6 @@
 ---
 layout: legal
+permalink: /terms-of-service
 css: legal
 title: "Terms of Service | Daily Utility Apps"
 heading: "Terms of Service"

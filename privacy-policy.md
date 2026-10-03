@@ -1,5 +1,6 @@
 ---
 layout: legal
+permalink: /privacy-policy
 css: legal
 title: "Privacy Policy | Daily Utility Apps"
 heading: "Privacy Policy"

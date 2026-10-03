@@ -12,7 +12,7 @@
 {%- assign _cat = site.data.categories | where: "name", include.post.category | first -%}
 {%- assign _glyph = include.post.glyph | default: _cat.glyph | default: "spark" -%}
 <li class="reveal tone-{{ _cat.tone | default: 'blue' }}">
-  <a class="post-card" href="{{ include.post.url | replace: '.html', '' | relative_url }}">
+  <a class="post-card" href="{{ include.post.url | relative_url }}">
     <span class="post-card-banner" aria-hidden="true"><span class="post-card-glyph"><svg><use href="#i-{{ _glyph }}"/></svg></span></span>
     <div class="post-card-body">
       <span class="post-card-cat">{{ include.post.category | escape }}</span>

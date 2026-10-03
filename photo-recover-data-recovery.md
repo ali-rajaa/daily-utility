@@ -1,5 +1,6 @@
 ---
 layout: app
+permalink: /photo-recover-data-recovery
 css: app
 title: "Photo Recover & Data Recovery: Restore Deleted Photos"
 description: "Photo Recover & Data Recovery helps you find and restore deleted photos and files from your Android phone's trash bin. From Daily Utility Apps."
@@ -8,7 +9,7 @@ tagline: "Find and restore deleted photos and files from your phone's trash bin.
 android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
 category: "Tools"
 updated: 2026-09-29
-og_image: "/assets/og/photo-recover-data-recovery.png"
+og_image: "/assets/og/photo-recover-data-recovery.jpg"
 og_image_alt: "Photo Recover & Data Recovery, an app from Daily Utility Apps"
 
 moments_heading: "For the moment you realise it's gone"

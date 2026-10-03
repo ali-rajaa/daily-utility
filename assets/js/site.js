@@ -1,0 +1,265 @@
+/* Daily Utility Apps: shared behaviour for every page: header scroll
+   state, the phone menu, reveal-on-scroll and the rest. Each block
+   checks for its own elements and does nothing when they are absent, so
+   any page can include this safely.
+   Served as a cached file (loaded with defer from _includes/scripts.html)
+   rather than inline, so later page views don't download it again. */
+(function () {
+  'use strict';
+
+  /* iOS Safari only applies :active while a touch listener exists, so
+     without this the instant press feedback on buttons never shows. */
+  document.addEventListener('touchstart', function () {}, { passive: true });
+
+  var header = document.getElementById('site-header');
+
+  /* ---- Header scroll state ----
+     The hairline and shadow appear only once content is under the header,
+     tracked by a 1px sentinel at the top of the page (no scroll listener). */
+  var sentinel = document.getElementById('scroll-sentinel');
+  if (header && sentinel && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      header.classList.toggle('is-scrolled', !entries[0].isIntersecting);
+    }).observe(sentinel);
+  }
+
+  /* ---- Navigation ----
+     Two layers, each with one function that sets its state, so classes
+     and aria attributes never disagree:
+     - setSheet: the phone sheet behind the menu button.
+     - setSub: one menu (Apps, Guides, Help). On desktop it's a flyout
+       with the page dimmed behind it; in the phone sheet it folds open.
+     Desktop flyouts open on click, or on hover after a short intent
+     delay (so a pointer passing over the bar doesn't flash them), and
+     close when the pointer leaves the header, on Escape (focus returns
+     to the trigger), on a click outside, when focus leaves the menu, or
+     when a link inside is followed. Crossing the breakpoint resets both. */
+  var toggle = document.getElementById('nav-toggle');
+  var nav = document.getElementById('site-nav');
+  var root = document.documentElement;
+  if (header && nav) {
+    var desktop = window.matchMedia('(min-width: 760px)');
+    var triggers = Array.prototype.slice.call(header.querySelectorAll('.nav-trigger'));
+    var openSub = null;
+    var openedAt = 0;
+    var hoverTimer = null;
+
+    var setSub = function (trigger, open, returnFocus) {
+      if (open && openSub && openSub !== trigger) setSub(openSub, false);
+      trigger.setAttribute('aria-expanded', String(open));
+      if (open) { openSub = trigger; openedAt = Date.now(); }
+      else if (openSub === trigger) openSub = null;
+      var flyout = !!openSub && desktop.matches;
+      header.classList.toggle('menu-open', flyout);
+      root.classList.toggle('nav-flyout-open', flyout);
+      if (!open && returnFocus) trigger.focus();
+    };
+    var closeSubs = function () { if (openSub) setSub(openSub, false); };
+
+    triggers.forEach(function (t) {
+      t.addEventListener('click', function () {
+        var isOpenNow = t.getAttribute('aria-expanded') === 'true';
+        // A click right after hover opened this menu confirms it rather
+        // than immediately closing it again.
+        if (isOpenNow && desktop.matches && Date.now() - openedAt < 400) return;
+        setSub(t, !isOpenNow);
+      });
+      t.parentElement.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || !desktop.matches) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () { setSub(t, true); }, openSub ? 0 : 140);
+      });
+    });
+
+    // Plain links in the bar (Guides): hovering one closes any open menu,
+    // the way moving to a non-menu item does on apple.com.
+    Array.prototype.forEach.call(header.querySelectorAll('.nav-link--page'), function (a) {
+      a.parentElement.addEventListener('pointerenter', function (e) {
+        if (e.pointerType !== 'mouse' || !desktop.matches) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(closeSubs, 120);
+      });
+    });
+
+    header.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'mouse') clearTimeout(hoverTimer);
+    });
+    header.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse' || !desktop.matches) return;
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(closeSubs, 220);
+    });
+
+    var scrim = document.getElementById('nav-scrim');
+    if (scrim) scrim.addEventListener('click', closeSubs);
+
+    // The phone sheet.
+    var sheetOpen = function () { return header.classList.contains('nav-open'); };
+    var setSheet = function (open, returnFocus) {
+      if (!toggle) return;
+      header.classList.toggle('nav-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (!open) closeSubs();
+      if (!open && returnFocus) toggle.focus();
+    };
+    if (toggle) toggle.addEventListener('click', function () { setSheet(!sheetOpen()); });
+
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) { closeSubs(); setSheet(false); }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (header.contains(e.target)) return;
+      if (openSub && desktop.matches) closeSubs();
+      if (sheetOpen()) setSheet(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (openSub && (desktop.matches || !sheetOpen())) { setSub(openSub, false, true); return; }
+      if (sheetOpen()) setSheet(false, true);
+    });
+
+    header.addEventListener('focusout', function (e) {
+      var to = e.relatedTarget;
+      if (!to) return;
+      if (!header.contains(to)) { closeSubs(); if (sheetOpen()) setSheet(false); return; }
+      if (openSub && desktop.matches && !openSub.parentElement.contains(to)) closeSubs();
+    });
+
+    var onBreakpoint = function () { closeSubs(); setSheet(false); };
+    if (desktop.addEventListener) desktop.addEventListener('change', onBreakpoint);
+    else if (desktop.addListener) desktop.addListener(onBreakpoint);
+  }
+
+  /* ---- Article contents: highlight the section being read ----
+     The link for the last section whose top has passed the upper third
+     of the screen gets .is-active (and aria-current). */
+  var tocLinks = document.querySelectorAll('.post-toc-list a');
+  if (tocLinks.length && 'IntersectionObserver' in window) {
+    var targets = [];
+    tocLinks.forEach(function (a) {
+      var el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+      if (el) targets.push({ link: a, el: el.closest('.post-section') || el });
+    });
+    var setActive = function () {
+      var current = null;
+      var line = window.innerHeight * 0.35;
+      targets.forEach(function (t) { if (t.el.getBoundingClientRect().top <= line) current = t; });
+      targets.forEach(function (t) {
+        var on = t === current;
+        t.link.classList.toggle('is-active', on);
+        if (on) t.link.setAttribute('aria-current', 'true'); else t.link.removeAttribute('aria-current');
+      });
+    };
+    var spy = new IntersectionObserver(setActive, { rootMargin: '-35% 0px -60% 0px' });
+    targets.forEach(function (t) { spy.observe(t.el); });
+    setActive();
+  }
+
+  /* ---- Contents lists fold on phones ----
+     Open by default in the HTML (so they work without JavaScript); on
+     narrow screens they start closed and close again after a link is
+     tapped, and they reopen if the window widens to the desktop layout. */
+  var folds = document.querySelectorAll('.post-toc-fold');
+  if (folds.length) {
+    var wide = window.matchMedia('(min-width: 60rem)');
+    var syncFolds = function () { folds.forEach(function (d) { d.open = wide.matches; }); };
+    syncFolds();
+    if (wide.addEventListener) wide.addEventListener('change', syncFolds);
+    folds.forEach(function (d) {
+      d.addEventListener('click', function (e) {
+        if (!wide.matches && e.target.closest('a')) d.open = false;
+      });
+    });
+  }
+
+  /* ---- Share button ----
+     The phone's share sheet where there is one, else copy the link. */
+  document.querySelectorAll('[data-share-url]').forEach(function (btn) {
+    var label = btn.querySelector('.post-share-text');
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-share-url');
+      var title = btn.getAttribute('data-share-title');
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(function () {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function () {
+          if (label) label.textContent = 'Link copied';
+          setTimeout(function () { if (label) label.textContent = 'Share this guide'; }, 2000);
+        }, function () {});
+      }
+    });
+  });
+
+  /* ---- Swipe shelves ----
+     On phones the homepage job cards sit in a sideways shelf that snaps
+     to each card. Tabbing to a link in a half-hidden card scrolls the
+     link into view, then the snap pulls the shelf back to the previous
+     card, leaving the focused link off screen. Snapping the focused
+     card itself into place keeps it in view. */
+  document.querySelectorAll('.jobs-grid').forEach(function (shelf) {
+    shelf.addEventListener('focusin', function (e) {
+      if (shelf.scrollWidth <= shelf.clientWidth) return;
+      var card = e.target.closest('.jobs-grid > li');
+      if (card) card.scrollIntoView({ block: 'nearest', inline: 'start' });
+    });
+  });
+
+  /* ---- Tables ----
+     Label each cell with its column heading, so on phones (shell.css)
+     every row can stack as a card instead of hiding columns off to the
+     side. Without this the table simply scrolls sideways. */
+  document.querySelectorAll('.table-scroll table').forEach(function (table) {
+    var heads = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) {
+      return th.textContent.trim();
+    });
+    if (!heads.length) return;
+    table.querySelectorAll('tbody tr').forEach(function (tr) {
+      Array.prototype.forEach.call(tr.children, function (cell, i) {
+        if (heads[i]) cell.setAttribute('data-label', heads[i]);
+      });
+    });
+    table.classList.add('is-stackable');
+
+    /* Stacked, the box no longer scrolls, so it drops the "scrolls
+       sideways" label and its tab stop until the screen widens again. */
+    var wrap = table.parentNode;
+    var label = wrap.getAttribute('aria-label');
+    var phone = window.matchMedia('(max-width: 599.98px)');
+    var sync = function () {
+      if (phone.matches) {
+        wrap.removeAttribute('tabindex');
+        wrap.setAttribute('aria-label', 'Table');
+      } else {
+        wrap.setAttribute('tabindex', '0');
+        wrap.setAttribute('aria-label', label);
+      }
+    };
+    sync();
+    if (phone.addEventListener) phone.addEventListener('change', sync);
+  });
+
+  /* ---- Reveal on scroll ----
+     .reveal-ready (which hides .reveal content) is added only after the
+     observer that shows it again exists. If anything here fails, the
+     content simply stays visible. */
+  try {
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length && 'IntersectionObserver' in window) {
+      var revealer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+      reveals.forEach(function (el) { revealer.observe(el); });
+      document.documentElement.classList.add('reveal-ready');
+    }
+  } catch (err) {
+    document.documentElement.classList.remove('reveal-ready');
+  }
+})();

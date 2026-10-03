@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/backup-before-switching-phones
 css: post
 title: "How to Back Up Your Phone Before Switching to a New One"
 description: "A 10-step checklist for backing up photos, contacts, messages, app data and sign-in codes before you switch phones, so nothing gets left behind."
@@ -31,7 +32,7 @@ related:
   - move-photos-android-to-iphone
   - backup-vs-sync
   - check-app-permissions-photos
-og_image: "/assets/og/backup-before-switching-phones.png"
+og_image: "/assets/og/backup-before-switching-phones.jpg"
 og_image_alt: "How to Back Up Your Phone Before Switching to a New One: a Daily Info guide from Daily Utility Apps"
 ---
 

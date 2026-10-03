@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/organise-phone-photos
 css: post
 title: "How to Organise Thousands of Photos on Your Phone"
 description: "A realistic way to tame a huge camera roll: clearing clutter, building albums that last and keeping it tidy with a few minutes a month."
@@ -29,7 +30,7 @@ related:
   - free-up-phone-storage
   - where-deleted-photos-go-android
   - check-app-permissions-photos
-og_image: "/assets/og/organise-phone-photos.png"
+og_image: "/assets/og/organise-phone-photos.jpg"
 og_image_alt: "How to Organise Thousands of Photos on Your Phone: a Daily Info guide from Daily Utility Apps"
 ---
 
@@ -45,7 +46,7 @@ Before you delete, move or reorganise anything, make sure your photos and videos
 
 Back up to cloud storage or a computer, and confirm the backup has actually finished. A large library can take a long time to upload for the first time, and backups can pause without warning when the phone is on mobile data, low on battery or out of cloud storage. Look for a clear sign in your backup app that everything is uploaded, and spot-check a few older photos.
 
-Also check what happens to your backup when you delete a photo from your phone. Some services keep their own copy; others sync the deletion, so the photo disappears from the cloud too. If yours syncs deletions, be extra careful during the clear-out steps below, or make an additional copy on a computer first. Our guide to [backup vs sync](/daily-info/backup-vs-sync) explains the difference.
+Also check what happens to your backup when you delete a photo from your phone. Some services keep their own copy; others sync the deletion, so the photo disappears from the cloud too. If yours syncs deletions, be extra careful during the clear-out steps below, or make an additional copy on a computer first. Our guide to [backup vs sync]({{ '/daily-info/backup-vs-sync' | relative_url }}) explains the difference.
 
 ## Set a realistic goal
 
@@ -96,7 +97,7 @@ Every camera roll has photos that were never meant to be taken: pictures of the 
 
 Set yourself a simple rule while scrolling: if you can tell at a glance that a photo is a mistake, delete it immediately. Don't stop to think about photos that might be worth keeping; skip them and come back later. Speed matters more than perfection at this stage.
 
-Remember that deleted photos usually go to a **Recently Deleted** or **Trash** folder for a while before being removed permanently. That's a helpful safety net during a big clear-out. Leave it alone until you're finished, then check it before emptying it. Our guide to [where deleted photos go on Android](/daily-info/where-deleted-photos-go-android) explains how long different apps keep them.
+Remember that deleted photos usually go to a **Recently Deleted** or **Trash** folder for a while before being removed permanently. That's a helpful safety net during a big clear-out. Leave it alone until you're finished, then check it before emptying it. Our guide to [where deleted photos go on Android]({{ '/daily-info/where-deleted-photos-go-android' | relative_url }}) explains how long different apps keep them.
 
 ## Sort out chat app photos
 
@@ -163,7 +164,7 @@ Sharing photos adds a lot of clutter, to your own library and to everyone else's
 
 ## Hide private photos
 
-Some photos don't belong in a library you might scroll through in front of other people: medical photos, documents, or private moments. Rather than deleting them, you can move them somewhere more discreet. It's also worth checking [which apps can see your photos](/daily-info/check-app-permissions-photos) at the same time.
+Some photos don't belong in a library you might scroll through in front of other people: medical photos, documents, or private moments. Rather than deleting them, you can move them somewhere more discreet. It's also worth checking [which apps can see your photos]({{ '/daily-info/check-app-permissions-photos' | relative_url }}) at the same time.
 
 - On an iPhone, you can hide a photo from the main library. It moves to the **Hidden** album, which can be locked so it needs Face ID, Touch ID or your passcode to open.
 - In Google Photos, the **Locked Folder** keeps photos behind your screen lock and out of your main library and search. Be aware that photos in the Locked Folder aren't included in your backup by default, so don't use it as the only home for photos you can't afford to lose.
@@ -200,6 +201,6 @@ Keep your backup running all the time rather than when you remember. Check it ev
 
 <aside class="post-note" markdown="1">
 
-Tidying is much less stressful when you know every photo you care about has a copy somewhere safe. [Cloud Storage Backup & Drive](/cloud-storage-backup-drive) backs up your photos, videos, contacts and app data and lets you restore them when you need them.
+Tidying is much less stressful when you know every photo you care about has a copy somewhere safe. [Cloud Storage Backup & Drive]({{ '/cloud-storage-backup-drive' | relative_url }}) backs up your photos, videos, contacts and app data and lets you restore them when you need them.
 
 </aside>

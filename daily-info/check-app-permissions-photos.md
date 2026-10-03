@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/check-app-permissions-photos
 css: post
 title: "How to Check Which Apps Can See Your Photos and Files"
 description: "How to see which apps can access your photos, files and contacts on Android and iPhone, what each permission means, and how to take access away."
@@ -28,7 +29,7 @@ related:
   - backup-vs-sync
   - move-photos-android-to-iphone
   - where-deleted-photos-go-android
-og_image: "/assets/og/check-app-permissions-photos.png"
+og_image: "/assets/og/check-app-permissions-photos.jpg"
 og_image_alt: "How to Check Which Apps Can See Your Photos and Files: a Daily Info guide from Daily Utility Apps"
 ---
 
@@ -226,6 +227,6 @@ A photo backup app needs access to the photos it backs up; to back up your whole
 
 <aside class="post-note" markdown="1">
 
-We never sell your personal information, and we never use your files to build advertising profiles. Our [privacy policy](/privacy-policy) explains exactly how your data is handled.
+We never sell your personal information, and we never use your files to build advertising profiles. Our [privacy policy]({{ '/privacy-policy' | relative_url }}) explains exactly how your data is handled.
 
 </aside>

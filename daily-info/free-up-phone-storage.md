@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/free-up-phone-storage
 css: post
 title: "How to Free Up Storage on Your Phone Without Losing Anything"
 description: "A safe, step-by-step way to clear space on a full phone: what to back up first, what's safe to delete and where hidden space usually goes."
@@ -31,7 +32,7 @@ related:
   - backup-vs-sync
   - organise-phone-photos
   - where-deleted-photos-go-android
-og_image: "/assets/og/free-up-phone-storage.png"
+og_image: "/assets/og/free-up-phone-storage.jpg"
 og_image_alt: "How to Free Up Storage on Your Phone Without Losing Anything: a Daily Info guide from Daily Utility Apps"
 ---
 
@@ -67,7 +68,7 @@ Start with your photos and videos, since they're both the biggest category and t
 
 To check, open your backup app and look for a clear sign that everything has been uploaded. Then pick a few photos from different months and years and confirm they're there, ideally by looking on another device or in a web browser.
 
-There's one more thing to check: what happens to your backup when you delete a photo from the phone. Some services keep a separate copy that stays put, which is what you want when freeing space. Others sync deletions, so removing a photo from the phone removes it from the cloud as well. If you're not sure which yours does, our guide to [backup vs sync](/daily-info/backup-vs-sync) explains the difference and how to tell.
+There's one more thing to check: what happens to your backup when you delete a photo from the phone. Some services keep a separate copy that stays put, which is what you want when freeing space. Others sync deletions, so removing a photo from the phone removes it from the cloud as well. If you're not sure which yours does, our guide to [backup vs sync]({{ '/daily-info/backup-vs-sync' | relative_url }}) explains the difference and how to tell.
 
 Only when you're confident that your photos and videos are safe should you start deleting them from the phone.
 
@@ -83,7 +84,7 @@ Then duplicates and bursts. Burst mode and repeated attempts at the same shot ca
 
 Then the obvious mistakes. Blurry shots, pictures of your pocket, photos of the floor. They take a moment to spot and are always safe to remove.
 
-For more ideas, our guide on [organising thousands of photos on your phone](/daily-info/organise-phone-photos) goes through a full clear-out step by step.
+For more ideas, our guide on [organising thousands of photos on your phone]({{ '/daily-info/organise-phone-photos' | relative_url }}) goes through a full clear-out step by step.
 
 ## Empty the trash, but only when you're sure
 
@@ -91,7 +92,7 @@ This part catches a lot of people out. On most phones, deleting a photo doesn't 
 
 That safety net is valuable, and it's the reason a deleted photo can often be recovered. So don't empty the trash as a reflex. First, scroll through it and make sure there's nothing in there you want back. If you've just done a big clear-out, it can be worth waiting a day or two, in case you realise you deleted something by mistake.
 
-When you're sure, empty the trash to reclaim the space. On an iPhone, open the Photos app and find Recently Deleted, which is usually near the bottom of your albums. On Android, check the trash or bin in whichever gallery app you use, and in your file manager if you delete files there too. Our guide to [where deleted photos go on Android](/daily-info/where-deleted-photos-go-android) lists the most common places.
+When you're sure, empty the trash to reclaim the space. On an iPhone, open the Photos app and find Recently Deleted, which is usually near the bottom of your albums. On Android, check the trash or bin in whichever gallery app you use, and in your file manager if you delete files there too. Our guide to [where deleted photos go on Android]({{ '/daily-info/where-deleted-photos-go-android' | relative_url }}) lists the most common places.
 
 ## Deal with chat app media
 
@@ -187,6 +188,6 @@ Once you've cleared space, a few habits keep it that way without needing another
 
 <aside class="post-note" markdown="1">
 
-The safest way to free space is to know your photos, videos, contacts and app data already have a copy somewhere else. [Cloud Storage Backup & Drive](/cloud-storage-backup-drive) backs them up and lets you restore them when you need them, so clearing space on your phone doesn't mean losing anything.
+The safest way to free space is to know your photos, videos, contacts and app data already have a copy somewhere else. [Cloud Storage Backup & Drive]({{ '/cloud-storage-backup-drive' | relative_url }}) backs them up and lets you restore them when you need them, so clearing space on your phone doesn't mean losing anything.
 
 </aside>

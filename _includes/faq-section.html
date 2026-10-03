@@ -1,20 +1,19 @@
 {%- comment -%}
   A visible FAQ section (shell.css FAQ cards). Params: faqs (list of
-  {q, a}), optional heading (default "Questions people ask"), sub,
-  id, alt (true for the alternate section background) and split (true
-  puts the heading beside the questions on wide screens, with no eyebrow:
-  the homepage's layout; everywhere else keeps the centred column). Pair it with
-  faq-schema.html, which writes the same questions as FAQPage data --
-  the visible and structured answers must always match.
+  {q, a}), optional heading (default "Questions people ask"), sub, id and
+  alt (true for the alternate section background). The heading sits
+  beside the questions on wide screens and above them on phones -- the
+  same layout on every page (3 Oct; `split` is still accepted and no
+  longer needed). Pair it with faq-schema.html, which writes the same
+  questions as FAQPage data -- the visible and structured answers must
+  always match.
 {%- endcomment -%}
 {%- if include.faqs and include.faqs.size > 0 %}
-<section class="section{% if include.alt %} section--alt{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %}>
-  <div class="wrap{% if include.split %} faq-split{% else %} wrap--narrow{% endif %}">
-    <div class="section-head{% unless include.split %} section-head--center{% endunless %} reveal">
-      {%- unless include.split %}
-      <span class="eyebrow">FAQ</span>
-      {%- endunless %}
-      <h2>{{ include.heading | default: "Questions people ask" | escape }}</h2>
+{%- assign _faq_title = include.id | default: "faq" | append: "-title" %}
+<section class="section{% if include.alt %} section--alt{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %} aria-labelledby="{{ _faq_title }}">
+  <div class="wrap faq-split">
+    <div class="section-head reveal">
+      <h2 id="{{ _faq_title }}">{{ include.heading | default: "Questions people ask" | escape }}</h2>
       {%- if include.sub %}
       <p class="section-sub">{{ include.sub | escape }}</p>
       {%- endif %}

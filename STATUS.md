@@ -1438,6 +1438,89 @@ radii. The only exception is the bare tick at 2.5. 34 icons; the unused
 pin, devices, spark and search were removed. Share images were
 regenerated so their tiles show the new glyphs (the hub's uses the book).
 
+## 5q. Audit fixes, delivery, clean URLs, About page and redesign (3 Oct)
+
+User asked for a Phase 1-3 audit, then: "go ahead, apps are free, and
+please apply everything design as well improve heavily".
+
+**SEO and accessibility**
+- The 20 links inside guide text now go through `relative_url`, like
+  every template link.
+- App schema: `applicationCategory` is `UtilitiesApplication` (a value
+  Google recognises; the visible "Productivity"/"Tools" labels stay),
+  `inLanguage` is `en-AU` like the articles, and an `offers` price of 0
+  plus `isAccessibleForFree`. The apps are free (owner, 3 Oct). There is
+  still no rating, per the standing no-ratings rule.
+- Store badges: the accessible name now starts with the visible text
+  ("Get it on Google Play: Document Reader"), and the two text lines are
+  separated by a space, so the computed text matches (WCAG 2.5.3).
+- The homepage's three "Learn more" links name their app for screen
+  readers.
+- Every section is named by its heading (`aria-labelledby`).
+- Share images are JPEG (quality 85): 782KB for all 13, down from 3.5MB,
+  each about 60KB and well under link-preview limits. To regenerate,
+  render PNGs with the scratch scripts, then convert with Pillow at
+  quality 85; `og:image:type` follows the file extension.
+
+**Delivery**
+- The logo (header, footer, bylines) is a 64px PNG and WebP served
+  through `_includes/brand-mark.html`: 2.7KB instead of the 25KB 192px
+  file, which stays only for the schema logo.
+- The shared script is `assets/js/site.js`, loaded with `defer` and
+  cached, instead of 11KB inline on every page. CLS is still 0.
+- Stylesheets are `.scss` files written as plain CSS. Jekyll compiles
+  them with `style: compressed` (`_config.yml`), so comments stay in the
+  source and the served CSS is about 81KB instead of 116KB. Pixel
+  comparison of all 17 pages at 1440 and 390 before and after: identical.
+- Sass refused a stray `}` in post.css from commit 5809739 (29 Sep). The
+  broken fragment around it also held a global `.post-promo
+  {display:none}`, which had been hiding the article sidebar's app card
+  at every width. It now shows on wide screens as first designed.
+- Dead CSS removed: `.eyebrow`, `.section-head--center`, `.btn--sm`,
+  `.nowrap`, `.text-sm`, the old trust band and the three duplicate
+  breadcrumb styles (now one `.breadcrumbs` in shell).
+
+**Clean URLs**: every page sets an extensionless `permalink:` (e.g.
+`/privacy-policy`). Jekyll still writes `privacy-policy.html` and the
+URLs are unchanged, but `page.url` is already clean, so the `.html`
+stripping is gone from the layouts, includes, feed and hub. The canonical
+and sitemap keep it as a fallback. **A new page must set its own
+`permalink:`.**
+
+**About page** (`/about`, in the footer's new "Company" column): built
+only from statements the site already makes, the four apps and their
+jobs, free to download, the privacy commitments and Daily Info. No
+history, team or location, and no CloudGate or Australia.
+
+**Redesign**
+- One section-heading style everywhere: left-aligned title and sub, no
+  uppercase label above it.
+- App pages: a two-column hero (copy and a "Free on ..." label; the
+  app's glyph on a white tile in a panel of its colour, with its feature
+  labels around it). Moments, steps, features and tips are open
+  layouts instead of a box each (features with fewer than six items
+  share one panel). Related guides have their own section and fill the
+  row. The FAQ sits beside its heading. A closing pair of cards: get
+  the app, and your privacy.
+- Guides: no box per section; a hairline and space between sections.
+  Step guides are a numbered timeline. The read time shows once, in the
+  stats tiles.
+- Hub: each topic's name and description sit beside its guides.
+- Closing bands (homepage, hub, guides) share one horizontal layout.
+- The 404's four apps form a 2x2 grid. The guides' topic links go to
+  each topic's group, not the top of the hub.
+- The guides' closing band said "Back up your phone automatically", an
+  unconfirmed claim (apps.yml rules out "automatic"). It now reads "Keep a
+  copy off your phone".
+
+**Checks**: html-validate passes, and the full suite passes (nav 32/32,
+app 20/20, post 14/14). axe is clean on all 17 pages, light and dark, at
+1440 and 390. CLS is 0. Every link, anchor and ID is valid, and there are
+no CloudGate or Australia mentions outside the legal pages. Lighthouse
+mobile: performance 98-100, accessibility 100, best practices 100. SEO is
+69 only because `staging: true` blocks indexing; that is the remaining
+launch step.
+
 ## 6. SEO and routing
 
 **URLs**

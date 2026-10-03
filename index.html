@@ -1,5 +1,6 @@
 ---
 layout: default
+permalink: /
 css: index
 title: "Daily Utility Apps: Phone Backup, Transfer & Recovery Apps"
 description: "Daily Utility Apps makes four focused phone apps: cloud backup, a document reader, phone-to-phone transfer and photo recovery. For Android and iPhone."
@@ -55,10 +56,12 @@ updated: 2026-09-29
 
 <section class="section" aria-labelledby="start-title">
   <div class="wrap">
-    <div class="home-cta tone-{{ flagship.tone }} reveal">
-      {% include app-tile.html app=flagship class="home-cta-tile" %}
-      <h2 id="start-title">Start with a backup</h2>
-      <p class="section-sub">If you install one of our apps, make it {{ flagship.name | escape }}. A copy of your photos, videos, contacts and app data off your phone makes every other job safer, from clearing space to switching phones. It's on {% include platforms.html app=flagship %}.</p>
+    <div class="cta-band cta-band--card home-cta tone-{{ flagship.tone }} reveal">
+      {% include app-tile.html app=flagship class="cta-band-icon" %}
+      <div class="section-head">
+        <h2 id="start-title">Start with a backup</h2>
+        <p class="section-sub">If you install one of our apps, make it {{ flagship.name | escape }}. A copy of your photos, videos, contacts and app data off your phone makes every other job safer, from clearing space to switching phones. It's free on {% include platforms.html app=flagship %}.</p>
+      </div>
       {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url app=flagship.short %}
     </div>
   </div>

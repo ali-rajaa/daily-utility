@@ -1,5 +1,6 @@
 ---
 layout: app
+permalink: /smartphone-data-transfer
 css: app
 title: "Smartphone All Data Transfer: Move Photos, Videos & Files"
 description: "Smartphone All Data Transfer moves your photos, videos and files from one phone to another. For Android, from Daily Utility Apps."
@@ -8,7 +9,7 @@ tagline: "Transfer photos, videos and files from one phone to another."
 android_url: "https://play.google.com/store/apps/details?id=com.transfer.files.transfer.apps.share.app"
 category: "Tools"
 updated: 2026-09-29
-og_image: "/assets/og/smartphone-data-transfer.png"
+og_image: "/assets/og/smartphone-data-transfer.jpg"
 og_image_alt: "Smartphone All Data Transfer, an app from Daily Utility Apps"
 
 moments_heading: "When files need to get from one phone to another"

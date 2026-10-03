@@ -1,3 +1,7 @@
+---
+# Front matter fence: tells Jekyll to compile this file with Sass
+# (compressed, see _config.yml). Output keeps the .css name.
+---
 /* ==========================================================================
    index.css: the homepage (index.html + _includes/home/).
    Order: hero with the app orbit, the apps (flagship feature + three
@@ -545,16 +549,10 @@
 
 /* ---------- Closing CTA ---------- */
 
+/* The closing band is shell.css's .cta-band--card; the homepage adds a
+   wash of the flagship's colour in two corners. */
 .home-cta {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem);
-  border-radius: 1.75rem;
-  background: var(--brand-soft);
-  text-align: center;
   overflow: hidden;
   isolation: isolate;
 }
@@ -569,9 +567,6 @@
     radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 40%),
     radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--glow-b) 22%, transparent), transparent 40%);
 }
-.home-cta .section-sub { max-width: 38rem; margin-top: 0; }
-.home-cta .store-badges { justify-content: center; }
-.home-cta-tile { width: 4rem; }
 
 /* ---------- Accessibility preferences ---------- */
 

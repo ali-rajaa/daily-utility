@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/backup-vs-sync
 css: post
 title: "Backup vs Sync: What's the Difference?"
 description: "Backup and sync sound alike but protect you differently. Learn what each does, when sync can delete your files, and why you want both."
@@ -28,7 +29,7 @@ related:
   - free-up-phone-storage
   - backup-before-switching-phones
   - check-app-permissions-photos
-og_image: "/assets/og/backup-vs-sync.png"
+og_image: "/assets/og/backup-vs-sync.jpg"
 og_image_alt: "Backup vs Sync: What's the Difference? A Daily Info guide from Daily Utility Apps"
 ---
 
@@ -193,7 +194,7 @@ An untested backup might not work. A few minutes of checking tells you whether i
 - Check the contents. Look for a few specific photos and contacts in your backup, including older ones.
 - Try a small restore. Restore a single photo or file from your backup onto your phone. If it works, you know the backup is real.
 
-Do this every few months, and always before a big change such as a software update, a repair or a new phone. Our guide to [backing up before switching phones](/daily-info/backup-before-switching-phones) covers that last one in detail.
+Do this every few months, and always before a big change such as a software update, a repair or a new phone. Our guide to [backing up before switching phones]({{ '/daily-info/backup-before-switching-phones' | relative_url }}) covers that last one in detail.
 
 ## An example
 
@@ -207,6 +208,6 @@ The phone, the photos and the mistake are the same in both cases. The difference
 
 <aside class="post-note" markdown="1">
 
-Sync keeps your devices in step; a backup gives you something to go back to. [Cloud Storage Backup & Drive](/cloud-storage-backup-drive) backs up your photos, videos, contacts and app data, and lets you restore them when you need them.
+Sync keeps your devices in step; a backup gives you something to go back to. [Cloud Storage Backup & Drive]({{ '/cloud-storage-backup-drive' | relative_url }}) backs up your photos, videos, contacts and app data, and lets you restore them when you need them.
 
 </aside>

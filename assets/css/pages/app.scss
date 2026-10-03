@@ -1,0 +1,479 @@
+---
+# Front matter fence: tells Jekyll to compile this file with Sass
+# (compressed, see _config.yml). Output keeps the .css name.
+---
+/* ==========================================================================
+   app.css: the app landing page layout (_layouts/app.html). Every app
+   shares this one stylesheet, so a change here is consistent across all
+   four pages.
+
+   Redesigned 3 Oct: a two-column hero, left-aligned section headings like
+   the homepage, and open layouts instead of a box around every item.
+   Colours are shell.css tokens only (contrast-checked there); the hero
+   panel and icon chips use the fixed illustration tokens (--tone-*), so
+   they look the same in both themes. FAQ, post cards and the section
+   scaffold live in shell.css because other pages use them too.
+   ========================================================================== */
+
+/* ---------- Hero ---------- */
+
+.app-hero { padding-block: var(--space-hero-top) clamp(2.5rem, 5vw, 3.5rem); }
+
+.app-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+}
+@media (max-width: 899.98px) {
+  .app-hero-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* "Free on Android", with the app's own tile: what it costs and where it
+   runs, before anything else. */
+.app-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.5rem;
+  padding: 0.3rem 0.95rem 0.3rem 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.app-hero-kicker-tile { width: 1.75rem; box-shadow: none; }
+
+.app-hero h1 { text-wrap: balance; }
+.app-hero-lead {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.3125rem);
+  line-height: 1.55;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+.app-hero-get { margin-top: 2rem; }
+
+.app-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+.app-hero-meta li { display: inline-flex; align-items: center; gap: 0.45rem; }
+.app-hero-meta svg { width: 1.125rem; height: 1.125rem; color: var(--brand-text); }
+.app-hero-mark { width: 1.125rem; height: 1.125rem; }
+
+/* The app's illustration: its glyph on a white tile, ringed, in a panel
+   of the app's colour, with the app's main features as labels around
+   it. The same language as the Daily Info banners. Decorative: every
+   label repeats something stated in text on the page. */
+.app-hero-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 0.86;
+  border-radius: 2rem;
+  background: var(--tone-gradient);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  isolation: isolate;
+}
+.app-hero-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.3), transparent 42%),
+    radial-gradient(circle at 86% 92%, rgba(255, 255, 255, 0.16), transparent 45%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1.4px) 0 0 / 20px 20px;
+}
+.app-hero-ring {
+  position: absolute;
+  width: 44%;
+  aspect-ratio: 1;
+  border: 1px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+}
+.app-hero-ring--outer {
+  width: 72%;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.app-hero-icon {
+  display: grid;
+  place-items: center;
+  width: 26%;
+  max-width: 8.5rem;
+  aspect-ratio: 1;
+  border-radius: 23%;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.16), 0 22px 44px rgba(6, 16, 31, 0.3);
+  color: var(--tone-deep);
+  transform: rotate(-6deg);
+}
+.app-hero-icon svg { width: 54%; height: 54%; }
+
+.app-hero-chip {
+  position: absolute;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 24px rgba(6, 16, 31, 0.18);
+  color: var(--tone-deep);
+  font: 650 0.875rem/1 var(--font);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+.app-hero-chip--1 { top: 14%; left: 8%; }
+.app-hero-chip--2 { top: 21%; right: 7%; }
+.app-hero-chip--3 { bottom: 20%; left: 10%; }
+.app-hero-chip--4 { bottom: 12%; right: 12%; }
+
+@media (max-width: 899.98px) {
+  .app-hero-visual { aspect-ratio: 16 / 10; max-width: 36rem; }
+}
+@media (max-width: 479.98px) {
+  .app-hero-chip { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
+  .app-hero-chip--1 { left: 5%; }
+  .app-hero-chip--2 { right: 4%; }
+  .app-hero-chip--3 { left: 6%; }
+  .app-hero-chip--4 { right: 6%; }
+}
+
+/* Quick links to the page's main sections. */
+.app-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+.app-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  text-decoration: none;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+.app-jump a:hover { border-color: var(--brand); color: var(--brand-text); }
+.app-jump a:active { background: var(--brand-soft); }
+/* Sections the quick links land on sit clear of the sticky header. */
+#moments, #how-it-works, #features, #compare, #tips, #guides, #faq { scroll-margin-top: var(--header-h); }
+
+/* ---------- Moments: when to use it ----------
+   Open columns with a hairline above each, not four boxes. */
+.moments {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 1099.98px) { .moments { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 599.98px) { .moments { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
+.moment { padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.moment-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.85rem;
+  background: var(--tone-gradient);
+  color: #fff;
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--tone-deep) 80%, transparent);
+}
+.moment-icon svg { width: 1.3rem; height: 1.3rem; }
+.moment h3 { font-size: 1.125rem; }
+.moment p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+
+/* ---------- How it works ----------
+   Three numbered steps joined by a line on wide screens. */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 719.98px) { .steps { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
+.step { position: relative; }
+.step-number {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--on-brand);
+  font: 700 1.0625rem/1 var(--font-heading);
+}
+@media (min-width: 720px) {
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 1.375rem;
+    left: 3.75rem;
+    right: 0.5rem;
+    border-top: 2px dashed var(--border-strong);
+  }
+}
+.step h3 { margin-top: 1.25rem; }
+.step p { margin-top: 0.5rem; max-width: 22rem; color: var(--text-2); font-size: 1rem; line-height: 1.6; }
+
+/* ---------- Features ---------- */
+
+.feature-icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+.feature-card h3 { font-size: 1.125rem; }
+.feature-card p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+
+/* Fewer than six: one panel divided into columns. The 1px gap shows the
+   panel's border colour, so the dividers stay right however it wraps. */
+.feature-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--border);
+  overflow: hidden;
+}
+.feature-panel .feature-card { padding: clamp(1.75rem, 3vw, 2.25rem); background: var(--surface); }
+
+/* Six or more: a bento, the first feature as a large 2x2 tile -- 1 big
+   + 5 small fills a 3x3 grid exactly. */
+.feature-grid--bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+.feature-grid--bento .feature-card {
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.feature-grid--bento .feature-card:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  background: linear-gradient(160deg, var(--brand-soft), var(--surface) 65%);
+}
+.feature-grid--bento .feature-card:first-child .feature-icon {
+  width: 4rem;
+  height: 4rem;
+  padding: 1rem;
+  margin-bottom: auto;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.feature-grid--bento .feature-card:first-child h3 {
+  margin-top: 2rem;
+  font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+}
+.feature-grid--bento .feature-card:first-child p { font-size: 1.0625rem; max-width: 28rem; }
+@media (max-width: 899.98px) {
+  .feature-grid--bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 559.98px) {
+  .feature-grid--bento { grid-template-columns: minmax(0, 1fr); }
+  .feature-grid--bento .feature-card:first-child { grid-column: auto; grid-row: auto; }
+}
+
+/* ---------- With / without ---------- */
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 60rem;
+}
+@media (max-width: 719.98px) { .compare { grid-template-columns: minmax(0, 1fr); } }
+.compare-col {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.compare-col--with {
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 60%),
+    var(--surface);
+  border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
+  box-shadow: var(--shadow-md);
+}
+.compare-title { font-size: 1.125rem; }
+.compare-col--without .compare-title { color: var(--text-2); }
+.compare-col--with .compare-title { color: var(--brand-text); }
+.compare ul { display: grid; gap: 0.9rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
+.compare li { display: flex; align-items: flex-start; gap: 0.75rem; line-height: 1.5; }
+.compare-col--without li { color: var(--text-2); }
+.compare-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.05rem;
+  border-radius: 50%;
+}
+.compare-mark svg { width: 0.85rem; height: 0.85rem; }
+.compare-col--without .compare-mark { background: var(--bg-alt); color: var(--text-2); }
+.compare-col--with .compare-mark { background: var(--brand); color: var(--on-brand); }
+
+/* ---------- Tips ----------
+   Three numbered notes in open columns; the numerals carry the rhythm. */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 899.98px) { .tips { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
+.tip-num {
+  display: block;
+  margin-bottom: 0.75rem;
+  font: 700 2.25rem/1 var(--font-heading);
+  letter-spacing: -0.04em;
+  color: var(--brand-text);
+}
+.tip h3 { font-size: 1.125rem; }
+.tip p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+
+/* ---------- Related guides ----------
+   auto-fit: two guides share the row instead of leaving a gap. */
+.app-guides-grid { grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+
+/* ---------- Other apps ---------- */
+.other-apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.other-apps > li { display: flex; }
+.other-app {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
+}
+@media (hover: hover) {
+  .other-app:hover { color: var(--text); border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .other-app:hover .other-app-arrow { transform: translateX(3px); }
+}
+.other-app:active { transform: scale(0.985); transition-duration: 0.1s; }
+.other-app-tile { width: 3.25rem; }
+.other-app-text { display: flex; flex-direction: column; min-width: 0; }
+.other-app-name { font: 600 1rem/1.3 var(--font-heading); }
+.other-app-tagline { margin-top: 0.2rem; font-size: 0.875rem; line-height: 1.45; color: var(--text-2); }
+.other-app-arrow {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--brand-text);
+  transition: transform 0.2s var(--ease-out);
+}
+
+/* ---------- Closing pair: get the app, your privacy ---------- */
+.app-close-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 899.98px) { .app-close-grid { grid-template-columns: minmax(0, 1fr); } }
+.app-close-get,
+.app-close-privacy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 1.75rem;
+}
+.app-close-get {
+  padding: clamp(2rem, 5vw, 3.5rem);
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 45%),
+    var(--brand-soft);
+}
+.app-close-tile { width: 4rem; margin-bottom: 1.5rem; }
+.app-close-get .section-sub { margin-top: 0.75rem; margin-bottom: 1.75rem; }
+.app-close-privacy {
+  padding: clamp(2rem, 4vw, 2.75rem);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.app-close-privacy-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+.app-close-privacy-icon svg { width: 1.5rem; height: 1.5rem; }
+.app-close-privacy p { margin-top: 0.75rem; color: var(--text-2); line-height: 1.65; }
+.app-close-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  color: var(--brand-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+.app-close-link svg { width: 1.05rem; height: 1.05rem; transition: transform 0.2s var(--ease-out); }
+@media (hover: hover) { .app-close-link:hover svg { transform: translateX(3px); } }
+
+/* ---------- Accessibility preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .other-app { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .other-app:hover, .other-app:active, .other-app:hover .other-app-arrow, .app-close-link:hover svg { transform: none; }
+}
+@media (prefers-contrast: more) {
+  .moment, .compare-col, .other-app, .app-close-privacy, .feature-panel, .feature-grid--bento .feature-card, .app-jump a, .app-hero-kicker { border-color: var(--border-strong); }
+}

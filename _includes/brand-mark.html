@@ -1,0 +1,8 @@
+{%- comment -%}
+  The site's own logo mark (assets/icons/mark.png, scaled). A 64px file is
+  enough for every place it's shown (18-32px, so 2x for sharp screens):
+  about 4KB as PNG and less as WebP, against 25KB for the 192px original,
+  which stays only for the schema logo.
+  Params: class (required), size (display size in px).
+{%- endcomment -%}
+<picture><source srcset="{{ '/assets/icons/mark-64.webp' | relative_url }}" type="image/webp"><img class="{{ include.class }}" src="{{ '/assets/icons/mark-64.png' | relative_url }}" width="{{ include.size }}" height="{{ include.size }}" alt=""{% if include.eager %} loading="eager"{% endif %}></picture>

@@ -1,9 +1,10 @@
 ---
 layout: default
+permalink: /daily-info/
 css: blog-hub
 title: "Daily Info: Everyday Phone Guides | Daily Utility Apps"
 description: "Practical guides for everyday phone problems: backing up, switching phones, managing photos and storage, and keeping your data private."
-og_image: "/assets/og/daily-info.png"
+og_image: "/assets/og/daily-info.jpg"
 og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utility Apps"
 ---
 {%- comment -%}
@@ -36,7 +37,7 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
     {
       "@type": "BlogPosting",
       "headline": {{ post.heading | default: post.title | jsonify | replace: "/", "\/" }},
-      "url": {{ post.url | replace: '.html', '' | absolute_url | jsonify | replace: "/", "\/" }},
+      "url": {{ post.url | absolute_url | jsonify | replace: "/", "\/" }},
       "datePublished": {{ post.date | date_to_xmlschema | jsonify }}
     }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
@@ -58,12 +59,11 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
   {% include hero-glow.html %}
   <div class="wrap hero-glow-content hub-hero-grid">
     <div class="hub-hero-copy">
-      <nav class="hub-crumbs" aria-label="Breadcrumb">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="{{ '/' | relative_url }}">Home</a>
-        <span aria-hidden="true">/</span>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
         <span aria-current="page">Daily Info</span>
       </nav>
-      <span class="eyebrow">Daily Info</span>
       <h1>Guides for everyday <span class="hub-accent">phone problems</span></h1>
       <p class="hub-sub">Plain-English help with backing up, switching phones, looking after your photos and storage, and keeping your data private.</p>
       <ul class="hub-stats">
@@ -79,7 +79,7 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
     {%- assign _fcat = site.data.categories | where: "name", featured.category | first -%}
     <div class="hub-featured tone-{{ _fcat.tone | default: 'blue' }}">
       <span class="hub-featured-label">Latest guide</span>
-      <a class="hub-featured-card" href="{{ featured.url | replace: '.html', '' | relative_url }}">
+      <a class="hub-featured-card" href="{{ featured.url | relative_url }}">
         <span class="hub-featured-banner" aria-hidden="true">
           <span class="hub-featured-ring"></span>
           <span class="post-card-glyph hub-featured-glyph"><svg><use href="#i-{{ featured.glyph | default: _fcat.glyph | default: 'spark' }}"/></svg></span>
@@ -99,11 +99,10 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
   </div>
 </section>
 
-<section class="section section--alt" id="topics">
+<section class="section section--alt" id="topics" aria-labelledby="topics-title">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Browse by topic</span>
-      <h2>Find help by what you're trying to do</h2>
+      <h2 id="topics-title">Find help by what you're trying to do</h2>
     </div>
     <ul class="topic-grid">
       {%- for cat in site.data.categories %}
@@ -135,18 +134,19 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
 
 {%- comment -%} Per-topic lists: published guides first, then the
 planned ones (upcoming layout, marked "Coming soon"). {%- endcomment %}
-<section class="section hub-groups">
+<section class="section hub-groups" aria-label="Guides by topic">
   <div class="wrap">
     {%- for cat in site.data.categories %}
     {%- assign _group = by_cat | where: "name", cat.name | first -%}
     {%- assign _soon = soon_by_cat | where: "name", cat.name | first -%}
     {%- if _group or _soon %}
-    <div class="hub-group tone-{{ cat.tone }}" id="{{ cat.name | slugify }}">
+    <section class="hub-group tone-{{ cat.tone }}" id="{{ cat.name | slugify }}" aria-labelledby="{{ cat.name | slugify }}-title">
       <div class="hub-group-head">
         <span class="topic-icon"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg></span>
-        <h2 class="hub-group-title">{{ cat.name | escape }}</h2>
+        <h2 class="hub-group-title" id="{{ cat.name | slugify }}-title">{{ cat.name | escape }}</h2>
+        <p class="hub-group-blurb">{{ cat.blurb | escape }}</p>
       </div>
-      <ul class="post-grid">
+      <ul class="post-grid hub-group-grid">
         {%- if _group %}{% for post in _group.items %}
         {% include post-card.html post=post %}
         {%- endfor %}{% endif %}
@@ -154,12 +154,12 @@ planned ones (upcoming layout, marked "Coming soon"). {%- endcomment %}
         {% include post-card.html post=post %}
         {%- endfor %}{% endif %}
       </ul>
-    </div>
+    </section>
     {%- endif %}
     {%- endfor %}
 
-    <div class="cta-band hub-cta reveal">
-      {% include app-tile.html app=flagship class="hub-cta-tile" %}
+    <div class="cta-band cta-band--card hub-cta tone-{{ flagship.tone }} reveal">
+      {% include app-tile.html app=flagship class="cta-band-icon" %}
       <div class="section-head">
         <h2>Back up before you need to</h2>
         <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data.</p>

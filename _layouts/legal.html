@@ -26,7 +26,7 @@ css: legal
   Home > this page (STATUS.md section 6: legal pages carry one).
 {%- endcomment -%}
 {%- assign _heading = page.heading | default: page.title -%}
-{%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
+{%- assign _clean_url = page.url -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -40,12 +40,11 @@ css: legal
 
 <section class="section legal-hero">
   <div class="wrap legal-wrap">
-    <nav class="legal-crumbs" aria-label="Breadcrumb">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="{{ '/' | relative_url }}">Home</a>
-      <span aria-hidden="true">/</span>
+      <span class="breadcrumbs-sep" aria-hidden="true">/</span>
       <span aria-current="page">{{ _heading | escape }}</span>
     </nav>
-    <span class="eyebrow">Legal</span>
     <h1>{{ _heading | escape }}</h1>
     {%- if page.lead %}
     <p class="legal-lead">{{ page.lead | escape }}</p>

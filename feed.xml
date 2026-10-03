@@ -19,7 +19,7 @@
   <author><name>{{ site.title | xml_escape }}</name><uri>{{ '/' | absolute_url }}</uri></author>
   <icon>{{ '/assets/icons/mark-192.png' | absolute_url }}</icon>
 {%- for p in _posts %}
-  {%- assign _u = p.url | replace: '.html', '' | absolute_url %}
+  {%- assign _u = p.url | absolute_url %}
   <entry>
     <title>{{ p.heading | default: p.title | xml_escape }}</title>
     <id>{{ _u }}</id>

@@ -63,7 +63,7 @@
                 <p class="app-platform"><svg aria-hidden="true"><use href="#i-phone"/></svg>{% include platforms.html app=app %}</p>
                 <div class="app-actions">
                   {% include store-badges.html ios_url=app.ios_url android_url=app.android_url app=app.short class="store-badges--compact" %}
-                  <a class="app-more" href="{{ '/' | append: app.slug | relative_url }}">Learn more<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+                  <a class="app-more" href="{{ '/' | append: app.slug | relative_url }}">Learn more<span class="visually-hidden"> about {{ app.short | escape }}</span><svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
                 </div>
               </div>
             </div>

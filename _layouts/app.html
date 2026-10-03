@@ -30,11 +30,16 @@ css: app
   give general advice; neither may imply a feature the app isn't known
   to have. The #download id must stay on the hero's store badges.
 {%- endcomment -%}
-{%- assign _clean_url = page.url | replace: "/index.html", "/" | replace: ".html", "" -%}
-{%- comment -%} This page's own apps.yml entry (for its glyph/tone tile),
-found by URL: /document-reader-pdf.html -> document-reader-pdf.
+{%- comment -%} Schema: applicationCategory is one of schema.org's
+  application types (all four apps are utilities), not the page's visible
+  category label. The apps are free to download (owner, 3 Oct), so the
+  Offer is price 0; currency is required by Google even for free apps.
 {%- endcomment -%}
-{%- assign _slug = page.url | remove_first: "/" | remove: ".html" -%}
+{%- assign _clean_url = page.url -%}
+{%- comment -%} This page's own apps.yml entry (for its glyph/tone tile),
+found by URL: /document-reader-pdf -> document-reader-pdf.
+{%- endcomment -%}
+{%- assign _slug = page.url | remove_first: "/" -%}
 {%- assign _app = site.data.apps | where: "slug", _slug | first -%}
 {%- assign _short = _app.short | default: page.app_name -%}
 {%- comment -%} Platforms come from which store links the page actually
@@ -52,11 +57,17 @@ has -- never hardcoded, since most of the apps are Android-only.
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": {{ page.app_name | jsonify | replace: "/", "\/" }},
-  "applicationCategory": {{ page.category | jsonify | replace: "/", "\/" }},
+  "applicationCategory": "UtilitiesApplication",
   "operatingSystem": {{ _os | jsonify }},
   "description": {{ page.description | jsonify | replace: "/", "\/" }},
   "url": {{ _clean_url | absolute_url | jsonify | replace: "/", "\/" }},
-  "inLanguage": "en",
+  "inLanguage": "en-AU",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
   {%- if page.android_url or page.ios_url %}
   "installUrl": {{ page.android_url | default: page.ios_url | jsonify | replace: "/", "\/" }},
   {%- endif %}
@@ -85,45 +96,58 @@ has -- never hardcoded, since most of the apps are Android-only.
 {% include faq-schema.html faqs=page.faqs %}
 
 {%- comment -%} Everything visible sits inside the app's tone scope
-(shell.css "App tones"): buttons, eyebrows, links, step numbers, icon
-tiles, the trust band and the hero glow all take this app's colour. The
-header and footer stay outside it, in brand blue. Sections: hero with
-quick links, moments, how it works, features, with/without, tips +
-related guides, FAQ, privacy, other apps, get-the-app card; backgrounds
-alternate down the page. {%- endcomment %}
+(shell.css "App tones"): buttons, links, step numbers, icon chips and the
+hero all take this app's colour. The header and footer stay outside it,
+in brand blue.
+
+Layout (redesigned 3 Oct): a two-column hero (copy left, the app's tile
+with its features right), then sections with left-aligned headings like
+the homepage -- no uppercase labels over headings, and open layouts
+rather than a box around every item: moments, how it works, features (one
+panel, or the bento for 6+), with/without, tips, related guides, FAQ
+beside its heading, other apps, and a closing pair of cards (get the app,
+your privacy). Every section is named by its heading (aria-labelledby).
+{%- endcomment %}
 <div class="tone-{{ _app.tone }}">
-<section class="section app-hero hero-glow-host">
+<section class="section app-hero hero-glow-host" aria-labelledby="app-title">
   {% include hero-glow.html %}
-  <div class="wrap hero-glow-content app-hero-inner">
-    {% include app-tile.html app=_app class="app-hero-icon" %}
-    <div class="section-head">
-      <span class="eyebrow">{{ page.category | escape }}</span>
-      <h1>{{ page.app_name | escape }}</h1>
-      <p class="section-sub">{{ page.tagline | escape }}</p>
+  <div class="wrap hero-glow-content app-hero-grid">
+    <div class="app-hero-copy">
+      <p class="app-hero-kicker">{% include app-tile.html app=_app class="app-hero-kicker-tile" %}<span>Free on {{ _platforms }}</span></p>
+      <h1 id="app-title">{{ page.app_name | escape }}</h1>
+      <p class="app-hero-lead">{{ page.tagline | escape }}</p>
+      <div class="app-hero-get" id="download">
+        {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+      </div>
+      <ul class="app-hero-meta">
+        <li>{% include brand-mark.html class="app-hero-mark" size="18" %}By Daily Utility Apps</li>
+        <li><svg aria-hidden="true"><use href="#i-shield"/></svg>Your data is never sold</li>
+      </ul>
     </div>
-    <div class="btn-row" id="download">
-      {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+    <div class="app-hero-visual" aria-hidden="true">
+      <span class="app-hero-ring"></span>
+      <span class="app-hero-ring app-hero-ring--outer"></span>
+      <span class="app-hero-icon"><svg><use href="#i-{{ _app.glyph }}"/></svg></span>
+      {%- for feat in _app.features limit: 4 %}
+      <span class="app-hero-chip app-hero-chip--{{ forloop.index }}">{{ feat | escape }}</span>
+      {%- endfor %}
     </div>
-    <ul class="app-hero-meta">
-      <li><svg aria-hidden="true"><use href="#i-phone"/></svg>{{ _platforms }}</li>
-      <li><img class="app-hero-mark" src="{{ '/assets/icons/mark-192.png' | relative_url }}" width="18" height="18" alt="">By Daily Utility Apps</li>
-      <li><svg aria-hidden="true"><use href="#i-shield"/></svg>Your data is never sold</li>
-    </ul>
+  </div>
+  <div class="wrap hero-glow-content">
     <nav class="app-jump" aria-label="On this page">
       {%- if page.moments %}<a href="#moments">When to use it</a>{% endif %}
       {%- if page.how_it_works %}<a href="#how-it-works">How it works</a>{% endif %}
       {%- if page.features %}<a href="#features">Features</a>{% endif %}
-      {%- if page.faqs %}<a href="#faq">FAQ</a>{% endif %}
+      {%- if page.faqs %}<a href="#faq">Questions</a>{% endif %}
     </nav>
   </div>
 </section>
 
 {%- if page.moments %}
-<section class="section section--alt" id="moments">
+<section class="section" id="moments" aria-labelledby="moments-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">When to use it</span>
-      <h2>{{ page.moments_heading | default: "Made for everyday moments" | escape }}</h2>
+    <div class="section-head reveal">
+      <h2 id="moments-title">{{ page.moments_heading | default: "Made for everyday moments" | escape }}</h2>
       {%- if page.moments_sub %}
       <p class="section-sub">{{ page.moments_sub | escape }}</p>
       {%- endif %}
@@ -142,17 +166,16 @@ alternate down the page. {%- endcomment %}
 {%- endif %}
 
 {%- if page.how_it_works %}
-<section class="section" id="how-it-works">
+<section class="section section--alt" id="how-it-works" aria-labelledby="how-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">How it works</span>
-      <h2>{{ page.steps_heading | default: "Three steps to get started" | escape }}</h2>
+    <div class="section-head reveal">
+      <h2 id="how-title">{{ page.steps_heading | default: "Three steps to get started" | escape }}</h2>
     </div>
     <ol class="steps">
       {%- for step in page.how_it_works %}
       <li class="step reveal">
-        <span class="step-number">{{ forloop.index }}</span>
-        <h3>{{ step.title | escape }}</h3>
+        <span class="step-number" aria-hidden="true">{{ forloop.index }}</span>
+        <h3><span class="visually-hidden">Step {{ forloop.index }}: </span>{{ step.title | escape }}</h3>
         <p>{{ step.text | escape }}</p>
       </li>
       {%- endfor %}
@@ -162,18 +185,18 @@ alternate down the page. {%- endcomment %}
 {%- endif %}
 
 {%- if page.features %}
-<section class="section section--alt" id="features">
+<section class="section" id="features" aria-labelledby="features-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Features</span>
-      <h2>What {{ page.app_name | escape }} does</h2>
+    <div class="section-head reveal">
+      <h2 id="features-title">What {{ _short | escape }} does</h2>
     </div>
     {%- comment -%} Six or more features: bento layout, the first feature as
     a large 2x2 tile (3 columns x 3 rows = 1 big + 5 small, no gaps).
+    Fewer: one panel split into columns, rather than a box per feature.
     {%- endcomment %}
-    <div class="feature-grid{% if page.features.size >= 6 %} feature-grid--bento{% endif %}">
+    <div class="feature-grid{% if page.features.size >= 6 %} feature-grid--bento{% else %} feature-panel{% endif %} reveal">
       {%- for feature in page.features %}
-      <div class="feature-card reveal">
+      <div class="feature-card">
         <svg class="feature-icon" aria-hidden="true"><use href="#i-{{ feature.icon | escape }}"/></svg>
         <h3>{{ feature.title | escape }}</h3>
         <p>{{ feature.text | escape }}</p>
@@ -185,11 +208,10 @@ alternate down the page. {%- endcomment %}
 {%- endif %}
 
 {%- if page.compare %}
-<section class="section" id="compare">
+<section class="section section--alt" id="compare" aria-labelledby="compare-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">The difference</span>
-      <h2>{{ page.compare.heading | escape }}</h2>
+    <div class="section-head reveal">
+      <h2 id="compare-title">{{ page.compare.heading | escape }}</h2>
     </div>
     <div class="compare reveal">
       <div class="compare-col compare-col--without">
@@ -213,72 +235,56 @@ alternate down the page. {%- endcomment %}
 </section>
 {%- endif %}
 
-{%- if page.tips or page.guides %}
-<section class="section section--alt" id="tips">
+{%- if page.tips %}
+<section class="section" id="tips" aria-labelledby="tips-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">Tips</span>
-      <h2>{{ page.tips_heading | default: "Good to know" | escape }}</h2>
+    <div class="section-head reveal">
+      <h2 id="tips-title">{{ page.tips_heading | default: "Good to know" | escape }}</h2>
     </div>
-    {%- if page.tips %}
     <ol class="tips">
       {%- for t in page.tips %}
       <li class="tip reveal">
-        <span class="tip-num" aria-hidden="true">{{ forloop.index }}</span>
-        <div>
-          <h3>{{ t.title | escape }}</h3>
-          <p>{{ t.text | escape }}</p>
-        </div>
+        <span class="tip-num" aria-hidden="true">{{ forloop.index | prepend: "0" }}</span>
+        <h3>{{ t.title | escape }}</h3>
+        <p>{{ t.text | escape }}</p>
       </li>
       {%- endfor %}
     </ol>
-    {%- endif %}
-    {%- if page.guides %}
-    <div class="app-guides">
-      <div class="section-head-row reveal">
-        <h3 class="app-guides-title">Related guides from Daily Info</h3>
-        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.guides %}
+<section class="section section--alt" id="guides" aria-labelledby="guides-title">
+  <div class="wrap">
+    <div class="section-head-row reveal">
+      <div class="section-head">
+        <h2 id="guides-title">Related guides</h2>
+        <p class="section-sub">Free, plain-English guides from Daily Info.</p>
       </div>
-      <ul class="post-grid">
-        {%- for slug in page.guides %}
-        {%- assign _g = site.pages | where: "layout", "post" | where: "slug", slug | first -%}
-        {%- if _g %}
-        {% include post-card.html post=_g %}
-        {%- endif %}
-        {%- endfor %}
-      </ul>
+      <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
     </div>
-    {%- endif %}
+    <ul class="post-grid app-guides-grid">
+      {%- for slug in page.guides %}
+      {%- assign _g = site.pages | where: "layout", "post" | where: "slug", slug | first -%}
+      {%- if _g %}
+      {% include post-card.html post=_g %}
+      {%- endif %}
+      {%- endfor %}
+    </ul>
   </div>
 </section>
 {%- endif %}
 
 {% include faq-section.html faqs=page.faqs id="faq" %}
 
-{%- comment -%} The trust band states only what's true company-wide (who
-makes the app, the privacy policy's no-selling commitment). Anything
-app-specific -- how or where that app stores data -- goes in the page's
-own optional trust_text, so it's never claimed for an app it doesn't
-apply to. {%- endcomment %}
-<section class="section section--alt">
-  <div class="wrap wrap--narrow">
-    <div class="trust-band reveal">
-      <span class="trust-band-icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span>
-      <div>
-        <h2 class="h3">Your privacy</h2>
-        <p>{{ page.app_name | escape }} is made by Daily Utility Apps. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We never sell your personal information, and we never use your files to build advertising profiles. Read the full <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a>.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 {%- assign _others = site.data.apps | where: "built", true -%}
 {%- if _others.size > 1 %}
-<section class="section">
+<section class="section section--alt" aria-labelledby="others-title">
   <div class="wrap">
-    <div class="section-head section-head--center reveal">
-      <span class="eyebrow">More from Daily Utility Apps</span>
-      <h2>Other everyday tools</h2>
+    <div class="section-head reveal">
+      <h2 id="others-title">Other everyday tools</h2>
+      <p class="section-sub">Each of our apps does one job. These are the others.</p>
     </div>
     <ul class="other-apps">
       {%- for app in _others %}
@@ -300,15 +306,24 @@ apply to. {%- endcomment %}
 </section>
 {%- endif %}
 
-<section class="section app-cta-section">
-  <div class="wrap">
-    <div class="cta-band cta-band--card reveal">
-      {% include app-tile.html app=_app class="cta-band-icon" %}
-      <div class="section-head">
-        <h2>Get {{ page.app_name | escape }}</h2>
-        <p class="section-sub">Available on {{ _platforms }}.</p>
-      </div>
+{%- comment -%} The privacy card states only what's true company-wide
+(who makes the app, the privacy policy's no-selling commitment). Anything
+app-specific -- how or where that app stores data -- goes in the page's
+own optional trust_text, so it's never claimed for an app it doesn't
+apply to. {%- endcomment %}
+<section class="section app-close" aria-labelledby="get-title">
+  <div class="wrap app-close-grid">
+    <div class="app-close-get reveal">
+      {% include app-tile.html app=_app class="app-close-tile" %}
+      <h2 id="get-title">Get {{ _short | escape }}</h2>
+      <p class="section-sub">Free to download on {{ _platforms }}.</p>
       {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
+    </div>
+    <div class="app-close-privacy reveal">
+      <span class="app-close-privacy-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+      <h2 class="h3">Your privacy</h2>
+      <p>{{ page.app_name | escape }} is made by Daily Utility Apps. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We never sell your personal information, and we never use your files to build advertising profiles.</p>
+      <a class="app-close-link" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
     </div>
   </div>
 </section>

@@ -13,12 +13,13 @@
     layout: default and render through this; the homepage, the Daily Info
     hub and 404 use it directly.
 
-    Addresses. page.url keeps the .html extension, but every link on the
-    site drops it (GitHub Pages serves /x from x.html), so the canonical
-    drops it too; otherwise each page would name a second address for
-    itself. Full URLs always go through absolute_url, which adds site.url
-    AND site.baseurl: while baseurl is /daily-utility, building them from
-    site.url alone would leave that segment out of every one.
+    Addresses. Every page sets its own extensionless `permalink:` (e.g.
+    /privacy-policy). Jekyll still writes privacy-policy.html, which
+    GitHub Pages serves at /privacy-policy, and page.url is already the
+    clean address. The .html strip below is only a fallback for a page
+    added without a permalink, so its canonical never names a second
+    address. Full URLs always go through absolute_url, which adds site.url
+    AND site.baseurl.
   {%- endcomment -%}
   {%- assign _title = page.title | default: site.title -%}
   {%- assign _desc = page.description | default: site.description -%}
@@ -60,15 +61,19 @@
   {%- endunless %}
   {%- comment -%} Share image: a page's own 1200x630 card from
   og_image / og_image_alt (articles, app pages and the Daily Info hub
-  each have one in assets/og/), else its photo (image / image_alt), else
+  each have one in assets/og/, saved as JPEG: about 60KB each instead of
+  270KB as PNG, well under the ~300KB some apps allow for link
+  previews), else its photo (image / image_alt), else
   the site-wide default card. {%- endcomment -%}
-  {%- assign _og_img = page.og_image | default: page.image | default: "/assets/og/default.png" -%}
+  {%- assign _og_img = page.og_image | default: page.image | default: "/assets/og/default.jpg" -%}
   {%- assign _og_alt = page.og_image_alt | default: page.image_alt | default: "Daily Utility Apps: smart tools for everyday life" %}
   <meta property="og:image" content="{{ _og_img | absolute_url }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="{{ _og_alt | escape }}">
-  <meta property="og:image:type" content="image/png">
+  {%- assign _og_ext = _og_img | split: "." | last | downcase -%}
+  {%- if _og_ext == "jpg" %}{% assign _og_ext = "jpeg" %}{% endif %}
+  <meta property="og:image:type" content="image/{{ _og_ext }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ _title | escape }}">
   <meta name="twitter:description" content="{{ _desc | escape }}">

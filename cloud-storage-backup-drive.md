@@ -1,5 +1,6 @@
 ---
 layout: app
+permalink: /cloud-storage-backup-drive
 css: app
 title: "Cloud Storage Backup & Drive: Photo, Video & Contact Backup"
 description: "Cloud Storage Backup & Drive backs up your photos, videos, contacts and app data so you can restore them when you need them. For iPhone and Android."
@@ -9,7 +10,7 @@ ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
 android_url: "https://play.google.com/store/apps/details?id=com.backup.and.restore.all.apps.photo.backup"
 category: "Productivity"
 updated: 2026-09-29
-og_image: "/assets/og/cloud-storage-backup-drive.png"
+og_image: "/assets/og/cloud-storage-backup-drive.jpg"
 og_image_alt: "Cloud Storage Backup & Drive, an app from Daily Utility Apps"
 
 moments_heading: "When a backup matters most"

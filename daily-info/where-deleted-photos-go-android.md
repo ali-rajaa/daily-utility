@@ -1,5 +1,6 @@
 ---
 layout: post
+permalink: /daily-info/where-deleted-photos-go-android
 css: post
 title: "Where Do Deleted Photos Go on Android?"
 description: "What happens when you delete a photo on Android, how long it stays in the trash, and where to look when you want it back."
@@ -28,7 +29,7 @@ related:
   - backup-vs-sync
   - organise-phone-photos
   - free-up-phone-storage
-og_image: "/assets/og/where-deleted-photos-go-android.png"
+og_image: "/assets/og/where-deleted-photos-go-android.jpg"
 og_image_alt: "Where Do Deleted Photos Go on Android?: a Daily Info guide from Daily Utility Apps"
 ---
 
@@ -44,7 +45,7 @@ These days, most of those apps don't erase a photo the moment you delete it. Ins
 
 That design exists because accidental deletion is common. A slip of the thumb while scrolling, a selection that included one photo too many, a child playing with the phone. The trash gives you a chance to undo it.
 
-There's an important consequence, though: deleted photos in the trash still take up storage space. If you're deleting photos to free up room, you won't see the space come back until the trash is emptied. Our guide to [freeing up storage without losing anything](/daily-info/free-up-phone-storage) explains how to do that safely.
+There's an important consequence, though: deleted photos in the trash still take up storage space. If you're deleting photos to free up room, you won't see the space come back until the trash is emptied. Our guide to [freeing up storage without losing anything]({{ '/daily-info/free-up-phone-storage' | relative_url }}) explains how to do that safely.
 
 ## What to do the moment you notice a photo is missing
 
@@ -69,7 +70,7 @@ How long photos stay depends on whether they were backed up:
 - Backed-up photos and videos stay in the trash for 60 days.
 - Photos and videos that weren't backed up stay for 30 days.
 
-Google Photos also treats deletion differently depending on backup. If a photo is backed up to your Google account and you delete it in the app, it's moved to the trash and removed everywhere: from your phone, from Google Photos online, and from any other devices signed in to the same account. That's sync at work. Our guide to [backup vs sync](/daily-info/backup-vs-sync) explains why that matters.
+Google Photos also treats deletion differently depending on backup. If a photo is backed up to your Google account and you delete it in the app, it's moved to the trash and removed everywhere: from your phone, from Google Photos online, and from any other devices signed in to the same account. That's sync at work. Our guide to [backup vs sync]({{ '/daily-info/backup-vs-sync' | relative_url }}) explains why that matters.
 
 If you want to free up space on the phone but keep the backed-up copy, Google Photos has a separate option to remove only the copies stored on your device. Those photos stay safe in your Google account and can still be viewed in the app when you're online.
 
@@ -194,7 +195,7 @@ Once a photo has been permanently deleted from the phone's storage, getting it b
 
 A factory reset erases everything on the phone in the same way. Photos that existed before a reset can only come back from a backup or another copy.
 
-This is why recovery tools focus on the trash. Our [Photo Recover & Data Recovery](/photo-recover-data-recovery) app helps you find and restore deleted photos and files that are still in your phone's trash bin, and no app can reliably bring back photos that have already been permanently erased.
+This is why recovery tools focus on the trash. Our [Photo Recover & Data Recovery]({{ '/photo-recover-data-recovery' | relative_url }}) app helps you find and restore deleted photos and files that are still in your phone's trash bin, and no app can reliably bring back photos that have already been permanently erased.
 
 ## Check your settings now
 
@@ -214,6 +215,6 @@ With your photos backed up and the backup checked now and then, deleting a photo
 
 <aside class="post-note" markdown="1">
 
-Once the trash has emptied, a backup is the way back. [Cloud Storage Backup & Drive](/cloud-storage-backup-drive) backs up your photos, videos, contacts and app data and lets you restore them when you need them.
+Once the trash has emptied, a backup is the way back. [Cloud Storage Backup & Drive]({{ '/cloud-storage-backup-drive' | relative_url }}) backs up your photos, videos, contacts and app data and lets you restore them when you need them.
 
 </aside>

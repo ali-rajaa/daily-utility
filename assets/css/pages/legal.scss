@@ -1,3 +1,7 @@
+---
+# Front matter fence: tells Jekyll to compile this file with Sass
+# (compressed, see _config.yml). Output keeps the .css name.
+---
 /* ==========================================================================
    legal.css: the privacy/terms layout (_layouts/legal.html).
 
@@ -19,17 +23,6 @@
   background: linear-gradient(to bottom, var(--bg-alt), var(--bg));
 }
 
-.legal-crumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  margin-bottom: 1.25rem;
-  font-size: 0.875rem;
-  color: var(--text-2);
-}
-.legal-crumbs a { color: var(--text-2); text-decoration: none; }
-.legal-crumbs a:hover { color: var(--brand-text); text-decoration: underline; }
-.legal-crumbs [aria-current="page"] { color: var(--text); font-weight: 500; }
 
 .legal-lead {
   max-width: 42rem;

@@ -37,9 +37,10 @@
       </ul>
     </nav>
 
-    <nav class="footer-col" id="support" aria-label="Support and legal">
-      <p class="footer-head">Support &amp; legal</p>
+    <nav class="footer-col" id="support" aria-label="Company">
+      <p class="footer-head">Company</p>
       <ul class="footer-links">
+        <li><a href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About us</a></li>
         <li><a href="{{ '/terms-of-service' | relative_url }}#contact">Contact support</a></li>
         <li><a href="{{ '/privacy-policy' | relative_url }}">Privacy Policy</a></li>
         <li><a href="{{ '/terms-of-service' | relative_url }}">Terms of Service</a></li>
