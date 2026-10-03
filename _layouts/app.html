@@ -105,8 +105,8 @@ alternate down the page. {%- endcomment %}
       {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
     </div>
     <ul class="app-hero-meta">
-      <li><svg aria-hidden="true"><use href="#i-devices"/></svg>{{ _platforms }}</li>
-      <li><svg aria-hidden="true"><use href="#i-spark"/></svg>By Daily Utility Apps</li>
+      <li><svg aria-hidden="true"><use href="#i-phone"/></svg>{{ _platforms }}</li>
+      <li><img class="app-hero-mark" src="{{ '/assets/icons/mark-192.png' | relative_url }}" width="18" height="18" alt="">By Daily Utility Apps</li>
       <li><svg aria-hidden="true"><use href="#i-shield"/></svg>Your data is never sold</li>
     </ul>
     <nav class="app-jump" aria-label="On this page">
@@ -204,7 +204,7 @@ alternate down the page. {%- endcomment %}
         <h3 class="compare-title">{% if page.compare.with_title %}{{ page.compare.with_title | escape }}{% else %}With {{ _short | escape }}{% endif %}</h3>
         <ul>
           {%- for item in page.compare.with %}
-          <li><span class="compare-mark" aria-hidden="true"><svg><use href="#i-check"/></svg></span><span>{{ item | escape }}</span></li>
+          <li><span class="compare-mark" aria-hidden="true"><svg><use href="#i-tick"/></svg></span><span>{{ item | escape }}</span></li>
           {%- endfor %}
         </ul>
       </div>

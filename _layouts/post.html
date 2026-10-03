@@ -103,7 +103,7 @@ css: post
         <h1>{{ page.heading | escape }}</h1>
         <p class="post-lead">{{ page.description | escape }}</p>
         <div class="post-meta">
-          <span class="post-byline"><span class="post-byline-mark" aria-hidden="true"><svg><use href="#i-spark"/></svg></span>By {{ site.title }}</span>
+          <span class="post-byline"><img class="post-byline-mark" src="{{ '/assets/icons/mark-192.png' | relative_url }}" width="30" height="30" alt="">By {{ site.title }}</span>
           <span class="post-meta-sep" aria-hidden="true">&middot;</span>
           <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
           {%- if page.updated and page.updated != page.date %}
@@ -179,10 +179,10 @@ css: post
       <div class="post-content">
         {%- if page.takeaways %}
         <div class="post-takeaways">
-          <p class="post-takeaways-title"><svg aria-hidden="true"><use href="#i-spark"/></svg>The short version</p>
+          <p class="post-takeaways-title"><svg aria-hidden="true"><use href="#i-list"/></svg>The short version</p>
           <ul>
             {%- for item in page.takeaways %}
-            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>{{ item | escape }}</span></li>
+            <li><svg aria-hidden="true"><use href="#i-tick"/></svg><span>{{ item | escape }}</span></li>
             {%- endfor %}
           </ul>
         </div>

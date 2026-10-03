@@ -17,7 +17,7 @@ moments:
   - icon: photo
     title: "A photo deleted by mistake"
     text: "One tap too many while scrolling, and a picture you wanted has gone."
-  - icon: folder
+  - icon: trash
     title: "A clear-out that went too far"
     text: "You freed up space in a hurry and took something you meant to keep with it."
   - icon: doc

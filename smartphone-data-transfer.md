@@ -23,7 +23,7 @@ moments:
   - icon: video
     title: "Sending a large video"
     text: "The clip that's far too big to email, moved straight to the phone that needs it."
-  - icon: contacts
+  - icon: users
     title: "Helping family switch"
     text: "Moving a parent's or grandparent's photos to their new phone."
 

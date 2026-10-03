@@ -21,10 +21,10 @@ moments:
   - icon: shield
     title: "When a phone is lost or broken"
     text: "Your backup doesn't live on the phone, so losing the phone doesn't have to mean losing what was on it."
-  - icon: folder
+  - icon: storage
     title: "When storage runs low"
     text: "With your photos and videos backed up, you can clear space on your phone without guessing."
-  - icon: contacts
+  - icon: users
     title: "Keeping family memories safe"
     text: "The photos and videos you can never take again, kept somewhere other than the phone in your pocket."
 
@@ -53,7 +53,7 @@ features:
   - icon: restore
     title: "Restore"
     text: "Bring what you've backed up back onto your phone, or onto a new one."
-  - icon: devices
+  - icon: phone
     title: "iPhone and Android"
     text: "Available on both the App Store and Google Play."
 

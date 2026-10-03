@@ -17,13 +17,13 @@ moments:
   - icon: doc
     title: "An attachment from work"
     text: "A contract, a report or a form arrives by email while you're away from your desk."
-  - icon: contacts
+  - icon: chat
     title: "A file in a group chat"
     text: "The school newsletter, a club schedule or a shared plan, sent to everyone at once."
-  - icon: folder
+  - icon: sheet
     title: "A spreadsheet on the go"
     text: "Check a budget, a timetable or a list without waiting to get back to a computer."
-  - icon: spark
+  - icon: slides
     title: "Slides before a meeting"
     text: "Look over a presentation on the way in, so you know what's coming."
 
@@ -40,7 +40,7 @@ features:
   - icon: doc
     title: "PDF files"
     text: "Open and read PDF documents on your phone."
-  - icon: folder
+  - icon: files
     title: "Word, Excel and PowerPoint"
     text: "Read Word documents, Excel spreadsheets and PowerPoint presentations as well as PDFs."
   - icon: check

@@ -8,11 +8,13 @@
 
   Usage: {% include store-badges.html ios_url=app.ios_url android_url=app.android_url %}
 
-  Icon paths are the same Apple-glyph / Google-Play-triangle renditions
+  Icon paths are the Apple-glyph / Google-Play-triangle renditions
   widely used on app sites' badges -- a proven,
   recognisable pattern, not a fresh guess at official brand assets
   (Apple/Google's own badge files carry usage guidelines this avoids
   needing to follow exactly, while still reading as the real thing).
+  The Play triangle's four pieces share exact corner points (the centre
+  is 13,12.4 in all four), so no hairline seams show between colours.
 {%- endcomment -%}
 <div class="store-badges{% if include.class %} {{ include.class }}{% endif %}">
   {%- if include.ios_url %}
@@ -23,7 +25,7 @@
   {%- endif %}
   {%- if include.android_url %}
   <a class="store-badge" href="{{ include.android_url }}" target="_blank" rel="noopener noreferrer" aria-label="{% if include.app %}Get {{ include.app | escape }} on Google Play{% else %}Get it on Google Play{% endif %}">
-    <svg class="store-badge-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3c-.3.3-.5.8-.5 1.4v16.6c0 .6.2 1.1.5 1.4l.1.1L13 12.5v-.1L3.7 2.2l-.1.1z" fill="#4285F4"/><path d="M16.1 15.6l-3.1-3.1v-.1l3.1-3.1 3.5 2c1 .6 1 1.5 0 2.1l-3.5 2.2z" fill="#FBBC05"/><path d="M16.1 15.6L13 12.4 3.6 21.8c.4.4 1 .4 1.7.1l10.8-6.3z" fill="#34A853"/><path d="M16.1 9.2L5.3 3c-.7-.4-1.3-.3-1.7.1L13 12.4l3.1-3.2z" fill="#EA4335"/></svg>
+    <svg class="store-badge-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3c-.3.3-.5.8-.5 1.4v16.6c0 .6.2 1.1.5 1.4l.1.1L13 12.4 3.7 2.2l-.1.1z" fill="#4285F4"/><path d="M16.1 15.6 13 12.4l3.1-3.2 3.5 2c1 .6 1 1.5 0 2.1l-3.5 2.3z" fill="#FBBC05"/><path d="M16.1 15.6L13 12.4 3.6 21.8c.4.4 1 .4 1.7.1l10.8-6.3z" fill="#34A853"/><path d="M16.1 9.2L5.3 3c-.7-.4-1.3-.3-1.7.1L13 12.4l3.1-3.2z" fill="#EA4335"/></svg>
     <span class="store-badge-text"><small>Get it on</small><strong>Google Play</strong></span>
   </a>
   {%- endif %}

@@ -1396,6 +1396,48 @@ except privacy-policy and terms-of-service for "cloudgate", "Pty",
 "ACN", the address, "product of", "powered by" and the social networks.
 Result: zero matches. Re-run it whenever copy or the footer changes.
 
+## 5p. Icon set redrawn to one spec, matched to labels (3 Oct)
+
+User: "deeply analyse and improve the SVGs full website and fix them".
+Every sprite icon was rendered on a 24-unit grid at 16, 20, 24 and 96px
+and inside app tiles, then checked against the label beside it.
+
+**Drawing problems fixed**
+- Phone transfer (teal app, 51 uses) was two phones and two arrows
+  crammed into 24 units; it turned to mush at 16-20px. Now the phones
+  sit on a diagonal with one curved arrow in each empty corner.
+- Sync and restore had arrowheads that didn't sit on the ends of their
+  arcs. Arcs and heads are now computed, so each head meets its curve.
+  Restore's arrow now points back in time.
+- The cloud (flagship, 62 uses) was lopsided; it's now three computed
+  lobes on a flat base.
+- The Google Play triangle on the store badges had hairline seams:
+  neighbouring colour pieces didn't share corner points. They do now.
+- The check icon drew a ring inside the filled badges in "The short
+  version" and the "With [app]" comparison; those use a bare tick.
+- Two CSS `stroke-width` rules that never reached the icons were removed.
+
+**Icons that didn't match their labels**
+- A laptop and phone for "iPhone and Android" (the apps are phone-only):
+  now a phone.
+- The sparkle (now read as "AI feature") for "By Daily Utility Apps",
+  "Not sure which app?", "The short version" and "Slides before a
+  meeting": now the real logo, a compass, a list and a slide.
+- Others: a person for "a file in a group chat" (now a chat bubble), a
+  folder for "a spreadsheet" (spreadsheet) and "Word, Excel and
+  PowerPoint" (stacked files), a cloud for "Encrypted" (padlock), a
+  history arrow for "Deleted when you leave" (bin), a magnifier for FAQs
+  (question mark), a person for Contact support (envelope), devices for
+  "Compare all four apps" (a grid of four), a document for the guides
+  (book), one person for family moments (two people), a folder for
+  "When storage runs low" (storage).
+
+**Spec** (top of `_includes/icon-sprite.html`): 24x24 grid, 2-unit
+margin, 1.75 stroke with round caps and joins, no fills, 2-unit corner
+radii. The only exception is the bare tick at 2.5. 34 icons; the unused
+pin, devices, spark and search were removed. Share images were
+regenerated so their tiles show the new glyphs (the hub's uses the book).
+
 ## 6. SEO and routing
 
 **URLs**

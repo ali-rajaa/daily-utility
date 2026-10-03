@@ -116,16 +116,8 @@
   color: var(--text);
   font-weight: 600;
 }
-.post-byline-mark {
-  display: grid;
-  place-items: center;
-  width: 1.9rem;
-  height: 1.9rem;
-  border-radius: 50%;
-  background: var(--tone-gradient);
-  color: #fff;
-}
-.post-byline-mark svg { width: 1rem; height: 1rem; }
+/* The site's own logo mark: the byline names Daily Utility Apps. */
+.post-byline-mark { width: 1.9rem; height: 1.9rem; }
 
 /* Right side: the drawn banner (or photo) with the article's own numbers
    in a row of glass tiles overlapping its lower edge. */
@@ -305,7 +297,6 @@
   border-radius: 50%;
   background: var(--brand);
   color: var(--on-brand);
-  stroke-width: 2.5;
 }
 
 /* ---------- Article sections ----------

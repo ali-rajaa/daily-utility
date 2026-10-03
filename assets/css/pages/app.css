@@ -49,6 +49,7 @@
 }
 .app-hero-meta li { display: inline-flex; align-items: center; gap: 0.4rem; }
 .app-hero-meta svg { width: 1.125rem; height: 1.125rem; color: var(--brand-text); }
+.app-hero-mark { width: 1.125rem; height: 1.125rem; }
 
 /* ---------- How it works ---------- */
 
@@ -384,7 +385,7 @@
   margin-top: 0.05rem;
   border-radius: 50%;
 }
-.compare-mark svg { width: 0.85rem; height: 0.85rem; stroke-width: 2.6; }
+.compare-mark svg { width: 0.85rem; height: 0.85rem; }
 .compare-col--without .compare-mark { background: var(--border); color: var(--text-2); }
 .compare-col--with .compare-mark { background: var(--brand); color: var(--on-brand); }
 
