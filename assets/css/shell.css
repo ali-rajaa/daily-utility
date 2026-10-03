@@ -873,7 +873,6 @@ h3, .h3 {
 
 .footer-get .store-badges { flex-direction: column; align-items: flex-start; gap: 0.625rem; }
 .footer-get .store-badge { min-width: 10rem; }
-.footer-trademarks { margin-top: 1rem; max-width: 16rem; font-size: 0.75rem; line-height: 1.55; }
 
 .footer-head {
   margin-bottom: 0.875rem;

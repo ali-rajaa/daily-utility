@@ -13,8 +13,8 @@
   and "Contact support" opens the Contact section of the Terms of
   Service, which carries the email address.
 
-  The Apple/Google credit sits under the badges it belongs to, as their
-  badge guidelines ask.
+  No Apple/Google trademark line under the badges (removed at the
+  user's request, 3 Oct).
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _flagship = site.data.apps | where: "tier", "flagship" | first -%}
@@ -49,7 +49,6 @@
     <div class="footer-col footer-get">
       <p class="footer-head">Get the app</p>
       {% include store-badges.html ios_url=_flagship.ios_url android_url=_flagship.android_url class="footer-badges" %}
-      <p class="footer-trademarks">App Store is a service mark of Apple Inc. Google Play is a trademark of Google LLC.</p>
     </div>
   </div>
 
