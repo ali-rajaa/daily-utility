@@ -13,11 +13,11 @@ noindex: true
   and the sitemap (STATUS.md section 6).
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
-<section class="section notfound hero-glow-host">
+<section class="section notfound hero-glow-host" aria-labelledby="notfound-title">
   {% include hero-glow.html %}
   <div class="wrap hero-glow-content notfound-inner">
     <p class="notfound-code" aria-hidden="true">404</p>
-    <h1>This page isn't here</h1>
+    <h1 id="notfound-title">This page isn't here</h1>
     <p class="section-sub">It may have moved, or the link may be mistyped. These links will help you find what you were after.</p>
     <div class="btn-row">
       <a class="btn btn--primary" href="{{ '/' | relative_url }}">Go to the homepage</a>

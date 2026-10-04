@@ -395,9 +395,7 @@
   margin: 1.25rem 0 0;
 }
 .job-facts dt {
-  font: 650 0.75rem/1.3 var(--font-heading);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font: 600 0.875rem/1.3 var(--font);
   color: var(--brand-text);
 }
 .job-facts dd {
@@ -538,12 +536,9 @@
 
 /* Phones: each guide becomes a compact row (glyph beside the text)
    instead of a tall banner card. The hub keeps its full cards. */
+/* Phones: guide cards are compact rows site-wide (shell.css); the
+   homepage's teaser also drops the description. */
 @media (max-width: 599.98px) {
-  .home-guides .post-card { flex-direction: row; }
-  .home-guides .post-card-banner { width: 5.5rem; height: auto; flex-shrink: 0; }
-  .home-guides .post-card-glyph { width: 2.75rem; height: 2.75rem; box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2); }
-  .home-guides .post-card-body { padding: 1rem 1.125rem 1.125rem; }
-  .home-guides .post-card-title { margin-top: 0.6rem; font-size: 1.0625rem; }
   .home-guides .post-card-desc { display: none; }
 }
 

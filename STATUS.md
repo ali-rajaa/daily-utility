@@ -1521,6 +1521,35 @@ mobile: performance 98-100, accessibility 100, best practices 100. SEO is
 69 only because `staging: true` blocks indexing; that is the remaining
 launch step.
 
+## 5r. Mobile check of the redesign (4 Oct)
+
+User: "double check everything on mobile and fix any issues and make sure
+everything has been applied properly; we don't need a launch date, and
+the domain comes later". `staging: true` stays until the domain is set.
+
+Checked every page at 320-899px (15 widths, portrait and landscape),
+plus a script confirming each change from 5q is in the built pages.
+Fixed:
+- **App hero labels covered the icon** on phones and small tablets
+  (Data Transfer, Photo Recover: long labels such as "Restore to your
+  phone"). Below 900px the labels now sit in the panel's four corners,
+  with a smaller icon and a taller panel under 600px. A script checks
+  for overlaps (rotated icon included) at every width: none.
+- **About page app names** were 25px tap targets; now 44px, without
+  moving the layout.
+- **Guide lists on phones** are compact rows everywhere (shell.css
+  `.post-grid`), not just on the homepage: the hub is about 1,000px
+  shorter. The homepage teaser also drops descriptions.
+- **Homepage job cards' field labels** were small uppercase; now
+  sentence case, like every other label since 5q.
+- **Four sections had no label** (the 404, hub and legal heroes, and the
+  guides' closing band); now each is named by its heading, as 5q claimed
+  for all of them.
+
+Results: full suite passes; phone audit with no tap-target or margin
+issues; axe clean on 17 pages x light/dark x 1440/390; CLS 0; no
+broken links, anchors or duplicate IDs.
+
 ## 6. SEO and routing
 
 **URLs**

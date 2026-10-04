@@ -1134,6 +1134,18 @@ picture { display: contents; }
 }
 .post-grid > li { display: flex; }
 
+/* Phones: every guide grid (homepage, hub, app pages, articles) shows
+   compact rows -- a narrow banner beside the text -- instead of a stack
+   of tall cards, so a list of guides takes a third of the scrolling. */
+@media (max-width: 599.98px) {
+  .post-grid .post-card { flex-direction: row; }
+  .post-grid .post-card-banner { width: 5.5rem; height: auto; flex-shrink: 0; }
+  .post-grid .post-card-glyph { width: 2.75rem; height: 2.75rem; box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2); }
+  .post-grid .post-card-body { padding: 1rem 1.125rem 1.125rem; }
+  .post-grid .post-card-title { margin-top: 0.6rem; font-size: 1.0625rem; }
+  .post-grid .post-card-desc { font-size: 0.875rem; }
+}
+
 .post-card {
   position: relative;
   display: flex;

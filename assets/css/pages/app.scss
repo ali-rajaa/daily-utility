@@ -138,15 +138,26 @@
 .app-hero-chip--3 { bottom: 20%; left: 10%; }
 .app-hero-chip--4 { bottom: 12%; right: 12%; }
 
+/* Below the two-column layout the panel is shorter for its width, so the
+   labels move out to the four corners and the icon shrinks: long labels
+   ("Restore to your phone") then never reach the icon (checked at every
+   width from 320 to 899, the rotated icon's full box included). */
 @media (max-width: 899.98px) {
-  .app-hero-visual { aspect-ratio: 16 / 10; max-width: 36rem; }
+  .app-hero-visual { aspect-ratio: 16 / 10.5; max-width: 36rem; }
+  .app-hero-icon { width: 22%; max-width: 6.5rem; }
+  .app-hero-chip--1 { top: 6%; left: 5%; }
+  .app-hero-chip--2 { top: 6%; right: 5%; left: auto; }
+  .app-hero-chip--3 { bottom: 6%; left: 5%; top: auto; }
+  .app-hero-chip--4 { bottom: 6%; right: 5%; left: auto; top: auto; }
 }
-@media (max-width: 479.98px) {
+@media (max-width: 599.98px) {
+  .app-hero-visual { aspect-ratio: 1 / 0.82; }
+  .app-hero-icon { width: 26%; }
   .app-hero-chip { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
-  .app-hero-chip--1 { left: 5%; }
-  .app-hero-chip--2 { right: 4%; }
-  .app-hero-chip--3 { left: 6%; }
-  .app-hero-chip--4 { right: 6%; }
+  .app-hero-chip--1, .app-hero-chip--2 { top: 5%; }
+  .app-hero-chip--3, .app-hero-chip--4 { bottom: 5%; }
+  .app-hero-chip--1, .app-hero-chip--3 { left: 4%; }
+  .app-hero-chip--2, .app-hero-chip--4 { right: 4%; }
 }
 
 /* Quick links to the page's main sections. */

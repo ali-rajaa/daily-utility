@@ -275,12 +275,12 @@ css: post
     </div>
   </section>
 
-  <section class="section section--alt">
+  <section class="section section--alt" aria-labelledby="post-cta-title">
     <div class="wrap">
       <div class="cta-band cta-band--card post-cta tone-{{ flagship.tone }} reveal">
         {% include app-tile.html app=flagship class="cta-band-icon" %}
         <div class="section-head">
-          <h2>Keep a copy off your phone</h2>
+          <h2 id="post-cta-title">Keep a copy off your phone</h2>
           <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data, ready to restore when you need them. Free on {% include platforms.html app=flagship %}.</p>
         </div>
         {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}

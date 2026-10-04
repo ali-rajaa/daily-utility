@@ -67,7 +67,15 @@
 }
 .about-app-tile { width: 3.5rem; }
 .about-app h3 { font-size: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); }
-.about-app h3 a { color: var(--text); text-decoration: none; }
+/* A 44px tap height without moving the layout: the padding grows the
+   link's hit area and the negative margin gives the space back. */
+.about-app h3 a {
+  display: inline-block;
+  padding-block: 0.6875rem;
+  margin-block: -0.6875rem;
+  color: var(--text);
+  text-decoration: none;
+}
 @media (hover: hover) { .about-app h3 a:hover { color: var(--brand-text); } }
 .about-app-job { margin-top: 0.3rem; font-weight: 600; color: var(--brand-text); }
 .about-app-text > p:last-child { margin-top: 0.4rem; max-width: 40rem; color: var(--text-2); line-height: 1.6; }

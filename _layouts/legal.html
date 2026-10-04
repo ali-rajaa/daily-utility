@@ -38,14 +38,14 @@ css: legal
 }
 </script>
 
-<section class="section legal-hero">
+<section class="section legal-hero" aria-labelledby="legal-title">
   <div class="wrap legal-wrap">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="{{ '/' | relative_url }}">Home</a>
       <span class="breadcrumbs-sep" aria-hidden="true">/</span>
       <span aria-current="page">{{ _heading | escape }}</span>
     </nav>
-    <h1>{{ _heading | escape }}</h1>
+    <h1 id="legal-title">{{ _heading | escape }}</h1>
     {%- if page.lead %}
     <p class="legal-lead">{{ page.lead | escape }}</p>
     {%- endif %}

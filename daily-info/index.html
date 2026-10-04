@@ -55,7 +55,7 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
 }
 </script>
 
-<section class="section hub-hero hero-glow-host">
+<section class="section hub-hero hero-glow-host" aria-labelledby="hub-title">
   {% include hero-glow.html %}
   <div class="wrap hero-glow-content hub-hero-grid">
     <div class="hub-hero-copy">
@@ -64,7 +64,7 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
         <span class="breadcrumbs-sep" aria-hidden="true">/</span>
         <span aria-current="page">Daily Info</span>
       </nav>
-      <h1>Guides for everyday <span class="hub-accent">phone problems</span></h1>
+      <h1 id="hub-title">Guides for everyday <span class="hub-accent">phone problems</span></h1>
       <p class="hub-sub">Plain-English help with backing up, switching phones, looking after your photos and storage, and keeping your data private.</p>
       <ul class="hub-stats">
         <li><strong>{{ posts.size }}</strong> {% if posts.size == 1 %}guide{% else %}guides{% endif %}</li>
