@@ -1550,6 +1550,20 @@ Results: full suite passes; phone audit with no tap-target or margin
 issues; axe clean on 17 pages x light/dark x 1440/390; CLS 0; no
 broken links, anchors or duplicate IDs.
 
+## 5s. App pages shorter on phones only (4 Oct)
+
+User: "trim the features page on mobile ONLY and leave it for desktop,
+same with Daily Utility". The app pages are this site's feature pages.
+Below 600px (app.scss, one media query): moments, steps, features and
+tips are compact rows with the icon or number beside the text instead of
+stacked blocks; the six-feature bento is one divided panel; related-guide
+teasers drop their descriptions. Nothing is hidden from the app's own
+copy. Phone heights: Backup & Drive 10,669 -> 9,093px, Document Reader
+9,278 -> 8,122, Data Transfer 9,792 -> 8,261, Photo Recover 9,783 ->
+8,108. Pixel comparison at 600, 768, 1024 and 1440px before and after:
+identical (one 600px shot differed only by sub-threshold noise in the
+animated hero glow). axe clean; phone checks clean.
+
 ## 6. SEO and routing
 
 **URLs**

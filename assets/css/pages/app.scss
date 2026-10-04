@@ -480,6 +480,70 @@
 .app-close-link svg { width: 1.05rem; height: 1.05rem; transition: transform 0.2s var(--ease-out); }
 @media (hover: hover) { .app-close-link:hover svg { transform: translateX(3px); } }
 
+/* ---------- Phones only: a shorter page ----------
+   Desktop and tablets are untouched (pixel-compared at 600px and up).
+   Below 600px the stacked blocks -- icon or number above, title, then
+   text -- become compact rows with the icon or number beside the text,
+   which roughly halves the height of moments, steps, features and tips
+   without hiding any of it. */
+@media (max-width: 599.98px) {
+  .moment, .step, .tip,
+  .feature-panel .feature-card,
+  .feature-grid--bento .feature-card {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    align-items: start;
+  }
+  .moment > :not(.moment-icon), .step > :not(.step-number), .tip > :not(.tip-num),
+  .feature-card > :not(.feature-icon) { grid-column: 2; }
+  .moment-icon, .step-number, .tip-num, .feature-icon { grid-row: 1 / span 2; }
+
+  .moments { gap: 0; }
+  .moment { padding-block: 1.25rem; }
+  .moment-icon { width: 2.5rem; height: 2.5rem; margin-bottom: 0; border-radius: 0.75rem; }
+  .moment h3 { font-size: 1.0625rem; }
+  .moment p { margin-top: 0.3rem; }
+
+  .steps { gap: 1.5rem; }
+  .step-number { width: 2.5rem; height: 2.5rem; font-size: 1rem; }
+  .step h3 { margin-top: 0.45rem; font-size: 1.0625rem; }
+  .step p { margin-top: 0.3rem; font-size: 0.9375rem; }
+
+  /* six features: one divided panel, like the smaller app pages, not
+     six separate boxes */
+  .feature-grid--bento {
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--border);
+    overflow: hidden;
+  }
+  .feature-grid--bento .feature-card,
+  .feature-grid--bento .feature-card:first-child { border: 0; border-radius: 0; background: var(--surface); }
+  /* related guides are a teaser here: title and date, the description
+     is on the guide */
+  .app-guides-grid .post-card-desc { display: none; }
+  .feature-panel .feature-card,
+  .feature-grid--bento .feature-card,
+  .feature-grid--bento .feature-card:first-child { padding: 1.25rem; }
+  .feature-grid--bento .feature-card:first-child { display: grid; }
+  .feature-icon,
+  .feature-grid--bento .feature-card:first-child .feature-icon {
+    width: 2.5rem; height: 2.5rem; padding: 0.6rem; margin-bottom: 0;
+  }
+  .feature-grid--bento .feature-card:first-child .feature-icon { background: var(--brand-soft); box-shadow: none; }
+  .feature-card h3,
+  .feature-grid--bento .feature-card:first-child h3 { margin-top: 0.35rem; font-size: 1.0625rem; }
+  .feature-card p,
+  .feature-grid--bento .feature-card:first-child p { margin-top: 0.3rem; font-size: 0.9375rem; }
+
+  .tips { gap: 1.5rem; }
+  .tip-num { margin-bottom: 0; font-size: 1.625rem; line-height: 1.2; }
+  .tip h3 { font-size: 1.0625rem; margin-top: 0.15rem; }
+  .tip p { margin-top: 0.3rem; }
+}
+
 /* ---------- Accessibility preferences ---------- */
 @media (prefers-reduced-motion: reduce) {
   .other-app { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
