@@ -1,0 +1,141 @@
+---
+layout: default
+permalink: /contact
+css: contact
+title: "Contact Daily Utility Apps: Email Our Support Team"
+description: "Email the Daily Utility Apps support team about any of our four apps: questions, problems, feedback or privacy requests."
+breadcrumbs:
+  - name: "Home"
+    url: "/"
+  - name: "Contact"
+    url: "/contact"
+---
+{%- comment -%}
+  Contact page (4 Oct). One way to reach us: the support email
+  (site.company.support_email, Daily Utility's own address, user 4 Oct).
+  No phone number, address, hours or reply-time promise: none of that is
+  confirmed, and the operating company and its location stay on the
+  legal pages (STATUS.md 5o).
+
+  Each "Email about" link opens a message with the app already named in
+  the subject, so we know which app it's about before reading it. The
+  Copy button is added by site.js; without JavaScript the address is
+  still plain, selectable text and the mailto link still works.
+{%- endcomment -%}
+{%- assign apps = site.data.apps | where: "built", true -%}
+{%- assign _email = site.company.support_email -%}
+{% include breadcrumb-schema.html crumbs=page.breadcrumbs %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": {{ page.title | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "description": {{ page.description | jsonify }},
+  "about": { "@id": {{ '/' | absolute_url | append: '#organization' | jsonify }} }
+}
+</script>
+<section class="section contact-hero hero-glow-host" aria-labelledby="contact-title">
+  {% include hero-glow.html %}
+  <div class="wrap hero-glow-content contact-hero-grid">
+    <div class="contact-hero-copy">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+        <span aria-current="page">Contact</span>
+      </nav>
+      <h1 id="contact-title">Contact us</h1>
+      <p class="contact-lead">A question about one of our apps, a problem to report, feedback or a privacy request: email our support team and tell us what's going on.</p>
+    </div>
+
+    <div class="contact-card">
+      <span class="contact-card-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span>
+      <p class="contact-card-label">Email support</p>
+      <p class="contact-card-email"><a href="mailto:{{ _email }}">{{ _email }}</a></p>
+      <div class="contact-card-actions">
+        <a class="btn btn--primary" href="mailto:{{ _email }}">Write an email<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <button class="btn btn--ghost contact-copy" type="button" data-copy="{{ _email }}" hidden><span class="contact-copy-text">Copy address</span></button>
+      </div>
+      <p class="contact-copy-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="apps-title">
+  <div class="wrap contact-split">
+    <div class="section-head reveal">
+      <h2 id="apps-title">Email about an app</h2>
+      <p class="section-sub">Pick the app and your email opens with its name in the subject line.</p>
+    </div>
+    <ul class="contact-apps">
+      {%- for app in apps %}
+      {%- capture _subject %}{{ app.name }} support{% endcapture %}
+      <li class="tone-{{ app.tone }} reveal">
+        <a class="contact-app" href="mailto:{{ _email }}?subject={{ _subject | url_encode | replace: '+', '%20' }}">
+          {% include app-tile.html app=app class="contact-app-tile" %}
+          <span class="contact-app-text">
+            <span class="contact-app-name">{{ app.name | escape }}</span>
+            <span class="contact-app-desc">Questions, problems or feedback</span>
+          </span>
+          <svg class="contact-app-go" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="include-title">
+  <div class="wrap contact-split">
+    <div class="section-head reveal">
+      <h2 id="include-title">What to put in your email</h2>
+      <p class="section-sub">A few details up front mean fewer emails back and forth.</p>
+    </div>
+    <ol class="contact-steps">
+      <li class="reveal">
+        <h3>Which app</h3>
+        <p>The app's name, if you didn't start from one of the links above.</p>
+      </li>
+      <li class="reveal">
+        <h3>Your phone</h3>
+        <p>Its make and model, and whether it runs iOS or Android, with the version if you know it.</p>
+      </li>
+      <li class="reveal">
+        <h3>What happened</h3>
+        <p>What you were doing, what you expected and what you saw instead. A screenshot often says it best.</p>
+      </li>
+    </ol>
+    <p class="contact-note reveal"><svg aria-hidden="true"><use href="#i-shield"/></svg><span>Please don't include your password. Support doesn't need it to help you.</span></p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 id="more-title">Other ways to find an answer</h2>
+    </div>
+    <ul class="contact-more">
+      <li class="reveal">
+        <a href="{{ '/' | relative_url }}#faq">
+          <span class="contact-more-icon" aria-hidden="true"><svg><use href="#i-help"/></svg></span>
+          <span class="contact-more-name">Questions about our apps</span>
+          <span class="contact-more-desc">What each app does, and where to get it.</span>
+        </a>
+      </li>
+      <li class="reveal">
+        <a href="{{ '/daily-info/' | relative_url }}">
+          <span class="contact-more-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>
+          <span class="contact-more-name">Daily Info guides</span>
+          <span class="contact-more-desc">Plain-English guides to everyday phone problems.</span>
+        </a>
+      </li>
+      <li class="reveal">
+        <a href="{{ '/privacy-policy' | relative_url }}#your-rights">
+          <span class="contact-more-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+          <span class="contact-more-name">Your privacy rights</span>
+          <span class="contact-more-desc">How to ask for a copy of your data, or for it to be deleted.</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -193,6 +193,32 @@
     });
   });
 
+  /* ---- Copy button (Contact page) ----
+     Hidden in the markup and shown only when the clipboard is there to
+     use, so it never appears as a button that does nothing. The status
+     line announces the result to screen readers too. */
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    if (!navigator.clipboard || !window.isSecureContext) return;
+    var label = btn.querySelector('.contact-copy-text');
+    var status = btn.closest('.contact-card');
+    status = status && status.querySelector('.contact-copy-status');
+    var timer;
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(function () {
+        if (label) label.textContent = 'Copied';
+        if (status) status.textContent = 'Email address copied.';
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          if (label) label.textContent = 'Copy address';
+          if (status) status.textContent = '';
+        }, 2500);
+      }, function () {
+        if (status) status.textContent = 'Couldn\'t copy. Select the address above instead.';
+      });
+    });
+  });
+
   /* ---- Swipe shelves ----
      On phones the homepage job cards sit in a sideways shelf that snaps
      to each card. Tabbing to a link in a half-hidden card scrolls the

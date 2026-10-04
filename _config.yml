@@ -49,12 +49,14 @@ liquid:
 # The operating company behind the apps. Used by the legal pages ONLY
 # (privacy-policy.md, terms-of-service.md): the rest of the site presents
 # Daily Utility Apps as its own company and never names it (user, 3 Oct).
+# The exception is support_email: it is Daily Utility's own address
+# (user, 4 Oct), so the Contact page shows it as well.
 company:
   legal_name: "CloudGate Technologies Pty Limited"
   acn: "ACN 673 209 553"
   address_line1: "10 Seddon Way"
   address_line2: "Canning Vale WA 6155, Australia"
-  support_email: "support@cloudgate-app.com"
+  support_email: "console@dailyutilityapps.store"
 
 exclude:
   - Gemfile

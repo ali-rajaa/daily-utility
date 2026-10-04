@@ -1564,6 +1564,27 @@ copy. Phone heights: Backup & Drive 10,669 -> 9,093px, Document Reader
 identical (one 600px shot differed only by sub-threshold noise in the
 animated hero glow). axe clean; phone checks clean.
 
+## 5t. Contact page and the support email (4 Oct)
+
+User: "email for daily is - console@dailyutilityapps.store". It replaces
+`support@cloudgate-app.com` as `company.support_email` in `_config.yml`,
+so the legal pages pick it up unchanged. Because it is Daily Utility's
+own address (not the operating company's), it may appear outside the
+legal pages too.
+
+New page `/contact` (contact.html, pages/contact.scss): the email on a
+card with "Write an email" (mailto) and "Copy address" (site.js shows
+it only where the clipboard works; a status line announces the copy),
+one mailto link per app with the app named in the subject, what to put
+in an email, and links to the homepage FAQ, Daily Info and the privacy
+rights section. No phone, address, hours or reply-time promise: none is
+confirmed. Schema: ContactPage + BreadcrumbList; the homepage
+Organization gains `email` and a customer-support `contactPoint`.
+"Contact support" in the header Help menu and the footer, and the About
+page's closing band, now open /contact (they used to open the Terms
+of Service contact section). axe clean (light/dark, 1440 and 390);
+phone checks clean.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -1810,9 +1831,9 @@ what's there.
 
 - [ ] The old site's URL list, and the privacy/support URLs the stores
       currently point to (this blocks the cutover, not the build).
-- [ ] Support email: keep `support@cloudgate-app.com`, or set up
-      `support@dailyutilityapps.store`? The second needs MX records on
-      the new domain.
+- [x] ~~Support email~~ — the user gave `console@dailyutilityapps.store`
+      (4 Oct); it is `company.support_email` in `_config.yml` (section
+      5t). Mail to it needs MX records on dailyutilityapps.store.
 - [ ] Where the DNS is managed (Cloudflare or the registrar). This
       decides how redirects are done.
 - [x] ~~Confirm the flagship's Apple id~~ — confirmed by the user (28

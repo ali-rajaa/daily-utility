@@ -1,0 +1,224 @@
+---
+# Front matter fence: tells Jekyll to compile this file with Sass
+# (compressed, see _config.yml). Output keeps the .css name.
+---
+/* ==========================================================================
+   contact.css: the Contact page (contact.html). Built from shell.css
+   tokens and components (section scaffold, buttons, breadcrumbs); this
+   file adds the hero and email card, the per-app email links, the
+   "what to include" steps and the closing links.
+   ========================================================================== */
+
+/* ---------- Hero ---------- */
+.contact-hero { padding-block: var(--space-hero-top) var(--space-hero-bottom); }
+.contact-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+}
+@media (max-width: 899.98px) { .contact-hero-grid { grid-template-columns: minmax(0, 1fr); } }
+.contact-hero .breadcrumbs { margin-bottom: 1.5rem; }
+.contact-hero h1 { text-wrap: balance; }
+.contact-lead {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.3125rem);
+  line-height: 1.55;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* The email itself, on a raised card: the one thing this page is for. */
+.contact-card {
+  position: relative;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--border));
+  border-radius: 1.75rem;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 55%),
+    var(--surface);
+  box-shadow: var(--shadow-md);
+}
+.contact-card-icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 23%;
+  background: var(--tone-gradient);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 6px 16px rgba(12, 20, 36, 0.18);
+}
+.contact-card-icon svg { width: 54%; height: 54%; }
+.contact-card-label {
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--brand-text);
+}
+.contact-card-email {
+  margin-top: 0.35rem;
+  font: 700 clamp(1.1875rem, 0.95rem + 1.1vw, 1.625rem)/1.25 var(--font-heading);
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.contact-card-email a {
+  display: inline-block;
+  padding-block: 0.4rem;
+  margin-block: -0.4rem;
+  color: var(--text);
+  text-decoration: none;
+}
+@media (hover: hover) { .contact-card-email a:hover { color: var(--brand-text); text-decoration: underline; text-underline-offset: 0.15em; } }
+.contact-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.contact-copy-status:empty { display: none; }
+.contact-copy-status { margin-top: 0.75rem; font-size: 0.9375rem; color: var(--text-2); }
+@media (max-width: 479.98px) {
+  .contact-card-actions .btn { flex: 1 1 100%; justify-content: center; }
+}
+
+/* ---------- Heading beside its content ---------- */
+.contact-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: 1.5rem clamp(1.5rem, 5vw, 4rem);
+}
+.contact-split > .section-head { margin-bottom: 0; text-align: left; }
+@media (max-width: 899.98px) { .contact-split { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- Email about an app ---------- */
+.contact-apps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+.contact-apps li + li { border-top: 1px solid var(--border); }
+.contact-app {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 1rem 1.25rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color 160ms ease-out;
+}
+.contact-app-tile { width: 2.75rem; }
+.contact-app-text { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.contact-app-name { font: 600 1.0625rem/1.3 var(--font-heading); }
+.contact-app-desc { font-size: 0.9375rem; color: var(--text-2); }
+.contact-app-go {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--brand-text);
+  transition: transform 160ms ease-out;
+}
+@media (hover: hover) {
+  .contact-app:hover { background: var(--brand-soft); }
+  .contact-app:hover .contact-app-go { transform: translateX(3px); }
+}
+.contact-app:active { background: var(--brand-soft); }
+
+/* ---------- What to put in your email ---------- */
+.contact-steps {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.contact-steps li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  column-gap: 1rem;
+  counter-increment: step;
+}
+.contact-steps li::before {
+  content: counter(step);
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--on-brand);
+  font: 700 1rem/1 var(--font-heading);
+}
+.contact-steps h3 { grid-column: 2; margin-top: 0.45rem; font-size: 1.0625rem; }
+.contact-steps p { grid-column: 2; margin-top: 0.3rem; color: var(--text-2); line-height: 1.6; }
+.contact-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.contact-note svg { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; margin-top: 0.1rem; color: var(--brand-text); }
+@media (min-width: 900px) { .contact-note { grid-column: 2; } }
+
+/* ---------- Other ways to find an answer ---------- */
+.contact-more {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 899.98px) { .contact-more { grid-template-columns: minmax(0, 1fr); } }
+.contact-more a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 1rem;
+  height: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 160ms ease-out, box-shadow 160ms ease-out;
+}
+.contact-more-icon {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+.contact-more-icon svg { width: 1.2rem; height: 1.2rem; }
+.contact-more-name { align-self: end; font: 600 1.0625rem/1.3 var(--font-heading); }
+.contact-more-desc { margin-top: 0.25rem; font-size: 0.9375rem; color: var(--text-2); line-height: 1.5; }
+@media (hover: hover) {
+  .contact-more a:hover { border-color: color-mix(in srgb, var(--brand) 40%, var(--border)); box-shadow: var(--shadow-sm); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-app, .contact-app-go, .contact-more a { transition: none; }
+  .contact-app:hover .contact-app-go { transform: none; }
+}
+@media (prefers-contrast: more) {
+  .contact-card, .contact-apps, .contact-apps li + li, .contact-more a, .contact-note { border-color: var(--border-strong); }
+}

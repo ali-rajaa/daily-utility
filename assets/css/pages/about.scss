@@ -137,3 +137,6 @@
 @media (prefers-contrast: more) {
   .about-hero-cell { border-color: var(--border-strong); }
 }
+
+/* The support email in the closing band: long, so it may break anywhere. */
+.cta-band .section-sub a { color: var(--brand-text); font-weight: 600; text-decoration: underline; text-underline-offset: 0.15em; overflow-wrap: anywhere; }

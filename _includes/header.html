@@ -17,13 +17,12 @@
   Everything lists itself: apps from _data/apps.yml (built: true, the
   flagship featured). Platforms (iPhone / Android) are deliberately not
   shown here -- they live on the app pages and the homepage's
-  availability table, where they're the point (user, 29 Sep). The
-  support email lives on the legal pages only, so "Contact support"
-  opens the Contact section of the Terms of Service.
+  availability table, where they're the point (user, 29 Sep). "Contact
+  support" opens the Contact page, which carries the support email.
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
-{%- assign _in_help = false -%}{%- if page.layout == "legal" -%}{%- assign _in_help = true -%}{%- endif %}
+{%- assign _in_help = false -%}{%- if page.layout == "legal" or page.url == "/contact" -%}{%- assign _in_help = true -%}{%- endif %}
 <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 <div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
@@ -85,7 +84,7 @@
                 <p class="nav-menu-label">Help &amp; support</p>
                 <ul class="nav-help">
                   <li><a class="nav-help-link" href="{{ '/' | relative_url }}#faq"><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-help"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Questions about our apps</span><span class="nav-help-desc">What each app does, and where to get it.</span></span></a></li>
-                  <li><a class="nav-help-link" href="{{ '/terms-of-service' | relative_url }}#contact"><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Contact support</span><span class="nav-help-desc">How to reach our support team about any of our apps.</span></span></a></li>
+                  <li><a class="nav-help-link" href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Contact support</span><span class="nav-help-desc">Email our support team about any of our apps.</span></span></a></li>
                   <li><a class="nav-help-link" href="{{ '/privacy-policy' | relative_url }}"{% if page.url == "/privacy-policy" %} aria-current="page"{% endif %}><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Privacy Policy</span><span class="nav-help-desc">How your data is handled. We never sell it.</span></span></a></li>
                   <li><a class="nav-help-link" href="{{ '/terms-of-service' | relative_url }}"{% if page.url == "/terms-of-service" %} aria-current="page"{% endif %}><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-doc"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Terms of Service</span><span class="nav-help-desc">The terms for using our apps and this site.</span></span></a></li>
                 </ul>

@@ -10,8 +10,8 @@
   Daily Utility Apps is presented as its own company (user, 3 Oct): the
   operating company's name, ACN, address and support email appear on
   the legal pages only, never here. So the copyright names the site,
-  and "Contact support" opens the Contact section of the Terms of
-  Service, which carries the email address.
+  and "Contact support" opens the Contact page, which carries Daily
+  Utility's own support email (user, 4 Oct).
 
   No Apple/Google trademark line under the badges (removed at the
   user's request, 3 Oct).
@@ -41,7 +41,7 @@
       <p class="footer-head">Company</p>
       <ul class="footer-links">
         <li><a href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About us</a></li>
-        <li><a href="{{ '/terms-of-service' | relative_url }}#contact">Contact support</a></li>
+        <li><a href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}>Contact support</a></li>
         <li><a href="{{ '/privacy-policy' | relative_url }}">Privacy Policy</a></li>
         <li><a href="{{ '/terms-of-service' | relative_url }}">Terms of Service</a></li>
       </ul>

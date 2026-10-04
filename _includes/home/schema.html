@@ -1,9 +1,10 @@
 {%- comment -%}
   Homepage structured data. The Organization lives here and only here;
   every SoftwareApplication and BlogPosting elsewhere points back at its
-  @id rather than repeating it. Deliberately no legal name, address,
-  email or social profiles: STATUS.md 5c and 5f keep the company name and
-  location to the legal pages and footer, schema included.
+  @id rather than repeating it. Deliberately no legal name, address or
+  social profiles: STATUS.md 5c and 5o keep the operating company and its
+  location to the legal pages, schema included. The support email is
+  Daily Utility's own (user, 4 Oct), so it is listed.
 {%- endcomment -%}
 {%- assign _home = '/' | absolute_url -%}
 <script type="application/ld+json">
@@ -15,7 +16,14 @@
       "@id": {{ _home | append: '#organization' | jsonify }},
       "name": {{ site.title | jsonify }},
       "url": {{ _home | jsonify }},
-      "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify }}
+      "logo": {{ '/assets/icons/mark-192.png' | absolute_url | jsonify }},
+      "email": {{ site.company.support_email | jsonify }},
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": {{ site.company.support_email | jsonify }},
+        "url": {{ '/contact' | absolute_url | jsonify }}
+      }
     },
     {
       "@type": "WebSite",
