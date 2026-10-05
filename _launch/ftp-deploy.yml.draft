@@ -1,0 +1,148 @@
+# DRAFT, not active (5 Oct). A replacement for .github/workflows/pages.yml
+# that uploads the site over FTP to the dailyutilityapps.store host. On
+# hold until we know how imranshafique/daily-utility-website deploys.
+# Before using it: add `include: [.htaccess]`, switch _config.yml to the
+# Live state (STATUS.md section 7) and set the FTP secrets listed below.
+# Builds the site with plain Jekyll and uploads it over FTP to the
+# dailyutilityapps.store web host (STATUS.md section 7).
+#
+# Pull requests into main are built and checked but never deployed, so a
+# broken change shows up before it is merged.
+#
+# The FTP login lives in the repo's encrypted secrets, never in a file:
+#   Settings > Secrets and variables > Actions > Secrets
+#     FTP_USERNAME   the FTP user name
+#     FTP_PASSWORD   its password
+# Optional, under the Variables tab of the same screen:
+#     FTP_HOST       default dailyutilityapps.store
+#     FTP_SERVER_DIR the website folder on the server. Unset: the deploy
+#                    uses public_html (or domains/<host>/public_html) when
+#                    the login lands above it, else the login folder.
+#     FTP_TLS        strict (encrypted, certificate checked),
+#                    loose (encrypted, default) or off (plain FTP).
+# Until both secrets exist the deploy step is skipped with a warning.
+
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Build
+        run: bundle exec jekyll build --trace
+        env:
+          JEKYLL_ENV: production
+
+      # A Liquid file without its --- front matter fence (robots.txt,
+      # sitemap.xml) is copied as-is, so its {{ }} tags reach production
+      # unrendered. Nothing in the built site should still contain one.
+      # Jekyll writes no _site at all when there is nothing to build, and
+      # grep would read that as "no match", so it is checked first.
+      - name: Check built output
+        run: |
+          if [ ! -f _site/index.html ] || [ ! -f _site/.htaccess ]; then
+            echo "::error::The build is missing _site/index.html or _site/.htaccess, so there is nothing safe to deploy."
+            exit 1
+          fi
+          if grep -rlE '\{\{|\{%' --include='*.html' --include='*.xml' --include='*.txt' --include='*.css' --include='*.js' --include='*.json' _site; then
+            echo "::error::The files above contain unrendered Liquid. Add an empty --- front matter fence to the top of each source file."
+            exit 1
+          fi
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: _site
+          include-hidden-files: true
+          retention-days: 7
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://dailyutilityapps.store/
+    env:
+      FTP_HOST: ${{ vars.FTP_HOST || 'dailyutilityapps.store' }}
+      FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR }}
+      FTP_TLS: ${{ vars.FTP_TLS || 'loose' }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: _site
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      # lftp reads the password from LFTP_PASSWORD (--env-password), so it
+      # never appears on a command line or in the log.
+      - name: Upload to the web host
+        run: |
+          if [ -z "$FTP_USERNAME" ] || [ -z "$LFTP_PASSWORD" ]; then
+            echo "::warning::FTP_USERNAME and FTP_PASSWORD secrets are not set, so nothing was uploaded. See the top of pages.yml."
+            exit 0
+          fi
+          case "$FTP_TLS" in
+            strict) TLS="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate true" ;;
+            loose)  TLS="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate false" ;;
+            off)    TLS="set ftp:ssl-allow false" ;;
+            *) echo "::error::FTP_TLS must be strict, loose or off."; exit 1 ;;
+          esac
+          SETUP="$TLS; set net:max-retries 3; set net:timeout 30; set ftp:passive-mode true; open --user \"$FTP_USERNAME\" --env-password \"ftp://$FTP_HOST\""
+
+          DIR="$FTP_SERVER_DIR"
+          if [ -z "$DIR" ]; then
+            LISTING=$(lftp -c "$SETUP; cls -1a" | sed 's:/*$::')
+            if printf '%s\n' "$LISTING" | grep -qx "domains"; then
+              DIR="domains/$FTP_HOST/public_html"
+            elif printf '%s\n' "$LISTING" | grep -qx "public_html"; then
+              DIR="public_html"
+            else
+              DIR="."
+            fi
+          fi
+          echo "Uploading to: $DIR"
+
+          # Keep a copy of the top-level files already there (an old
+          # .htaccess or index page) as a downloadable artifact.
+          mkdir -p before-deploy
+          lftp -c "$SETUP; cd \"$DIR\" && mirror --no-recursion --parallel=4 . before-deploy" || true
+
+          # Upload everything. No --delete: files already on the server
+          # that this site doesn't have are left alone (STATUS.md 8).
+          lftp -c "$SETUP; cd \"$DIR\" && mirror --reverse --verbose=1 --parallel=4 --no-perms _site ."
+
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: server-files-before-deploy
+          path: before-deploy
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 90
