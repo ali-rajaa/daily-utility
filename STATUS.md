@@ -1364,6 +1364,11 @@ and axe is clean on all 16 pages in both themes at 1440 and 390.
 
 ## 5o. Daily Utility as its own company: CloudGate on legal pages only (3 Oct)
 
+> **Superseded by section 5u (8 Oct).** The legal pages now name Daily
+> Utility Apps / DAILY UTILITY APPS PTY LTD, so CloudGate appears nowhere
+> on this site. The check below still applies, with "cloudgate" now
+> expected to match zero pages, the legal pages included.
+
 User, 3 Oct: *"we need to remove all cloudgate traces, keep it ONLY IN
 LEGAL so socials etc, remove powered BY, ITS ITS OWN COMPANY"*. This
 replaces rule 2 of section 5c (which still allowed the footer). It's a
@@ -1584,6 +1589,54 @@ Organization gains `email` and a customer-support `contactPoint`.
 page's closing band, now open /contact (they used to open the Terms
 of Service contact section). axe clean (light/dark, 1440 and 390);
 phone checks clean.
+
+## 5u. New Privacy Policy and Terms of Service (8 Oct)
+
+The owner supplied the Daily Utility Apps Privacy Policy and Terms of
+Service as PDFs (both effective and last updated 8 Sep 2026; the same
+documents published at cloud.dailyutilityapps.store). They replace the
+old CloudGate-era legal pages completely. **Standing rule: the legal
+text is the owner's, reproduced as written. Don't add to, drop or reword
+it without a new version from the owner.** Only the formatting (headings
+in sentence case, lists, the contents box, contact card) is the site's.
+
+- **Who:** "Daily Utility Apps, including where applicable DAILY UTILITY
+  APPS PTY LTD". `company.legal_name` is now that name and appears on the
+  two legal pages only; `acn` and the address are gone (the documents
+  give neither). CloudGate is no longer named anywhere on the site, and
+  Australia is no longer mentioned in the legal text.
+- **Contact:** console@dailyutilityapps.store, as before.
+- **Dates:** the layout shows "Effective and last updated 8 September
+  2026" (`effective` and `last_updated` front matter); `updated:
+  2026-10-08` is when the pages changed here, for the sitemap only.
+- **Numbering:** the contents box numbers the sections. The privacy
+  document jumps from 18 to 20; here Contact us is 19. (Worth fixing on
+  the cloud site too.)
+- `#your-rights` is kept for "Your privacy choices", because the Contact
+  page links to it.
+
+**Site copy brought into line with the new policy.** The old policy's
+claims that the new one doesn't make were removed everywhere:
+- "We never sell your personal information" became "We don't sell your
+  private files, photos, videos, documents or contacts, and we only use
+  them to provide the features you ask for" (sections "How we use
+  information" and "How information may be shared"). Changed in the app
+  pages' privacy card and FAQs, the homepage, About, the Help menu
+  description and the app-permissions guide.
+- Amazon Web Services, the United States and "encrypted at rest" are
+  gone (the new policy says "cloud infrastructure" and "encrypted
+  transmission where applicable"). The homepage FAQ "Where are my
+  backed-up files stored?" became "How do I delete my account and
+  data?", and the homepage card "Encrypted in transit and at rest"
+  became "Permissions you control".
+- "Deleted within 72 hours" is gone; deletion now follows the policy
+  (deleted or anonymised once a request is processed, unless something
+  must be kept).
+- The policy says some apps contain ads. The FAQs about advertising now
+  say so and point to the policy, instead of implying no ads.
+- "privacy-first" was dropped from the site description.
+- The homepage FAQ on getting help now gives the email and the Contact
+  page, not the Terms of Service.
 
 ## 6. SEO and routing
 

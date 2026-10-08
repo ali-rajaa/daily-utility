@@ -4,225 +4,187 @@ permalink: /terms-of-service
 css: legal
 title: "Terms of Service | Daily Utility Apps"
 heading: "Terms of Service"
-description: "The terms for using Daily Utility Apps and this website: your account, purchases, acceptable use, liability and governing law."
-lead: "The rules for using our apps and this website: what you can expect from us, what we expect from you, and how responsibility is shared between us. Please read them carefully."
-last_updated: 2026-09-29
+description: "The terms that govern your use of Daily Utility Apps applications and services: accounts, your content, purchases, acceptable use and liability."
+lead: "The terms that govern your use of the applications and services provided by Daily Utility Apps."
+effective: 2026-09-08
+last_updated: 2026-09-08
+updated: 2026-10-08
 sections:
-  - id: agreement
-    label: "Agreement to these terms"
-  - id: eligibility
-    label: "Eligibility and accounts"
-  - id: using-the-apps
-    label: "Using our apps"
-  - id: purchases
-    label: "Purchases and subscriptions"
+  - id: our-services
+    label: "Our services"
+  - id: accounts
+    label: "User accounts"
   - id: your-content
-    label: "Your content"
+    label: "Cloud storage and user content"
+  - id: permissions
+    label: "Device permissions"
   - id: acceptable-use
     label: "Acceptable use"
-  - id: copyright
-    label: "Copyright and takedown requests"
+  - id: purchases
+    label: "Subscriptions and purchases"
+  - id: third-party
+    label: "Advertising and third-party services"
+  - id: deletion
+    label: "Account and data deletion"
+  - id: intellectual-property
+    label: "Intellectual property"
   - id: availability
-    label: "Availability, backups and recovery"
-  - id: suspension
-    label: "Suspension and termination"
-  - id: warranties
-    label: "Disclaimer of warranties"
-  - id: consumer-law
-    label: "Australian Consumer Law"
+    label: "Service availability"
   - id: liability
     label: "Limitation of liability"
-  - id: indemnity
-    label: "Indemnity"
+  - id: apple-google
+    label: "Apple and Google services"
+  - id: privacy
+    label: "Privacy"
   - id: changes
-    label: "Changes to these terms"
-  - id: governing-law
-    label: "Governing law and disputes"
-  - id: general
-    label: "General"
+    label: "Changes to these Terms"
+  - id: contact
+    label: "Contact us"
 ---
+{%- comment -%}
+  The text of the Daily Utility Apps Terms of Service (effective and last
+  updated 8 Sep 2026), as supplied by the owner on 8 Oct 2026 -- the same
+  document published at cloud.dailyutilityapps.store/terms-of-service.
+  Reproduced as written; only the formatting is the site's. The table of
+  contents numbers the sections as the source does. Don't add to or
+  reword this text without a new version from the owner (STATUS.md
+  section 5u).
+{%- endcomment -%}
+{%- assign _email = site.company.support_email -%}
 
-## Agreement to these terms {#agreement}
+*This document is provided in English. Translations may be added later; the English text is the version that applies.*
+{: .callout}
 
-These Terms of Service ("Terms") form a binding agreement between you and **{{ site.company.legal_name }}** ({{ site.company.acn }}) ("CloudGate", "we", "us" or "our") governing your use of the apps we publish as Daily Utility Apps and this website (together, the "Services").
+These Terms of Service ("Terms") govern your use of applications and services provided by Daily Utility Apps, including where applicable {{ site.company.legal_name }} ("we", "us", or "our").
 
-By downloading, accessing or using the Services, you confirm that you have read, understood and agree to be bound by these Terms and by our [Privacy Policy]({{ '/privacy-policy' | relative_url }}). **If you do not agree, you must not use the Services.**
+By downloading, installing, accessing, or using our apps or services, you agree to these Terms.
 
-If you use the Services on behalf of an organisation, you confirm that you have authority to bind that organisation, and "you" includes that organisation.
+## Our services {#our-services}
 
-## Eligibility and accounts {#eligibility}
+Daily Utility Apps provides mobile applications that may include:
 
-Where an app lets you create an account, you must be at least 16 years old, or the minimum age required in your country, to do so.
+- Cloud storage and backup
+- File management
+- Photo, video, and contact backup
+- Data transfer and recovery
+- Document and media tools
+- Other utility features
 
-- You must provide accurate information and keep it up to date.
-- You are responsible for keeping your sign-in details confidential.
-- **You are responsible for all activity under your account**, whether or not you authorised it.
-- You must tell us immediately at [{{ site.company.support_email }}](mailto:{{ site.company.support_email }}) if you suspect unauthorised access.
-- You may not share, sell, transfer or licence your account to anyone else.
+Features may vary between Android, iOS, app versions, devices, and subscription plans.
 
-We may refuse registration, or suspend or close an account, where we reasonably believe these Terms have been breached.
+## User accounts {#accounts}
 
-## Using our apps {#using-the-apps}
+Some features may require an account.
 
-We grant you a personal, non-exclusive, non-transferable, revocable licence to download and use our apps on devices you own or control, in line with these Terms and the rules of the store you downloaded them from.
+You are responsible for keeping your account and login details secure and for activities performed through your account.
 
-Your use of an app downloaded from the Apple App Store or Google Play is also subject to that store's terms. Where these Terms and the store's terms conflict on a matter the store's terms govern, such as billing and refunds, the store's terms apply.
+## Cloud storage and user content {#your-content}
 
-We may add, change or remove features, and release updates, to improve the apps or keep them secure. Some features may not work on every device or operating system version.
+You retain ownership of files, photos, videos, contacts, documents, and other content you upload or process through our Service.
 
-## Purchases and subscriptions {#purchases}
+You give us permission to store, process, transmit, and manage your content only as necessary to provide the features you request.
 
-Some apps may offer optional in-app purchases or subscriptions. Where they do:
+You are responsible for keeping your own backup of important files. We cannot guarantee that every file can always be recovered, restored, uploaded, or downloaded successfully.
 
-- Prices are shown in the store before you buy, in the currency that applies to your country, including GST or any other sales tax that applies to you.
-- Purchases and subscriptions are billed, renewed and refunded by Apple or Google under their own terms, and you manage or cancel them in your store account settings.
-- Subscriptions **renew automatically** at the end of each billing period unless you cancel before the renewal date. Cancellation takes effect at the end of the current period, and you keep access until then.
-- Except where required by law, including the Australian Consumer Law, payments are non-refundable.
+## Device permissions {#permissions}
 
-## Your content {#your-content}
+Some features may require access to:
 
-**You keep all ownership rights in the files you use with our apps** ("Your Content"). We claim no ownership over them.
+- Photos and videos
+- Audio
+- Contacts
+- Files and storage
+- Other device features
 
-Where an app stores Your Content, you grant us a limited, non-exclusive, worldwide, royalty-free licence to host, store, copy, transmit, reformat and display it solely to the extent necessary to provide, maintain and secure that app's service for you. This licence ends when Your Content is deleted, subject to routine backup cycles.
-
-You confirm that:
-
-- You own Your Content, or have all the rights and permissions needed to use it with our apps
-- Your Content does not infringe anyone else's intellectual property, privacy or other rights
-- Your Content does not breach any applicable law
-
-**You are solely responsible for Your Content** and for anything that happens as a result of you sharing it.
+These permissions are used to provide the features you request. You can manage permissions through your device settings.
 
 ## Acceptable use {#acceptable-use}
 
-You must not use the Services to store, share, transmit or facilitate:
+You must not use our Service to:
 
-- Content that is unlawful, or that infringes copyright, trade marks or other intellectual property rights
-- Child sexual abuse material, or any content that sexualises or exploits minors
-- Content that harasses, threatens, defames or incites violence or hatred against any person or group
-- Malware, viruses, ransomware or code designed to disrupt systems or gain unauthorised access to them
-- Content that breaches the privacy of others, including intimate images shared without consent
-- Material supporting terrorism, or instructions for making weapons
+- Violate any law
+- Upload illegal or harmful content
+- Infringe the rights of others
+- Spread malware or harmful software
+- Attempt unauthorized access to our systems
+- Abuse or interfere with our services
 
-You must also not:
+We may restrict or terminate access where necessary to protect our users, systems, or legal rights.
 
-- Try to gain unauthorised access to the Services, other people's accounts or our infrastructure
-- Reverse engineer, decompile or try to derive source code, except to the extent the law prohibits this restriction
-- Use the Services to send unsolicited bulk messages or run a public file-hosting or distribution service
-- Get around usage limits, rate limits or access restrictions
-- Resell, sublicence or commercially exploit the Services without our written permission
-- Use automated systems to access the Services in a way that puts an unreasonable load on our infrastructure
+## Subscriptions and purchases {#purchases}
 
-We may investigate suspected breaches, remove content, suspend or terminate accounts, and report unlawful activity to the authorities.
+Some features may require a paid subscription or in-app purchase.
 
-## Copyright and takedown requests {#copyright}
+Purchases made through the Google Play Store or Apple App Store are processed by the relevant platform.
 
-We respect intellectual property rights and expect our users to do the same.
+Subscriptions may automatically renew unless cancelled before the renewal date.
 
-If you believe content stored through the Services infringes your copyright, email [{{ site.company.support_email }}](mailto:{{ site.company.support_email }}) with: identification of the copyrighted work, where the allegedly infringing material is, your contact details, a statement that you believe in good faith the use is not authorised, and a statement that the information in your notice is accurate.
+Deleting the app does not automatically cancel a subscription.
 
-We may remove or disable access to content that is the subject of a valid notice, and may terminate the accounts of repeat infringers.
+Subscriptions should be managed through your Google Play or Apple account.
 
-## Availability, backups and recovery {#availability}
+Refunds are subject to the policies of Google Play, Apple, and applicable consumer law.
 
-We aim to keep the Services available and reliable, but we do not guarantee they will be uninterrupted or error free. They may be unavailable during maintenance or updates, or because of events outside our control.
+## Advertising and third-party services {#third-party}
 
-**Important: no app, including a backup app, is a substitute for keeping your own copies of files that matter to you.** We take reasonable steps to protect Your Content, but we do not warrant that it will never be lost, corrupted or temporarily unavailable.
-{: .callout}
+Some applications may contain advertising or use third-party services for:
 
-Recovery and transfer features depend on your device, its storage and its operating system. We cannot guarantee that a deleted file can be recovered, or that every file can be transferred.
+- Cloud storage
+- Analytics
+- Advertising
+- Crash reporting
+- Authentication
+- Payments
 
-We may modify, suspend or discontinue any part of the Services. If we discontinue a service that stores Your Content, we will give you reasonable notice and a reasonable opportunity to export it.
+Third-party services may have their own terms and privacy policies.
 
-## Suspension and termination {#suspension}
+## Account and data deletion {#deletion}
 
-You may stop using the Services at any time, and close any account you hold.
+Where account creation is available, you may request deletion of your account and associated data through the app where supported or by contacting us.
 
-We may suspend or terminate your access, with or without notice, where:
+Email: [{{ _email }}](mailto:{{ _email }})
 
-- You breach these Terms or our acceptable use requirements
-- We are required to by law or by a lawful request
-- Your use poses a security risk, or may cause harm or liability to us, other users or third parties
-- An account has been inactive for an extended period, after notice to its registered email address
+Deleting an account may permanently remove cloud-stored files and other associated data.
 
-Where practical and lawful, we will give you notice and a reasonable opportunity to export Your Content before termination. After termination, we delete Your Content in line with our [Privacy Policy]({{ '/privacy-policy' | relative_url }}).
+## Intellectual property {#intellectual-property}
 
-The sections on your content, disclaimers, limitation of liability, indemnity and governing law survive termination.
+Our apps, software, branding, graphics, designs, and other materials belong to Daily Utility Apps or our licensors.
 
-## Disclaimer of warranties {#warranties}
+You may use our applications only for lawful personal use and may not copy, resell, reverse engineer, or redistribute them except where permitted by law.
 
-To the maximum extent permitted by law, and subject to the Australian Consumer Law section below:
+## Service availability {#availability}
 
-**The Services are provided "as is" and "as available", without warranties of any kind, whether express, implied or statutory.** We disclaim all implied warranties of merchantability, fitness for a particular purpose, title and non-infringement.
+We may update, change, suspend, or discontinue features from time to time.
 
-We do not warrant that the Services will meet your requirements, be uninterrupted, timely, secure or error free, that defects will be corrected, or that Your Content will always be available or free from loss or corruption.
-
-## Australian Consumer Law {#consumer-law}
-
-Nothing in these Terms excludes, restricts or modifies any guarantee, right or remedy you may have under the *Competition and Consumer Act 2010* (Cth), including the Australian Consumer Law, or any other law that cannot lawfully be excluded or limited.
-
-Our goods and services come with guarantees that cannot be excluded under the Australian Consumer Law. Where we are entitled to, we limit our liability for breach of a non-excludable guarantee, at our option, to supplying the services again or paying the cost of having them supplied again.
+We do not guarantee that the Service will always be available, error-free, or compatible with every device.
 
 ## Limitation of liability {#liability}
 
-To the maximum extent permitted by law, and subject to the Australian Consumer Law section above:
+To the extent permitted by law, Daily Utility Apps is not responsible for indirect or consequential losses caused by use of the Service, including data loss, file corruption, service interruption, or third-party service failures.
 
-- **We are not liable for any indirect, incidental, special, consequential, exemplary or punitive damages**, including loss of profits, revenue, business opportunity or goodwill, or loss, corruption or unavailability of data, however caused, whether in contract, tort (including negligence), statute or otherwise.
-- **Our total aggregate liability** arising out of or in connection with these Terms or the Services is limited to the greater of: (a) the total amount you paid us for the Services in the twelve months before the event giving rise to the claim; or (b) AUD $100.
+Nothing in these Terms limits rights or protections that cannot legally be excluded.
 
-These limitations apply even if we have been told such damages are possible, and even if a limited remedy fails of its essential purpose.
+## Apple and Google services {#apple-google}
 
-## Indemnity {#indemnity}
+Apps downloaded from the Apple App Store or Google Play may also be subject to the applicable terms and policies of Apple or Google.
 
-You agree to indemnify, defend and hold harmless CloudGate and its officers, directors, employees, contractors and agents against any claims, liabilities, damages, losses, costs and expenses (including reasonable legal fees) arising out of or connected with:
+Apple and Google are not responsible for providing support for Daily Utility Apps applications except where required by their own policies or applicable law.
 
-- Your Content, including any claim that it infringes someone else's rights
-- Your use or misuse of the Services
-- Your breach of these Terms or of any applicable law
-- Your breach of anyone else's rights
+## Privacy {#privacy}
 
-We will tell you about any such claim and may, at our option, take over its defence at your expense.
+Your use of our Service is also governed by our [Privacy Policy]({{ '/privacy-policy' | relative_url }}), which explains how we collect, use, store, and protect information.
 
-## Changes to these terms {#changes}
+## Changes to these Terms {#changes}
 
-We may update these Terms from time to time. Where changes are material, we will give reasonable notice in the relevant app or on this website before they take effect.
+We may update these Terms from time to time.
 
-Continuing to use the Services after the effective date means you accept the updated Terms. If you do not accept them, you must stop using the Services.
+When changes are made, the "Last Updated" date will be revised.
 
-## Governing law and disputes {#governing-law}
+## Contact us {#contact}
 
-These Terms are governed by the laws of Western Australia, Australia, without regard to conflict of laws principles. You and we submit to the non-exclusive jurisdiction of the courts of Western Australia and any courts entitled to hear appeals from them.
-
-### Before starting proceedings
-
-If a dispute arises, you agree to first contact us at [{{ site.company.support_email }}](mailto:{{ site.company.support_email }}) and try to resolve it informally. If it is not resolved within 30 days, either party may start proceedings. Nothing in this section stops either party from seeking urgent injunctive relief.
-
-## General {#general}
-
-### Entire agreement
-
-These Terms and our Privacy Policy are the entire agreement between you and us about the Services, and replace any earlier agreements or understandings.
-
-### Severability
-
-If any provision is found unenforceable, it will be changed to the minimum extent necessary or severed, and the rest stays in full force.
-
-### No waiver
-
-If we do not enforce a provision, that is not a waiver of our right to enforce it later.
-
-### Assignment
-
-You may not assign or transfer these Terms without our written consent. We may assign them in connection with a merger, acquisition or sale of assets.
-
-### Force majeure
-
-We are not liable for any failure or delay caused by events beyond our reasonable control, including natural disasters, war, industrial action, network or power failures, or acts of government.
-
-### Contact
+If you have any questions about these Terms, contact:
 
 <div class="contact-card">
-<p><strong>{{ site.company.legal_name }}</strong> ({{ site.company.acn }})</p>
-<p>Email: <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a></p>
-<p>Address: {{ site.company.address_line1 }}, {{ site.company.address_line2 }}</p>
+<p><strong>Daily Utility Apps</strong></p>
+<p>Email: <a href="mailto:{{ _email }}">{{ _email }}</a></p>
 </div>

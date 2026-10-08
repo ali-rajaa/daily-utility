@@ -9,7 +9,7 @@ tagline: "Cloud backup and restore for your photos, videos, contacts and app dat
 ios_url: "https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432"
 android_url: "https://play.google.com/store/apps/details?id=com.backup.and.restore.all.apps.photo.backup"
 category: "Productivity"
-updated: 2026-09-29
+updated: 2026-10-08
 og_image: "/assets/og/cloud-storage-backup-drive.jpg"
 og_image_alt: "Cloud Storage Backup & Drive, an app from Daily Utility Apps"
 
@@ -101,6 +101,6 @@ faqs:
     a: "Yes. Back up your old phone first and confirm the backup is complete, then restore onto the new phone, and only reset the old one once everything you need is there."
   - q: "Who makes Cloud Storage Backup & Drive?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Do you sell my data or use my files for advertising?"
-    a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
+  - q: "Do you sell my files or use them for advertising?"
+    a: "No. We don't sell your private files, photos, videos, audio, documents or contacts, and we only use them to provide the features you ask for. The privacy policy explains what advertising and analytics providers may process."
 ---

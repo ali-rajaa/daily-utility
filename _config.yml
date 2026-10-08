@@ -1,5 +1,5 @@
 title: Daily Utility Apps
-description: Smart tools for everyday life. Daily Utility Apps builds focused, privacy-first apps for iPhone and Android.
+description: Smart tools for everyday life. Daily Utility Apps builds focused apps for iPhone and Android.
 
 # ---------------------------------------------------------------------------
 # Site address. Two states; see STATUS.md section 7.
@@ -46,16 +46,13 @@ liquid:
   error_mode: strict
   strict_filters: true
 
-# The operating company behind the apps. Used by the legal pages ONLY
-# (privacy-policy.md, terms-of-service.md): the rest of the site presents
-# Daily Utility Apps as its own company and never names it (user, 3 Oct).
-# The exception is support_email: it is Daily Utility's own address
-# (user, 4 Oct), so the Contact page shows it as well.
+# The company behind the apps, as the Privacy Policy and Terms of Service
+# name it (owner's documents, 8 Oct): "Daily Utility Apps, including where
+# applicable DAILY UTILITY APPS PTY LTD". legal_name appears on the legal
+# pages only; the rest of the site says Daily Utility Apps. support_email
+# is used across the site (Contact page, legal pages, schema).
 company:
-  legal_name: "CloudGate Technologies Pty Limited"
-  acn: "ACN 673 209 553"
-  address_line1: "10 Seddon Way"
-  address_line2: "Canning Vale WA 6155, Australia"
+  legal_name: "DAILY UTILITY APPS PTY LTD"
   support_email: "console@dailyutilityapps.store"
 
 exclude:

@@ -227,6 +227,6 @@ A photo backup app needs access to the photos it backs up; to back up your whole
 
 <aside class="post-note" markdown="1">
 
-We never sell your personal information, and we never use your files to build advertising profiles. Our [privacy policy]({{ '/privacy-policy' | relative_url }}) explains exactly how your data is handled.
+We don't sell your private files, photos, videos, documents or contacts, and we only use them to provide the features you ask for. Our [privacy policy]({{ '/privacy-policy' | relative_url }}) explains exactly how your data is handled.
 
 </aside>

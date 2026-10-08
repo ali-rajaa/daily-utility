@@ -4,189 +4,356 @@ permalink: /privacy-policy
 css: legal
 title: "Privacy Policy | Daily Utility Apps"
 heading: "Privacy Policy"
-description: "How Daily Utility Apps collects, uses, stores and protects your personal information across our apps and this website."
-lead: "What information our apps and this website collect, how we use and store it, who we share it with, and the rights you have over your personal information and your files."
-last_updated: 2026-09-29
+description: "How Daily Utility Apps collects, uses, stores, shares and protects information when you use our apps, cloud storage services and websites."
+lead: "How information is collected, used, stored, shared and protected when you use our mobile applications, cloud storage services, websites and related services."
+effective: 2026-09-08
+last_updated: 2026-09-08
+updated: 2026-10-08
 sections:
-  - id: who-we-are
-    label: "Who we are"
-  - id: scope
-    label: "What this policy covers"
   - id: information-we-collect
     label: "Information we collect"
-  - id: how-we-use-it
-    label: "How we use your information"
-  - id: app-tracking
-    label: "App Tracking Transparency"
-  - id: your-files
-    label: "Your files and your rights over them"
-  - id: storage-security
-    label: "Storage and security"
-  - id: disclosure
-    label: "When we disclose information"
+  - id: device-information
+    label: "Device and usage information"
+  - id: media-permissions
+    label: "Photos, videos, audio and media permissions"
+  - id: contacts-permission
+    label: "Contacts permission"
+  - id: android-storage
+    label: "Android file and storage access"
+  - id: cloud-storage
+    label: "Cloud storage and backup"
+  - id: advertising
+    label: "Advertising and tracking"
+  - id: analytics
+    label: "Analytics and diagnostics"
+  - id: service-providers
+    label: "Third-party service providers"
+  - id: google-apple
+    label: "Google Play and Apple services"
+  - id: how-we-use
+    label: "How we use information"
+  - id: sharing
+    label: "How information may be shared"
   - id: retention
-    label: "Retention and deletion"
+    label: "Data retention"
+  - id: deletion
+    label: "Account and data deletion"
   - id: your-rights
-    label: "Your privacy rights"
-  - id: website
-    label: "This website, cookies and analytics"
+    label: "Your privacy choices"
+  - id: security
+    label: "Data security"
   - id: children
-    label: "Children"
+    label: "Children's privacy"
   - id: changes
-    label: "Changes to this policy"
+    label: "Changes to this Privacy Policy"
   - id: contact
-    label: "How to contact us"
+    label: "Contact us"
 ---
+{%- comment -%}
+  The text of the Daily Utility Apps Privacy Policy (effective and last
+  updated 8 Sep 2026), as supplied by the owner on 8 Oct 2026 -- the same
+  document published at cloud.dailyutilityapps.store/privacy-policy.
+  Reproduced as written; only the formatting is the site's. The table of
+  contents numbers the sections (the source skips from 18 to 20; here
+  Contact us is 19). Don't add to or reword this text without a new
+  version from the owner (STATUS.md section 5u).
+{%- endcomment -%}
+{%- assign _email = site.company.support_email -%}
 
-## Who we are {#who-we-are}
+*This document is provided in English. Translations may be added later; the English text is the version that applies.*
+{: .callout}
 
-This Privacy Policy explains how **{{ site.company.legal_name }}** ({{ site.company.acn }}) ("CloudGate", "we", "us" or "our") collects, uses, stores and discloses personal information. We publish our mobile apps under the name **Daily Utility Apps**.
+Daily Utility Apps ("Daily Utility Apps", "we", "us", or "our"), including where applicable {{ site.company.legal_name }}, develops and operates mobile applications available through platforms including the Google Play Store and Apple App Store.
 
-We are based at {{ site.company.address_line1 }}, {{ site.company.address_line2 }}, and we handle personal information in accordance with the *Privacy Act 1988* (Cth) and the Australian Privacy Principles ("APPs"). Where the General Data Protection Regulation ("GDPR") or applicable United States state privacy laws apply to you, you have the additional rights described below.
+This Privacy Policy explains how information is collected, used, stored, shared, and protected when you use our mobile applications, cloud storage services, websites, and related services collectively referred to as the "Service".
 
-By using our apps or this website, you agree to this Privacy Policy. If you do not agree, please do not use them.
-
-## What this policy covers {#scope}
-
-This policy applies to this website and to every app we publish as Daily Utility Apps (together, the "Services"):
-
-- [Cloud Storage Backup & Drive]({{ '/cloud-storage-backup-drive' | relative_url }})
-- [Document Reader: Read All PDF]({{ '/document-reader-pdf' | relative_url }})
-- [Smartphone All Data Transfer]({{ '/smartphone-data-transfer' | relative_url }})
-- [Photo Recover & Data Recovery]({{ '/photo-recover-data-recovery' | relative_url }})
-
-Our apps do different jobs, so they handle different information. An app that backs up your files stores the content you choose to back up; an app that reads, transfers or recovers files works with them to do what you ask. Where something below applies only to some apps, we say so.
+Our applications include utility, file management, data transfer, data recovery, document reading, cloud storage, backup, and restore functionality. The information collected depends on the particular application and features you choose to use.
 
 ## Information we collect {#information-we-collect}
 
-### Information you provide
+Depending on the application and features you use, we may collect or process the following types of information.
 
-- **Account information:** if an app lets you create an account, your email address, your sign-in details (passwords are stored only in hashed form) and any display name you choose.
-- **Purchases:** if an app offers in-app purchases or subscriptions, they are processed by Apple or Google under their own terms. We receive confirmation of the purchase; we do not receive or store your full payment card details.
-- **Support correspondence:** messages, attachments and contact details you send when you contact us.
+### Personal information
 
-### Your files and content
+We may collect:
 
-Apps that back up or store files, such as Cloud Storage Backup & Drive, store the content you choose to back up ("Your Content") so that we can provide that service to you. Apps that open, transfer or recover files access them only to perform the function you ask for.
+- Email address
+- Information you provide when contacting customer support
+- Other information you voluntarily provide through the Service
 
-### Information collected automatically
+An email address may be used to create or manage an account, provide cloud functionality, identify your account, restore access, or communicate with you.
 
-- **Device and app information:** device model, operating system version, app version, language and time zone.
-- **Usage information:** which features you use, backup or transfer status, and error and crash logs.
-- **Technical information:** IP address, approximate location derived from your IP address, and connection information.
+### User content
 
-We use Firebase, provided by Google, to understand aggregate usage patterns and to receive crash reports. We use this information to operate, secure, troubleshoot and improve the Services.
+Our cloud storage, backup, transfer, recovery, and file-management applications may process content that you select or authorize the application to access, including:
 
-## How we use your information {#how-we-use-it}
+- Photos
+- Videos
+- Audio files
+- Documents
+- Other files
+- Contacts
+- Backup data
 
-We use personal information to:
+We access this content only when necessary to provide features requested by you, such as uploading, backing up, restoring, transferring, managing, recovering, viewing, or sharing content.
 
-- Provide each app's features, including storing, syncing and restoring Your Content where an app offers that
-- Create and administer accounts, and authenticate you when you sign in, where an app has accounts
-- Deliver in-app purchases and subscriptions where an app offers them
-- Provide customer support and respond to your enquiries
-- Detect, investigate and prevent fraud, abuse, security incidents and breaches of our [Terms of Service]({{ '/terms-of-service' | relative_url }})
-- Send service communications, such as security alerts and material changes to our terms
-- Comply with legal obligations and respond to lawful requests
-- Analyse aggregated usage to maintain and improve the Services
+When you choose to upload or backup content to our cloud service, that content may be transmitted to and stored on cloud infrastructure used to provide the Service.
 
-**We do not sell your personal information, and we do not sell or licence Your Content.** We do not use Your Content to build advertising profiles about you.
-{: .callout}
+## Device and usage information {#device-information}
 
-### Legal bases (GDPR)
+We may automatically collect certain technical information when you use our applications, including:
 
-Where the GDPR applies, we rely on: performance of a contract (providing the Services), legitimate interests (security, abuse prevention and service improvement), legal obligation (record keeping and lawful requests), and consent (where we separately ask for it).
+- Device type and model
+- Operating system and version
+- Device identifiers
+- IP address
+- App version
+- Crash information
+- Diagnostic information
+- Performance information
 
-## App Tracking Transparency on Apple devices {#app-tracking}
+We may use this information to operate the Service, detect technical problems, understand app performance, prevent misuse, and improve our applications.
 
-Where one of our iPhone apps uses Apple's App Tracking Transparency ("ATT") framework, we ask your permission before any tracking that requires it. With your permission, we and our advertising, analytics and attribution partners may use device identifiers and app activity to measure ad performance, attribute installs and improve advertising.
+## Photos, videos, audio and media permissions {#media-permissions}
 
-If you choose **Ask App Not to Track**, we respect your choice and will not carry out tracking that requires ATT permission. You can change this at any time in your Apple device settings.
+Some of our applications require access to photos, videos, audio, or other media stored on your device.
 
-## Your files and your rights over them {#your-files}
+These permissions may be used to allow you to:
 
-**You retain ownership of Your Content.** Using our apps does not transfer ownership or intellectual property rights in your files to us.
+- Backup photos and videos
+- Upload media to cloud storage
+- Restore backed-up media
+- Transfer files between devices
+- Manage files
+- Recover supported files
+- Select files for sharing
+- View or organize content
 
-Where an app stores Your Content, you grant us a limited, non-exclusive, worldwide, royalty-free licence to host, store, copy, transmit, reformat and display it strictly to the extent necessary to provide that app's service to you, including making backup copies and generating thumbnails or previews. This licence exists only so the service can work, and ends when Your Content is deleted from our systems, subject to the retention periods below.
+We do not access device media beyond what is required for the features provided by the application and the permissions granted by you.
 
-We do not routinely access or review Your Content. We may access it only where necessary to: provide technical support you have asked for, comply with a lawful request, investigate a suspected breach of our Terms of Service, or deal with an urgent security or safety issue.
+You can change or revoke these permissions through your device settings.
 
-## Storage and security {#storage-security}
+## Contacts permission {#contacts-permission}
 
-Your Content and account data are stored on infrastructure operated by Amazon Web Services in the United States.
+Certain applications may request permission to access contacts.
 
-**Your personal information and Your Content are stored outside Australia.** By using our apps, you consent to that overseas storage and handling. Where personal information is transferred outside Australia, we take reasonable steps to ensure the recipient handles it consistently with the Australian Privacy Principles.
+Contact access may be used for features such as:
 
-We use technical and organisational measures designed to protect personal information and Your Content, including:
+- Contact backup
+- Contact restoration
+- Data transfer
 
-- Encryption of data in transit between your device and our servers using industry-standard TLS
-- Encryption of Your Content and account data at rest on our servers
-- Access controls limiting staff access to systems that hold personal information
+If you choose to backup contacts to cloud storage, the contact information required for that feature may be transmitted to and stored using our cloud infrastructure or service providers so that it can later be restored.
 
-No method of transmission or storage is completely secure. We take reasonable steps to protect your information, but we cannot guarantee absolute security.
+Contact access is not required for features that do not depend on contacts, where technically possible.
 
-## When we disclose information {#disclosure}
+You may deny or revoke contact permission through your device settings.
 
-We disclose personal information only in these circumstances:
+## Android file and storage access {#android-storage}
 
-- **Service providers:** hosting (Amazon Web Services), analytics and crash reporting (Firebase, provided by Google), advertising and attribution, and customer support providers, each bound by confidentiality obligations and permitted to use the information only to provide services to us.
-- **At your direction:** for example, when you share a file or send it to another device, it becomes available to the person or device you chose.
-- **Legal requirements:** where required by law, subpoena, court order or a lawful request from a government or law enforcement authority.
-- **Protection of rights:** where reasonably necessary to enforce our Terms of Service, investigate suspected fraud or abuse, or protect the rights, property or safety of CloudGate, our users or the public.
-- **Business transfers:** in connection with a merger, acquisition, restructure or sale of assets, in which case we will take reasonable steps to ensure the recipient continues to handle your information in line with this policy.
+Some Daily Utility Apps applications provide core features involving file management, backup, recovery, storage, or device-to-device transfer.
 
-A current list of our service providers is available on request.
+Depending on the Android version and functionality of the application, the app may request access to device storage or broader file access where necessary to provide these core functions.
 
-## Retention and deletion {#retention}
+Such access may be used to:
 
-We keep account information and Your Content for as long as you use the relevant app, or as long as your account remains active.
+- Locate files stored on your device
+- Display files
+- Backup files
+- Restore files
+- Transfer files
+- Recover supported files
+- Organize or manage files
+- Allow you to select files for cloud upload or sharing
 
-- **Deleting files:** when you delete a file, it may remain recoverable for a limited period of 30 days before permanent deletion.
-- **Closing an account:** when you close an account, we delete or de-identify your personal information and Your Content within 72 hours, except where retention is required by law.
-- **Inactive accounts:** we do not delete your data solely because your account has been inactive.
-- **Records we must keep:** any transaction records we hold are retained for the period required by Australian taxation and corporations law.
+You can manage storage permissions through Android device settings.
 
-Copies may persist for a short time in routine system backups after deletion, and are overwritten in the ordinary course of operations.
+## Cloud storage and backup {#cloud-storage}
 
-## Your privacy rights {#your-rights}
+Our cloud applications allow users to upload supported information to cloud storage and access or restore that information later.
 
-Subject to applicable law, you may:
+Depending on the features you use, cloud content may include:
 
-- Request access to the personal information we hold about you
-- Request correction of information that is inaccurate, out of date or incomplete
-- Request deletion of your personal information and Your Content
-- Request a copy of your data in a portable format
-- Object to, or ask us to restrict, certain processing where the GDPR applies
-- Withdraw consent where processing is based on consent
-- Opt out of non-essential communications at any time
+- Photos
+- Videos
+- Audio
+- Documents
+- Contacts
+- Other supported files
 
-To make a request, email [{{ site.company.support_email }}](mailto:{{ site.company.support_email }}). We will respond within a reasonable period, and in any case within the time required by law. We may need to verify your identity before acting on a request.
+Uploaded content is stored for the purpose of providing cloud backup, storage, synchronization, access, and restoration functionality.
 
-### Complaints
+Information transmitted between the application and our services is protected using security measures such as encrypted transmission where applicable.
 
-If you believe we have breached the Australian Privacy Principles, please contact us first so we can investigate. If you are not satisfied with our response, you can lodge a complaint with the Office of the Australian Information Commissioner at [oaic.gov.au](https://www.oaic.gov.au). If the GDPR applies to you, you may also complain to your local supervisory authority.
+You remain responsible for choosing which content you upload or backup.
 
-## This website, cookies and analytics {#website}
+## Advertising and tracking {#advertising}
 
-This website does not require an account. It may use analytics, such as Google Analytics, to understand aggregate visits and improve the site, which can involve cookies or similar technologies. You can control cookies through your browser settings.
+Some of our applications contain advertisements.
 
-The App Store and Google Play buttons on this website take you to Apple's and Google's own sites, which are covered by their own privacy policies.
+We may work with third-party advertising providers that process certain information to:
 
-## Children {#children}
+- Display advertisements
+- Measure advertising performance
 
-Our apps and this website are not directed at children. Where an app lets you create an account, you must be at least 16 years old, or the minimum age required in your country to consent to the processing of personal information, whichever is higher.
+Advertising providers may process information such as:
 
-We do not knowingly collect personal information from children below that age. If we become aware that we have, we will delete it. If you believe a child has given us personal information, contact us at [{{ site.company.support_email }}](mailto:{{ site.company.support_email }}).
+- Device identifiers
+- Advertising identifiers
+- Usage data
+- Advertising data
+- App interaction information
 
-## Changes to this policy {#changes}
+On Apple devices, certain advertising or analytics activities may qualify as tracking under Apple's policies.
 
-We may update this Privacy Policy from time to time. Where changes are material, we will give notice in the relevant app or on this website before they take effect. The date at the top of this page shows when it was last updated. Continuing to use the Services after changes take effect means you accept the updated policy.
+Where required, the application will request your permission through Apple's App Tracking Transparency framework before allowing tracking across apps or websites owned by other companies.
 
-## How to contact us {#contact}
+You may deny tracking permission without losing access to the basic functionality of the application.
+
+You can also change tracking permissions later through: iPhone/iPad **Settings → Privacy & Security → Tracking**
+
+## Analytics and diagnostics {#analytics}
+
+We may use third-party analytics, crash-reporting, or performance-monitoring services.
+
+These services may process information such as:
+
+- Device identifiers
+- App usage
+- Feature interactions
+- Crash information
+- Diagnostic information
+- Performance data
+
+We use this information to find bugs, improve application stability, understand how features are used, and improve the Service.
+
+## Third-party service providers {#service-providers}
+
+We may use third-party companies and service providers to help operate our applications.
+
+These providers may include:
+
+- Cloud hosting and storage providers
+- Advertising providers
+- Analytics providers
+- Crash-reporting services
+- Technical infrastructure providers
+- Authentication providers
+- Payment and subscription platforms
+- Media-processing libraries and services
+
+These providers may process information only as necessary to perform their services, subject to their own contractual, security, and privacy obligations.
+
+Some third-party services also operate under their own privacy policies.
+
+## Google Play and Apple services {#google-apple}
+
+Our applications may use services provided by Google and Apple.
+
+On Android, this may include Google Play services and related platform functionality.
+
+On iPhone and iPad, applications may use Apple-provided services and frameworks required to operate the application.
+
+Purchases and subscriptions made through our applications may be processed by the Google Play Store or Apple App Store.
+
+Payment card information submitted directly to Google or Apple is handled by those platforms. We do not receive your complete payment card details from those stores.
+
+## How we use information {#how-we-use}
+
+Information may be used to:
+
+- Provide the Service
+- Create and manage accounts
+- Provide cloud storage
+- Upload and restore backups
+- Transfer or manage files
+- Provide requested app features
+- Maintain application functionality
+- Provide customer support
+- Perform analytics
+- Diagnose crashes and technical problems
+- Improve performance
+- Comply with applicable legal requirements
+
+We do not use your personal files, photos, videos, contacts, or other private user content for purposes unrelated to providing the features you request.
+
+## How information may be shared {#sharing}
+
+Information may be shared with third parties where necessary for:
+
+- Cloud storage
+- Advertising
+- Analytics
+- Crash reporting
+
+We do not sell users' private cloud files, photos, videos, audio, documents, or contacts to third parties.
+
+## Data retention {#retention}
+
+We retain information only for as long as reasonably necessary to:
+
+- Provide the Service
+- Maintain user accounts
+- Maintain cloud backups requested by users
+- Meet legal requirements
+
+Cloud content may remain stored while your account or cloud storage service remains active.
+
+## Account and data deletion {#deletion}
+
+Where an application provides account creation, users may request deletion of their account and associated personal information.
+
+Depending on the application, account deletion may be available directly from the account or settings section of the app.
+
+Users may also contact us regarding data deletion at: [{{ _email }}](mailto:{{ _email }})
+
+After a valid deletion request is processed, associated personal information and cloud data will be deleted or anonymized unless we are required to retain certain information for legal, fraud-prevention, security, accounting, or regulatory purposes.
+
+Once cloud files or an account have been permanently deleted, they may not be recoverable.
+
+## Your privacy choices {#your-rights}
+
+Depending on your device, location, and applicable law, you may have the right to:
+
+- Request access to personal information
+- Request correction of inaccurate information
+- Request deletion of information
+- Delete your account
+- Withdraw consent
+- Disable app permissions
+- Limit advertising tracking
+- Object to certain processing
+- Request information about how your data is handled
+
+Permissions for contacts, photos, media, files, and tracking can generally be controlled from your device's privacy settings.
+
+## Data security {#security}
+
+We use reasonable technical and organizational safeguards designed to protect information from unauthorized access, alteration, loss, disclosure, or misuse.
+
+These safeguards may include encrypted transmission, access controls, authentication, and other security measures appropriate to the Service.
+
+## Children's privacy {#children}
+
+Our Services are not specifically directed to children under the age of 13.
+
+We do not knowingly collect personal information from children under 13 without appropriate authorization where required by law.
+
+## Changes to this Privacy Policy {#changes}
+
+We may update this Privacy Policy when our applications, cloud services, data practices, legal requirements, or third-party services change.
+
+When we make changes, we will update the "Last Updated" date at the top of this Privacy Policy.
+
+Users are encouraged to review this policy periodically.
+
+## Contact us {#contact}
+
+For privacy questions, account deletion requests, data requests, or other concerns regarding this Privacy Policy, contact:
 
 <div class="contact-card">
-<p><strong>{{ site.company.legal_name }}</strong> ({{ site.company.acn }})</p>
-<p>Privacy enquiries: <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a></p>
-<p>Postal address: {{ site.company.address_line1 }}, {{ site.company.address_line2 }}</p>
-<p>Privacy Officer: Raja Imran Shafique</p>
+<p><strong>Daily Utility Apps</strong></p>
+<p>Email: <a href="mailto:{{ _email }}">{{ _email }}</a></p>
 </div>
+
+This Privacy Policy applies to Daily Utility Apps applications available through Google Play, Apple App Store, and related Daily Utility Apps services.

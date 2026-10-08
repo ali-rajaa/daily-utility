@@ -8,7 +8,7 @@ app_name: "Document Reader: Read All PDF"
 tagline: "Read PDF, Word, Excel and PowerPoint files in one app."
 android_url: "https://play.google.com/store/apps/details?id=com.dw.pdf.reader.pdfviewer.pdfeditor.alldocumentreader.filereader"
 category: "Productivity"
-updated: 2026-09-29
+updated: 2026-10-08
 og_image: "/assets/og/document-reader-pdf.jpg"
 og_image_alt: "Document Reader: Read All PDF, an app from Daily Utility Apps"
 
@@ -86,6 +86,6 @@ faqs:
     a: "It's currently on Google Play for Android. If an iPhone version is released, you'll find the App Store link on this page."
   - q: "Who makes Document Reader: Read All PDF?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Do you sell my data or use my files for advertising?"
-    a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
+  - q: "Do you sell my files or use them for advertising?"
+    a: "No. We don't sell your private files, photos, videos, audio, documents or contacts, and we only use them to provide the features you ask for. The privacy policy explains what advertising and analytics providers may process."
 ---

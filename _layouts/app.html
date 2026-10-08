@@ -307,7 +307,7 @@ your privacy). Every section is named by its heading (aria-labelledby).
 {%- endif %}
 
 {%- comment -%} The privacy card states only what's true company-wide
-(who makes the app, the privacy policy's no-selling commitment). Anything
+(who makes the app, and the privacy policy's commitment not to sell your files or use them for anything but the features you ask for). Anything
 app-specific -- how or where that app stores data -- goes in the page's
 own optional trust_text, so it's never claimed for an app it doesn't
 apply to. {%- endcomment %}
@@ -322,7 +322,7 @@ apply to. {%- endcomment %}
     <div class="app-close-privacy reveal">
       <span class="app-close-privacy-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
       <h2 class="h3">Your privacy</h2>
-      <p>{{ page.app_name | escape }} is made by Daily Utility Apps. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We never sell your personal information, and we never use your files to build advertising profiles.</p>
+      <p>{{ page.app_name | escape }} is made by Daily Utility Apps. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We don't sell your private files, photos, videos, documents or contacts, and we only use them to provide the features you ask for.</p>
       <a class="app-close-link" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
     </div>
   </div>

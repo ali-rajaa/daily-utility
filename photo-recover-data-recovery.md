@@ -8,7 +8,7 @@ app_name: "Photo Recover & Data Recovery"
 tagline: "Find and restore deleted photos and files from your phone's trash bin."
 android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
 category: "Tools"
-updated: 2026-09-29
+updated: 2026-10-08
 og_image: "/assets/og/photo-recover-data-recovery.jpg"
 og_image_alt: "Photo Recover & Data Recovery, an app from Daily Utility Apps"
 
@@ -89,6 +89,6 @@ faqs:
     a: "It's currently on Google Play for Android. If an iPhone version is released, you'll find the App Store link on this page."
   - q: "Who makes Photo Recover & Data Recovery?"
     a: "Daily Utility Apps, the developer name you'll see on its store listing."
-  - q: "Do you sell my data or use my files for advertising?"
-    a: "No. We never sell your personal information, and we never use your files to build advertising profiles. The privacy policy has the full details."
+  - q: "Do you sell my files or use them for advertising?"
+    a: "No. We don't sell your private files, photos, videos, audio, documents or contacts, and we only use them to provide the features you ask for. The privacy policy explains what advertising and analytics providers may process."
 ---

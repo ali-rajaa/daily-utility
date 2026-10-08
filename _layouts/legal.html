@@ -11,8 +11,10 @@ css: legal
 
   Required front matter (STATUS.md section 4): title, description,
   css (must be "legal"), heading (the H1; title is the longer <title>),
-  last_updated, sections (a list of {id, label}). Optional: lead (an
-  intro paragraph under the H1).
+  last_updated (the document's own "Last updated" date), sections (a
+  list of {id, label}). Optional: lead (an intro paragraph under the H1),
+  effective (the document's effective date, shown before last_updated),
+  updated (when this page last changed, for the sitemap only).
   The body is prose written as .md (so kramdown runs); every body
   heading must carry kramdown's inline ID syntax, e.g.
   `## Data we collect {#data-we-collect}`, matching one of the
@@ -49,7 +51,16 @@ css: legal
     {%- if page.lead %}
     <p class="legal-lead">{{ page.lead | escape }}</p>
     {%- endif %}
-    <p class="legal-updated"><svg aria-hidden="true"><use href="#i-auto"/></svg>Last updated <time datetime="{{ page.last_updated | date_to_xmlschema }}">{{ page.last_updated | date: "%-d %B %Y" }}</time></p>
+    {%- assign _eff = page.effective | date: "%Y-%m-%d" -%}
+    {%- assign _upd = page.last_updated | date: "%Y-%m-%d" %}
+    <p class="legal-updated"><svg aria-hidden="true"><use href="#i-auto"/></svg>
+      {%- if page.effective and _eff == _upd -%}
+      <span>Effective and last updated <time datetime="{{ _upd }}">{{ page.last_updated | date: "%-d %B %Y" }}</time></span>
+      {%- else -%}
+      {%- if page.effective %}<span>Effective <time datetime="{{ _eff }}">{{ page.effective | date: "%-d %B %Y" }}</time></span><span aria-hidden="true">&middot;</span>{% endif -%}
+      <span>Last updated <time datetime="{{ _upd }}">{{ page.last_updated | date: "%-d %B %Y" }}</time></span>
+      {%- endif -%}
+    </p>
   </div>
 </section>
 
