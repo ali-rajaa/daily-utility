@@ -1638,6 +1638,34 @@ claims that the new one doesn't make were removed everywhere:
 - The homepage FAQ on getting help now gives the email and the Contact
   page, not the Terms of Service.
 
+**Audit, 8 Oct (second pass, at the owner's request).**
+- *Word for word:* the rendered text of both legal pages was compared
+  by script with the text extracted from the two PDFs (whitespace,
+  quote marks, heading case and section numbers normalised). One real
+  difference was found and fixed: a dropped comma in "Photos, videos,
+  audio, and media permissions". What remains is layout only: "Daily
+  Utility Apps — Email: …" is set as a two-line contact card, and the
+  cloud site's page furniture ("Questions about this document?", "Back
+  to sign in", page headers) isn't reproduced.
+- *Everything else on the site:* every sentence on all 16 other pages
+  that talks about our apps or company was listed and checked against
+  the two documents. Fixed:
+  - "Free" on its own became "free to download" everywhere (app hero,
+    About list and meta description, homepage flagship band, guide
+    promo). The Terms say some features may need a paid subscription or
+    in-app purchase, so "free" alone overstated it. **Rule: say "free to
+    download", never just "free".** The schema Offer stays at price 0
+    (the download price).
+  - The homepage card "Tracking only with permission" became "Tracking
+    permission on iPhone": the policy's permission prompt is Apple's App
+    Tracking Transparency, and ad providers may process identifiers.
+  - The homepage delete FAQ said you *can* delete your account in the
+    app; the policy says it *may* be available depending on the app.
+    Reworded to match.
+  - The Contact page link "Your privacy rights / a copy of your data"
+    became "Your privacy choices / access, correct or delete your
+    information", the policy's own section and rights.
+
 ## 6. SEO and routing
 
 **URLs**

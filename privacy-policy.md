@@ -15,7 +15,7 @@ sections:
   - id: device-information
     label: "Device and usage information"
   - id: media-permissions
-    label: "Photos, videos, audio and media permissions"
+    label: "Photos, videos, audio, and media permissions"
   - id: contacts-permission
     label: "Contacts permission"
   - id: android-storage
@@ -114,7 +114,7 @@ We may automatically collect certain technical information when you use our appl
 
 We may use this information to operate the Service, detect technical problems, understand app performance, prevent misuse, and improve our applications.
 
-## Photos, videos, audio and media permissions {#media-permissions}
+## Photos, videos, audio, and media permissions {#media-permissions}
 
 Some of our applications require access to photos, videos, audio, or other media stored on your device.
 

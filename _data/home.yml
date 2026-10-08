@@ -53,7 +53,7 @@ privacy:
     text: "Our apps only access your photos, contacts or files for the features you use, and you can change or revoke any permission in your phone's settings."   # Media, contacts and Android storage permissions
   - icon: trash
     title: "Delete your account and data"
-    text: "Ask in the app where supported, or by email. Once your request is processed, your personal information and cloud data are deleted or anonymised, unless we're required to keep some."   # Account and data deletion
+    text: "Ask in the app, where the app supports it, or by email. Once your request is processed, your personal information and cloud data are deleted or anonymised, unless we're required to keep some."   # Account and data deletion
   - icon: toggle
-    title: "Tracking only with permission"
+    title: "Tracking permission on iPhone"
     text: "On iPhone, we ask before any tracking that needs Apple's App Tracking Transparency permission. Saying no keeps the app's basic features working, and you can change it later in Settings."   # Advertising and tracking

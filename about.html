@@ -3,7 +3,7 @@ layout: default
 permalink: /about
 css: about
 title: "About Daily Utility Apps: Four Focused Phone Apps"
-description: "Daily Utility Apps makes four free phone apps, each built around one everyday job: backing up, reading documents, moving files and getting deleted photos back."
+description: "Daily Utility Apps makes four phone apps, all free to download, each built around one everyday job: backing up, reading documents, moving files and getting deleted photos back."
 ---
 {%- comment -%}
   About page (3 Oct). Every statement here is already made elsewhere on
@@ -54,7 +54,7 @@ description: "Daily Utility Apps makes four free phone apps, each built around o
           <p class="about-app-job">{{ app.task | escape }}</p>
           <p>{{ app.task_text | escape }}</p>
         </div>
-        <p class="about-app-platform"><svg aria-hidden="true"><use href="#i-phone"/></svg>Free on {% include platforms.html app=app %}</p>
+        <p class="about-app-platform"><svg aria-hidden="true"><use href="#i-phone"/></svg>Free to download on {% include platforms.html app=app %}</p>
       </li>
       {%- endfor %}
     </ul>

@@ -91,7 +91,10 @@
 .about-app-platform svg { width: 1.05rem; height: 1.05rem; color: var(--brand-text); }
 @media (max-width: 719.98px) {
   .about-app { grid-template-columns: auto minmax(0, 1fr); }
-  .about-app-platform { grid-column: 2; padding-top: 0; }
+  /* "Free to download on iPhone and Android" is wider than a small
+     phone's text column, so it wraps here instead of staying on one line. */
+  .about-app-platform { grid-column: 2; align-items: flex-start; padding-top: 0; white-space: normal; }
+  .about-app-platform svg { flex: 0 0 auto; margin-top: 0.15rem; }
 }
 
 /* ---------- How we work ---------- */
