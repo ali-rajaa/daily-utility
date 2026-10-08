@@ -5,6 +5,9 @@
 #
 # Pull requests into main are built and checked but never deployed, so a
 # broken change shows up before it is merged.
+#
+# This deploys the noindex PREVIEW (staging.fixmypcperth.com). The live
+# site, dailyutilityapps.store, is published by live.yml.
 
 name: Build and deploy
 

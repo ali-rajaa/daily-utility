@@ -1666,6 +1666,43 @@ claims that the new one doesn't make were removed everywhere:
     became "Your privacy choices / access, correct or delete your
     information", the policy's own section and rights.
 
+## 5v. Publishing to dailyutilityapps.store (8 Oct)
+
+The live site is served by GitHub Pages from **imranshafique/daily-utility-website**
+(private; the user can push to it but has no Settings access, the same
+arrangement as CloudGate). This repo stays the place to edit.
+
+`.github/workflows/live.yml` runs on every push to `main`:
+1. Reads the live repo's top-level `CNAME`. It must be
+   dailyutilityapps.store or a subdomain, or the job stops. No CNAME:
+   stops too (the domain is set in that repo's Pages settings, which only
+   its owner can change).
+2. Builds the site for exactly that address (`url` from the CNAME,
+   `staging: false`) and checks the build: no unrendered Liquid, the
+   sitemap uses the live address, nothing marked noindex.
+3. Commits the **built** files to the live repo's `main` with a
+   `.nojekyll` file, as an ordinary commit (never a force push). The
+   live repo's `.github` folder is left alone; `.htaccess` is left out.
+   First run only: saves the live repo's previous `main` as
+   `old-site-backup`.
+
+Why built files rather than the source: this site needs Jekyll 4, and a
+"Deploy from a branch" Pages build uses the github-pages gem (Jekyll 3,
+plus the plugins that broke fixmypcperth). `.nojekyll` makes Pages serve
+the files as they are, so no Pages setting has to change.
+
+Needs the secret `LIVE_SITE_TOKEN` in this repo: a classic token with
+the `repo` scope from an account that can push to the live repo. Until
+it exists the job only warns. Each run creates a commit (the stylesheet
+`?v=` stamp changes every build).
+
+`_config.yml` stays in the Preview state; the live address comes from
+the CNAME at build time. `pages.yml` still deploys the noindex preview.
+The FTP route (`_launch/ftp-deploy.yml.draft`, `.htaccess`) is not used.
+
+Tested locally against stand-in repos: first publish with backup, repeat
+publish, www domain, wrong CNAME, no CNAME, no token, no access.
+
 ## 6. SEO and routing
 
 **URLs**

@@ -1,0 +1,170 @@
+# Publishes the site to imranshafique/daily-utility-website, the repo that
+# GitHub Pages serves dailyutilityapps.store from (STATUS.md section 7).
+#
+# Built files, not the source: this site needs Jekyll 4, but a "Deploy from
+# a branch" Pages build uses GitHub's own Jekyll 3 (the github-pages gem).
+# So the site is built here, for the live address, and the finished files
+# are committed to the live repo with a .nojekyll file, which tells Pages
+# to serve them exactly as they are. Edit the site in THIS repo.
+#
+# Needs one secret in THIS repo (Settings > Secrets and variables >
+# Actions > New repository secret):
+#   LIVE_SITE_TOKEN  a classic GitHub token, with the "repo" scope, from an
+#                    account that can push to imranshafique/daily-utility-website
+# Without it the job does nothing but warn.
+#
+# Safety, checked before anything is pushed:
+# - The domain is read from the live repo's own CNAME file and must be
+#   dailyutilityapps.store or a subdomain of it. The site is built for that
+#   exact address and the CNAME is kept. No CNAME, or another domain: the
+#   job stops and pushes nothing.
+# - Every publish is an ordinary commit on top of the live repo's history,
+#   never a force push. The first run also saves the live repo's main as
+#   the branch old-site-backup.
+# - The live repo's .github folder is never touched.
+
+name: Publish to dailyutilityapps.store
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-site
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'ali-rajaa/daily-utility'
+    runs-on: ubuntu-latest
+    env:
+      LIVE_URL: https://github.com/imranshafique/daily-utility-website.git
+      LIVE_DIR: ${{ github.workspace }}/../live-site
+      LIVE_SITE_TOKEN: ${{ secrets.LIVE_SITE_TOKEN }}
+    steps:
+      - name: Check the token
+        id: token
+        run: |
+          if [ -z "$LIVE_SITE_TOKEN" ]; then
+            echo "::warning::The LIVE_SITE_TOKEN secret is not set, so nothing was published. See the top of live.yml."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.token.outputs.ok == 'true'
+        uses: actions/checkout@v7
+
+      - if: steps.token.outputs.ok == 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      # The token goes in a header, never in a URL, so it can't appear in
+      # an error message.
+      - name: Read the live repo
+        if: steps.token.outputs.ok == 'true'
+        id: live
+        run: |
+          AUTH=$(printf 'x-access-token:%s' "$LIVE_SITE_TOKEN" | base64 -w0)
+          echo "::add-mask::$AUTH"
+          git config --global http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+
+          rc=0
+          git ls-remote --exit-code --heads "$LIVE_URL" main >/dev/null || rc=$?
+          if [ "$rc" = 2 ]; then
+            echo "::error::The live repo has no main branch. Nothing was pushed."
+            exit 1
+          elif [ "$rc" != 0 ]; then
+            echo "::error::Couldn't read the live repo. Check that LIVE_SITE_TOKEN is valid and can push to it."
+            exit 1
+          fi
+          git clone --quiet --depth 1 --branch main "$LIVE_URL" "$LIVE_DIR"
+          cd "$LIVE_DIR"
+          echo "Live repo, top level:"
+          find . -mindepth 1 -maxdepth 1 ! -name .git -printf '  %f\n' | sort
+
+          domain=""
+          if [ -f CNAME ]; then
+            domain=$(tr -d '[:space:]' < CNAME | tr '[:upper:]' '[:lower:]')
+          fi
+          if [ -z "$domain" ]; then
+            echo "::error::The live repo has no CNAME file at its top level, so it isn't connected to a domain from there. Nothing was pushed."
+            exit 1
+          fi
+          case "$domain" in
+            dailyutilityapps.store|*.dailyutilityapps.store) ;;
+            *)
+              echo "::error::The live repo's CNAME is '$domain', not dailyutilityapps.store. Nothing was pushed."
+              exit 1 ;;
+          esac
+          echo "Live domain: $domain"
+          echo "domain=$domain" >> "$GITHUB_OUTPUT"
+
+      - name: Build for the live address
+        if: steps.token.outputs.ok == 'true'
+        env:
+          JEKYLL_ENV: production
+          DOMAIN: ${{ steps.live.outputs.domain }}
+        run: |
+          printf 'url: "https://%s"\nbaseurl: ""\nstaging: false\n' "$DOMAIN" > "$RUNNER_TEMP/_config.live.yml"
+          bundle exec jekyll build --trace --config "_config.yml,$RUNNER_TEMP/_config.live.yml"
+
+          if [ ! -f _site/index.html ]; then
+            echo "::error::The build produced no _site/index.html. Nothing was pushed."
+            exit 1
+          fi
+          if grep -rlE '\{\{|\{%' --include='*.html' --include='*.xml' --include='*.txt' --include='*.css' --include='*.js' --include='*.json' _site; then
+            echo "::error::The files above contain unrendered Liquid. Nothing was pushed."
+            exit 1
+          fi
+          # The live build must carry the live address and must be indexable.
+          if ! grep -q "<loc>https://$DOMAIN/</loc>" _site/sitemap.xml; then
+            echo "::error::The sitemap doesn't use https://$DOMAIN. Nothing was pushed."
+            exit 1
+          fi
+          if grep -qi 'name="robots" content="noindex' _site/index.html || grep -q 'Disallow: /$' _site/robots.txt; then
+            echo "::error::The live build is still marked noindex. Nothing was pushed."
+            exit 1
+          fi
+
+      - name: Publish
+        if: steps.token.outputs.ok == 'true'
+        env:
+          DOMAIN: ${{ steps.live.outputs.domain }}
+        run: |
+          cd "$LIVE_DIR"
+
+          # First run only: keep the live repo's current main.
+          rc=0
+          git ls-remote --exit-code --heads origin old-site-backup >/dev/null || rc=$?
+          if [ "$rc" = 2 ]; then
+            git push --quiet origin HEAD:refs/heads/old-site-backup
+            echo "Saved the live repo's previous main as old-site-backup."
+          elif [ "$rc" != 0 ]; then
+            echo "::error::Couldn't check the live repo's branches. Nothing was pushed."
+            exit 1
+          fi
+
+          # Replace everything except .github with the built site.
+          { git ls-files -z | grep -zv '^\.github/' || true; } | xargs -0 -r git rm -q --
+          cp -a "$GITHUB_WORKSPACE/_site/." .
+          rm -f .htaccess
+          printf '%s\n' "$DOMAIN" > CNAME
+          touch .nojekyll
+          git add -A
+          if git diff --cached --quiet; then
+            echo "The live site is already up to date."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit --quiet -m "Publish the Daily Utility Apps site" \
+              -m "Built from ali-rajaa/daily-utility@${GITHUB_SHA::7} for https://$DOMAIN"
+          git push --quiet origin HEAD:refs/heads/main
+          echo "Published ali-rajaa/daily-utility@${GITHUB_SHA::7} to https://$DOMAIN"
