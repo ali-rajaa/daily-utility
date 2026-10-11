@@ -28,9 +28,11 @@
 
 name: Publish to dailyutilityapps.store
 
+# Manual only for now: the first runs (11 Oct) found the live repo isn't
+# connected to dailyutilityapps.store (Pages serves its develop branch at
+# imranshafique.github.io/daily-utility-website, no custom domain).
+# STATUS.md section 5v. Put the push trigger back once a target is agreed.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -157,6 +159,12 @@ jobs:
           # workflows and the actions they use (how it deploys, if it does).
           top=$(find . -mindepth 1 -maxdepth 1 ! -name .git -printf '%f\n' | sort | paste -sd ',' - | sed 's/,/, /g')
           echo "::notice title=Live repo files::${top:-empty}"
+          # app-ads.txt is public by design (ad networks fetch it), so it's
+          # safe to show; this site must carry the same file when it goes live.
+          if [ -f app-ads.txt ]; then
+            ads=$(head -c 900 app-ads.txt | tr -d '\r' | sed '/^[[:space:]]*$/d' | paste -sd '|' - | sed 's/|/ | /g')
+            echo "::notice title=Live repo app-ads.txt::${ads:-empty}"
+          fi
           if [ -d .github/workflows ]; then
             wfs=$(find .github/workflows -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd ',' - | sed 's/,/, /g')
             uses=$({ grep -rhoE 'uses:[[:space:]]*[^[:space:]#]+' .github/workflows || true; } | sed -E 's/uses:[[:space:]]*//' | sort -u | paste -sd ',' - | sed 's/,/, /g')
