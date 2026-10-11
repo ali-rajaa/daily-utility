@@ -7,7 +7,13 @@
 
 Options -Indexes -MultiViews
 DirectoryIndex index.html
-ErrorDocument 404 /404.html
+# Not-found responses. The page is written out here rather than pointing
+# at /404.html: on this host Apache's internal fetch of an error page is
+# mapped to a different folder, so "ErrorDocument 404 /404.html" failed
+# with "Additionally, a 404 Not Found error was encountered" (11 Oct).
+# The status stays 404; browsers then swap in the site's full 404 page
+# (served at /404). Must stay on one line, with no double quotes inside.
+ErrorDocument 404 "<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex'><title>Page not found | Daily Utility Apps</title><style>:root{color-scheme:light dark}body{margin:0;padding:18vh 24px;font:17px/1.6 system-ui,sans-serif;text-align:center;background:Canvas;color:CanvasText}h1{margin:0 0 .5rem;font-size:2rem}a{color:LinkText}</style></head><body><h1>Page not found</h1><p>The page you were looking for isn't here.</p><p><a href='/'>Homepage</a> &middot; <a href='/daily-info/'>Daily Info</a> &middot; <a href='/contact'>Contact</a></p><script>fetch('/404').then(function(r){return r.ok?r.text():null}).then(function(h){if(h){document.open();document.write(h);document.close()}}).catch(function(){})</script></body></html>"
 
 <IfModule mod_rewrite.c>
   RewriteEngine On

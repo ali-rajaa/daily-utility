@@ -1801,7 +1801,26 @@ screens and a full-width button at the foot of the phone menu. Its
 accessible name is "Sign in to Daily Utility Cloud Storage". axe clean,
 layout check clean.
 
-**Upload:** approved by the user on 11 Oct.
+**Upload:** approved by the user on 11 Oct. First upload (run
+38100592808): 58 files to the website folder; the old sign-in site's 9
+files backed up to `.site-backups/20261011-010525` on the server (hidden,
+access denied). Live checks: 9 of 10 passed.
+
+**The not-found page:** missing addresses got Apache's own page ("…
+Additionally, a 404 Not Found error was encountered while trying to use
+an ErrorDocument"). The host maps the domain into its folder with a
+rewrite that internal redirects skip, so `ErrorDocument 404 /404.html`
+looked in the wrong folder. Reproduced locally with that setup. Fix: the
+not-found response is written inline in `.htaccess` (one line, single
+quotes only), status 404, title "Page not found", links home / Daily
+Info / Contact; in a browser it fetches `/404` and swaps in the full
+styled page. Checked in Chromium: status 404, address unchanged, full
+404 page with header shown.
+
+The workflow gained a **check** mode (live checks only, touches nothing)
+and reports what a failing page returned. Uploads skip the server
+backup once the folder already holds this site (earlier versions are in
+git).
 After it's confirmed live, consider a push trigger, and retire the
 preview at staging.fixmypcperth.com (section 8, step 6).
 

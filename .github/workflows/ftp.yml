@@ -211,17 +211,27 @@ jobs:
 
           # Back up what the upload could replace: the website folder's
           # top-level files, and its assets and daily-info folders if any.
+          # Skipped once the folder already holds this site (it has
+          # daily-info/): every earlier version of it is in git.
+          if grep -qx 'daily-info/' "$RUNNER_TEMP/webroot.txt"; then
+            echo "::notice title=Backup::Skipped: the folder already holds this site, and its earlier versions are in git."
+            skip_backup=true
+          fi
           stamp=$(date -u +%Y%m%d-%H%M%S)
           bkdir="$RUNNER_TEMP/backup"
           mkdir -p "$bkdir"
-          lftp -c "$SETUP; cd \"$DIR\" && mirror --no-recursion --parallel=4 . \"$bkdir\""
-          for d in assets daily-info; do
-            if grep -qx "$d/" "$RUNNER_TEMP/webroot.txt"; then
-              lftp -c "$SETUP; cd \"$DIR\" && mirror --parallel=4 \"$d\" \"$bkdir/$d\""
-            fi
-          done
+          if [ "${skip_backup:-}" != true ]; then
+            lftp -c "$SETUP; cd \"$DIR\" && mirror --no-recursion --parallel=4 . \"$bkdir\""
+            for d in assets daily-info; do
+              if grep -qx "$d/" "$RUNNER_TEMP/webroot.txt"; then
+                lftp -c "$SETUP; cd \"$DIR\" && mirror --parallel=4 \"$d\" \"$bkdir/$d\""
+              fi
+            done
+          fi
           nb=$(find "$bkdir" -type f | wc -l)
-          if [ "$nb" -gt 0 ]; then
+          if [ "${skip_backup:-}" = true ]; then
+            :
+          elif [ "$nb" -gt 0 ]; then
             if [ "$DIR" = "." ]; then
               # The login folder is the website: keep the backup in a
               # hidden folder that the server refuses to show.
