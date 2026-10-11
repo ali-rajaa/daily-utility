@@ -1817,6 +1817,24 @@ Info / Contact; in a browser it fetches `/404` and swaps in the full
 styled page. Checked in Chromium: status 404, address unchanged, full
 404 page with header shown.
 
+**That inline fix didn't take on the host either** (same Apache page):
+the host's own server-wide ErrorDocument wins over anything in
+`.htaccess`, and points outside this folder. A one-off probe (test
+files under common error-page names, all removed after) matched none of
+them, and showed **PHP runs** on the host. Final fix:
+- `404.php` sends `http_response_code(404)` and the site's `404.html`;
+- the last rewrite rule sends any address that is neither a file nor a
+  folder to it (`ErrorDocument 404 /404.php` kept for other hosts);
+- folders asked for without their slash (`/daily-info`) are redirected
+  by `.htaccess` to `https://<host>/daily-info/`, because Apache's own
+  slash redirect exposed an internal `/site/` path under a host-style
+  mapping in testing;
+- `.ht*` files are denied explicitly.
+Tested locally on Apache with PHP-FPM behind a host-style folder
+mapping: missing pages and missing files return 404 with the styled
+page, `/404.php` too; every page, redirect and the slash fix correct;
+Chromium shows the full 404 page with status 404.
+
 The workflow gained a **check** mode (live checks only, touches nothing)
 and reports what a failing page returned. Uploads skip the server
 backup once the folder already holds this site (earlier versions are in

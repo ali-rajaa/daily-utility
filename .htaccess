@@ -7,13 +7,18 @@
 
 Options -Indexes -MultiViews
 DirectoryIndex index.html
-# Not-found responses. The page is written out here rather than pointing
-# at /404.html: on this host Apache's internal fetch of an error page is
-# mapped to a different folder, so "ErrorDocument 404 /404.html" failed
-# with "Additionally, a 404 Not Found error was encountered" (11 Oct).
-# The status stays 404; browsers then swap in the site's full 404 page
-# (served at /404). Must stay on one line, with no double quotes inside.
-ErrorDocument 404 "<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex'><title>Page not found | Daily Utility Apps</title><style>:root{color-scheme:light dark}body{margin:0;padding:18vh 24px;font:17px/1.6 system-ui,sans-serif;text-align:center;background:Canvas;color:CanvasText}h1{margin:0 0 .5rem;font-size:2rem}a{color:LinkText}</style></head><body><h1>Page not found</h1><p>The page you were looking for isn't here.</p><p><a href='/'>Homepage</a> &middot; <a href='/daily-info/'>Daily Info</a> &middot; <a href='/contact'>Contact</a></p><script>fetch('/404').then(function(r){return r.ok?r.text():null}).then(function(h){if(h){document.open();document.write(h);document.close()}}).catch(function(){})</script></body></html>"
+
+# Never serve this file or any other .ht* file.
+<IfModule mod_authz_core.c>
+  <FilesMatch "^\.ht">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+# Missing addresses are answered by 404.php (the last rewrite rule
+# below): this host's server-wide error page takes priority over an
+# ErrorDocument set here, which showed Apache's default page (11 Oct).
+# ErrorDocument stays for hosts that do honour it.
+ErrorDocument 404 /404.php
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -24,6 +29,12 @@ ErrorDocument 404 "<!doctype html><html lang='en'><head><meta charset='utf-8'><m
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # A folder asked for without its slash (/daily-info): add the slash
+  # here. Left to Apache, the redirect can show the host's internal
+  # folder path (seen with a host-style mapping in testing, 11 Oct).
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^(.*[^/])$ https://%{HTTP_HOST}/$1/ [R=301,L]
 
   # Clean URLs. Jekyll writes about.html but every link and canonical is
   # /about. A typed or old /about.html redirects to /about (and
@@ -39,6 +50,12 @@ ErrorDocument 404 "<!doctype html><html lang='en'><head><meta charset='utf-8'><m
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.html -f
   RewriteRule ^(.+)$ $1.html [L]
+
+  # Anything else that doesn't exist: 404.php sends a real 404 status
+  # with the site's not-found page.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ 404.php [L]
 </IfModule>
 
 # Stylesheets and scripts carry a ?v= stamp that changes on every build,
