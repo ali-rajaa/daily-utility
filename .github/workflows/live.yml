@@ -56,8 +56,13 @@ jobs:
             echo "ok=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # persist-credentials: false keeps this run's own GitHub login out of
+      # the checkout. Left in, git sends it alongside LIVE_SITE_TOKEN and
+      # GitHub refuses the request.
       - if: steps.token.outputs.ok == 'true'
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - if: steps.token.outputs.ok == 'true'
         uses: ruby/setup-ruby@v1
@@ -74,14 +79,22 @@ jobs:
           AUTH=$(printf 'x-access-token:%s' "$LIVE_SITE_TOKEN" | base64 -w0)
           echo "::add-mask::$AUTH"
           git config --global http.https://github.com/.extraheader "AUTHORIZATION: basic $AUTH"
+          # Outside any checkout, so only this login is sent.
+          cd "$RUNNER_TEMP"
 
           rc=0
-          git ls-remote --exit-code --heads "$LIVE_URL" main >/dev/null || rc=$?
+          err=$(git ls-remote --exit-code --heads "$LIVE_URL" main 2>&1 >/dev/null) || rc=$?
           if [ "$rc" = 2 ]; then
             echo "::error::The live repo has no main branch. Nothing was pushed."
             exit 1
           elif [ "$rc" != 0 ]; then
-            echo "::error::Couldn't read the live repo. Check that LIVE_SITE_TOKEN is valid and can push to it."
+            reason=$(printf '%s' "$err" | tr '\n' ' ' | sed 's/  */ /g')
+            case "$err" in
+              *"not found"*) hint="GitHub says the repo doesn't exist for this token: check the account that made LIVE_SITE_TOKEN can open imranshafique/daily-utility-website." ;;
+              *"401"*|*"403"*|*"Authentication failed"*|*"Invalid username"*) hint="GitHub refused LIVE_SITE_TOKEN: check it was copied in full, has the repo scope, and hasn't been deleted." ;;
+              *) hint="Check that LIVE_SITE_TOKEN is valid and can push to it." ;;
+            esac
+            echo "::error::Couldn't read the live repo. $hint (git said: $reason)"
             exit 1
           fi
           git clone --quiet --depth 1 --branch main "$LIVE_URL" "$LIVE_DIR"
