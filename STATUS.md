@@ -1712,6 +1712,30 @@ in settings only, gh-pages with /docs, www domain, Pages by workflow,
 Pages off, settings unreadable with and without a CNAME file, another
 domain, no domain, no token, no access.
 
+### 5v, continued: what the first runs found (11 Oct)
+
+The publish workflow now reports the live repo's setup as run
+annotations. Result:
+- **imranshafique/daily-utility-website is not connected to
+  dailyutilityapps.store.** GitHub Pages ("Deploy from a branch") serves
+  its **`develop`** branch, folder `/`, at
+  `https://imranshafique.github.io/daily-utility-website/`, with **no
+  custom domain**. No workflows.
+- Its files: `.gitignore`, `.nojekyll`, `README.md`, `app-ads.txt`,
+  `assets`, `docs`, `favicon.ico`, `index.html`, `privacy-policy.html`,
+  `terms-of-service.html`. The store listings may point at its
+  privacy/terms pages; check before changing it.
+- **`app-ads.txt`** reads `google.com, pub-5899980541606715, DIRECT,
+  f08c47fec0942fa0` (Google AdMob's seller check). This site now carries
+  the same file at `/app-ads.txt`. **It must be on whatever serves
+  dailyutilityapps.store**, at the top level, or ad income can be
+  affected.
+- Nothing was pushed: the domain check stopped every run. `live.yml` is
+  manual-only until a target is agreed. On 5 Oct dailyutilityapps.store
+  resolved to a web host (185.196.102.116, the FTP server in the user's
+  screenshot), so the domain is most likely served from there, not from
+  GitHub.
+
 ## 6. SEO and routing
 
 **URLs**
