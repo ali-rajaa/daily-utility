@@ -1835,6 +1835,24 @@ mapping: missing pages and missing files return 404 with the styled
 page, `/404.php` too; every page, redirect and the slash fix correct;
 Chromium shows the full 404 page with status 404.
 
+**Live, 11 Oct (runs 38101802243 upload, 38101917388 check): all 13 live
+checks pass** on https://dailyutilityapps.store: home, /about (clean
+address), privacy (company name), terms, a guide, app-ads.txt, a missing
+file (404 + site page), .htaccess hidden, robots.txt, the 404 page,
+.html → clean, /daily-info → /daily-info/, http → https (www → bare
+domain also confirmed by look). The /.htaccess check accepts 403 or 404
+as long as its rules never come back (this host answers 404).
+
+**Open after go-live:**
+- Uploads are manual (Actions → "Upload to dailyutilityapps.store" →
+  upload). A push trigger can be added if wanted.
+- Retire the noindex preview at staging.fixmypcperth.com (`pages.yml`,
+  section 8 step 6) and remove the borrowed DNS record.
+- Point the store listings' privacy/support/marketing URLs at
+  https://dailyutilityapps.store/privacy-policy etc. The old copy at
+  imranshafique.github.io/daily-utility-website/ still has the old text.
+- Search Console: add the property and submit /sitemap.xml.
+
 The workflow gained a **check** mode (live checks only, touches nothing)
 and reports what a failing page returned. Uploads skip the server
 backup once the folder already holds this site (earlier versions are in
