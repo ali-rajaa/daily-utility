@@ -23,6 +23,10 @@
 #           deleted; files this site doesn't have are left alone.
 #   check   only the live-page checks from the end of upload; touches
 #           nothing on the server.
+#   probe-404  finds which file the host's own not-found rule looks for:
+#           puts marked test files under common error-page names, asks
+#           for a missing address, reports which one answered, and
+#           deletes every test file again.
 # The results are shown as annotations on the run's summary page.
 
 name: Upload to dailyutilityapps.store
@@ -33,7 +37,7 @@ on:
       mode:
         description: "look = report only, upload = publish the site, check = test the live site only"
         type: choice
-        options: [look, upload, check]
+        options: [look, upload, check, probe-404]
         default: look
 
 permissions:
@@ -158,6 +162,31 @@ jobs:
           lftp -c "$SETUP; cd \"$DIR\" && rm \"$mark\"" >/dev/null 2>&1 || true
           echo "::notice title=Cloud app address::$cloud answers $c_head, title: ${c_title:-none}; same page as the main address: $same. A test file put in this folder was found at the main address: $on_main, at the cloud address: $on_cloud (200 = this folder serves that address)."
 
+
+      - name: Probe the host's not-found rule
+        if: env.MODE == 'probe-404'
+        env:
+          DIR: ${{ steps.look.outputs.dir }}
+        run: |
+          SETUP=$(cat "$RUNNER_TEMP/lftp-setup")
+          names="404.shtml 404.htm 404.php error.html error404.html notfound.html not_found.html errors/404.html error/404.html error_docs/not_found.html error-pages/404.html"
+          mkdir -p "$RUNNER_TEMP/probe"
+          for n in $names; do
+            mkdir -p "$RUNNER_TEMP/probe/$(dirname "$n")"
+            printf '<html><body>probe-marker:%s</body></html>\n' "$n" > "$RUNNER_TEMP/probe/$n"
+          done
+          lftp -c "$SETUP; cd \"$DIR\" && mirror --reverse --no-perms \"$RUNNER_TEMP/probe\" ."
+          sleep 3
+          body=$(curl -sS --max-time 20 "$SITE/missing-probe-$GITHUB_RUN_ID" 2>/dev/null || true)
+          hit=$(printf '%s' "$body" | grep -o 'probe-marker:[^<]*' | head -n 1 | sed 's/probe-marker://' || true)
+          text=$(printf '%s' "$body" | sed -e 's/<[^>]*>/ /g' | tr -s ' \n\r\t' ' ' | head -c 200)
+          deny=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code}' "$SITE/.site-backups/" 2>/dev/null || echo 000)
+          # Remove every test file and the folders made for them.
+          rmcmds=""
+          for n in $names; do rmcmds="$rmcmds; rm -f \"$n\""; done
+          lftp -c "$SETUP; cd \"$DIR\" $rmcmds; rmdir errors; rmdir error; rmdir error_docs; rmdir error-pages" >/dev/null 2>&1 || true
+          left=$(lftp -c "$SETUP; cd \"$DIR\" && cls -1" 2>/dev/null | grep -cE '^(404\.(shtml|htm|php)|error\.html|error404\.html|notfound\.html|not_found\.html|errors|error|error_docs|error-pages)/?$' || true)
+          echo "::notice title=Not-found probe::host error page uses: ${hit:-none of the test names}; missing address showed: $text; hidden backup folder answers $deny; test files left behind: $left"
 
       - if: env.MODE == 'upload'
         uses: actions/checkout@v7
