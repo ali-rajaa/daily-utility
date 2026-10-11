@@ -181,11 +181,22 @@ jobs:
           hit=$(printf '%s' "$body" | grep -o 'probe-marker:[^<]*' | head -n 1 | sed 's/probe-marker://' || true)
           text=$(printf '%s' "$body" | sed -e 's/<[^>]*>/ /g' | tr -s ' \n\r\t' ' ' | head -c 200)
           deny=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code}' "$SITE/.site-backups/" 2>/dev/null || echo 000)
+          # Does the host run PHP? (A PHP file could answer missing
+          # addresses with a real 404 status and the site's own page.)
+          printf '<?php http_response_code(404); echo "php-ok-" . (40 + 2);\n' > "$RUNNER_TEMP/probe-php-$GITHUB_RUN_ID.php"
+          lftp -c "$SETUP; cd \"$DIR\" && put \"$RUNNER_TEMP/probe-php-$GITHUB_RUN_ID.php\" -o \"probe-php-$GITHUB_RUN_ID.php\"" >/dev/null 2>&1 || true
+          php=$(curl -sS --max-time 20 -w ' (HTTP %{http_code}, %{content_type})' "$SITE/probe-php-$GITHUB_RUN_ID.php" 2>/dev/null | head -c 160 || true)
+          lftp -c "$SETUP; cd \"$DIR\" && rm -f \"probe-php-$GITHUB_RUN_ID.php\"" >/dev/null 2>&1 || true
+          case "$php" in
+            php-ok-42*) php_runs="yes" ;;
+            *) php_runs="no" ;;
+          esac
+          echo "::notice title=PHP probe::PHP runs: $php_runs; the test page answered: $php"
           # Remove every test file and the folders made for them.
           rmcmds=""
           for n in $names; do rmcmds="$rmcmds; rm -f \"$n\""; done
           lftp -c "$SETUP; cd \"$DIR\" $rmcmds; rmdir errors; rmdir error; rmdir error_docs; rmdir error-pages" >/dev/null 2>&1 || true
-          left=$(lftp -c "$SETUP; cd \"$DIR\" && cls -1" 2>/dev/null | grep -cE '^(404\.(shtml|htm|php)|error\.html|error404\.html|notfound\.html|not_found\.html|errors|error|error_docs|error-pages)/?$' || true)
+          left=$(lftp -c "$SETUP; cd \"$DIR\" && cls -1" 2>/dev/null | grep -cE '^(404\.(shtml|htm|php)|error\.html|error404\.html|notfound\.html|not_found\.html|errors|error|error_docs|error-pages|probe-php-.*)/?$' || true)
           echo "::notice title=Not-found probe::host error page uses: ${hit:-none of the test names}; missing address showed: $text; hidden backup folder answers $deny; test files left behind: $left"
 
       - if: env.MODE == 'upload'
