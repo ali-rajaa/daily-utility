@@ -14,7 +14,9 @@
 #
 # Run it from the Actions tab and pick a mode:
 #   look    connect and report what's on the server and how the website
-#           answers; uploads nothing (the default)
+#           answers (the default). Changes nothing, except one tiny test
+#           file it puts in the website folder and deletes straight away,
+#           to see which web addresses that folder serves.
 #   upload  back up the files the upload could replace (to a folder on
 #           the server, outside the website where possible), upload the
 #           site, then check the live pages. Nothing on the server is
@@ -118,13 +120,39 @@ jobs:
           # 3. How the website answers right now.
           probe() { curl -sS -o /dev/null --max-time 20 -w '%{http_code} %{redirect_url}' "$1" 2>&1 || true; }
           home=$(probe "$SITE/")
-          server=$(curl -sSI --max-time 20 "$SITE/" 2>/dev/null | tr -d '\r' | sed -n 's/^[Ss]erver: //p' | head -n 1)
-          title=$(curl -sS --max-time 20 "$SITE/" 2>/dev/null | grep -o '<title>[^<]*' | head -n 1 | sed 's/<title>//')
+          server=$(curl -sSI --max-time 20 "$SITE/" 2>/dev/null | tr -d '\r' | sed -n 's/^[Ss]erver: //p' | head -n 1 || true)
+          title=$(curl -sS --max-time 20 "$SITE/" 2>/dev/null | grep -o '<title>[^<]*' | head -n 1 | sed 's/<title>//' || true)
           echo "::notice title=Website now::https: $home; server: ${server:-unknown}; title: ${title:-none}; http: $(probe "http://${SITE#https://}/"); www: $(probe "https://www.${SITE#https://}/")"
           case "$home" in
             2*|3*) echo "https_ok=true" >> "$GITHUB_OUTPUT" ;;
             *)     echo "https_ok=false" >> "$GITHUB_OUTPUT" ;;
           esac
+
+          # 4. What the folder's own index.html is, what's in its assets
+          #    folder, and whether the cloud web app shares this folder.
+          idx_title=$(lftp -c "$SETUP; cd \"$DIR\" && cat index.html" 2>/dev/null | grep -o '<title>[^<]*' | head -n 1 | sed 's/<title>//' || true)
+          if grep -qx 'assets/' "$RUNNER_TEMP/webroot.txt"; then
+            assets=$(lftp -c "$SETUP; cd \"$DIR\" && cls -1F assets" 2>/dev/null | sed 's:^assets/::' | head -n 30 | paste -sd ',' - | sed 's/,/, /g' || true)
+            n_assets=$(lftp -c "$SETUP; cd \"$DIR\" && find assets" 2>/dev/null | grep -vc '/$' || true)
+          fi
+          echo "::notice title=Folder's index.html and assets::index.html title: ${idx_title:-none}; assets/ holds ${n_assets:-0} files, top level: ${assets:-none}"
+          cloud="https://cloud.${SITE#https://}/"
+          c_head=$(probe "$cloud")
+          c_title=$(curl -sS --max-time 20 "$cloud" 2>/dev/null | grep -o '<title>[^<]*' | head -n 1 | sed 's/<title>//' || true)
+          main_sum=$({ curl -sS --max-time 20 "$SITE/" 2>/dev/null || true; } | sha256sum | cut -c1-12)
+          cloud_sum=$({ curl -sS --max-time 20 "$cloud" 2>/dev/null || true; } | sha256sum | cut -c1-12)
+          same="no"; [ "$main_sum" = "$cloud_sum" ] && same="yes"
+          # A marker file uploaded here and looked for on both addresses
+          # shows which address this folder really serves. It's removed
+          # straight after.
+          mark="ftp-check-$GITHUB_RUN_ID.txt"
+          printf 'check %s\n' "$GITHUB_RUN_ID" > "$RUNNER_TEMP/$mark"
+          lftp -c "$SETUP; cd \"$DIR\" && put \"$RUNNER_TEMP/$mark\" -o \"$mark\"" >/dev/null 2>&1 || true
+          on_main=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code}' "$SITE/$mark" 2>/dev/null || echo 000)
+          on_cloud=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code}' "$cloud$mark" 2>/dev/null || echo 000)
+          lftp -c "$SETUP; cd \"$DIR\" && rm \"$mark\"" >/dev/null 2>&1 || true
+          echo "::notice title=Cloud app address::$cloud answers $c_head, title: ${c_title:-none}; same page as the main address: $same. A test file put in this folder was found at the main address: $on_main, at the cloud address: $on_cloud (200 = this folder serves that address)."
+
 
       - if: env.MODE == 'upload'
         uses: actions/checkout@v7
