@@ -2104,45 +2104,40 @@ what's there.
 
 ## 10. Open items
 
-- [ ] The old site's URL list, and the privacy/support URLs the stores
-      currently point to (this blocks the cutover, not the build).
-- [x] ~~Support email~~ — the user gave `console@dailyutilityapps.store`
-      (4 Oct); it is `company.support_email` in `_config.yml` (section
-      5t). Mail to it needs MX records on dailyutilityapps.store.
-- [ ] Where the DNS is managed (Cloudflare or the registrar). This
-      decides how redirects are done.
-- [x] ~~Confirm the flagship's Apple id~~ — confirmed by the user (28
-      Sep): `https://apps.apple.com/us/app/cloud-storage-backup-drive/id6760700432`,
-      matches what was already in `apps.yml`.
-- [x] ~~The real app icon (PNG)~~ — done, see section 4a. Screenshots for
-      the flagship's app page are still needed; CSS device mockups are
-      the placeholder until then.
-- [x] ~~For each of the three "more" apps: real name, icon.~~ — done,
-      see section 5a. Still open: an App Store link for any of the three,
-      if one exists (not checked), and taglines better than the
-      title-only inference currently in `apps.yml`.
-- [ ] **Owner review of the legal pages (blocks cutover).** *Partly
-      resolved 29 Sep: owner confirmed hosting etc. is the same as
-      CloudGate — now stated (section 5d). Still confirm per app: any ads
-      / ATT tracking, accounts, in-app purchases.* They're
-      adapted from the CloudGate templates with CloudGate-product
-      specifics removed (section 5b). Confirm, per app, and add back
-      where true: where stored data is hosted (APP 8 expects the
-      countries named where practicable — the policy currently says only
-      "may be located outside Australia"), which analytics/crash/ad SDKs
-      each app uses, whether any app shows ads or uses ATT tracking,
-      whether any app has accounts or in-app purchases, and concrete
-      retention/deletion periods. Also confirm Raja Imran Shafique is
-      still the Privacy Officer for these apps.
-- [ ] **Owner review of all four app pages (blocks cutover).** Copy is
-      limited to what each listing's title/package ID establishes. Check
-      it against each real store description and add confirmed features
-      (and a `trust_text` where an app has a specific, true privacy
-      point, e.g. how the flagship stores backups).
-- [ ] The GA4 measurement ID (`G-…`) for step 7. Create a GA4 property for
-      dailyutilityapps.store; until then analytics is simply left out.
-- [ ] Verify `fixmypcperth.com` (for the preview) and later
-      `dailyutilityapps.store` on the GitHub account.
+*Updated 11 Oct, after go-live (section 5w). Closed items are in the
+sections they link to.*
+
+**Needs information from the owner (content can't be invented):**
+- [ ] **App pages, confirmed features.** Each app page says only what its
+      store listing's title and package establish. Send each app's real
+      store description (or confirm features) to fill them out, plus a
+      `trust_text` where an app has a specific, true privacy point.
+- [ ] **App Store links** for Document Reader, Data Transfer and Photo
+      Recover, if any is on iOS (only the flagship is linked).
+- [ ] **Analytics (optional):** a GA4 measurement ID if visitor stats are
+      wanted. The new privacy policy already allows analytics.
+
+**Content to build:**
+- [ ] More Daily Info guides. There are 7: Backup & Storage 2, Switching
+      Phones 2, Photos & Media 2, Privacy & Security 1, and none that
+      supports Document Reader.
+
+**Go-live housekeeping:**
+- [ ] Automatic upload on every push to `main` (ftp.yml is manual now).
+- [ ] Retire the noindex preview at staging.fixmypcperth.com (`pages.yml`)
+      and delete its borrowed DNS record (section 8, step 6).
+- [ ] Store listings: privacy/support/marketing URLs to
+      dailyutilityapps.store (`/privacy-policy`, `/contact`, `/`).
+- [ ] The old copy at imranshafique.github.io/daily-utility-website/
+      still shows the old policy (its owner can update or retire it).
+- [ ] Google Search Console: add dailyutilityapps.store, submit
+      `/sitemap.xml`.
+- [ ] Cloud site (not this repo): its privacy policy numbering jumps
+      from 18 to 20.
+
+**Closed:** support email (5t), legal pages (5u: the owner's own
+documents), go-live and hosting (5w), app icons and names (4a, 5a),
+flagship Apple id.
 
 ## Log
 
