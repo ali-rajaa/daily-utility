@@ -275,6 +275,17 @@ jobs:
           redirect ".html to clean" "$SITE/about.html" "$SITE/about"
           redirect "http to https" "http://${SITE#https://}/" "$SITE/"
           echo "::notice title=Live checks::$report"
+          # When the not-found page check fails, say what the server does
+          # with a missing address and with the site's own 404 page.
+          case "$report" in
+            *"404 page FAILED"*)
+              miss="$SITE/this-page-does-not-exist-$GITHUB_RUN_ID"
+              hdrs=$(curl -sS -o /dev/null -D - --max-time 20 "$miss" 2>/dev/null | tr -d '\r' | grep -iE '^(server|content-type|content-length|x-[a-z-]+|via|cf-ray):' | paste -sd ';' - || true)
+              p404=$(curl -sS -o "$RUNNER_TEMP/p404" --max-time 20 -w '%{http_code}' "$SITE/404" 2>/dev/null || echo 000)
+              t404=$(grep -o '<title>[^<]*' "$RUNNER_TEMP/p404" 2>/dev/null | head -n 1 | sed 's/<title>//' || true)
+              echo "::notice title=Not-found diagnostics::missing address headers: ${hdrs:-none}; /404 answers $p404 (${t404:-no title}); /404.html answers $(curl -sS -o /dev/null --max-time 20 -w '%{http_code} %{redirect_url}' "$SITE/404.html" 2>/dev/null || echo 000)"
+              ;;
+          esac
           if [ "$fails" -gt 0 ]; then
             echo "::error::$fails live check(s) failed. The files were uploaded; see 'Live checks' for which pages didn't answer as expected."
             exit 1
