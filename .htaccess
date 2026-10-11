@@ -1,9 +1,8 @@
 # ---------------------------------------------------------------------------
 # Web server rules for dailyutilityapps.store (Apache / LiteSpeed shared
-# hosting). Jekyll copies .htaccess into _site by default. GitHub Pages
-# ignores it, so it only takes effect once the site is uploaded to the
-# web host (draft workflow: _launch/ftp-deploy.yml.draft).
-# STATUS.md section 7.
+# hosting), uploaded by .github/workflows/ftp.yml. Jekyll copies
+# .htaccess into _site by default; GitHub Pages ignores it.
+# STATUS.md section 5w.
 # ---------------------------------------------------------------------------
 
 Options -Indexes -MultiViews
@@ -26,9 +25,9 @@ ErrorDocument 404 /404.html
   # about.html. THE_REQUEST is the browser's own request line, so the
   # internal rewrite below never loops back into these redirects.
   RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.html[\s?]
-  RewriteRule ^ /%1 [R=301,L]
+  RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
   RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?]
-  RewriteRule ^ /%1 [R=301,L]
+  RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

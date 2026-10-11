@@ -7,7 +7,7 @@
 # broken change shows up before it is merged.
 #
 # This deploys the noindex PREVIEW (staging.fixmypcperth.com). The live
-# site, dailyutilityapps.store, is published by live.yml.
+# site, dailyutilityapps.store, is uploaded to the web host by ftp.yml.
 
 name: Build and deploy
 

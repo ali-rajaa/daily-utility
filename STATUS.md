@@ -1736,6 +1736,53 @@ annotations. Result:
   screenshot), so the domain is most likely served from there, not from
   GitHub.
 
+## 5w. Going live by FTP to the dailyutilityapps.store web host (11 Oct)
+
+The user chose option A: dailyutilityapps.store is served by the web
+host (the FTP account from their FileZilla screenshot), so the site is
+uploaded there. `live.yml` (GitHub Pages via imranshafique's repo) and
+the old `_launch` FTP draft were removed; section 5v explains why.
+
+`.github/workflows/ftp.yml`, run by hand from the Actions tab:
+- **look** (default): logs in, finds the website folder (`FTP_SERVER_DIR`
+  if set, else `domains/<host>/public_html`, `public_html`, `httpdocs`,
+  else the login folder), and reports as run annotations: the folders
+  where the login lands, everything in the website folder, and how
+  https://dailyutilityapps.store, http and www answer now. Uploads
+  nothing.
+- **upload**: builds for `https://dailyutilityapps.store` with
+  `staging: false` (the live address is injected at build time;
+  `_config.yml` stays in the Preview state for `pages.yml`), checks the
+  build (`index.html`, `.htaccess`, `app-ads.txt`, `404.html` present,
+  no unrendered Liquid, live sitemap, not noindex); refuses to upload
+  if https doesn't answer yet (`.htaccess` sends everyone there); backs
+  up the website folder's top-level files plus its `assets` and
+  `daily-info` folders to `site-backups/<time>` beside the website
+  folder (or a hidden, access-denied `.site-backups` inside it when the
+  login folder is the website); uploads with no deletion; then checks
+  the live site: home, `/about` (clean address), privacy (company name),
+  terms, a guide, `app-ads.txt`, `robots.txt`, the 404 page,
+  `.html` → clean redirect and http → https.
+- Secrets: `FTP_USERNAME`, `FTP_PASSWORD`. Variables (optional):
+  `FTP_HOST`, `FTP_SERVER_DIR`, `FTP_TLS` (loose by default: FTP over
+  TLS without certificate checking; `strict`; `off` = plain FTP).
+
+`.htaccess`: the `.html` → clean redirects now name `https://` and the
+host explicitly, so a host behind a proxy can't redirect to `http://`.
+
+**Tested end to end here** against a real FTP server and Apache 2.4 with
+HTTPS serving a fake old site (with a `cloud/` folder and an old
+`assets/old.css`): look, build, backup, upload and every live check
+passed; `www` → bare domain, `/daily-info` → `/daily-info/`, old
+`.html` addresses → clean ones, year-long caching on stamped CSS,
+`max-age=0` on pages, gzip, no server errors; the `cloud/` folder and
+the unrelated old file were left alone.
+
+**Still to do:** the user adds the two secrets and runs **look**; check
+the reported website folder and current site; then run **upload**.
+After it's confirmed live, consider a push trigger, and retire the
+preview at staging.fixmypcperth.com (section 8, step 6).
+
 ## 6. SEO and routing
 
 **URLs**
