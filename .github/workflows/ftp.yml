@@ -281,7 +281,14 @@ jobs:
           check "a guide" "$SITE/daily-info/backup-vs-sync?$bust" 200 "Backup"
           check "app-ads.txt" "$SITE/app-ads.txt?$bust" 200 "pub-5899980541606715"
           check "missing file" "$SITE/assets/missing-$GITHUB_RUN_ID.png" 404 "Page not found"
-          check ".htaccess hidden" "$SITE/.htaccess" 403 ""
+          # .htaccess must never be shown: 403 or 404 are both fine, as
+          # long as its rules don't come back.
+          code=$(curl -sS -o "$RUNNER_TEMP/ht" --max-time 25 -w '%{http_code}' "$SITE/.htaccess" 2>/dev/null || echo 000)
+          if { [ "$code" = 403 ] || [ "$code" = 404 ]; } && ! grep -q 'RewriteEngine' "$RUNNER_TEMP/ht"; then
+            report="$report .htaccess hidden ok;"
+          else
+            report="$report .htaccess hidden FAILED ($code);"; fails=$((fails+1))
+          fi
           check "robots.txt" "$SITE/robots.txt?$bust" 200 "Sitemap: $SITE/sitemap.xml"
           check "404 page" "$SITE/this-page-does-not-exist-$GITHUB_RUN_ID" 404 "Page not found"
           redirect ".html to clean" "$SITE/about.html" "$SITE/about"
