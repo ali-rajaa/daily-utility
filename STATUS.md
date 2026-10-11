@@ -1794,7 +1794,14 @@ the unrelated old file were left alone.
 - This site now has its own `/favicon.ico` (16/32/48, from
   `assets/icons/favicon-48.png`) so the old one is replaced too.
 
-**Still to do:** run **upload** (with the user's go-ahead).
+**Sign in link (user, 11 Oct):** the header now has "Sign in" to the
+cloud web app (`site.cloud_url`, https://cloud.dailyutilityapps.store/),
+outside the Apps/Guides/Help capsule as a small outlined button on wide
+screens and a full-width button at the foot of the phone menu. Its
+accessible name is "Sign in to Daily Utility Cloud Storage". axe clean,
+layout check clean.
+
+**Upload:** approved by the user on 11 Oct.
 After it's confirmed live, consider a push trigger, and retire the
 preview at staging.fixmypcperth.com (section 8, step 6).
 

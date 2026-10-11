@@ -19,6 +19,11 @@
   shown here -- they live on the app pages and the homepage's
   availability table, where they're the point (user, 29 Sep). "Contact
   support" opens the Contact page, which carries the support email.
+
+  "Sign in" (user, 11 Oct) goes to the Daily Utility Cloud Storage web app
+  (site.cloud_url). It sits outside the capsule, since it leaves the site:
+  a small outlined button beside it on wide screens, a full-width button
+  at the foot of the phone menu.
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
@@ -93,6 +98,7 @@
           </div>
         </li>
       </ul>
+      <a class="nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
     </nav>
   </div>
 </header>

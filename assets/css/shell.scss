@@ -484,6 +484,29 @@ picture { display: contents; }
 
 .nav-toggle { display: none; }
 
+/* "Sign in": leaves for the cloud web app, so it sits outside the
+   capsule as a small outlined button. */
+.nav-signin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font: 600 0.9375rem/1.2 var(--font);
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+@media (hover: hover) { .nav-signin:hover { background: var(--bg-alt); } }
+.nav-signin:active { transform: scale(0.97); transition-duration: 0.1s; }
+.nav-signin:focus:not(:focus-visible) { outline: none; }
+.nav-signin:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
 /* ---------- Menu panels (shared by desktop flyouts and the phone sheet) ---------- */
 
 .nav-menu-label {
@@ -636,6 +659,7 @@ picture { display: contents; }
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--bg-alt) 72%, transparent);
   }
+  .site-nav { gap: 0.625rem; }
   .nav-link { min-height: 2.5rem; padding: 0.5rem 1rem; }
   .nav-link:hover { background: color-mix(in srgb, var(--surface) 70%, transparent); }
   .nav-link[aria-expanded="true"], .nav-link.is-current, .nav-link[aria-current] {
@@ -646,7 +670,7 @@ picture { display: contents; }
   .nav-link:active { transform: scale(0.97); transition-duration: 0.1s; }
   /* Touch screens wide enough for this layout (tablets, phones held
      sideways): full 44px targets. The capsule still fits the bar. */
-  @media (pointer: coarse) { .nav-link { min-height: 2.75rem; } }
+  @media (pointer: coarse) { .nav-link, .nav-signin { min-height: 2.75rem; } }
 
   .nav-menu {
     position: absolute;
@@ -803,6 +827,8 @@ picture { display: contents; }
   .js .nav-chevron, .js .nav-go { width: 1.1rem; height: 1.1rem; margin: 0; opacity: 1; transform: none; color: var(--text-2); }
   .js .nav-trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
   .js .nav-link--page[aria-current] { color: var(--brand-text); }
+  /* The phone menu ends with Sign in as a full-width button. */
+  .js .nav-signin { width: 100%; min-height: 3rem; margin-top: 0.25rem; font-size: 1.0625rem; }
 
   .js .nav-menu { display: none; }
   .js .nav-trigger[aria-expanded="true"] + .nav-menu { display: block; }

@@ -55,6 +55,10 @@ company:
   legal_name: "DAILY UTILITY APPS PTY LTD"
   support_email: "console@dailyutilityapps.store"
 
+# The Daily Utility Cloud Storage web app, where people sign in (user,
+# 11 Oct). Linked as "Sign in" in the header.
+cloud_url: "https://cloud.dailyutilityapps.store/"
+
 exclude:
   - Gemfile
   - Gemfile.lock
