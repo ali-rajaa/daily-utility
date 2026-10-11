@@ -283,6 +283,8 @@ jobs:
               hdrs=$(curl -sS -o /dev/null -D - --max-time 20 "$miss" 2>/dev/null | tr -d '\r' | grep -iE '^(server|content-type|content-length|x-[a-z-]+|via|cf-ray):' | paste -sd ';' - || true)
               p404=$(curl -sS -o "$RUNNER_TEMP/p404" --max-time 20 -w '%{http_code}' "$SITE/404" 2>/dev/null || echo 000)
               t404=$(grep -o '<title>[^<]*' "$RUNNER_TEMP/p404" 2>/dev/null | head -n 1 | sed 's/<title>//' || true)
+              body=$(curl -sS --max-time 20 "$miss" 2>/dev/null | sed -e 's/<[^>]*>/ /g' | tr -s ' \n\r\t' ' ' | head -c 300 || true)
+              echo "::notice title=Not-found page text::${body:-empty}"
               echo "::notice title=Not-found diagnostics::missing address headers: ${hdrs:-none}; /404 answers $p404 (${t404:-no title}); /404.html answers $(curl -sS -o /dev/null --max-time 20 -w '%{http_code} %{redirect_url}' "$SITE/404.html" 2>/dev/null || echo 000)"
               ;;
           esac
