@@ -1673,18 +1673,25 @@ The live site is served by GitHub Pages from **imranshafique/daily-utility-websi
 arrangement as CloudGate). This repo stays the place to edit.
 
 `.github/workflows/live.yml` runs on every push to `main`:
-1. Reads the live repo's top-level `CNAME`. It must be
-   dailyutilityapps.store or a subdomain, or the job stops. No CNAME:
-   stops too (the domain is set in that repo's Pages settings, which only
-   its owner can change).
-2. Builds the site for exactly that address (`url` from the CNAME,
+1. Reads the live repo's **GitHub Pages settings** through the API with
+   the token: custom domain, publishing method, and the branch and
+   folder Pages serves. (If the settings can't be read, it falls back to
+   `main` and the CNAME file.) It stops without pushing if Pages is off,
+   has no custom domain, has another domain, or is published by the live
+   repo's own workflow; the domain must be dailyutilityapps.store or a
+   subdomain.
+2. Builds the site for exactly that domain (`url` from it,
    `staging: false`) and checks the build: no unrendered Liquid, the
    sitemap uses the live address, nothing marked noindex.
-3. Commits the **built** files to the live repo's `main` with a
-   `.nojekyll` file, as an ordinary commit (never a force push). The
-   live repo's `.github` folder is left alone; `.htaccess` is left out.
-   First run only: saves the live repo's previous `main` as
-   `old-site-backup`.
+3. Commits the **built** files to the branch and folder Pages serves,
+   with `CNAME` and `.nojekyll`, as an ordinary commit (never a force
+   push). The live repo's `.github` folder is left alone; `.htaccess` is
+   left out. First run only: saves that branch as `old-site-backup`.
+
+Fixed on the first real runs (11 Oct): the checkout's own saved login
+was sent alongside the token, so GitHub refused it
+(`persist-credentials: false` now); and the live repo has no CNAME file,
+so the domain is now read from its Pages settings.
 
 Why built files rather than the source: this site needs Jekyll 4, and a
 "Deploy from a branch" Pages build uses the github-pages gem (Jekyll 3,
@@ -1700,8 +1707,10 @@ it exists the job only warns. Each run creates a commit (the stylesheet
 the CNAME at build time. `pages.yml` still deploys the noindex preview.
 The FTP route (`_launch/ftp-deploy.yml.draft`, `.htaccess`) is not used.
 
-Tested locally against stand-in repos: first publish with backup, repeat
-publish, www domain, wrong CNAME, no CNAME, no token, no access.
+Tested locally against stand-in repos and a stand-in Pages API: domain
+in settings only, gh-pages with /docs, www domain, Pages by workflow,
+Pages off, settings unreadable with and without a CNAME file, another
+domain, no domain, no token, no access.
 
 ## 6. SEO and routing
 

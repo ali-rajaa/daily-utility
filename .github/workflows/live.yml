@@ -121,6 +121,12 @@ jobs:
             *)
               echo "Couldn't read the live repo's Pages settings (HTTP $code); falling back to its main branch and CNAME file." ;;
           esac
+          # A one-line summary as an annotation, readable without the log.
+          if [ "$code" = 200 ]; then
+            echo "::notice title=Live repo Pages settings::HTTP 200; method $(jq -r '.build_type // "legacy"' pages.json); branch ${branch:-none}; folder $folder; domain ${pages_domain:-none}; status $(jq -r '.status // "unknown"' pages.json); address $(jq -r '.html_url // "unknown"' pages.json)"
+          else
+            echo "::notice title=Live repo Pages settings::HTTP $code ($(jq -r '.message // empty' pages.json 2>/dev/null | head -c 120))"
+          fi
           case "$folder" in
             /) dir="." ;;
             /docs) dir="docs" ;;
@@ -147,6 +153,17 @@ jobs:
           cd "$LIVE_DIR"
           echo "Live repo, top level of '$branch':"
           find . -mindepth 1 -maxdepth 1 ! -name .git -printf '  %f\n' | sort
+          # What's in the live repo, as annotations: its top level, its
+          # workflows and the actions they use (how it deploys, if it does).
+          top=$(find . -mindepth 1 -maxdepth 1 ! -name .git -printf '%f\n' | sort | paste -sd ',' - | sed 's/,/, /g')
+          echo "::notice title=Live repo files::${top:-empty}"
+          if [ -d .github/workflows ]; then
+            wfs=$(find .github/workflows -maxdepth 1 -type f -printf '%f\n' | sort | paste -sd ',' - | sed 's/,/, /g')
+            uses=$({ grep -rhoE 'uses:[[:space:]]*[^[:space:]#]+' .github/workflows || true; } | sed -E 's/uses:[[:space:]]*//' | sort -u | paste -sd ',' - | sed 's/,/, /g')
+            echo "::notice title=Live repo workflows::${wfs:-none}; actions used: ${uses:-none}"
+          else
+            echo "::notice title=Live repo workflows::none"
+          fi
 
           # 3. The domain: Pages settings first, else the CNAME file.
           file_domain=""
