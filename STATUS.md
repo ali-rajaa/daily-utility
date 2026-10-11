@@ -1778,8 +1778,23 @@ passed; `www` → bare domain, `/daily-info` → `/daily-info/`, old
 `max-age=0` on pages, gzip, no server errors; the `cloud/` folder and
 the unrelated old file were left alone.
 
-**Still to do:** the user adds the two secrets and runs **look**; check
-the reported website folder and current site; then run **upload**.
+**Look runs (11 Oct):**
+- FTP login works (FTP over TLS). The login lands directly in the
+  website folder for **dailyutilityapps.store** (`DIR` = `.`), Apache,
+  https working, www answering.
+- That folder held an older static "Daily Utility Cloud Storage — Sign
+  in" page: `index.html`, `assets/` (css, icons, js, logos: 4 files),
+  `favicon.ico`, `privacy-policy.html`, `terms-of-service.html`,
+  `app-ads.txt` (the same files as imranshafique/daily-utility-website).
+- **cloud.dailyutilityapps.store is served from a different folder** (a
+  test file put in this folder appeared on the main address, not on
+  cloud) and shows "Daily Utility Cloud Storage". The user confirmed the
+  sign-in belongs on cloud.dailyutilityapps.store, so the main address
+  can take this site.
+- This site now has its own `/favicon.ico` (16/32/48, from
+  `assets/icons/favicon-48.png`) so the old one is replaced too.
+
+**Still to do:** run **upload** (with the user's go-ahead).
 After it's confirmed live, consider a push trigger, and retire the
 preview at staging.fixmypcperth.com (section 8, step 6).
 
