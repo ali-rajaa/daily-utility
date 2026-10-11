@@ -14,10 +14,13 @@
 # Without it the job does nothing but warn.
 #
 # Safety, checked before anything is pushed:
-# - The domain is read from the live repo's own CNAME file and must be
-#   dailyutilityapps.store or a subdomain of it. The site is built for that
-#   exact address and the CNAME is kept. No CNAME, or another domain: the
-#   job stops and pushes nothing.
+# - Where to publish comes from the live repo's GitHub Pages settings (read
+#   with the token): its custom domain, and the branch and folder Pages
+#   serves. If those can't be read, its main branch and CNAME file are
+#   used. The domain must be dailyutilityapps.store or a subdomain of it,
+#   and the site is built for that exact address. Pages off, no domain,
+#   another domain, or Pages run by its own workflow: the job stops and
+#   pushes nothing.
 # - Every publish is an ordinary commit on top of the live repo's history,
 #   never a force push. The first run also saves the live repo's main as
 #   the branch old-site-backup.
@@ -42,7 +45,9 @@ jobs:
     if: github.repository == 'ali-rajaa/daily-utility'
     runs-on: ubuntu-latest
     env:
+      LIVE_REPO: imranshafique/daily-utility-website
       LIVE_URL: https://github.com/imranshafique/daily-utility-website.git
+      GITHUB_API: https://api.github.com
       LIVE_DIR: ${{ github.workspace }}/../live-site
       LIVE_SITE_TOKEN: ${{ secrets.LIVE_SITE_TOKEN }}
     steps:
@@ -71,7 +76,9 @@ jobs:
           bundler-cache: true
 
       # The token goes in a header, never in a URL, so it can't appear in
-      # an error message.
+      # an error message. Where to publish comes from the live repo's own
+      # GitHub Pages settings: its domain, and the branch and folder Pages
+      # serves. Anything that doesn't add up stops the run before a push.
       - name: Read the live repo
         if: steps.token.outputs.ok == 'true'
         id: live
@@ -82,42 +89,87 @@ jobs:
           # Outside any checkout, so only this login is sent.
           cd "$RUNNER_TEMP"
 
+          # 1. GitHub Pages settings of the live repo.
+          code=$(curl -sS -o pages.json -w '%{http_code}' \
+            -H "Authorization: Bearer $LIVE_SITE_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$GITHUB_API/repos/$LIVE_REPO/pages" || echo 000)
+          pages_domain=""; branch="main"; folder="/"
+          case "$code" in
+            200)
+              build_type=$(jq -r '.build_type // "legacy"' pages.json)
+              pages_domain=$(jq -r '.cname // ""' pages.json | tr '[:upper:]' '[:lower:]')
+              branch=$(jq -r '.source.branch // ""' pages.json)
+              folder=$(jq -r '.source.path // "/"' pages.json)
+              echo "GitHub Pages in the live repo:"
+              echo "  publishing method: $build_type"
+              echo "  source: branch '${branch:-none}', folder '$folder'"
+              echo "  custom domain: ${pages_domain:-none}"
+              echo "  status: $(jq -r '.status // "unknown"' pages.json), address: $(jq -r '.html_url // "unknown"' pages.json)"
+              if [ "$build_type" = "workflow" ]; then
+                echo "::error::The live repo publishes its site with its own GitHub Actions workflow, so files pushed to it aren't published as they are. Its owner can switch Settings > Pages > Source to 'Deploy from a branch' (main, / root). Nothing was pushed."
+                exit 1
+              fi
+              if [ -z "$branch" ]; then
+                echo "::error::GitHub Pages in the live repo has no source branch. Nothing was pushed."
+                exit 1
+              fi
+              ;;
+            404)
+              echo "::error::GitHub Pages isn't turned on in the live repo, so it can't serve dailyutilityapps.store. Its owner can turn it on in Settings > Pages (Deploy from a branch, main, / root) with the custom domain dailyutilityapps.store. Nothing was pushed."
+              exit 1 ;;
+            *)
+              echo "Couldn't read the live repo's Pages settings (HTTP $code); falling back to its main branch and CNAME file." ;;
+          esac
+          case "$folder" in
+            /) dir="." ;;
+            /docs) dir="docs" ;;
+            *) echo "::error::GitHub Pages serves the folder '$folder', which this workflow doesn't handle. Nothing was pushed."; exit 1 ;;
+          esac
+
+          # 2. The branch Pages serves.
           rc=0
-          err=$(git ls-remote --exit-code --heads "$LIVE_URL" main 2>&1 >/dev/null) || rc=$?
+          err=$(git ls-remote --exit-code --heads "$LIVE_URL" "$branch" 2>&1 >/dev/null) || rc=$?
           if [ "$rc" = 2 ]; then
-            echo "::error::The live repo has no main branch. Nothing was pushed."
+            echo "::error::The live repo has no '$branch' branch. Nothing was pushed."
             exit 1
           elif [ "$rc" != 0 ]; then
             reason=$(printf '%s' "$err" | tr '\n' ' ' | sed 's/  */ /g')
             case "$err" in
-              *"not found"*) hint="GitHub says the repo doesn't exist for this token: check the account that made LIVE_SITE_TOKEN can open imranshafique/daily-utility-website." ;;
+              *"not found"*) hint="GitHub says the repo doesn't exist for this token: check the account that made LIVE_SITE_TOKEN can open $LIVE_REPO." ;;
               *"401"*|*"403"*|*"Authentication failed"*|*"Invalid username"*) hint="GitHub refused LIVE_SITE_TOKEN: check it was copied in full, has the repo scope, and hasn't been deleted." ;;
               *) hint="Check that LIVE_SITE_TOKEN is valid and can push to it." ;;
             esac
             echo "::error::Couldn't read the live repo. $hint (git said: $reason)"
             exit 1
           fi
-          git clone --quiet --depth 1 --branch main "$LIVE_URL" "$LIVE_DIR"
+          git clone --quiet --depth 1 --branch "$branch" "$LIVE_URL" "$LIVE_DIR"
           cd "$LIVE_DIR"
-          echo "Live repo, top level:"
+          echo "Live repo, top level of '$branch':"
           find . -mindepth 1 -maxdepth 1 ! -name .git -printf '  %f\n' | sort
 
-          domain=""
-          if [ -f CNAME ]; then
-            domain=$(tr -d '[:space:]' < CNAME | tr '[:upper:]' '[:lower:]')
+          # 3. The domain: Pages settings first, else the CNAME file.
+          file_domain=""
+          if [ -f "$dir/CNAME" ]; then
+            file_domain=$(tr -d '[:space:]' < "$dir/CNAME" | tr '[:upper:]' '[:lower:]')
           fi
+          domain="${pages_domain:-$file_domain}"
           if [ -z "$domain" ]; then
-            echo "::error::The live repo has no CNAME file at its top level, so it isn't connected to a domain from there. Nothing was pushed."
+            echo "::error::The live repo isn't connected to a domain: GitHub Pages has no custom domain and there's no CNAME file. Its owner can set Settings > Pages > Custom domain to dailyutilityapps.store. Nothing was pushed."
             exit 1
           fi
           case "$domain" in
             dailyutilityapps.store|*.dailyutilityapps.store) ;;
             *)
-              echo "::error::The live repo's CNAME is '$domain', not dailyutilityapps.store. Nothing was pushed."
+              echo "::error::The live repo's domain is '$domain', not dailyutilityapps.store. Nothing was pushed."
               exit 1 ;;
           esac
-          echo "Live domain: $domain"
-          echo "domain=$domain" >> "$GITHUB_OUTPUT"
+          echo "Publishing to https://$domain (branch '$branch', folder '$folder')"
+          {
+            echo "domain=$domain"
+            echo "branch=$branch"
+            echo "dir=$dir"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Build for the live address
         if: steps.token.outputs.ok == 'true'
@@ -150,26 +202,34 @@ jobs:
         if: steps.token.outputs.ok == 'true'
         env:
           DOMAIN: ${{ steps.live.outputs.domain }}
+          BRANCH: ${{ steps.live.outputs.branch }}
+          DIR: ${{ steps.live.outputs.dir }}
         run: |
           cd "$LIVE_DIR"
 
-          # First run only: keep the live repo's current main.
+          # First run only: keep the live repo's current site.
           rc=0
           git ls-remote --exit-code --heads origin old-site-backup >/dev/null || rc=$?
           if [ "$rc" = 2 ]; then
             git push --quiet origin HEAD:refs/heads/old-site-backup
-            echo "Saved the live repo's previous main as old-site-backup."
+            echo "Saved the live repo's previous '$BRANCH' as old-site-backup."
           elif [ "$rc" != 0 ]; then
             echo "::error::Couldn't check the live repo's branches. Nothing was pushed."
             exit 1
           fi
 
-          # Replace everything except .github with the built site.
-          { git ls-files -z | grep -zv '^\.github/' || true; } | xargs -0 -r git rm -q --
-          cp -a "$GITHUB_WORKSPACE/_site/." .
-          rm -f .htaccess
-          printf '%s\n' "$DOMAIN" > CNAME
-          touch .nojekyll
+          # Replace the published folder (everything except .github when
+          # it's the top level) with the built site.
+          if [ "$DIR" = "." ]; then
+            { git ls-files -z | grep -zv '^\.github/' || true; } | xargs -0 -r git rm -q --
+          else
+            git rm -r -q --ignore-unmatch -- "$DIR"
+          fi
+          mkdir -p "$DIR"
+          cp -a "$GITHUB_WORKSPACE/_site/." "$DIR/"
+          rm -f "$DIR/.htaccess"
+          printf '%s\n' "$DOMAIN" > "$DIR/CNAME"
+          touch "$DIR/.nojekyll"
           git add -A
           if git diff --cached --quiet; then
             echo "The live site is already up to date."
@@ -179,5 +239,5 @@ jobs:
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
               commit --quiet -m "Publish the Daily Utility Apps site" \
               -m "Built from ali-rajaa/daily-utility@${GITHUB_SHA::7} for https://$DOMAIN"
-          git push --quiet origin HEAD:refs/heads/main
+          git push --quiet origin "HEAD:refs/heads/$BRANCH"
           echo "Published ali-rajaa/daily-utility@${GITHUB_SHA::7} to https://$DOMAIN"
