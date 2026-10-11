@@ -21,6 +21,8 @@
 #           the server, outside the website where possible), upload the
 #           site, then check the live pages. Nothing on the server is
 #           deleted; files this site doesn't have are left alone.
+#   check   only the live-page checks from the end of upload; touches
+#           nothing on the server.
 # The results are shown as annotations on the run's summary page.
 
 name: Upload to dailyutilityapps.store
@@ -29,9 +31,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "look = report only, upload = publish the site"
+        description: "look = report only, upload = publish the site, check = test the live site only"
         type: choice
-        options: [look, upload]
+        options: [look, upload, check]
         default: look
 
 permissions:
@@ -55,6 +57,7 @@ jobs:
       MODE: ${{ inputs.mode || 'look' }}
     steps:
       - name: Check the secrets
+        if: env.MODE != 'check'
         run: |
           if [ -z "$FTP_USERNAME" ] || [ -z "$LFTP_PASSWORD" ]; then
             echo "::error::Add the FTP_USERNAME and FTP_PASSWORD secrets to this repo first (see the top of ftp.yml)."
@@ -63,11 +66,13 @@ jobs:
           echo "Mode: $MODE"
 
       - name: Install lftp
+        if: env.MODE != 'check'
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp >/dev/null
 
       # lftp reads the password from LFTP_PASSWORD (--env-password), so it
       # is never on a command line or in the log.
       - name: Connect and look
+        if: env.MODE != 'check'
         id: look
         run: |
           case "$FTP_TLS" in
@@ -237,7 +242,7 @@ jobs:
           echo "::notice title=Upload::$(find _site -type f | wc -l) files uploaded to '$DIR'."
 
       - name: Check the live site
-        if: env.MODE == 'upload'
+        if: env.MODE == 'upload' || env.MODE == 'check'
         run: |
           sleep 5
           fails=0; report=""
@@ -247,7 +252,9 @@ jobs:
             if [ "$code" = "$3" ] && { [ -z "$4" ] || grep -qF "$4" "$RUNNER_TEMP/page"; }; then
               report="$report $1 ok;"
             else
-              report="$report $1 FAILED ($code);"; fails=$((fails+1))
+              got=$(grep -o '<title>[^<]*' "$RUNNER_TEMP/page" 2>/dev/null | head -n 1 | sed 's/<title>//' || true)
+              [ -n "$got" ] || got=$(head -c 120 "$RUNNER_TEMP/page" 2>/dev/null | tr -d '\r' | tr '\n' ' ' || true)
+              report="$report $1 FAILED ($code, got: ${got:-empty});"; fails=$((fails+1))
             fi
           }
           redirect() { # name, url, where it should end up
