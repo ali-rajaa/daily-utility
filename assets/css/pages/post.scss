@@ -7,7 +7,7 @@
 
    The whole article sits in its topic's tone (shell.css "App tones", from
    _data/categories.yml), so every --brand colour below is that topic's
-   colour, already contrast-checked in both themes. FAQ cards, the CTA
+   colour, already contrast-checked. FAQ cards, the CTA
    card and the section-head row are shared and live in shell.css.
    ========================================================================== */
 
@@ -163,7 +163,7 @@
   border-radius: 1.6rem;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.16), 0 18px 40px rgba(6, 16, 31, 0.28);
-  /* The disc is white in both themes, so the glyph uses the tone's
+  /* The disc is white, so the glyph uses the tone's
      fixed --tone-deep (all >= 5.4:1 on white). */
   color: var(--tone-deep);
   transform: rotate(-6deg);

@@ -1860,6 +1860,23 @@ git).
 After it's confirmed live, consider a push trigger, and retire the
 preview at staging.fixmypcperth.com (section 8, step 6).
 
+## 5x. Light mode only (14 Oct)
+
+User: "make the light mode the default, and remove dark mode altogether,
+light looks way better". **Standing rule: the site is light only.**
+- `shell.scss`: the two `@media (prefers-color-scheme: dark)` blocks (the
+  dark colour tokens and the dark tone overrides) are gone, and `:root`
+  sets `color-scheme: light`, so form controls and scrollbars stay light
+  on dark-mode devices too.
+- `default.html`: `<meta name="color-scheme" content="light">` and one
+  white `theme-color` (the dark variant is gone).
+- Comments that described "both themes" were reworded.
+- Checked: with the device in dark mode, 9 pages at 1280 and 390px render
+  pixel-identical to light mode (the 404 page's moving glow aside,
+  identical with animation paused); all suites, axe and the layout check
+  pass. The scratchpad shell test now asserts a dark-mode device gets
+  the white page.
+
 ## 6. SEO and routing
 
 **URLs**

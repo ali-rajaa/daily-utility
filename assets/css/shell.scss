@@ -11,7 +11,7 @@
    and read these tokens rather than redefining them, so the header,
    footer and rhythm can never drift apart between page types.
 
-   Colour pairs were checked for WCAG AA (4.5:1) in both themes before use:
+   Colour pairs were checked for WCAG AA (4.5:1) before use:
    text and text-2 on bg, bg-alt and surface; brand-text on those and on
    brand-soft; on-brand on brand and brand-hover.
    ========================================================================== */
@@ -46,7 +46,7 @@
   --glass: rgba(255, 255, 255, 0.94);
 
   /* Illustration colours (see "App tones" below): app tiles, guide
-     banners and icon chips. Fixed in both themes, like the store
+     banners and icon chips. Fixed colours, like the store
      badges, and always carry a white glyph. Blue is the default. */
   --tone-light: #3b82f6;
   --tone-deep: #0b5fe8;
@@ -85,33 +85,10 @@
   --space-hero-bottom: clamp(3.5rem, 8vw, 6rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0a0e16;
-    --bg-alt: #0f1521;
-    --surface: #141b29;
-    --text: #e9eef6;
-    --text-2: #a2adbf;
-    --border: #233047;
-    --border-strong: #33425c;
-    --brand: #5b9bff;
-    --brand-hover: #7db0ff;
-    --on-brand: #06101f;
-    --brand-soft: #16233b;
-    --brand-text: #7db0ff;
-    --brand-2: #2ce68c;
-    --brand-2-text: #34e59a;
-    --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #43b8f0 45%, var(--brand-2) 100%);
-    --glass: rgba(10, 14, 22, 0.94);
-    --surface-glass: rgba(20, 27, 41, 0.78);
-
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.4), 0 32px 64px rgba(0, 0, 0, 0.45);
-  }
+  /* Light only (user, 14 Oct: "light looks way better"). Telling the
+     browser keeps form controls and scrollbars light too, even when the
+     device is set to dark mode. */
+  color-scheme: light;
 }
 
 /* ---------- Fonts ----------
@@ -1040,16 +1017,14 @@ picture { display: contents; }
    One colour family per tone, used in three roles, so the same kind of
    thing always looks the same:
    - Controls and markers (buttons, links, numbered badges, check
-     bullets): --brand / --on-brand / --brand-text / --brand-soft. These
-     change with the theme: deep in light, lighter in dark.
+     bullets): --brand / --on-brand / --brand-text / --brand-soft.
    - Illustrations (app tiles, guide banners, icon chips): --tone-gradient
      with a white glyph, or --tone-deep for a glyph on a white disc.
-     These stay the same in both themes, like a printed object.
    - Hero glow: --brand plus --glow-b / --glow-c, lighter shades of the
      same colour. Only pages outside a tone (home, Daily Info, legal,
      404) show the logo's green and cyan.
 
-   All text pairs computed against WCAG AA 4.5:1 in both themes (29 Sep):
+   All text pairs computed against WCAG AA 4.5:1 (29 Sep):
    on-brand on brand/hover, brand-text on bg / bg-alt / surface /
    brand-soft, and body text on brand-soft -- lowest is teal
    brand-text on its soft tint at 4.85:1. White glyphs on every
@@ -1082,32 +1057,13 @@ picture { display: contents; }
   --tone-gradient: linear-gradient(145deg, #f43f5e, #be123c);
   --glow-b: #fb7185; --glow-c: #fda4af;
 }
-@media (prefers-color-scheme: dark) {
-  .tone-blue {
-    --brand: #5b9bff; --brand-hover: #7db0ff; --on-brand: #06101f;
-    --brand-soft: #16233b; --brand-text: #7db0ff;
-  }
-  .tone-violet {
-    --brand: #a78bfa; --brand-hover: #c4b5fd; --on-brand: #0a0e16;
-    --brand-soft: #231b3b; --brand-text: #c4b5fd;
-  }
-  .tone-teal {
-    --brand: #2dd4bf; --brand-hover: #5eead4; --on-brand: #0a0e16;
-    --brand-soft: #0d2a29; --brand-text: #5eead4;
-  }
-  .tone-rose {
-    --brand: #fb7185; --brand-hover: #fda4af; --on-brand: #0a0e16;
-    --brand-soft: #361621; --brand-text: #fda4af;
-  }
-}
-
 /* ---------- App tiles ----------
    _includes/app-tile.html: a white glyph on a coloured rounded square,
    standing in for each app's real icon (the site never shows the actual
    app logos). Size comes from the context class (e.g. .app-item-tile
    sets width); aspect-ratio keeps it square.
 
-   Tones are fixed colours in both themes, like the store badges: a tile
+   Tones are fixed colours, like the store badges: a tile
    is an object with its own colour, not part of the page surface. Every
    gradient stop keeps the white glyph at 3:1 or better (the WCAG ratio
    for graphics, computed): blue #3b82f6 3.7:1 / #0b5fe8 5.5:1, violet #a855f7
@@ -1224,7 +1180,7 @@ picture { display: contents; }
   box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2), 0 10px 24px rgba(6, 16, 31, 0.22);
   transition: transform 0.3s var(--ease-out);
 }
-/* The disc is white in both themes, so the glyph uses the tone's fixed
+/* The disc is white, so the glyph uses the tone's fixed
    --tone-deep (all >= 5.4:1 on white) rather than the theme's --brand. */
 .post-card-glyph { color: var(--tone-deep); }
 .post-card-glyph svg { width: 50%; height: 50%; }
