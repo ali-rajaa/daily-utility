@@ -1864,6 +1864,8 @@ preview at staging.fixmypcperth.com (section 8, step 6).
 
 User: "make the light mode the default, and remove dark mode altogether,
 light looks way better". **Standing rule: the site is light only.**
+**CloudGate is not affected:** it keeps its light and dark modes (user,
+15 Oct: "cloudgate dark and light is fine dont touch").
 - `shell.scss`: the two `@media (prefers-color-scheme: dark)` blocks (the
   dark colour tokens and the dark tone overrides) are gone, and `:root`
   sets `color-scheme: light`, so form controls and scrollbars stay light
