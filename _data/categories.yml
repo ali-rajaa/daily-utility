@@ -3,8 +3,8 @@
 # (icon-sprite symbol) and a tone (shell.css "App tones") so its article
 # cards and topic card carry a consistent colour and icon. A topic takes
 # the colour of the app it's about: backup blue, switching teal (Data
-# Transfer), photos rose (Photo Recover). Privacy has no app of its own
-# and takes the remaining violet; `blurb` is the
+# Transfer). Photos and privacy have no app of their own: photos keep
+# rose and privacy takes violet, so every topic stays distinct; `blurb` is the
 # one-line description on the hub's topic grid. Order = display order.
 
 - name: "Backup & Storage"

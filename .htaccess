@@ -8,9 +8,9 @@
 Options -Indexes -MultiViews
 DirectoryIndex index.html
 
-# Never serve this file or any other .ht* file.
+# Never serve this file, any other .ht* file, or the upload's file list.
 <IfModule mod_authz_core.c>
-  <FilesMatch "^\.ht">
+  <FilesMatch "^\.(ht|site-manifest)">
     Require all denied
   </FilesMatch>
 </IfModule>

@@ -1879,6 +1879,52 @@ light looks way better". **Standing rule: the site is light only.**
   pass. The scratchpad shell test now asserts a dark-mode device gets
   the white page.
 
+## 5y. Photo Recover & Data Recovery removed (15 Oct)
+
+User: "remove this app across daily utility like it doesn't exist, then fix
+css deeply and go through every page". **The site now has three apps:**
+Cloud Storage Backup & Drive (flagship), Document Reader: Read All PDF,
+Smartphone All Data Transfer.
+
+Removed: its `apps.yml` entry, `photo-recover-data-recovery.md`, its preview
+image, the homepage "Recover" job card and FAQ, and every mention in copy
+(home hero and meta, About, footer description, guide paragraph in
+where-deleted-photos-go-android, which now explains why the trash matters
+without naming an app). "Four apps" became "three apps" in visible copy;
+counts that can be avoided now are ("Compare our apps", "any of our apps").
+**Left as is:** the Privacy Policy and Terms (owner's documents, section
+5u) still list "data recovery" among the kinds of app the company makes.
+
+Layouts rebuilt for three:
+- Home orbit: flagship at the centre, the other two either side above it
+  (-150/-30 degrees, ring centre 52%), picked over a diagonal and a wide
+  arc by comparing all three; phones: one row of three tiles.
+- Home apps: the two side cards keep their store row at the foot and,
+  beside the flagship only (960px+), list the first three "moments" from
+  each app page's own front matter (titles only).
+- Home jobs: three columns with rows aligned across cards (CSS subgrid,
+  900px+); tablets: one card per row with its facts side by side; phones:
+  the swipe shelf as before.
+- About hero: flagship as a wide card on top, the other two below.
+- 404: the apps in one row of three (tile above name), a column on phones.
+- Apps menu: the flagship spans as many rows as there are other apps
+  (`--nav-others`, set from apps.yml), the others centred in their rows.
+- Removed the unused `.app-tile--rose`; `.tone-rose` stays for the Photos
+  & Media guide topic, which keeps its own colour (categories.yml).
+- Default preview image (assets/og/default.jpg) redrawn with three tiles.
+- Contact email link given a 44px tap height (found by the phone audit).
+
+**Removing files from the server:** the FTP upload now deletes files this
+site no longer has, but only ones it put there itself: after each upload
+it writes `.site-manifest.txt` (denied to browsers by `.htaccess`), and the
+next upload deletes files listed there that the new build lacks. This
+first time, `RETIRED_PATHS` in ftp.yml names the two Photo Recover files.
+Anything else on the server is reported as "Left alone", never deleted;
+`.site-backups/`, `.well-known/` and `cgi-bin/` are never touched. Live
+checks now include each retired page answering 404. Tested on a local FTP
+server: retired files deleted, unknown files kept, a later removal via the
+manifest deleted too.
+
 ## 6. SEO and routing
 
 **URLs**

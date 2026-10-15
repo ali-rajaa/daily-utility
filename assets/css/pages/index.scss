@@ -4,8 +4,8 @@
 ---
 /* ==========================================================================
    index.css: the homepage (index.html + _includes/home/).
-   Order: hero with the app orbit, the apps (flagship feature + three
-   cards), backup/transfer/recover/read compared with the switching-phones
+   Order: hero with the app orbit, the apps (flagship feature + the
+   other cards), backup/transfer/read compared with the switching-phones
    order, how data is handled, latest Daily Info, FAQ (split, shell.css),
    closing CTA.
 
@@ -47,16 +47,17 @@
 
 /* ---------- The app orbit ----------
    Real navigation: each app is a labelled link. The flagship sits at the
-   ring's centre; the other three sit ON the ring at even 120-degree steps
-   (-150, -30 and 90 degrees). Ring: centre (50%, 43%), radius 38% of the
-   square box -- raised above centre to leave room for the bottom tile's
-   label. Sizes (centre tile 30%, others 20%) were set by checking every
-   label's box against its neighbours: each clears the next tile by at
-   least ~3% of the box at desktop and phone widths. Each link is centred
-   on its point with the `translate` property; the float animates
-   `transform` on an inner span and the hover scales the tile with
-   `scale`, so the three never fight.
-     x = 50 + 38cos(a), y = 43 + 38sin(a)   (y grows downward) */
+   ring's centre; the other two sit ON the ring either side above it, at
+   -150 and -30 degrees, a balanced V (chosen over a diagonal and a wider
+   arc by comparing all three, 15 Oct). Ring: centre (50%, 52%), radius
+   38% of the box, so the group sits in the middle of the square. Sizes
+   (centre tile 30%, others 20%) were set by checking every label's box
+   against its neighbours at desktop and phone widths: the two upper tiles
+   label above themselves, the flagship below. Each link is centred on its
+   point with the `translate` property; the float animates `transform` on
+   an inner span and the hover scales the tile with `scale`, so the three
+   never fight.
+     x = 50 + 38cos(a), y = 52 + 38sin(a)   (y grows downward) */
 
 .home-hero-visual { display: flex; justify-content: center; }
 
@@ -72,7 +73,7 @@
   border-radius: 50%;
   border: 1px dashed var(--border-strong);
 }
-.orbit-ring { left: 12%; top: 5%; width: 76%; aspect-ratio: 1; }
+.orbit-ring { left: 12%; top: 14%; width: 76%; aspect-ratio: 1; }
 .orbit-ring::after { content: ""; inset: 22%; border-style: solid; border-color: var(--border); }
 
 .orbit-app {
@@ -84,16 +85,14 @@
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
-.orbit-app--main { width: 30%; left: 50%; top: 43%; z-index: 2; }
-.orbit-app--1 { width: 20%; left: 17.1%; top: 24%; }
-.orbit-app--2 { width: 20%; left: 82.9%; top: 24%; }
-.orbit-app--3 { width: 20%; left: 50%; top: 81%; }
+.orbit-app--main { width: 30%; left: 50%; top: 52%; z-index: 2; }
+.orbit-app--1 { width: 20%; left: 17.1%; top: 33%; }
+.orbit-app--2 { width: 20%; left: 82.9%; top: 33%; }
 
 .orbit-float { display: block; will-change: transform; }
 .orbit-app--main .orbit-float { animation: orbitFloat 22s ease-in-out infinite; }
 .orbit-app--1 .orbit-float { animation: orbitFloat 19s ease-in-out infinite reverse; }
 .orbit-app--2 .orbit-float { animation: orbitFloat 24s ease-in-out infinite; }
-.orbit-app--3 .orbit-float { animation: orbitFloat 21s ease-in-out infinite reverse; }
 
 @keyframes orbitFloat {
   0%, 100% { transform: translateY(0); }
@@ -124,26 +123,26 @@
 }
 .orbit-app:hover .orbit-label { color: var(--brand-text); border-color: var(--border-strong); }
 /* The two upper tiles label above themselves: below, their labels would
-   crowd the centre tile at phone widths (found by an overlap check). */
+   crowd the centre tile at narrow widths. */
 .orbit-app--1 .orbit-label,
 .orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.6rem); }
 
-/* Phones and small tablets: the orbit becomes one row of four labelled
-   tiles under the buttons, so the first screen reaches the apps instead
-   of a large decoration. Same links, same order (flagship first). */
+/* Phones and small tablets: the orbit becomes one row of labelled tiles
+   under the buttons, so the first screen reaches the apps instead of a
+   large decoration. Same links, same order (flagship first). */
 @media (max-width: 899.98px) {
   .home-hero-visual { justify-content: stretch; }
   .orbit {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.75rem;
     width: 100%;
-    max-width: 30rem;
+    max-width: 24rem;
     aspect-ratio: auto;
   }
   .orbit-ring { display: none; }
   .orbit-app,
-  .orbit-app--main, .orbit-app--1, .orbit-app--2, .orbit-app--3 {
+  .orbit-app--main, .orbit-app--1, .orbit-app--2 {
     position: static;
     translate: none;
     width: auto;
@@ -317,14 +316,18 @@
   box-shadow: var(--shadow-sm);
 }
 .app-item-tile { width: 3.25rem; }
-.app-item-body { flex: 1; min-width: 0; }
+/* The cards stretch to the flagship card's height; the platform and store
+   buttons sit at the foot, so the extra height falls between the text and
+   the buttons rather than as an empty band at the bottom. */
+.app-item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; align-self: stretch; }
 .app-item-foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1rem;
-  margin-top: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
 }
 .app-moments {
   margin-top: 1.5rem;
@@ -337,26 +340,36 @@
 .app-moments li svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--brand-text); }
 .app-moments strong { color: var(--text); font-weight: 600; }
 
+.app-item-moments {
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.app-item-moments-head { font: 600 0.9375rem/1.35 var(--font-heading); letter-spacing: -0.01em; color: var(--text); }
+.app-item-moments ul { display: grid; gap: 0.5rem; margin: 0.7rem 0 0; padding: 0; list-style: none; }
+.app-item-moments li { display: flex; gap: 0.55rem; font-size: 0.9375rem; line-height: 1.5; color: var(--text-2); }
+.app-item-moments li svg { width: 1.05rem; height: 1.05rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--brand-text); }
+/* Stacked, the cards no longer stretch beside the flagship, so the list
+   would only add length. */
+@media (max-width: 959.98px) { .app-item-moments { display: none; } }
+
 .app-item-foot .app-platform,
 .app-item-foot .app-actions { margin-top: 0; }
 @media (max-width: 479.98px) {
   .app-item { flex-direction: column; padding: 1.25rem; }
 }
 
-/* ---------- Back up, transfer, recover or read ---------- */
+/* ---------- Back up, transfer or read ---------- */
 
 .jobs-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-@media (max-width: 1099.98px) {
-  .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-/* Phones: a swipeable shelf instead of four stacked cards. The next card
+/* Phones: a swipeable shelf instead of stacked cards. The next card
    peeks in so it's obvious there's more; each card snaps into place.
    Every card stays in the page (and the tab order), just side by side. */
 @media (max-width: 599.98px) {
@@ -405,6 +418,23 @@
   color: var(--text-2);
 }
 .job-link { margin-top: 1rem; }
+/* Tablets: one card per row, its three facts side by side, which uses the
+   width better than three narrow columns. */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .jobs-grid { grid-template-columns: minmax(0, 1fr); }
+  .job-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.5rem; }
+}
+/* Side by side, each card's rows line up with its neighbours': heading,
+   the three facts and the link share row tracks across the grid
+   (subgrid), so "When to use it" starts at the same height in every
+   card however long the text above it is. */
+@media (min-width: 900px) {
+  @supports (grid-template-rows: subgrid) {
+    .job { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
+    .job-facts { grid-row: span 3; grid-template-rows: subgrid; row-gap: 1rem; }
+    .job-link { align-self: end; }
+  }
+}
 
 /* Switching phones: the three apps in the order the guide recommends. */
 .switch {

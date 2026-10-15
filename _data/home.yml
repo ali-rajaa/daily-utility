@@ -21,11 +21,6 @@ jobs:
     does: "Moves photos, videos and files from one phone to another."
     when: "Setting up a new phone, or sending a batch of photos to someone nearby."
     keeps_copy: "No. A transfer fills the other phone. It doesn't keep a copy anywhere else."
-  - name: "Recover"
-    app: photo-recover-data-recovery
-    does: "Looks through your phone's trash bin and restores deleted photos and files that are still there."
-    when: "As soon as you notice something's missing. Trash folders empty themselves, often after 30 days."
-    keeps_copy: "No. It can only bring back what the trash still holds."
   - name: "Read"
     app: document-reader-pdf
     does: "Opens PDF, Word, Excel and PowerPoint files in one app."

@@ -684,14 +684,18 @@ picture { display: contents; }
   }
   .nav-menu-inner--help { grid-template-columns: minmax(0, 1fr); }
   .nav-menu-side { padding-left: 2.5rem; border-left: 1px solid var(--border); }
-  /* Apps: the flagship card on the left, the other three stacked beside it. */
+  /* Apps: the flagship card on the left, the other apps stacked beside it.
+     header.html sets --nav-others to how many there are. */
   .nav-apps {
     display: grid;
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     grid-auto-rows: auto;
     gap: 0.25rem 1.25rem;
   }
-  .nav-apps-featured { grid-row: span 3; }
+  .nav-apps-featured { grid-row: span var(--nav-others, 2); }
+  /* Each other app sits in the middle of its share of the flagship's
+     height, so the column is evenly spaced rather than top-heavy. */
+  .nav-apps > li:not(.nav-apps-featured) { align-self: center; }
   .nav-help { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
   .nav-help-link { flex-direction: column; gap: 0.85rem; height: 100%; padding: 1.1rem; background: var(--bg-alt); }
   .nav-help-link:hover { background: var(--surface); box-shadow: var(--shadow-md); }
@@ -1093,7 +1097,6 @@ picture { display: contents; }
 .app-tile--blue { background: linear-gradient(145deg, #3b82f6, #0b5fe8); }
 .app-tile--violet { background: linear-gradient(145deg, #a855f7, #7c3aed); }
 .app-tile--teal { background: linear-gradient(145deg, #0d9488, #0f766e); }
-.app-tile--rose { background: linear-gradient(145deg, #f43f5e, #be123c); }
 
 @media (prefers-contrast: more) {
   .app-tile::before { display: none; }

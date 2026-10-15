@@ -1,5 +1,5 @@
 {%- comment -%}
-  Homepage hero: what the apps do, one primary action, and the four apps
+  Homepage hero: what the apps do, one primary action, and the apps
   as real navigation. On wide screens the apps sit in an orbit around the
   flagship; on phones the same links become one compact row (index.css),
   so the first screen reaches the apps instead of a large decoration.
@@ -10,7 +10,7 @@
   <div class="wrap hero-glow-content home-hero-grid">
     <div class="home-hero-copy">
       <h1 id="home-title">Simple apps for your phone's <span class="home-hero-accent">everyday jobs</span></h1>
-      <p class="home-hero-sub">Back up your photos, open your documents, move to a new phone and get deleted files back. Four apps from one team, each made for one of those jobs.</p>
+      <p class="home-hero-sub">Back up your photos, open your documents and move to a new phone. Three apps from one team, each made for one of those jobs.</p>
       <div class="btn-row">
         <a class="btn btn--primary" href="#apps">See the apps<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
         <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read Daily Info</a>
@@ -26,7 +26,7 @@
           <span class="orbit-float">{% include app-tile.html app=include.flagship %}</span>
           <span class="orbit-label">{{ include.flagship.short | escape }}</span>
         </a>
-        {%- for app in include.others limit: 3 %}
+        {%- for app in include.others limit: 2 %}
         <a class="orbit-app orbit-app--{{ forloop.index }} tone-{{ app.tone }}" href="{{ '/' | append: app.slug | relative_url }}">
           <span class="orbit-float">{% include app-tile.html app=app %}</span>
           <span class="orbit-label">{{ app.short | escape }}</span>

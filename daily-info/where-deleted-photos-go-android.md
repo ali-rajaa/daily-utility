@@ -7,7 +7,7 @@ description: "What happens when you delete a photo on Android, how long it stays
 heading: "Where Do Deleted Photos Go on Android?"
 category: "Photos & Media"
 date: 2026-09-29
-updated: 2026-09-29
+updated: 2026-10-15
 read_min: 13
 slug: where-deleted-photos-go-android
 glyph: trash-restore
@@ -195,7 +195,7 @@ Once a photo has been permanently deleted from the phone's storage, getting it b
 
 A factory reset erases everything on the phone in the same way. Photos that existed before a reset can only come back from a backup or another copy.
 
-This is why recovery tools focus on the trash. Our [Photo Recover & Data Recovery]({{ '/photo-recover-data-recovery' | relative_url }}) app helps you find and restore deleted photos and files that are still in your phone's trash bin, and no app can reliably bring back photos that have already been permanently erased.
+This is why the trash matters so much: a photo can be restored from it for as long as it's there, but no app can reliably bring back photos that have already been permanently erased.
 
 ## Check your settings now
 

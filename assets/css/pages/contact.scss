@@ -63,10 +63,12 @@
   letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
+/* A 44px tap height without moving the layout: the padding grows the
+   link's hit area and the negative margin gives the space back. */
 .contact-card-email a {
   display: inline-block;
-  padding-block: 0.4rem;
-  margin-block: -0.4rem;
+  padding-block: 0.65rem;
+  margin-block: -0.65rem;
   color: var(--text);
   text-decoration: none;
 }

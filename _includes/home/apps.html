@@ -1,6 +1,6 @@
 {%- comment -%}
   The apps, once. This replaces three older sections (task cards, app cards
-  and an availability table) that each listed the same four apps. Each
+  and an availability table) that each listed the same apps. Each
   card carries everything those sections said: the job it's for, what it
   covers, the phones it runs on and a direct store link.
   Cards are not whole-card links: they hold store buttons, and a link
@@ -59,6 +59,20 @@
               <ul class="app-feats" aria-label="What it covers">
                 {%- for feat in app.features %}<li>{{ feat | escape }}</li>{% endfor -%}
               </ul>
+              {%- comment -%} Beside the flagship card only (index.css hides it
+              when the cards stack): the first three moments from the app
+              page's own front matter, titles only, so nothing new is said. {%- endcomment -%}
+              {%- assign a_page = site.pages | where: "app_name", app.name | first %}
+              {%- if a_page.moments %}
+              <div class="app-item-moments">
+                <p class="app-item-moments-head">{{ a_page.moments_heading | escape }}</p>
+                <ul>
+                  {%- for m in a_page.moments limit: 3 %}
+                  <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>{{ m.title | escape }}</span></li>
+                  {%- endfor %}
+                </ul>
+              </div>
+              {%- endif %}
               <div class="app-item-foot">
                 <p class="app-platform"><svg aria-hidden="true"><use href="#i-phone"/></svg>{% include platforms.html app=app %}</p>
                 <div class="app-actions">

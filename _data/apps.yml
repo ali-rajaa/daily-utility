@@ -19,13 +19,13 @@
 #   are cards only" plan). tier controls prominence only: the flagship
 #   gets the header nav link, the homepage hero and spotlight; "more" apps
 #   get a real page and a homepage card, not that front-and-centre spot.
-# page: true for all four — every entry has a real page. Kept as an
+# page: true for every app — each entry has a real page. Kept as an
 #   explicit field, not assumed, in case a fifth app is ever added as a
 #   store-only listing before its page exists.
 # built controls whether that page has actually been published (same
 #   true/false-until-published pattern as fixmypcperth's suburbs.yml) —
 #   the homepage grid, footer and "other apps" lists only ever link to a
-#   built page. All four are built as of step 5.
+#   built page. Every app listed here is built.
 # short: a compact name for tight spaces (the homepage app orbit).
 # glyph + tone: the app's visual everywhere on the site, via
 #   _includes/app-tile.html (an icon-sprite symbol on a coloured tile).
@@ -80,20 +80,6 @@
   task: "Move my files to another phone"
   task_text: "Send photos, videos and files from one phone to another when you switch or share."
   features: ["Photos and videos", "Files", "Phone to phone"]
-  tier: more
-  page: true
-  built: true
-
-- slug: photo-recover-data-recovery
-  short: "Photo Recover"
-  name: "Photo Recover & Data Recovery"
-  tagline: "Find and restore deleted photos and files from your phone's trash bin."
-  glyph: trash-restore
-  tone: rose
-  android_url: "https://play.google.com/store/apps/details?id=com.data.recovery.trashbin.recovery.files"
-  task: "Get back a photo I deleted"
-  task_text: "Look through your phone's trash bin and restore the deleted photos and files still there."
-  features: ["Deleted photos", "Deleted files", "Restore to your phone"]
   tier: more
   page: true
   built: true

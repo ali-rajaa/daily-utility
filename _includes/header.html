@@ -48,7 +48,7 @@
             <div class="wrap nav-menu-inner nav-menu-inner--apps">
               <div class="nav-menu-main">
                 <p class="nav-menu-label">Our apps</p>
-                <ul class="nav-apps">
+                <ul class="nav-apps" style="--nav-others: {{ _apps.size | minus: 1 }}">
                   {%- for app in _apps %}
                   <li class="tone-{{ app.tone }}{% if app.tier == 'flagship' %} nav-apps-featured{% endif %}">
                     <a class="nav-app{% if app.tier == 'flagship' %} nav-app--featured{% endif %}" href="{{ '/' | append: app.slug | relative_url }}"{% if page.url contains app.slug %} aria-current="page"{% endif %}>
@@ -69,7 +69,7 @@
                 <p class="nav-menu-label">Choose an app</p>
                 <ul class="nav-quick">
                   <li><a href="{{ '/' | relative_url }}#which"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-compass"/></svg></span>Not sure which app you need?</a></li>
-                  <li><a href="{{ '/' | relative_url }}#apps"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-grid"/></svg></span>Compare all four apps</a></li>
+                  <li><a href="{{ '/' | relative_url }}#apps"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-grid"/></svg></span>Compare our apps</a></li>
                   <li><a href="{{ '/daily-info/' | relative_url }}"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>Read our phone guides</a></li>
                 </ul>
               </div>

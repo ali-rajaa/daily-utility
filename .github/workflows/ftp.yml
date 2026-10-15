@@ -19,8 +19,8 @@
 #           to see which web addresses that folder serves.
 #   upload  back up the files the upload could replace (to a folder on
 #           the server, outside the website where possible), upload the
-#           site, then check the live pages. Nothing on the server is
-#           deleted; files this site doesn't have are left alone.
+#           site, remove files this site uploaded before but no longer has
+#           (never anything else), then check the live pages.
 #   check   only the live-page checks from the end of upload; touches
 #           nothing on the server.
 # The results are shown as annotations on the run's summary page.
@@ -55,6 +55,12 @@ jobs:
       LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       SITE: https://dailyutilityapps.store
       MODE: ${{ inputs.mode || 'look' }}
+      # Files this site used to have that must be removed from the server
+      # even though no manifest listed them yet (the first upload with
+      # removals). Space-separated, relative to the website folder.
+      RETIRED_PATHS: >-
+        photo-recover-data-recovery.html
+        assets/og/photo-recover-data-recovery.jpg
     steps:
       - name: Check the secrets
         if: env.MODE != 'check'
@@ -247,9 +253,40 @@ jobs:
             echo "::notice title=Backup::The website folder was empty, so there was nothing to back up."
           fi
 
-          # Upload. No --delete: files this site doesn't have stay as they are.
+          # Upload. No --delete here: removals are handled below, and only
+          # for files this site itself put there.
           lftp -c "$SETUP; cd \"$DIR\" && mirror --reverse --parallel=4 --no-perms --verbose=1 \"$PWD/_site\" ."
           echo "::notice title=Upload::$(find _site -type f | wc -l) files uploaded to '$DIR'."
+
+          # Remove what this site no longer has, safely. A file is deleted
+          # only if this site uploaded it before (listed in the previous
+          # .site-manifest.txt) or it's named in RETIRED_PATHS, and the new
+          # build doesn't have it. Anything else on the server is left
+          # alone and only reported. The backup folder, SSL checks
+          # (.well-known) and cgi-bin are never touched.
+          (cd _site && find . -type f | sed 's#^\./##' | sort) > "$RUNNER_TEMP/build.txt"
+          lftp -c "$SETUP; cd \"$DIR\" && find" 2>/dev/null | grep -v '/$' | sed 's#^\./##' | sort > "$RUNNER_TEMP/server.txt" || true
+          lftp -c "$SETUP; cd \"$DIR\" && cat .site-manifest.txt" 2>/dev/null | sort > "$RUNNER_TEMP/old-manifest.txt" || true
+          read -r -a retired <<< "$RETIRED_PATHS"
+          printf '%s\n' "${retired[@]}" | sort > "$RUNNER_TEMP/retired.txt"
+          comm -23 "$RUNNER_TEMP/server.txt" "$RUNNER_TEMP/build.txt" \
+            | grep -vE '^(\.site-backups/|\.well-known/|cgi-bin/|\.site-manifest\.txt$)' > "$RUNNER_TEMP/extra.txt" || true
+          sort -u "$RUNNER_TEMP/old-manifest.txt" "$RUNNER_TEMP/retired.txt" > "$RUNNER_TEMP/ours.txt"
+          comm -12 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/delete.txt"
+          comm -23 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/left.txt"
+          if [ -s "$RUNNER_TEMP/delete.txt" ]; then
+            cmds=""
+            while IFS= read -r f; do cmds="$cmds; rm -f \"$f\""; done < "$RUNNER_TEMP/delete.txt"
+            lftp -c "$SETUP; cd \"$DIR\" $cmds"
+            echo "::notice title=Removed::$(wc -l < "$RUNNER_TEMP/delete.txt") files this site no longer has: $(head -n 20 "$RUNNER_TEMP/delete.txt" | paste -sd ',' - | sed 's/,/, /g')"
+          else
+            echo "::notice title=Removed::Nothing to remove."
+          fi
+          if [ -s "$RUNNER_TEMP/left.txt" ]; then
+            echo "::notice title=Left alone::$(wc -l < "$RUNNER_TEMP/left.txt") files on the server weren't put there by this site, so they were kept: $(head -n 20 "$RUNNER_TEMP/left.txt" | paste -sd ',' - | sed 's/,/, /g')"
+          fi
+          # Record what this site uploaded, for the next run.
+          lftp -c "$SETUP; cd \"$DIR\" && put \"$RUNNER_TEMP/build.txt\" -o .site-manifest.txt"
 
       - name: Check the live site
         if: env.MODE == 'upload' || env.MODE == 'check'
@@ -293,6 +330,11 @@ jobs:
           check "404 page" "$SITE/this-page-does-not-exist-$GITHUB_RUN_ID" 404 "Page not found"
           redirect ".html to clean" "$SITE/about.html" "$SITE/about"
           redirect "folder slash" "$SITE/daily-info" "$SITE/daily-info/"
+          read -r -a retired <<< "$RETIRED_PATHS"
+          for f in "${retired[@]}"; do
+            case "$f" in *.html) u="${f%.html}" ;; *) u="$f" ;; esac
+            check "removed: /$u" "$SITE/$u?$bust" 404 "Page not found"
+          done
           redirect "http to https" "http://${SITE#https://}/" "$SITE/"
           echo "::notice title=Live checks::$report"
           # When the not-found page check fails, say what the server does

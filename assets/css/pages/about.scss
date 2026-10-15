@@ -29,13 +29,25 @@
 }
 .about-hero .btn-row { margin-top: 2rem; }
 
-/* The four apps as a 2x2 of their tiles, each on its own soft tint. */
+/* The apps as their tiles, each on its own soft tint: the flagship (first
+   in apps.yml) as a wide card on top, the others side by side below it. */
 .about-hero-visual {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.875rem;
   max-width: 30rem;
 }
+.about-hero-cell:first-child {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.25rem;
+  aspect-ratio: auto;
+  min-height: 0;
+}
+.about-hero-cell:first-child .about-hero-tile { width: clamp(3.5rem, 7vw, 4.25rem); }
+.about-hero-cell:first-child .about-hero-name { font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.25rem); }
 @media (max-width: 899.98px) { .about-hero-visual { max-width: 26rem; } }
 .about-hero-cell {
   display: flex;
