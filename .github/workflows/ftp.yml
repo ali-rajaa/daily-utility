@@ -279,14 +279,29 @@ jobs:
           sort -u "$RUNNER_TEMP/old-manifest.txt" "$RUNNER_TEMP/retired.txt" > "$RUNNER_TEMP/ours.txt"
           comm -12 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/delete.txt"
           comm -23 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/left.txt"
-          # Never delete a file the cloud web app's page still links to
-          # (it lives in another folder, but could point here).
-          curl -sS --max-time 20 "https://cloud.${SITE#https://}/" > "$RUNNER_TEMP/cloud.html" 2>/dev/null || true
+          # Never delete a file the cloud web app still loads from here. It
+          # lives in another folder, so a relative link on its page loads
+          # its own copy, not this one. Keep ours only if its page links to
+          # this site's address for it, or names it and has no copy itself.
+          host="${SITE#https://}"
+          cloud="https://cloud.$host"
+          curl -sS --max-time 20 "$cloud/" > "$RUNNER_TEMP/cloud.html" 2>/dev/null || true
           if [ -s "$RUNNER_TEMP/delete.txt" ] && [ -s "$RUNNER_TEMP/cloud.html" ]; then
             : > "$RUNNER_TEMP/delete-ok.txt"
             while IFS= read -r f; do
-              if grep -qF "$f" "$RUNNER_TEMP/cloud.html"; then
-                echo "::warning title=Kept::$f is linked from the cloud web app's page, so it was not deleted."
+              keep=""
+              if grep -qF -e "//$host/$f" -e "//www.$host/$f" "$RUNNER_TEMP/cloud.html"; then
+                keep="the cloud web app's page links to it at $host"
+              elif grep -qF "$f" "$RUNNER_TEMP/cloud.html"; then
+                own=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code}' "$cloud/$f" 2>/dev/null || echo 000)
+                if [ "$own" = 200 ]; then
+                  echo "::notice title=Cloud has its own copy::$f is named on the cloud web app's page, which loads it from its own folder ($cloud/$f answers 200), so this site's copy isn't used."
+                else
+                  keep="the cloud web app's page names it and has no copy of its own ($own)"
+                fi
+              fi
+              if [ -n "$keep" ]; then
+                echo "::warning title=Kept::$f was not deleted: $keep."
                 echo "$f" >> "$RUNNER_TEMP/left.txt"
               else
                 echo "$f" >> "$RUNNER_TEMP/delete-ok.txt"

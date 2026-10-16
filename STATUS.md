@@ -1965,7 +1965,12 @@ folder, and copies are in `.site-backups/20261011-010525`. They're in
 `RETIRED_PATHS`, so the upload deletes them and the live checks confirm
 each answers 404. New safeguard: before deleting anything, the upload
 fetches the cloud app's page and keeps (with a warning) any file it
-links to.
+still loads from this site: one it links to at dailyutilityapps.store,
+or one it names when the cloud address has no copy of its own. The first
+run (38849819232) deleted site.css and app-mark-180.png but kept
+app-mark.svg because the cloud page names that path; the check was
+then narrowed as above, since a relative link on the cloud page loads
+the cloud folder's own copy.
 
 ## 6. SEO and routing
 
