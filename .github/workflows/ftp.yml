@@ -58,9 +58,14 @@ jobs:
       # Files this site used to have that must be removed from the server
       # even though no manifest listed them yet (the first upload with
       # removals). Space-separated, relative to the website folder.
+      # The last three are the old sign-in page's leftovers (its page was
+      # replaced on 11 Oct; a copy is in .site-backups/20261011-010525).
       RETIRED_PATHS: >-
         photo-recover-data-recovery.html
         assets/og/photo-recover-data-recovery.jpg
+        assets/css/site.css
+        assets/icons/app-mark-180.png
+        assets/logos/app-mark.svg
     steps:
       - name: Check the secrets
         if: env.MODE != 'check'
@@ -274,6 +279,21 @@ jobs:
           sort -u "$RUNNER_TEMP/old-manifest.txt" "$RUNNER_TEMP/retired.txt" > "$RUNNER_TEMP/ours.txt"
           comm -12 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/delete.txt"
           comm -23 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/left.txt"
+          # Never delete a file the cloud web app's page still links to
+          # (it lives in another folder, but could point here).
+          curl -sS --max-time 20 "https://cloud.${SITE#https://}/" > "$RUNNER_TEMP/cloud.html" 2>/dev/null || true
+          if [ -s "$RUNNER_TEMP/delete.txt" ] && [ -s "$RUNNER_TEMP/cloud.html" ]; then
+            : > "$RUNNER_TEMP/delete-ok.txt"
+            while IFS= read -r f; do
+              if grep -qF "$f" "$RUNNER_TEMP/cloud.html"; then
+                echo "::warning title=Kept::$f is linked from the cloud web app's page, so it was not deleted."
+                echo "$f" >> "$RUNNER_TEMP/left.txt"
+              else
+                echo "$f" >> "$RUNNER_TEMP/delete-ok.txt"
+              fi
+            done < "$RUNNER_TEMP/delete.txt"
+            mv "$RUNNER_TEMP/delete-ok.txt" "$RUNNER_TEMP/delete.txt"
+          fi
           if [ -s "$RUNNER_TEMP/delete.txt" ]; then
             cmds=""
             while IFS= read -r f; do cmds="$cmds; rm -f \"$f\""; done < "$RUNNER_TEMP/delete.txt"

@@ -1956,6 +1956,17 @@ proof for the future if more are EVER added no need to mention now"*.
 - Check whenever copy changes: search the built site for a number word
   or digit next to "apps". Expected: none about our own apps.
 
+**Old sign-in leftovers removed (user, 16 Oct: "delete the 3 old sign-in
+files from the server if its good"):** `assets/css/site.css`,
+`assets/icons/app-mark-180.png` and `assets/logos/app-mark.svg` were the
+old sign-in page's files that every upload reported as "Left alone".
+Nothing on this site uses them, the cloud app is served from another
+folder, and copies are in `.site-backups/20261011-010525`. They're in
+`RETIRED_PATHS`, so the upload deletes them and the live checks confirm
+each answers 404. New safeguard: before deleting anything, the upload
+fetches the cloud app's page and keeps (with a warning) any file it
+links to.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2451,3 +2462,5 @@ flagship Apple id.
   SEO, legal incl. the Australian details, hosting, QA), for the owner's next site.
 - 16 Oct: no app counts in copy; homepage orbit and phone row take any
   number of apps (section 5z).
+- 16 Oct: removed the old sign-in page's three leftover files from the
+  server (end of section 5z).
