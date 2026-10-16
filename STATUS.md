@@ -2415,3 +2415,6 @@ flagship Apple id.
 - 30 Sep: homepage rebuilt (section 5m): seven parts from includes and
   data files, 1,631 words of sourced content, the four apps shown once,
   standing rules 5c/5f re-verified.
+- 16 Oct: added SITE-PLAYBOOK.md (excluded from the build), a full write-up of how
+  CloudGate and Daily Utility were built (stack, files, design system, motion,
+  SEO, legal incl. the Australian details, hosting, QA), for the owner's next site.
