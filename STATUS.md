@@ -1925,6 +1925,37 @@ checks now include each retired page answering 404. Tested on a local FTP
 server: retired files deleted, unknown files kept, a later removal via the
 manifest deleted too.
 
+## 5z. No app counts; layouts take any number of apps (16 Oct)
+
+User: *"we cant use text limiting apps like "3 APPS" just make it future
+proof for the future if more are EVER added no need to mention now"*.
+**Standing rule:** copy never states how many apps there are.
+
+- Rewritten: homepage hero line and meta description, homepage FAQ
+  ("We make three focused phone apps", "Our other two apps"), About
+  title, description, intro and "All three apps are free to download",
+  and the footer line (it listed exactly the three jobs). Store
+  availability now points to each app's own store buttons instead of
+  naming which apps are Android-only.
+- Homepage orbit: was `limit: 2` with two hard-placed tiles, so a new
+  app would never have appeared. hero.html now places every non-flagship
+  app on the ring by angle (`--a`, positioned with CSS `cos()`/`sin()`):
+  one app straight above, two as the existing V (-150 and -30 degrees,
+  pixel-checked unchanged), three or more spread evenly round the ring.
+  Tiles shrink from 20% to 17% (4-5 apps) and 14% (6+); upper-half tiles
+  label above. Float lengths and directions alternate per tile. The
+  phone row uses `auto-fit` columns, so it fits more apps, then wraps.
+  Tested with 1, 3, 4 and 6 extra apps at 1440, 1024, 900 and 390px: no
+  overlaps, nothing under the header or over the hero copy, no sideways
+  scroll.
+- `.app-tile--rose` restored (it went with Photo Recover), so all four
+  tones work for a new app. apps.yml's header now lists the tones and
+  says adding an app is one entry plus its page.
+- Everything else already lists apps from `apps.yml` (header menu,
+  footer, homepage grid, Contact, schema ItemList, other-apps lists).
+- Check whenever copy changes: search the built site for a number word
+  or digit next to "apps". Expected: none about our own apps.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2418,3 +2449,5 @@ flagship Apple id.
 - 16 Oct: added SITE-PLAYBOOK.md (excluded from the build), a full write-up of how
   CloudGate and Daily Utility were built (stack, files, design system, motion,
   SEO, legal incl. the Australian details, hosting, QA), for the owner's next site.
+- 16 Oct: no app counts in copy; homepage orbit and phone row take any
+  number of apps (section 5z).

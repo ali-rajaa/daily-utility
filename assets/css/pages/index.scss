@@ -47,16 +47,18 @@
 
 /* ---------- The app orbit ----------
    Real navigation: each app is a labelled link. The flagship sits at the
-   ring's centre; the other two sit ON the ring either side above it, at
-   -150 and -30 degrees, a balanced V (chosen over a diagonal and a wider
-   arc by comparing all three, 15 Oct). Ring: centre (50%, 52%), radius
-   38% of the box, so the group sits in the middle of the square. Sizes
-   (centre tile 30%, others 20%) were set by checking every label's box
-   against its neighbours at desktop and phone widths: the two upper tiles
-   label above themselves, the flagship below. Each link is centred on its
-   point with the `translate` property; the float animates `transform` on
-   an inner span and the hover scales the tile with `scale`, so the three
-   never fight.
+   ring's centre; every other app sits ON the ring at an angle hero.html
+   works out from how many there are (--a): with two, -150 and -30
+   degrees, a balanced V (chosen over a diagonal and a wider arc by
+   comparing all three, 15 Oct); with more, spread evenly round the ring.
+   Ring: centre (50%, 52%), radius 38% of the box, so the group sits in
+   the middle of the square. Sizes (centre tile 30%, others --orbit-tile,
+   20% for up to three) were set by checking every label's box against
+   its neighbours at desktop and phone widths: tiles in the upper half
+   label above themselves (.orbit-app--up), the rest below. Each link is
+   centred on its point with the `translate` property; the float animates
+   `transform` on an inner span and the hover scales the tile with
+   `scale`, so the three never fight.
      x = 50 + 38cos(a), y = 52 + 38sin(a)   (y grows downward) */
 
 .home-hero-visual { display: flex; justify-content: center; }
@@ -86,13 +88,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 .orbit-app--main { width: 30%; left: 50%; top: 52%; z-index: 2; }
-.orbit-app--1 { width: 20%; left: 17.1%; top: 33%; }
-.orbit-app--2 { width: 20%; left: 82.9%; top: 33%; }
+.orbit-app--other {
+  width: var(--orbit-tile, 20%);
+  left: calc(50% + 38% * cos(var(--a, -90deg)));
+  top: calc(52% + 38% * sin(var(--a, -90deg)));
+}
 
 .orbit-float { display: block; will-change: transform; }
 .orbit-app--main .orbit-float { animation: orbitFloat 22s ease-in-out infinite; }
-.orbit-app--1 .orbit-float { animation: orbitFloat 19s ease-in-out infinite reverse; }
-.orbit-app--2 .orbit-float { animation: orbitFloat 24s ease-in-out infinite; }
+.orbit-app--other .orbit-float { animation: orbitFloat var(--float-dur, 20s) ease-in-out infinite var(--float-dir, normal); }
 
 @keyframes orbitFloat {
   0%, 100% { transform: translateY(0); }
@@ -122,19 +126,20 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 .orbit-app:hover .orbit-label { color: var(--brand-text); border-color: var(--border-strong); }
-/* The two upper tiles label above themselves: below, their labels would
-   crowd the centre tile at narrow widths. */
-.orbit-app--1 .orbit-label,
-.orbit-app--2 .orbit-label { top: auto; bottom: calc(100% + 0.6rem); }
+/* Tiles in the upper half label above themselves: below, their labels
+   would crowd the centre tile at narrow widths. */
+.orbit-app--up .orbit-label { top: auto; bottom: calc(100% + 0.6rem); }
 
 /* Phones and small tablets: the orbit becomes one row of labelled tiles
    under the buttons, so the first screen reaches the apps instead of a
-   large decoration. Same links, same order (flagship first). */
+   large decoration. Same links, same order (flagship first). The row
+   holds any number of apps: columns are added while each stays at
+   least 3.75rem wide, then the row wraps. */
 @media (max-width: 899.98px) {
   .home-hero-visual { justify-content: stretch; }
   .orbit {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(3.75rem, 1fr));
     gap: 0.75rem;
     width: 100%;
     max-width: 24rem;
@@ -142,7 +147,7 @@
   }
   .orbit-ring { display: none; }
   .orbit-app,
-  .orbit-app--main, .orbit-app--1, .orbit-app--2 {
+  .orbit-app--main, .orbit-app--other {
     position: static;
     translate: none;
     width: auto;
@@ -156,8 +161,7 @@
   .orbit-float { animation: none; }
   .orbit-app .app-tile { width: 3.5rem; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-md); }
   .orbit-label,
-  .orbit-app--1 .orbit-label,
-  .orbit-app--2 .orbit-label {
+  .orbit-app--up .orbit-label {
     position: static;
     translate: none;
     padding: 0;

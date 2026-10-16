@@ -1097,6 +1097,8 @@ picture { display: contents; }
 .app-tile--blue { background: linear-gradient(145deg, #3b82f6, #0b5fe8); }
 .app-tile--violet { background: linear-gradient(145deg, #a855f7, #7c3aed); }
 .app-tile--teal { background: linear-gradient(145deg, #0d9488, #0f766e); }
+/* Rose has no app today; kept so any of the four tones works for a new app. */
+.app-tile--rose { background: linear-gradient(145deg, #f43f5e, #be123c); }
 
 @media (prefers-contrast: more) {
   .app-tile::before { display: none; }

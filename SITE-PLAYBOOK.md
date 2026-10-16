@@ -36,10 +36,10 @@ Read sections 1 to 3 before you write any code. Section 19 is the build order.
 | | CloudGate Storage | Daily Utility Apps |
 |---|---|---|
 | Address | https://www.cloudgate-app.com | https://dailyutilityapps.store |
-| What it sells | One cloud storage app (Android, iPhone, web), 100GB to download and use for free, paid plans above that | A portfolio of three phone apps, one of them the flagship |
+| What it sells | One cloud storage app (Android, iPhone, web), 100GB to download and use for free, paid plans above that | A portfolio of phone apps, one of them the flagship |
 | Generator | Jekyll 3.10 through GitHub Pages' own builder (the `github-pages` gem) | Jekyll 4.4 run by GitHub Actions (plain Jekyll, no `github-pages` gem) |
 | Hosting | GitHub Pages, "Deploy from a branch", `CNAME` file in the repo | A shared Apache web host, uploaded over FTP by a GitHub Actions workflow. A noindex preview runs on GitHub Pages |
-| Pages | Home, Features, Cloud Tips hub, 11 guides, Privacy, Terms, 404 | Home, About, Contact, 3 app pages, Daily Info hub, 7 guides, Privacy, Terms, 404 |
+| Pages | Home, Features, Cloud Tips hub, guides, Privacy, Terms, 404 | Home, About, Contact, one page per app, Daily Info hub, guides, Privacy, Terms, 404 |
 | CSS | Plain `.css` files, `?v=` stamp | `.scss` files written as plain CSS, compiled and minified by Jekyll's Sass, `?v=` stamp |
 | Fonts | Inter (body), Space Grotesk (numbers), self-hosted | DM Sans (body), Space Grotesk (headings), self-hosted |
 | Colour modes | Light and dark, follows the device, with a toggle | Light only (owner's choice) |
@@ -61,6 +61,7 @@ The owner set these during both builds. They apply to the new site unless the ow
 - **No "automatic" or "automatically" claims** unless the owner confirms the product really does it.
 - **Say "free to download", never a bare "free"** for an app. (CloudGate's "100GB free" is a confirmed plan and is fine.)
 - **Feature copy stays inside what the store listing or the owner confirms.** Store names and package IDs come from the live listings, not memory.
+- **Never state how many products there are** ("three apps", "our other two apps"). Copy and layouts must work unchanged when one is added: every list reads from the data file, and no layout caps the number shown.
 
 **Brand**
 
@@ -356,7 +357,7 @@ Breakpoints used everywhere (Daily Utility): **480** (buttons go full width belo
 
 ### 9.3 Homepage (Daily Utility)
 
-1. **Hero with an orbit**: the flagship tile at the centre, the other apps' tiles around it, each floating slowly. Items are placed with the `translate` property, leaving `transform` free for the float.
+1. **Hero with an orbit**: the flagship tile at the centre, every other app on a ring around it, each floating slowly. The include works out each tile's angle from how many apps there are (one above, two as a V, three or more spread evenly) and CSS places it with `cos()`/`sin()`; tiles shrink as the ring fills. Items are placed with the `translate` property, leaving `transform` free for the float. On phones it becomes a row of tiles (`auto-fit` columns) that wraps when full.
 2. **Jobs**: cards named for the job in the user's words ("Back up my photos, videos and contacts"), each linking to the app that does it. On phones they sit in a sideways shelf with scroll snap; tabbing to a half-hidden card snaps it into view. Card rows use CSS subgrid so titles, text and links line up across cards.
 3. **Apps grid**: every app with its tile, tagline, feature chips and store badges.
 4. **Guides**: the newest guides as cards.

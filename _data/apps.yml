@@ -33,6 +33,12 @@
 #   logo"); tones are defined in shell.css's "App tiles" (the tile)
 #   and "App tones" (the app's whole colour identity on its own page
 #   and homepage card).
+#   Tones: blue, violet, teal or rose. Glyphs: any icon-sprite symbol.
+#
+# Adding an app is one entry here plus its page (layout: app). Nothing on
+# the site states how many apps there are (user, 16 Oct): the header,
+# footer, homepage orbit and grid, Contact and About all list whatever is
+# here, so never write a count ("three apps") into copy.
 # ios_url is omitted where an app isn't confirmed to exist on iOS; every
 #   page and card derives "iPhone and Android" vs "Android" from it.
 # Each tagline must match its app page's own `tagline:` front matter.
