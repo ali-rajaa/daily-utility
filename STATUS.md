@@ -1972,6 +1972,22 @@ app-mark.svg because the cloud page names that path; the check was
 then narrowed as above, since a relative link on the cloud page loads
 the cloud folder's own copy.
 
+## 5zz. Uploads on every push to main (18 Oct)
+
+User: *"make uploads automatic on every push to main"*. `ftp.yml` now also
+runs on `push` to `main`, in upload mode: build and check, back up, upload,
+remove only this site's old files (with the cloud-app safeguard), then the
+live checks. Manual runs from the Actions tab still offer look / upload /
+check.
+- A push that only touches notes outside the website (STATUS.md,
+  SITE-PLAYBOOK.md, README.md, `.claude/`, `pages.yml`) doesn't upload.
+- A build that fails its checks uploads nothing; a live check that fails
+  marks the run red after the files are up.
+- Pushes close together queue in the `ftp-site` group: the newest waits
+  for the running upload and older waiting runs are dropped, so the
+  server ends on the latest `main`.
+- `pages.yml` still builds the noindex preview on every push.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2235,7 +2251,7 @@ sections they link to.*
       supports Document Reader.
 
 **Go-live housekeeping:**
-- [ ] Automatic upload on every push to `main` (ftp.yml is manual now).
+- [x] Automatic upload on every push to `main` (18 Oct, see below).
 - [ ] Retire the noindex preview at staging.fixmypcperth.com (`pages.yml`)
       and delete its borrowed DNS record (section 8, step 6).
 - [ ] Store listings: privacy/support/marketing URLs to
@@ -2469,3 +2485,4 @@ flagship Apple id.
   number of apps (section 5z).
 - 16 Oct: removed the old sign-in page's three leftover files from the
   server (end of section 5z).
+- 18 Oct: ftp.yml uploads automatically on every push to main (section 5zz).

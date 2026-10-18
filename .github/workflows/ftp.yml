@@ -12,7 +12,14 @@
 #   FTP_TLS        loose (encrypted, default), strict (encrypted and the
 #                  certificate checked) or off (plain FTP, unencrypted)
 #
-# Run it from the Actions tab and pick a mode:
+# Every push to main uploads automatically (mode upload), unless the push
+# only changes notes that aren't part of the website (STATUS.md, the
+# playbook, README, .claude/, the preview workflow). A push whose build
+# fails its checks uploads nothing. Pushes close together queue: the
+# newest waits for the running upload, and any older one still waiting is
+# dropped, so the server always ends on the latest main.
+#
+# It can also be run by hand from the Actions tab, picking a mode:
 #   look    connect and report what's on the server and how the website
 #           answers (the default). Changes nothing, except one tiny test
 #           file it puts in the website folder and deletes straight away,
@@ -28,6 +35,14 @@
 name: Upload to dailyutilityapps.store
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - STATUS.md
+      - SITE-PLAYBOOK.md
+      - README.md
+      - .claude/**
+      - .github/workflows/pages.yml
   workflow_dispatch:
     inputs:
       mode:
@@ -54,7 +69,7 @@ jobs:
       FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
       LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       SITE: https://dailyutilityapps.store
-      MODE: ${{ inputs.mode || 'look' }}
+      MODE: ${{ github.event_name == 'push' && 'upload' || inputs.mode || 'look' }}
       # Files this site used to have that must be removed from the server
       # even though no manifest listed them yet (the first upload with
       # removals). Space-separated, relative to the website folder.

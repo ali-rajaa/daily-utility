@@ -653,7 +653,7 @@ When the site was built in a copy repo and the live repo belonged to someone els
 
 ### 16.3 A normal web host over FTP (Daily Utility live)
 
-`ftp.yml` (Appendix K) is run by hand from the Actions tab with one of three modes:
+`ftp.yml` (Appendix K) uploads automatically on every push to `main` (pushes that only change notes such as STATUS.md are skipped; pushes close together queue so the server ends on the newest commit). It can also be run by hand from the Actions tab with one of three modes:
 
 - **look**: logs in, finds the website folder, lists what's there. Changes nothing. Run this first on a new host.
 - **upload**: builds with the live address (`url` = the real domain, `staging: false`), checks the build (key files present, no unrendered Liquid, sitemap uses the live address, no `noindex`), checks https works, backs up the current site to `.site-backups/` on the server (first upload only), mirrors `_site` up with `lftp mirror --reverse`, then **deletes only files that the previous upload put there** (listed in `.site-manifest.txt`) or that are named in `RETIRED_PATHS`. Anything else on the server (the host's own files, other apps) is left alone and reported. Then runs the live checks.
@@ -2033,7 +2033,14 @@ jobs:
 #   FTP_TLS        loose (encrypted, default), strict (encrypted and the
 #                  certificate checked) or off (plain FTP, unencrypted)
 #
-# Run it from the Actions tab and pick a mode:
+# Every push to main uploads automatically (mode upload), unless the push
+# only changes notes that aren't part of the website (STATUS.md, the
+# playbook, README, .claude/, the preview workflow). A push whose build
+# fails its checks uploads nothing. Pushes close together queue: the
+# newest waits for the running upload, and any older one still waiting is
+# dropped, so the server always ends on the latest main.
+#
+# It can also be run by hand from the Actions tab, picking a mode:
 #   look    connect and report what's on the server and how the website
 #           answers (the default). Changes nothing, except one tiny test
 #           file it puts in the website folder and deletes straight away,
@@ -2049,6 +2056,14 @@ jobs:
 name: Upload to dailyutilityapps.store
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - STATUS.md
+      - SITE-PLAYBOOK.md
+      - README.md
+      - .claude/**
+      - .github/workflows/pages.yml
   workflow_dispatch:
     inputs:
       mode:
@@ -2075,13 +2090,18 @@ jobs:
       FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
       LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       SITE: https://dailyutilityapps.store
-      MODE: ${{ inputs.mode || 'look' }}
+      MODE: ${{ github.event_name == 'push' && 'upload' || inputs.mode || 'look' }}
       # Files this site used to have that must be removed from the server
       # even though no manifest listed them yet (the first upload with
       # removals). Space-separated, relative to the website folder.
+      # The last three are the old sign-in page's leftovers (its page was
+      # replaced on 11 Oct; a copy is in .site-backups/20261011-010525).
       RETIRED_PATHS: >-
         photo-recover-data-recovery.html
         assets/og/photo-recover-data-recovery.jpg
+        assets/css/site.css
+        assets/icons/app-mark-180.png
+        assets/logos/app-mark.svg
     steps:
       - name: Check the secrets
         if: env.MODE != 'check'
@@ -2295,6 +2315,36 @@ jobs:
           sort -u "$RUNNER_TEMP/old-manifest.txt" "$RUNNER_TEMP/retired.txt" > "$RUNNER_TEMP/ours.txt"
           comm -12 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/delete.txt"
           comm -23 "$RUNNER_TEMP/extra.txt" "$RUNNER_TEMP/ours.txt" > "$RUNNER_TEMP/left.txt"
+          # Never delete a file the cloud web app still loads from here. It
+          # lives in another folder, so a relative link on its page loads
+          # its own copy, not this one. Keep ours only if its page links to
+          # this site's address for it, or names it and has no copy itself.
+          host="${SITE#https://}"
+          cloud="https://cloud.$host"
+          curl -sS --max-time 20 "$cloud/" > "$RUNNER_TEMP/cloud.html" 2>/dev/null || true
+          if [ -s "$RUNNER_TEMP/delete.txt" ] && [ -s "$RUNNER_TEMP/cloud.html" ]; then
+            : > "$RUNNER_TEMP/delete-ok.txt"
+            while IFS= read -r f; do
+              keep=""
+              if grep -qF -e "//$host/$f" -e "//www.$host/$f" "$RUNNER_TEMP/cloud.html"; then
+                keep="the cloud web app's page links to it at $host"
+              elif grep -qF "$f" "$RUNNER_TEMP/cloud.html"; then
+                own=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code}' "$cloud/$f" 2>/dev/null || echo 000)
+                if [ "$own" = 200 ]; then
+                  echo "::notice title=Cloud has its own copy::$f is named on the cloud web app's page, which loads it from its own folder ($cloud/$f answers 200), so this site's copy isn't used."
+                else
+                  keep="the cloud web app's page names it and has no copy of its own ($own)"
+                fi
+              fi
+              if [ -n "$keep" ]; then
+                echo "::warning title=Kept::$f was not deleted: $keep."
+                echo "$f" >> "$RUNNER_TEMP/left.txt"
+              else
+                echo "$f" >> "$RUNNER_TEMP/delete-ok.txt"
+              fi
+            done < "$RUNNER_TEMP/delete.txt"
+            mv "$RUNNER_TEMP/delete-ok.txt" "$RUNNER_TEMP/delete.txt"
+          fi
           if [ -s "$RUNNER_TEMP/delete.txt" ]; then
             cmds=""
             while IFS= read -r f; do cmds="$cmds; rm -f \"$f\""; done < "$RUNNER_TEMP/delete.txt"
