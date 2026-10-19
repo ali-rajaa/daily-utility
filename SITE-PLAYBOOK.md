@@ -41,8 +41,8 @@ Read sections 1 to 3 before you write any code. Section 19 is the build order.
 | Hosting | GitHub Pages, "Deploy from a branch", `CNAME` file in the repo | A shared Apache web host, uploaded over FTP by a GitHub Actions workflow. A noindex preview runs on GitHub Pages |
 | Pages | Home, Features, Cloud Tips hub, guides, Privacy, Terms, 404 | Home, About, Contact, one page per app, Daily Info hub, guides, Privacy, Terms, 404 |
 | CSS | Plain `.css` files, `?v=` stamp | `.scss` files written as plain CSS, compiled and minified by Jekyll's Sass, `?v=` stamp |
-| Fonts | Inter (body), Space Grotesk (numbers), self-hosted | DM Sans (body), Space Grotesk (headings), self-hosted |
-| Colour modes | Light and dark, follows the device, with a toggle | Light only (owner's choice) |
+| Fonts | Inter (body), Space Grotesk (numbers), self-hosted | The device's system font (SF Pro on Apple devices), nothing downloaded |
+| Look | Own design system; light and dark, follows the device, with a toggle | apple.com's web style: monochrome with one blue; light only (owner's choice) |
 | JavaScript | One deferred `site.js`, plus `cloud-tips.js` on the hub | One deferred `site.js` |
 | Repo | `imranshafique/cloudgate-app` | `ali-rajaa/daily-utility` |
 
@@ -141,19 +141,18 @@ Why not the `github-pages` gem on Actions: it forces `jekyll-github-metadata`, w
 │   └── home.yml             # homepage copy blocks
 ├── _includes/
 │   ├── icon-sprite.html     # every icon as an SVG <symbol>, included once per page
-│   ├── header.html          # capsule nav: Apps, Guides, Help + "Sign in"
+│   ├── header.html          # apple.com-style bar: mark, Apps, Guides, About, Help, Sign in
 │   ├── footer.html
-│   ├── logo.html, brand-mark.html
+│   ├── brand-mark.html      # the logo mark (PNG + WebP)
 │   ├── app-tile.html        # white glyph on a coloured tile (never a real app icon)
 │   ├── store-badges.html    # App Store / Google Play buttons, drawn in SVG
 │   ├── platforms.html       # "iPhone and Android" from which store links exist
-│   ├── hero-glow.html       # three drifting blurred colour blobs behind a hero
 │   ├── faq-section.html     # visible FAQ (details/summary)
 │   ├── faq-schema.html      # the same questions as FAQPage JSON-LD
 │   ├── breadcrumb-schema.html
 │   ├── post-card.html       # guide card used on the hub, homepage, app pages
 │   ├── scripts.html         # <script src=site.js defer>
-│   └── home/                # homepage sections: hero, jobs, apps, guides, privacy, schema
+│   └── home/                # homepage sections: hero, app-promo, jobs, switch, privacy, guides, schema
 ├── _layouts/
 │   ├── default.html         # <head>, SEO tags, header, <main>, footer
 │   ├── app.html             # app landing page, built entirely from front matter
@@ -163,7 +162,6 @@ Why not the `github-pages` gem on Actions: it forces `jekyll-github-metadata`, w
 ├── assets/
 │   ├── css/shell.scss       # tokens, base, buttons, header, footer, shared components
 │   ├── css/pages/*.scss     # one per page type: index, app, post, blog-hub, about, contact, legal, not-found
-│   ├── fonts/               # dm-sans-latin.woff2, space-grotesk-latin.woff2 (variable)
 │   ├── icons/               # favicons, apple-touch-icon, logo mark PNG/WebP
 │   ├── js/site.js
 │   └── og/*.jpg             # 1200x630 share cards, one per key page
@@ -255,198 +253,150 @@ Rules that came out of the build:
 
 ## 8. Design system
 
-All of it lives in `shell.scss` as CSS custom properties. Page stylesheets read the tokens and never redefine them. No raw hex values in components.
+Daily Utility follows **apple.com's web design language** (redesigned 19 Oct 2026; STATUS.md 5zzz). Everything lives in `shell.scss` as CSS custom properties; page stylesheets read the tokens and never redefine them. No raw hex values in components. CloudGate keeps its own Inter-based system with light and dark modes (section 8.7).
 
 ### 8.1 Colour tokens (Daily Utility)
 
 ```css
---bg: #ffffff;        --bg-alt: #f4f7fb;     --surface: #ffffff;
---text: #0c1424;      --text-2: #4b5565;
---border: #e2e8f0;    --border-strong: #cbd5e1;
+--bg: #ffffff;        --bg-alt: #f5f5f7;     --surface: #ffffff;
+--text: #1d1d1f;      --text-2: #6e6e73;     /* 5.1:1 on white, 4.7:1 on #f5f5f7 */
+--border: #d2d2d7;    --border-strong: #86868b;
 --brand: #0b5fe8;     --brand-hover: #0848b8;  --on-brand: #ffffff;
---brand-soft: #e8f0ff; --brand-text: #0a52c9;   /* brand colour safe for text */
---brand-2: #16b871;   /* sampled from the logo; decoration only, 2.6:1 on white */
---brand-2-text: #0a7a47;
---brand-gradient: linear-gradient(135deg, var(--brand) 0%, #0f9ed6 45%, var(--brand-2) 100%);
+--brand-soft: #f5f5f7;                         /* quiet panels and icon chips */
+--brand-text: #0a52c9;                         /* the blue used for text links */
 ```
 
-- **Brand colours are sampled from the real logo**, not picked from a palette.
-- **Every text/background pair is measured for WCAG AA 4.5:1** before use, and the CSS comment records the result. Where a brand colour fails as text, add a darker `-text` sibling (`--brand-text`, `--brand-2-text`). Never put text on the gradient past the point where it drops below 4.5:1; buttons stay solid `--brand`.
+- **Monochrome with one blue.** Near-black text, Apple's greys, white and `#f5f5f7` surfaces. Every button and link uses the same blue, sampled from the real logo, on every page.
+- **Every text/background pair is measured for WCAG AA 4.5:1** before use, and the CSS comment records the result.
 
-### 8.2 Tones (per-product colour identity)
+### 8.2 Tones (per-product colour, used sparingly)
 
-Each product has a tone class that swaps the brand tokens, so one component takes the right colours anywhere it appears:
-
-```css
-.tone-violet {
-  --brand: #7c3aed; --brand-hover: #6d28d9; --on-brand: #ffffff;
-  --brand-soft: #f3edff; --brand-text: #6d28d9;
-  --tone-light: #a855f7; --tone-deep: #7c3aed;
-  --tone-gradient: linear-gradient(145deg, #a855f7, #7c3aed);
-  --glow-b: #c084fc; --glow-c: #d8b4fe;
-}
-```
-
-Daily Utility has blue, violet, teal and rose. An app page puts `tone-<x>` on `<main>`, so its buttons, links, glow and tiles all change together. White glyphs on every tone gradient stop are at least 3:1 (measured).
+Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.tone-rose`). A tone colours **only that product's own things**: its icon tile (`--tone-gradient`), a soft glow behind it (`--tone-light`) and a short accent label (`--tone-text`, contrast-checked). Buttons and links stay blue whatever the product, as on apple.com.
 
 ### 8.3 Typography
 
-- **Two families, self-hosted as variable woff2, Latin subset, `font-display: swap`, both preloaded.** One file per family covers every weight. No Google Fonts request.
-  - Daily Utility: Space Grotesk 500–700 for headings, DM Sans 400–700 for body and UI (the "tech startup" pairing from `ui-ux-pro-max`).
-  - CloudGate: Inter for everything, Space Grotesk for numbers.
-- **Fallback is `system-ui`**, not a generic sans.
-- Body 16px minimum (1rem), line height 1.5–1.65. Nothing under 12px.
-- Headings use `clamp()` sizes, tight line height (1.05–1.2) and negative tracking (-0.01em to -0.03em). Body tracking stays at 0.
-- `text-wrap: balance` on headings, `text-wrap: pretty` on lead paragraphs.
-- Spacing in `rem`, so the layout grows with the user's text size.
+- **The device's own system font**, nothing downloaded:
+  `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif`. SF Pro on Apple devices, Segoe UI on Windows, Roboto on Android. Headings and body share it; hierarchy comes from size, weight and tracking. (Apple's font files are never served: they're Apple's.)
+- Headings semibold (600) with tight tracking: h1 `clamp(2.5rem, 1.6rem + 3.6vw, 4rem)`, line-height 1.06, -0.015em; h2 up to 3rem; h3 21px.
+- Body 17px (1.0625rem), line-height 1.47; intro text 18–21px at 1.5; small labels 12px minimum.
+- `text-wrap: balance` on headings, `text-wrap: pretty` on intros. Spacing in `rem`, so the layout grows with the user's text size.
+- **Two-tone headlines** where a section introduces itself, as on Apple's Store: the name in black, what it is in grey, one heading ("Daily Utility Apps. *Simple apps for your phone's everyday jobs.*").
 
 ### 8.4 Spacing, shape, depth
 
 ```css
---wrap: 70rem;                         /* max content width */
+--wrap: 70rem;                         /* page width; Apple-style sections use 61.25rem (980px) */
 --gutter: clamp(1rem, 4vw, 2rem);      /* never under 16px on phones */
---header-h: 4rem;
---space-section: clamp(4rem, 9vw, 7rem);
---space-hero-top: clamp(3rem, 7vw, 5.5rem);    /* one hero rhythm for every page type */
---space-hero-bottom: clamp(3.5rem, 8vw, 6rem);
---radius-sm: 8px; --radius: 14px; --radius-lg: 22px; --radius-pill: 999px;
---shadow-sm: 0 1px 2px rgba(12,20,36,.06), 0 1px 3px rgba(12,20,36,.08);
---shadow-md: 0 4px 12px rgba(12,20,36,.08), 0 12px 32px rgba(12,20,36,.08);
---shadow-lg: 0 12px 24px rgba(12,20,36,.1), 0 32px 64px rgba(12,20,36,.12);
---ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+--header-h: 3rem;                      /* 2.75rem (44px) from 760px up */
+--space-section: clamp(4.5rem, 10vw, 8rem);
+--radius-sm: 10px; --radius: 12px; --radius-lg: 18px; --radius-pill: 980px;
+--shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+--shadow-md: 2px 4px 12px rgba(0,0,0,.08);   /* soft, directional */
+--shadow-lg: 2px 4px 16px rgba(0,0,0,.16);   /* hover */
 ```
 
-Breakpoints used everywhere (Daily Utility): **480** (buttons go full width below), **600** (tables become cards, app pages compact below), **760** (phone menu below, capsule nav above), **900** (two-column layouts above). Write them as `max-width: 599.98px` / `min-width: 600px` so they never overlap.
+- **Crisp 1px hairlines** (`--border`) between rows and list items; cards use a soft shadow instead of a border, or a grey `#f5f5f7` fill on white.
+- **Edge-to-edge panels with 12px gaps** for big product tiles, like apple.com's homepage.
+- Breakpoints: **480** (buttons full width below), **600** (tables become cards, app pages compact), **760** (phone menu below, full bar above), **900** (two-column layouts above). Written as `max-width: 599.98px` / `min-width: 600px` so they never overlap.
 
 ### 8.5 Icons
 
-- **One SVG sprite** (`icon-sprite.html`), included once after `<body>`, used as `<svg><use href="#i-cloud"/></svg>`. One request, cached.
-- **One drawing spec for every icon:** 24×24 grid, drawn inside a 2-unit margin, 1.75 stroke, round caps and joins, no fills. They all sit together at any size.
-- Decorative icons get `aria-hidden="true"`. Icon-only buttons get an `aria-label`.
-- The sprite is hidden with zero size and `overflow: hidden`, not `display: none` (some browsers won't let `<use>` reference a `display: none` symbol).
-- No emoji as icons.
+- **One SVG sprite** (`icon-sprite.html`), included once after `<body>`, used as `<svg><use href="#i-cloud"/></svg>`.
+- **One drawing spec:** 24×24 grid, 2-unit margin, 1.75 stroke, round caps and joins, no fills.
+- In content, icons are plain blue glyphs (no coloured squares). Decorative icons get `aria-hidden="true"`; icon-only buttons get an `aria-label`. No emoji.
 
 ### 8.6 App tiles (instead of real logos)
 
-`app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white sprite glyph at about 54% size, an inset top highlight and a soft shadow. Each app's `glyph` and `tone` live in `apps.yml`.
+`app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white sprite glyph at about 54%, an inset top highlight and a soft shadow. Big product visuals are this tile, large, on a quiet grey panel with a soft glow of its colour and white feature chips. Guide cards and guide heroes use the same tile with the topic's colour.
 
 ### 8.7 Light and dark
 
-- **Daily Utility is light only.** `color-scheme: light` in `:root`, `<meta name="color-scheme" content="light">`, `<meta name="theme-color" content="#ffffff">`. Form controls and scrollbars stay light on dark-mode devices.
-- **CloudGate does both.** Light tokens in `:root`; dark tokens under `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {…} }` and again under `:root[data-theme="dark"]`. A tiny inline script in `<head>` reads `localStorage['cg-theme']` and sets `data-theme` before the stylesheet paints, so the page never flashes the wrong theme. Two `theme-color` metas, one per scheme. The toggle uses the View Transitions API: the new theme grows as a circle from the button that was pressed (600ms, spring easing). With reduced motion it's a plain cross-fade.
-- Ask the owner which they want. If both, every token pair is contrast-checked in both themes.
+- **Daily Utility is light only.** `color-scheme: light`, `<meta name="color-scheme" content="light">`, `theme-color #ffffff`.
+- **CloudGate does both.** Light tokens in `:root`; dark tokens under `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {…} }` and again under `:root[data-theme="dark"]`. A tiny inline script in `<head>` reads `localStorage['cg-theme']` before the stylesheet paints. The toggle uses the View Transitions API: the new theme grows as a circle from the pressed button. With reduced motion it's a plain cross-fade.
 
 ---
 
 ## 9. UI/UX: components and page patterns
 
-### 9.1 Header
+### 9.1 Header (apple.com's global bar)
 
-- **Sticky, translucent capsule.** `backdrop-filter: saturate(180%) blur(20px)` on a mostly opaque background. It firms up (more opaque, a hairline shadow) once content scrolls under it, using an `IntersectionObserver` on a 1px sentinel at the top of the page (no scroll listener).
-- **Few items, named for what's behind them.** Daily Utility: **Apps** (flyout listing every app, flagship featured), **Guides** (a plain link to the hub), **Help** (flyout: Contact support, Privacy, Terms). **Sign in** sits outside the capsule as a small outlined button, because it leaves the site.
-- **Desktop (760px+):** flyouts open on hover after a 140ms intent delay, or on click, with a dim scrim behind. Hovering a plain link closes any open menu.
-- **Phones:** a menu button opens a sheet. Apps and Help fold open inside it; Sign in is a full-width button at the foot.
-- Menus are disclosure buttons (`aria-expanded`, `aria-controls`). Escape closes and returns focus. Clicking outside closes. Focus leaving the header closes. Crossing the breakpoint closes everything.
-- Without JavaScript the menus still open on hover and focus. `<html class="js">` is set by an inline script before CSS loads, so the phone menu is hidden from the first frame instead of flashing open.
+- **A thin translucent bar** (44px, 48px on phones): `rgba(250,250,252,.8)` with `backdrop-filter: saturate(180%) blur(20px)`, content scrolling under it.
+- **Desktop (760px+):** the logo mark only at the far left (the link is labelled with the site name), then Apps · Guides · About · Help · Sign in in 12px type, **spaced evenly to the right edge** (`justify-content: space-between` with an empty first flex item, so the gap after the logo equals the gaps between items).
+- **Menus:** Apps and Help open full-width panels that grow down from the bar (`clip-path` reveal), big 24px links on the left, small 12px links in columns beside them, each link fading in a moment after the one above. The bar turns solid while a menu is open, and **the page behind takes a faint tint, no blur** (owner's choice). Open on hover after a 140ms intent delay or on click; Escape closes and returns focus; moving to a plain link closes the menu.
+- **Phones:** the mark and a two-line menu button that turns into a cross. The menu fills the screen below the bar with large 28px links that fade in one by one, and the page behind can't scroll. Apps and Help **slide in from the right as their own panel** with a "‹ Menu" back button (focus moves to it); Escape closes the panel first, then the menu.
+- Menus are disclosure buttons (`aria-expanded`, `aria-controls`). Without JavaScript the menus open on hover and focus, and the phone links stay reachable.
 
 ### 9.2 Hero
 
-- Breadcrumbs (except the homepage), H1, a lead paragraph (max ~34rem), the main action.
-- **Hero glow** behind it: three large blurred radial-gradient blobs in the brand colours, drifting slowly (section 10). Plus a static, edge-faded dot grid texture.
-- The hero is **never** a scroll-reveal element: hiding it delays Largest Contentful Paint.
+Breadcrumbs (except the homepage), H1, a lead paragraph, the main actions. Product and guide heroes show the tile on a quiet grey panel ringed by hairlines, with white feature chips. No coloured gradients or animated blobs. The hero is never a scroll-reveal element (it would delay the largest paint).
 
 ### 9.3 Homepage (Daily Utility)
 
-1. **Hero with an orbit**: the flagship tile at the centre, every other app on a ring around it, each floating slowly. The include works out each tile's angle from how many apps there are (one above, two as a V, three or more spread evenly) and CSS places it with `cos()`/`sin()`; tiles shrink as the ring fills. Items are placed with the `translate` property, leaving `transform` free for the float. On phones it becomes a row of tiles (`auto-fit` columns) that wraps when full.
-2. **Jobs**: cards named for the job in the user's words ("Back up my photos, videos and contacts"), each linking to the app that does it. On phones they sit in a sideways shelf with scroll snap; tabbing to a half-hidden card snaps it into view. Card rows use CSS subgrid so titles, text and links line up across cards.
-3. **Apps grid**: every app with its tile, tagline, feature chips and store badges.
-4. **Guides**: the newest guides as cards.
-5. **Privacy**: a short plain statement with a link to the policy.
-6. **FAQ**, then a closing CTA band.
+1. **Store-style opening:** a two-tone H1 and every app as a "chiclet" (tile + short name). The row wraps on wide screens and scrolls sideways on phones, so it takes any number of apps.
+2. **Flagship panel:** full-width grey panel: eyebrow, product name (56px), tagline, "Free to download on iPhone and Android", blue **Learn more** and outlined **Download** pills, then the big tile with feature chips.
+3. **Promo tiles:** every other app two to a row on grey panels with 12px gaps; an odd one out spans the full width. Tiles side by side line up (the visual sits at the foot).
+4. **Compare table** ("Which kind of app do you need?"): one column per job, rows aligned across columns with CSS subgrid; on phones a sideways swipe.
+5. **Switching steps** on a grey panel with large numerals; **privacy** commitments as grey cards under a lock mark; a **sideways shelf** of guide cards; the FAQ as a hairline list; a closing call to action with store badges.
 
-CloudGate's homepage follows the same rhythm for one product: hero with the store buttons, what it does, plan overview, guides, FAQ, closing band ("Start with 100GB, free.").
+All of it reads from data; nothing states how many apps there are.
 
 ### 9.4 Product page (Daily Utility `app.html`)
 
-Built entirely from front matter; the page body is empty.
-
-Hero (tile, name, tagline, platforms, store badges with `id="download"`) → moments (situations the app helps with) → how it works (3 steps) → features (bento grid) → optional compare (without / with) → tips → related guides → FAQ → closing CTA → other apps.
-
-**On phones only** (below 600px) the page is compacted: moments, steps, features and tips become rows with the icon beside the text; the bento becomes one divided panel; guide teasers drop their descriptions. Nothing from the app's copy is hidden, and desktop is pixel-identical. This took the pages from about 10,000px to about 8,000–9,000px tall on a phone.
-
-CloudGate's features page does the same thing differently: on phones, long feature descriptions fold behind a "Read more" button.
+Built entirely from front matter. Hero (eyebrow, name, tagline, store badges with `id="download"`, the tile on a grey panel) → moments (blue glyphs over hairlines) → how it works (3 steps) → features (grey bento tiles) → optional compare (outlined "without", raised white "with") → tips → related guides → FAQ → closing call to action → other apps. **On phones only** the sections compact into rows; nothing is hidden and desktop is unchanged.
 
 ### 9.5 Guides hub and guide pages
 
-- **Hub:** hero with the newest guide as a large featured card; small stat pills; "Browse by topic" grid from `categories.yml` (glyph, tone, blurb, live count or "Guides coming soon"); per-topic lists only once a topic has more than one guide.
-- **CloudGate's hub** adds a search box and category filter that update the URL (`?q=`, so a filtered view can be shared), a "show more" button, and a grid/list toggle. Without JavaScript the search form still submits.
-- **Guide cards:** a topic-coloured banner with the topic glyph in a white disc. Never an app icon as a guide image.
-- **Guide page:** breadcrumbs, title, date and updated date, reading time, optional takeaways, a contents list built from the H2s (folded on phones, highlights the section being read), the article with each section as its own card, an optional FAQ, related guides ("Keep reading"), and a share button (native share sheet on phones, copy link elsewhere). CloudGate adds a reading-progress bar.
-- **Tables** in articles: on phones each row becomes a card with the column name beside each value (`site.js` writes `data-label` from the `<thead>`); above that they scroll sideways in a labelled, focusable box.
+- **Hub:** H1 with a grey second half; the newest guide as a large card; topic cards (white, soft shadow, the topic's tile); per-topic lists once a topic has more than one guide.
+- **Guide cards:** Apple Store cards: white, 18px corners, soft shadow, a quiet grey banner with the topic tile; they grow 1% on hover. Category label in the topic's accent colour.
+- **Guide page:** breadcrumbs, title, date, reading time, the tile on a grey panel with stat tiles, a grey "short version" panel, a contents list (folded on phones, highlights the section being read), sections, FAQ, related guides, share button. Tables become cards on phones.
 
 ### 9.6 Contact page
 
-The support email on a raised card, with "Write an email" (mailto) and "Copy address" (shown only where the clipboard API works; a `role="status"` line announces the copy). One mailto link per product, with the product name already in the subject. "What to put in your email" as numbered steps. "Please don't include your password." Links to the FAQ, the guides and the privacy rights section.
-
-**No phone number, street address, hours or reply-time promise** unless the owner confirms them. Schema: `ContactPage` + `BreadcrumbList`.
+The support email on a white card with a soft shadow, "Write an email" and "Copy address" pills, one mailto link per product (the product named in the subject), what to put in an email, and links to the FAQ, guides and privacy choices. **No phone number, address, hours or reply-time promise** unless confirmed.
 
 ### 9.7 Legal pages
 
-Hero with H1, a one-line lead, and "Effective and last updated 8 September 2026" (or the two dates separately when they differ). Below that a two-column layout: a sticky "On this page" contents list generated from front matter, and the prose in a readable measure (about 70 characters). The company details sit in a bordered contact card at the end. Content rules are in section 15.
+Hero with H1, lead and "Effective and last updated …"; a sticky contents list generated from front matter; prose at about 70 characters; callouts as grey panels; company details in a contact card at the end. Content rules are in section 15.
 
 ### 9.8 404
 
-Its own friendly page: a short message, "Go to the homepage" and "Read Daily Info" buttons, and links to each product. `noindex`, no canonical, left out of the sitemap. It must return a real **404 status** (Appendix I for Apache hosts). CloudGate's 404 shows the address that failed and pre-fills the guide search with words from it.
+A large grey "404" (decorative, hidden from screen readers), a plain H1, homepage and guides buttons, and the products as tiles. `noindex`, no canonical, out of the sitemap, and a real 404 status (Appendix I).
 
-### 9.9 Footer
+### 9.9 Footer (apple.com's)
 
-Logo and one-line description, product links (from `apps.yml`), guides, help links, legal links, "© {year} <trading name>". No "powered by", no parent company, no social links unless they belong to this brand.
+Light grey `#f5f5f7`, 12px type, `#424245` links. A short note line; a "you are here" trail (logo › page) on every page except the homepage; five directory columns (Apps, Daily Info, Help, Company, Get the app) that **fold on phones** (details/summary, closed by script, open without it); a "More ways to get help" line with the Contact page and support email; then copyright and legal links. No parent company, no "powered by".
 
 ### 9.10 Buttons and badges
 
-- `.btn--primary` (solid brand, white text), `.btn--ghost` (outlined), at least 44px tall, icon after the label for "go" actions.
-- **Store badges are drawn in SVG**, not downloaded images, so they stay sharp and match the type. Each has an accessible name ("Download on the App Store").
-- CloudGate's main button picks the right first step for the device: on iPhone it goes to the App Store, on Android to Google Play, elsewhere to the web app (and without JavaScript, the web app).
+- apple.com's pill pair: `.btn--primary` (filled blue) and `.btn--ghost` (blue outline that fills on hover). 17px regular, 44px tall, 980px radius, scale to 0.97 on press.
+- Text links read "Learn more ›" with a chevron that steps forward on hover.
+- **Store badges are drawn in SVG** (black, thin grey border) with accessible names.
 
 ### 9.11 Section scaffold
 
-Every section is `<section class="section" aria-labelledby="…-title"><div class="wrap">…`. A `.section-head` holds the H2 and a `.section-sub`. Alternate sections use `.section--alt` (the `--bg-alt` background). On wide screens, many sections put the heading beside the content (`contact-split`, `faq-split`) instead of always centring a kicker, an H2 and a paragraph; that repeated centred pattern made pages look generic.
+`<section class="section" aria-labelledby="…-title"><div class="wrap">…`. `.section-head` holds the H2 and a `.section-sub`. Alternate sections use `--bg-alt`. Vary layouts (heading beside content, centred compare, sideways shelves) so pages don't repeat one pattern.
 
 ---
 
 ## 10. Motion and animation
 
-Principles (from Apple's *Designing Fluid Interfaces*, applied to CSS):
+Principles (Apple's *Designing Fluid Interfaces*, applied to CSS):
 
-1. **Animate only `transform` and `opacity`.** Never width, height, top or left (except CloudGate's FAQ height, which is driven frame by frame by a spring).
-2. **Respond on press, not release.** Buttons, badges and nav links: `:active { transform: scale(0.97); }` with a 100ms transition. A no-op `touchstart` listener makes `:active` work on iOS Safari.
-3. **Hover effects only where hover exists:** wrap them in `@media (hover: hover)`.
-4. **Exits are faster than entrances.**
-5. **Things leave the way they came,** and menus grow from the control that opened them.
-6. **Interruptible.** Anything the user can reverse mid-flight (an accordion, a menu) must turn around smoothly from where it is.
-7. **Ambient motion is slow.** Background drift loops are 18 seconds or longer and barely move, so they never pull the eye or cause motion sickness.
-
-What's on the sites:
+1. **Animate only `transform` and `opacity`** (and `clip-path` for menus growing from the bar).
+2. **Respond on press, not release:** `:active { transform: scale(0.97) }` with a 100ms transition. A no-op `touchstart` listener makes `:active` work on iOS Safari.
+3. **A spring curve, not a linear fade.** `--spring` is a critically damped spring (damping 1.0, response about 0.4s) sampled into CSS `linear()`, with `cubic-bezier(.22,1,.36,1)` as the fallback; `--spring-dur: 0.42s`.
+4. **Hover effects only where hover exists** (`@media (hover: hover)`); exits faster than entrances; things leave the way they came; menus grow from the bar.
 
 | Motion | How |
 |---|---|
-| **Scroll reveal** | `.reveal` elements fade up 1rem over 0.6s with `--ease-out` when 10% enters the viewport (`IntersectionObserver`, `rootMargin: 0px 0px -8% 0px`), then stop being observed. Content is only hidden once the observer exists (`.reveal-ready` on `<html>`), so if the script fails, nothing stays invisible. Never on the first screen. CloudGate staggers siblings in a card row so the row lands as one movement |
-| **Hero glow** | Three blobs, `@keyframes` drifting by 4–8% and scaling 0.94–1.08 over 19s, 23s and 27s, ease-in-out, infinite. Different lengths so the pattern never visibly repeats |
-| **Orbit tiles** | Each tile floats a few pixels on a slow loop with a different delay |
-| **Header** | Background and shadow transition when the page scrolls under it |
-| **Menus** | Flyouts and the phone sheet fade and slide a few pixels; the chevron rotates |
-| **Card hover** | Border tints towards the brand, shadow deepens, arrow nudges 3px right |
-| **CloudGate FAQ** | A JavaScript critically damped spring (damping 1.0, response 0.36s open, 0.28s close) that always starts from the current height and velocity, so tapping again mid-flight reverses smoothly |
-| **CloudGate easing** | A `--spring` custom property using CSS `linear()` to approximate a critically damped spring (settles in 405ms), with `cubic-bezier(.22,1,.36,1)` as the fallback |
-| **CloudGate theme switch** | View Transitions circle reveal from the pressed button (section 8.7) |
+| **Scroll reveal** | `.reveal` blocks fade up 1rem over 0.6s when 10% enters the viewport (`IntersectionObserver`), then stop being observed. Hidden only once the observer exists. Never on the first screen |
+| **Promo tiles** | Their visuals rise into place tied to scroll position (`animation-timeline: view()`), so it's reversible; skipped where unsupported |
+| **Cards** | Grow 1% with a deeper shadow on hover, on the spring curve |
+| **Header menus** | Panel grows down (`clip-path`), links fade in 20ms apart; phone panels slide in from the right; the menu button's two lines turn into a cross |
+| **Links** | The "›" chevron steps forward 3px on hover |
+| **CloudGate FAQ** | A JavaScript critically damped spring that starts from the current height and velocity, so it reverses smoothly mid-flight |
 
-**User preferences, always:**
-
-- `prefers-reduced-motion: reduce`: no movement. Reveals become a 0.3s opacity fade; the glow and floats stop; press scaling is off; menus appear without sliding.
-- `prefers-reduced-transparency: reduce` and `prefers-contrast: more`: the header becomes solid with a visible border; the glow is toned down; card borders use `--border-strong`.
-- `@supports not (backdrop-filter: blur(1px))`: solid header background.
-
-The reveal CSS and JS are in Appendix E and F.
+**User preferences, always:** `prefers-reduced-motion` removes movement (fades only); `prefers-reduced-transparency` and `prefers-contrast: more` make the header solid and strengthen borders.
 
 ---
 
@@ -471,7 +421,7 @@ The reveal CSS and JS are in Appendix E and F.
 - **Static HTML, one shared CSS file plus one per page type, one deferred JS file.** No frameworks, no jQuery, no third-party scripts.
 - **CSS and JS carry a `?v=<build time>` stamp** (`{{ site.time | date: '%s' }}`), so the server can cache them for a year and a deploy still loads the new copy.
 - **Sass `style: compressed`** strips comments and whitespace from the served CSS; the source keeps them.
-- **Fonts:** two variable woff2 files, Latin subset, preloaded, `font-display: swap`.
+- **Fonts:** none downloaded; the system font renders immediately.
 - **Images:** WebP for photos and logo renders at the sizes used (64, 128, 480px); explicit `width`/`height` on every `<img>` so nothing shifts; `loading="lazy"` below the fold.
 - **Share cards** as JPEG at quality 85 (about 60KB instead of 270KB as PNG; some apps reject previews over about 300KB).
 - **No layout shift:** reserve space for anything that loads late; the reveal never applies to the first screen. Measure Cumulative Layout Shift on key pages (section 17).
@@ -713,6 +663,8 @@ After a live upload, run `ftp.yml` in **check** mode.
 | Wide tables scrolled off the side on phones | Stack rows as cards with `data-label` from the header row |
 | A 37px email link failed the tap-target check | Padding plus an equal negative margin (44px hit area, same layout) |
 | Pages looked templated (centred kicker + H2 + paragraph everywhere) | Heading beside content on wide screens; vary section layouts |
+| A sideways swipe row whose columns use CSS subgrid widened the whole page on phones (Chromium) | `contain: paint` on the section; clipping the row alone wasn't enough |
+| Phone menu panel sat inside the page margins | Don't make the bar's centred inner row `position: relative`; place menus against the full-width header |
 
 ---
 
@@ -720,8 +672,8 @@ After a live upload, run `ftp.yml` in **check** mode.
 
 1. **Collect facts from the owner**: name, domain, products and their store links, support email, logo files, colours (or sample them from the logo), the legal intake (15.3), whether they want dark mode, analytics yes or no. Start `STATUS.md` with them.
 2. **Scaffold**: `Gemfile`, `_config.yml` in preview state (`staging: true`), `.gitignore` (`_site/`, `.jekyll-cache/`, `.bundle/`, `vendor/`), `pages.yml`. Push and confirm the preview builds and is noindex.
-3. **Shell**: `default.html` (head, SEO tags), `shell.scss` (tokens, fonts, base, buttons, section scaffold), icon sprite, header, footer, `site.js` (header state, menus, reveal). Check the header at every width before going on.
-4. **Shared includes**: breadcrumbs + schema, FAQ section + schema, hero glow, store badges, product tile, guide card.
+3. **Shell**: `default.html` (head, SEO tags), `shell.scss` (tokens, system font, base, buttons, section scaffold), icon sprite, header, footer, `site.js` (header state, menus, reveal). Check the header at every width before going on.
+4. **Shared includes**: breadcrumbs + schema, FAQ section + schema, store badges, product tile, guide card.
 5. **Layouts**: product, guide, legal. Write each one's front matter contract in its header comment and in `STATUS.md`.
 6. **Pages**: home, products, about, contact, guides hub, legal, 404. Content only from confirmed facts.
 7. **SEO files**: `sitemap.xml`, `robots.txt`, `feed.xml`, `llms.txt` if wanted, favicons, share cards.
@@ -733,7 +685,7 @@ After a live upload, run `ftp.yml` in **check** mode.
 
 ## 20. Appendices: full source files
 
-These are the real files from Daily Utility Apps (Appendices A–K) and CloudGate (L–M) as they stand. Change names, domains, colours and copy for the new site; keep the structure and the checks.
+These are the real files from Daily Utility Apps as of the 19 Oct redesign (Appendices A–K) and CloudGate (L–M) as they stand. Change names, domains, colours and copy for the new site; keep the structure and the checks.
 
 ### Appendix A: _config.yml
 
@@ -926,10 +878,6 @@ gem "webrick"
   The ?v= stamp changes on every build, so browsers never keep a stale
   copy after a deploy. {%- endcomment -%}
   {%- assign _v = site.time | date: "%s" %}
-  {%- comment -%} Both fonts render above the fold on every page (headings
-  and body text), so both are worth the preload hint. {%- endcomment -%}
-  <link rel="preload" href="{{ '/assets/fonts/dm-sans-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{{ '/assets/fonts/space-grotesk-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
   {%- if page.css %}
   <link rel="stylesheet" href="{{ '/assets/css/pages/' | append: page.css | append: '.css' | relative_url }}?v={{ _v }}">
@@ -1019,26 +967,26 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
 {%- endif %}
 ```
 
-### Appendix E1: Reveal on scroll, hero glow and reduced motion (from assets/css/shell.scss)
+### Appendix E1: Design tokens, spring curve, reveal and user preferences (from assets/css/shell.scss)
 
 ```css
 :root {
   --bg: #ffffff;
-  --bg-alt: #f4f7fb;
+  --bg-alt: #f5f5f7;
   --surface: #ffffff;
-  --surface-glass: rgba(255, 255, 255, 0.78);
-  --text: #0c1424;
-  --text-2: #4b5565;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
+  --surface-glass: rgba(255, 255, 255, 0.72);
+  --text: #1d1d1f;
+  --text-2: #6e6e73;          /* 5.1:1 on white, 4.7:1 on --bg-alt */
+  --border: #d2d2d7;          /* hairlines */
+  --border-strong: #86868b;
   --brand: #0b5fe8;
   --brand-hover: #0848b8;
   --on-brand: #ffffff;
-  --brand-soft: #e8f0ff;
+  --brand-soft: #f5f5f7;      /* quiet panels and icon chips: Apple grey */
   --brand-text: #0a52c9;
   /* Sampled directly from the real logo mark (assets/icons/mark.png), not
      a generic accent: the icon sweeps from this blue to this green. Used
-     for decoration only (hero glow, borders, the logo itself) -- never
+     for decoration only (borders, the logo itself) -- never
      behind text. White text on it fails 4.5:1 contrast past ~20% into
      the blend (measured), so buttons stay solid --brand. */
   --brand-2: #16b871;
@@ -1057,39 +1005,36 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
   --tone-light: #3b82f6;
   --tone-deep: #0b5fe8;
   --tone-gradient: linear-gradient(145deg, #3b82f6, #0b5fe8);
-  /* Hero glow, second and third blobs (the first is --brand). Outside
-     a tone these are the logo's green and cyan; each tone swaps in
-     lighter shades of its own colour. */
-  --glow-b: var(--brand-2);
-  --glow-c: var(--accent);
 
-  --shadow-sm: 0 1px 2px rgba(12, 20, 36, 0.06), 0 1px 3px rgba(12, 20, 36, 0.08);
-  --shadow-md: 0 4px 12px rgba(12, 20, 36, 0.08), 0 12px 32px rgba(12, 20, 36, 0.08);
-  --shadow-lg: 0 12px 24px rgba(12, 20, 36, 0.1), 0 32px 64px rgba(12, 20, 36, 0.12);
+  /* Soft, directional (light from above-left), never a hard drop. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 2px 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 2px 4px 16px rgba(0, 0, 0, 0.16);
 
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 22px;
-  --radius-pill: 999px;
+  --radius-sm: 10px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 980px;
 
-  /* "Tech Startup" pairing (ui-ux-pro-max --domain typography): Space
-     Grotesk for headings/brand moments, DM Sans for everything read as
-     body or UI chrome. Both self-hosted (assets/fonts/) as variable
-     fonts -- one file per family covers every weight used, no
-     third-party request before text paints. System-ui is the fallback
-     for both, not a generic sans, so an unloaded-fonts render still
-     looks considered. */
-  --font-heading: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* The device's own system font: SF Pro on Apple devices, Segoe UI on
+     Windows, Roboto on Android. Nothing to download, and each one ships
+     with its own optical sizes and spacing tables. Headings and body use
+     the same family; hierarchy comes from size, weight and tracking. */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-heading: var(--font);
   --wrap: 70rem;
   --gutter: clamp(1rem, 4vw, 2rem);
-  --header-h: 4rem;
-  --space-section: clamp(4rem, 9vw, 7rem);
+  --header-h: 3rem;
+  --space-section: clamp(4.5rem, 10vw, 8rem);
   /* One hero rhythm for every page type (home, hub, app, article, legal):
      48px above / 56px below on phones, growing on larger screens. */
   --space-hero-top: clamp(3rem, 7vw, 5.5rem);
   --space-hero-bottom: clamp(3.5rem, 8vw, 6rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Motion: a critically damped spring (damping 1.0, response ~0.4s),
+     sampled into linear() where supported, else its closest curve. */
+  --spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring-dur: 0.42s;
 
   /* Light only (user, 14 Oct: "light looks way better"). Telling the
      browser keeps form controls and scrollbars light too, even when the
@@ -1097,114 +1042,13 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
   color-scheme: light;
 }
 
-/* ---------- Fonts ----------
-   Each file is a full variable font (weight axis covers every weight
-
-/* ... */
-
-/* ---------- Hero glow (decorative gradient mesh) ---------- */
-
-.hero-glow-host {
-  position: relative;
-  overflow: clip;
-  isolation: isolate;
-}
-
-.hero-glow {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-/* Texture: a fine static dot grid inside the glow layer, fading out
-   toward the edges. Painted once (no animation), so it adds depth
-   without adding any per-frame work. */
-.hero-glow::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, color-mix(in srgb, var(--text) 16%, transparent) 1px, transparent 1.3px);
-  background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 65% 45%, #000 20%, transparent 75%);
-  mask-image: radial-gradient(ellipse 70% 80% at 65% 45%, #000 20%, transparent 75%);
-}
-
-/* Required on the real content inside a .hero-glow-host: an absolutely
-   positioned z-index:0 layer (the glow) paints ABOVE plain in-flow
-   content per CSS stacking rules, not below it. position:relative +
-   z-index:1 here is what puts the content back on top -- without it the
-   glow would visually cover the text. */
-.hero-glow-content {
-  position: relative;
-  z-index: 1;
-}
-
-/* Each blob is a plain div: a radial gradient (soft-edged by itself, so
-   no blur filter) centred on its left/top point by the `translate`
-   property, leaving `transform` free for the drift. Transform-only
-   animation of a promoted layer is composited on the GPU with no
-   per-frame repaint -- the SVG-filter version this replaced ran the
-   page at ~12fps (see _includes/hero-glow.html).
-
-   Slow, low-amplitude drift -- ~18s+ per blob, well clear of the ~5s
-   (0.2Hz) cycle Apple's own motion guidance flags as uncomfortable.
-   Each blob gets its own duration/direction so the group reads as one
-   organic field rather than three shapes moving in lockstep. */
-.hero-glow-blob {
-  position: absolute;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  translate: -50% -50%;
-  will-change: transform;
-}
-.hero-glow-blob--a {
-  left: 18%;
-  top: 22%;
-  width: max(53%, 24rem);
-  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--brand) 55%, transparent), color-mix(in srgb, var(--brand) 22%, transparent) 50%, transparent);
-  animation: heroGlowDriftA 19s ease-in-out infinite;
-}
-.hero-glow-blob--b {
-  left: 82%;
-  top: 70%;
-  width: max(60%, 26rem);
-  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--glow-b) 45%, transparent), color-mix(in srgb, var(--glow-b) 18%, transparent) 50%, transparent);
-  animation: heroGlowDriftB 23s ease-in-out infinite;
-}
-.hero-glow-blob--c {
-  left: 63%;
-  top: 15%;
-  width: max(40%, 18rem);
-  background: radial-gradient(circle closest-side, color-mix(in srgb, var(--glow-c) 35%, transparent), color-mix(in srgb, var(--glow-c) 14%, transparent) 50%, transparent);
-  animation: heroGlowDriftC 27s ease-in-out infinite;
-}
-
-@keyframes heroGlowDriftA {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(6%, 8%) scale(1.08); }
-}
-@keyframes heroGlowDriftB {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-8%, -6%) scale(1.06); }
-}
-@keyframes heroGlowDriftC {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-4%, 6%) scale(0.94); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-glow-blob--a, .hero-glow-blob--b, .hero-glow-blob--c { animation: none; }
-}
-@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  .hero-glow { display: none; }
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --spring: linear(0, 0.0495, 0.1582, 0.2864, 0.4129, 0.5273, 0.6256, 0.7073, 0.7736, 0.8263, 0.8677, 0.8998, 0.9246, 0.9435, 0.9578, 0.9686, 0.9767, 0.9828, 0.9873, 0.9906, 0.9931, 0.995, 0.9963, 0.9973, 1);
+  }
 }
 
 /* ... */
-
 
 /* ---------- Reveal on scroll ----------
    Content is only hidden once scripts.html has confirmed the observer that
@@ -1221,11 +1065,41 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
 /* ---------- Accessibility preferences ---------- */
 
 /* Reduced motion keeps the fades that aid comprehension and drops movement. */
+@media (min-width: 760px) { :root { --header-h: 2.75rem; } }
+
 @media (prefers-reduced-motion: reduce) {
   .btn:active { transform: none; }
   .reveal-ready .reveal { transform: none; transition: opacity 0.3s ease; }
   .js .site-nav, .js .nav-open .site-nav { transform: none; }
   .nav-toggle-bars::before, .nav-toggle-bars::after, .nav-chevron, .nav-go,
+  .nav-app-arrow, .nav-app-more svg, .nav-app, .nav-help-link { transition: none; }
+  .nav-menu, .nav-trigger[aria-expanded="true"] + .nav-menu,
+  .nav-menu-inner > *, .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > *,
+  .nav-link:active, .nav-app:active, .nav-help-link:active,
+  .nav-app--featured:hover .nav-app-more svg, .nav-link--page:hover .nav-go { transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+@media (prefers-contrast: more) {
+  :root { --border: var(--border-strong); }
+  .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 var(--border-strong); }
+}
+
+/* Hidden visually, still read by screen readers (e.g. table captions). */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 ```
 
 ### Appendix F: assets/js/site.js
@@ -1350,7 +1224,8 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
 
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
-      if (openSub && (desktop.matches || !sheetOpen())) { setSub(openSub, false, true); return; }
+      // An open menu (or, on phones, an open sub-panel) closes first.
+      if (openSub) { setSub(openSub, false, true); return; }
       if (sheetOpen()) setSheet(false, true);
     });
 
@@ -1359,6 +1234,25 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
       if (!to) return;
       if (!header.contains(to)) { closeSubs(); if (sheetOpen()) setSheet(false); return; }
       if (openSub && desktop.matches && !openSub.parentElement.contains(to)) closeSubs();
+    });
+
+    // Phones: Apps and Help slide in as their own panel. Opening one
+    // moves focus to its back button; the back button closes it and
+    // returns focus to the item that opened it.
+    triggers.forEach(function (t) {
+      t.addEventListener('click', function () {
+        if (desktop.matches || t.getAttribute('aria-expanded') !== 'true') return;
+        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        var back = panel && panel.querySelector('.nav-back');
+        if (back) back.focus({ preventScroll: true });
+      });
+    });
+    Array.prototype.forEach.call(header.querySelectorAll('.nav-back'), function (b) {
+      b.addEventListener('click', function () {
+        var panel = b.closest('.nav-menu');
+        var t = panel && header.querySelector('[aria-controls="' + panel.id + '"]');
+        if (t) setSub(t, false, true);
+      });
     });
 
     var onBreakpoint = function () { closeSubs(); setSheet(false); };
@@ -1406,6 +1300,25 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
         if (!wide.matches && e.target.closest('a')) d.open = false;
       });
     });
+  }
+
+  /* ---- Footer columns fold on phones ----
+     Open in the HTML (so they work without JavaScript). On phones they
+     start closed, like apple.com's footer; on wide screens they are always
+     open and the heading is only a label, so it leaves the tab order. */
+  var footFolds = document.querySelectorAll('.footer-fold');
+  if (footFolds.length) {
+    var footWide = window.matchMedia('(min-width: 760px)');
+    var syncFoot = function () {
+      footFolds.forEach(function (d) {
+        d.open = footWide.matches;
+        var s = d.querySelector('summary');
+        if (!s) return;
+        if (footWide.matches) s.setAttribute('tabindex', '-1'); else s.removeAttribute('tabindex');
+      });
+    };
+    syncFoot();
+    if (footWide.addEventListener) footWide.addEventListener('change', syncFoot);
   }
 
   /* ---- Share button ----
@@ -1781,36 +1694,113 @@ css: legal
 {%- endif -%}
 ```
 
-### Appendix G6: _includes/hero-glow.html
+### Appendix G6: _includes/header.html (apple.com-style bar and menus)
 
 ```liquid
 {%- comment -%}
-  Decorative gradient-mesh glow for a hero section. Pure atmosphere: sits
-  behind the content (z-index below it), aria-hidden, pointer-events:none.
-  Uses --brand/--brand-2/--accent (sampled from the real logo, see
-  STATUS.md 4e).
+  Site header, apple.com style (preview): one thin translucent bar the
+  width of the page, the logo at the left and the items spread evenly
+  across the rest, in small type. Apps and Help open full-width menus
+  (big links first, smaller links beside them) with the page blurred
+  behind; Guides, About and Sign in are plain links. On phones the bar
+  keeps the logo and a two-line menu button; the menu fills the screen
+  with large links, and Apps and Help slide in as their own panel with a
+  back button, as on apple.com.
 
-  Three plain divs with CSS radial-gradient backgrounds, drifting via
-  transform. This replaced an SVG version (blurred circles under an
-  feGaussianBlur filter) in step 5: SVG filters aren't GPU-composited, so
-  that blur was re-rasterised on the CPU every frame of the drift and
-  held the page to ~12fps in testing (61fps without it). Radial
-  gradients are already soft-edged, so the blur added little but cost.
-  Styles live in shell.css ("Hero glow").
+  Same behaviour and hooks as before (site.js "Navigation"): .nav-trigger
+  buttons with aria-expanded / aria-controls, .nav-link--page for plain
+  links (hovering one closes an open menu), #nav-scrim, #nav-toggle,
+  .menu-open / .nav-open on the header.
 
-  The drift is ~18s+ per cycle -- well clear of the ~5s (0.2Hz) range
-  Apple's own motion guidance flags as uncomfortable -- and freezes under
-  prefers-reduced-motion rather than just slowing down.
-
-  Usage: {% include hero-glow.html %} as the first child of a
-  position:relative container; pair with .hero-glow-host on that
-  container and .hero-glow-content on the real content (shell.css).
+  Everything lists itself: apps from _data/apps.yml (built: true).
+  "Sign in" goes to the cloud web app (site.cloud_url).
 {%- endcomment -%}
-<div class="hero-glow" aria-hidden="true">
-  <div class="hero-glow-blob hero-glow-blob--a"></div>
-  <div class="hero-glow-blob hero-glow-blob--b"></div>
-  <div class="hero-glow-blob hero-glow-blob--c"></div>
-</div>
+{%- assign _apps = site.data.apps | where: "built", true -%}
+{%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
+{%- assign _in_help = false -%}{%- if page.layout == "legal" or page.url == "/contact" -%}{%- assign _in_help = true -%}{%- endif %}
+<div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
+<div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
+      {%- include brand-mark.html class="logo-mark" size="20" eager=true -%}
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <span class="nav-toggle-bars" aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <button class="nav-link nav-trigger{% if page.layout == 'app' %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-apps">Apps<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <div class="nav-menu" id="menu-apps">
+            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Apps</span></button>
+            <div class="nav-menu-inner">
+              <div class="nav-col nav-col--main">
+                <p class="nav-col-head">Explore our apps</p>
+                <ul class="nav-big">
+                  {%- for app in _apps %}
+                  <li><a href="{{ '/' | append: app.slug | relative_url }}"{% if page.url contains app.slug %} aria-current="page"{% endif %}>{{ app.short | default: app.name | escape }}</a></li>
+                  {%- endfor %}
+                </ul>
+              </div>
+              <div class="nav-col">
+                <p class="nav-col-head">Choose an app</p>
+                <ul class="nav-small">
+                  <li><a href="{{ '/' | relative_url }}#which">Not sure which app you need?</a></li>
+                  <li><a href="{{ '/' | relative_url }}#apps">Compare our apps</a></li>
+                </ul>
+              </div>
+              <div class="nav-col">
+                <p class="nav-col-head">Learn more</p>
+                <ul class="nav-small">
+                  <li><a href="{{ '/daily-info/' | relative_url }}">Read our phone guides</a></li>
+                  <li><a href="{{ '/about' | relative_url }}">About us</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-link--page" href="{{ '/daily-info/' | relative_url }}"{% if page.url == "/daily-info/" %} aria-current="page"{% elsif _in_guides %} aria-current="true"{% endif %}>Guides</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-link--page" href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About</a>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-link nav-trigger{% if _in_help %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-help">Help<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <div class="nav-menu" id="menu-help">
+            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Help</span></button>
+            <div class="nav-menu-inner">
+              <div class="nav-col nav-col--main">
+                <p class="nav-col-head">Help &amp; support</p>
+                <ul class="nav-big">
+                  <li><a href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}>Contact support</a></li>
+                  <li><a href="{{ '/' | relative_url }}#faq">Questions about our apps</a></li>
+                </ul>
+              </div>
+              <div class="nav-col">
+                <p class="nav-col-head">Legal</p>
+                <ul class="nav-small">
+                  <li><a href="{{ '/privacy-policy' | relative_url }}"{% if page.url == "/privacy-policy" %} aria-current="page"{% endif %}>Privacy Policy</a></li>
+                  <li><a href="{{ '/terms-of-service' | relative_url }}"{% if page.url == "/terms-of-service" %} aria-current="page"{% endif %}>Terms of Service</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item nav-item--signin">
+          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
 ```
 
 ### Appendix G7: _includes/app-tile.html
