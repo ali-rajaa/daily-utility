@@ -71,18 +71,17 @@
 .app-hero-meta svg { width: 1.125rem; height: 1.125rem; color: var(--brand-text); }
 .app-hero-mark { width: 1.125rem; height: 1.125rem; }
 
-/* The app's illustration: its glyph on a white tile, ringed, in a panel
-   of the app's colour, with the app's main features as labels around
-   it. The same language as the Daily Info banners. Decorative: every
-   label repeats something stated in text on the page. */
+/* The app's illustration, apple.com style: its tile, large, on a quiet
+   grey panel with a soft glow of the app's colour, ringed by hairlines,
+   with the app's main features as white labels around it. Decorative:
+   every label repeats something stated in text on the page. */
 .app-hero-visual {
   position: relative;
   display: grid;
   place-items: center;
   aspect-ratio: 1 / 0.86;
-  border-radius: 2rem;
-  background: var(--tone-gradient);
-  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+  background: var(--bg-alt);
   overflow: hidden;
   isolation: isolate;
 }
@@ -91,22 +90,19 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.3), transparent 42%),
-    radial-gradient(circle at 86% 92%, rgba(255, 255, 255, 0.16), transparent 45%),
-    radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1.4px) 0 0 / 20px 20px;
+  background: radial-gradient(45% 50% at 50% 50%, color-mix(in srgb, var(--tone-light) 26%, transparent), transparent 72%);
 }
 .app-hero-ring {
   position: absolute;
   width: 44%;
   aspect-ratio: 1;
-  border: 1px dashed rgba(255, 255, 255, 0.55);
+  border: 1px dashed var(--border);
   border-radius: 50%;
 }
 .app-hero-ring--outer {
   width: 72%;
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 0, 0, 0.06);
 }
 .app-hero-icon {
   display: grid;
@@ -115,21 +111,21 @@
   max-width: 8.5rem;
   aspect-ratio: 1;
   border-radius: 23%;
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.16), 0 22px 44px rgba(6, 16, 31, 0.3);
-  color: var(--tone-deep);
-  transform: rotate(-6deg);
+  background: var(--tone-gradient);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 18px 36px -14px color-mix(in srgb, var(--tone-deep) 55%, transparent);
+  color: #ffffff;
 }
 .app-hero-icon svg { width: 54%; height: 54%; }
 
 .app-hero-chip {
   position: absolute;
   padding: 0.55rem 0.95rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 10px 24px rgba(6, 16, 31, 0.18);
-  color: var(--tone-deep);
-  font: 650 0.875rem/1 var(--font);
+  background: #ffffff;
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+  font: 500 0.875rem/1 var(--font);
   letter-spacing: -0.005em;
   white-space: nowrap;
 }
@@ -200,17 +196,11 @@
 @media (max-width: 599.98px) { .moments { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
 .moment { padding-top: 1.5rem; border-top: 1px solid var(--border); }
 .moment-icon {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin-bottom: 1.25rem;
-  border-radius: 0.85rem;
-  background: var(--tone-gradient);
-  color: #fff;
-  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--tone-deep) 80%, transparent);
+  display: block;
+  margin-bottom: 1rem;
+  color: var(--brand-text);
 }
-.moment-icon svg { width: 1.3rem; height: 1.3rem; }
+.moment-icon svg { width: 2rem; height: 2rem; }
 .moment h3 { font-size: 1.125rem; }
 .moment p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
 
@@ -286,10 +276,10 @@
 }
 .feature-grid--bento .feature-card {
   padding: 1.75rem;
-  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: var(--bg-alt);
 }
+.feature-grid--bento .feature-icon { background: var(--surface); }
 .feature-grid--bento .feature-card:first-child {
   grid-column: span 2;
   grid-row: span 2;
@@ -297,7 +287,6 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: clamp(1.75rem, 4vw, 2.5rem);
-  background: linear-gradient(160deg, var(--brand-soft), var(--surface) 65%);
 }
 .feature-grid--bento .feature-card:first-child .feature-icon {
   width: 4rem;
@@ -332,15 +321,10 @@
   padding: clamp(1.5rem, 3vw, 2.25rem);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: transparent;
 }
-.compare-col--with {
-  background:
-    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 60%),
-    var(--surface);
-  border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
-  box-shadow: var(--shadow-md);
-}
+/* The answer raised: white with a soft shadow, on white or grey. */
+.compare-col--with { border-color: transparent; background: var(--surface); box-shadow: var(--shadow-md); }
 .compare-title { font-size: 1.125rem; }
 .compare-col--without .compare-title { color: var(--text-2); }
 .compare-col--with .compare-title { color: var(--brand-text); }
@@ -443,9 +427,7 @@
 }
 .app-close-get {
   padding: clamp(2rem, 5vw, 3.5rem);
-  background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 45%),
-    var(--brand-soft);
+  background: var(--bg-alt);
 }
 .app-close-tile { width: 4rem; margin-bottom: 1.5rem; }
 .app-close-get .section-sub { margin-top: 0.75rem; margin-bottom: 1.75rem; }
@@ -532,7 +514,7 @@
   .feature-grid--bento .feature-card:first-child .feature-icon {
     width: 2.5rem; height: 2.5rem; padding: 0.6rem; margin-bottom: 0;
   }
-  .feature-grid--bento .feature-card:first-child .feature-icon { background: var(--brand-soft); box-shadow: none; }
+  .feature-grid--bento .feature-card:first-child .feature-icon { box-shadow: none; }
   .feature-card h3,
   .feature-grid--bento .feature-card:first-child h3 { margin-top: 0.35rem; font-size: 1.0625rem; }
   .feature-card p,

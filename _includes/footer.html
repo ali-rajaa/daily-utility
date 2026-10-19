@@ -1,61 +1,95 @@
 {%- comment -%}
-  Site footer, one copy for every page: brand block with a short
-  description, two link columns, a "Get the app" column with the store
-  badges, and a bottom row with the copyright on the left.
+  Site footer, apple.com style (preview): light grey, small type. A note,
+  a breadcrumb (logo > this page), the directory columns, a "more ways to
+  get help" line, then copyright and legal links. On phones each column
+  is a fold (details/summary, closed by site.js, open without JS).
 
-  The apps list itself: an app appears once its _data/apps.yml entry has
-  built: true. Daily Info isn't repeated here (user, 29 Sep); it's in
-  the header.
-
-  The copyright names Daily Utility Apps. The registered company name
-  (DAILY UTILITY APPS PTY LTD) appears on the legal pages only, as the
-  owner's documents give it (STATUS.md 5u). "Contact support" opens the
-  Contact page, which carries the support email.
-
-  No Apple/Google trademark line under the badges (removed at the
-  user's request, 3 Oct).
+  Lists itself: apps from _data/apps.yml, guide topics from
+  _data/categories.yml. The copyright names Daily Utility Apps; the
+  registered company name stays on the legal pages (STATUS.md 5u). The
+  support email is Daily Utility's own, so it may appear here (5t).
+  Nothing here states how many apps there are (5z).
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _flagship = site.data.apps | where: "tier", "flagship" | first -%}
+{%- assign _crumb = page.breadcrumbs | last -%}
+{%- assign _title_lead = page.title | split: ":" | first | split: " | " | first -%}
+{%- assign _here = page.heading | default: page.app_name | default: _crumb.name | default: _title_lead -%}
 <footer class="site-footer">
-  <div class="wrap footer-grid">
-    <div class="footer-brand">
-      <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
-        {%- include logo.html -%}
-      </a>
-      <p class="footer-tagline">Simple apps for your phone's everyday jobs.</p>
-      <p class="footer-desc">Simple apps for your phone's everyday jobs.</p>
+  <div class="footer-wrap">
+    <div class="footer-notes">
+      <p>Our apps are free to download. Each app's page shows the phones it runs on and where to get it.</p>
     </div>
 
-    <nav class="footer-col" aria-label="Apps">
-      <p class="footer-head">Apps</p>
-      <ul class="footer-links">
-        {%- for _app in _apps %}
-        <li><a href="{{ '/' | append: _app.slug | relative_url }}">{{ _app.short | default: _app.name | escape }}</a></li>
-        {%- endfor %}
-      </ul>
+    {%- if page.url != "/" and _here %}
+    <nav class="footer-crumbs" aria-label="You are here">
+      <a class="footer-crumbs-home" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">{% include brand-mark.html class="footer-mark" size="18" %}</a>
+      <span class="footer-crumbs-sep" aria-hidden="true"><svg><use href="#i-chevron-down"/></svg></span>
+      <span aria-current="page">{{ _here | escape }}</span>
     </nav>
+    {%- endif %}
 
-    <nav class="footer-col" id="support" aria-label="Company">
-      <p class="footer-head">Company</p>
-      <ul class="footer-links">
-        <li><a href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About us</a></li>
-        <li><a href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}>Contact support</a></li>
+    <div class="footer-directory">
+      <details class="footer-col footer-fold" open>
+        <summary class="footer-head">Apps<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <ul class="footer-links">
+          {%- for _app in _apps %}
+          <li><a href="{{ '/' | append: _app.slug | relative_url }}"{% if page.url contains _app.slug %} aria-current="page"{% endif %}>{{ _app.short | default: _app.name | escape }}</a></li>
+          {%- endfor %}
+          <li><a href="{{ '/' | relative_url }}#which">Which app do I need?</a></li>
+        </ul>
+      </details>
+
+      <details class="footer-col footer-fold" open>
+        <summary class="footer-head">Daily Info<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <ul class="footer-links">
+          <li><a href="{{ '/daily-info/' | relative_url }}">All guides</a></li>
+          {%- for cat in site.data.categories %}
+          <li><a href="{{ '/daily-info/' | relative_url }}#{{ cat.name | slugify }}">{{ cat.name | escape }}</a></li>
+          {%- endfor %}
+        </ul>
+      </details>
+
+      <details class="footer-col footer-fold" open>
+        <summary class="footer-head">Help<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <ul class="footer-links">
+          <li><a href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}>Contact support</a></li>
+          <li><a href="{{ '/' | relative_url }}#faq">Questions about our apps</a></li>
+          <li><a href="{{ '/privacy-policy' | relative_url }}#your-rights">Your privacy choices</a></li>
+        </ul>
+      </details>
+
+      <details class="footer-col footer-fold" open>
+        <summary class="footer-head">Company<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <ul class="footer-links">
+          <li><a href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About us</a></li>
+          <li><a href="{{ site.cloud_url }}">Sign in to Cloud Storage</a></li>
+        </ul>
+      </details>
+
+      <details class="footer-col footer-fold" open>
+        <summary class="footer-head">Get the app<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <ul class="footer-links">
+          {%- if _flagship.ios_url %}
+          <li><a href="{{ _flagship.ios_url }}">{{ _flagship.short | escape }} on the App Store</a></li>
+          {%- endif %}
+          {%- if _flagship.android_url %}
+          <li><a href="{{ _flagship.android_url }}">{{ _flagship.short | escape }} on Google Play</a></li>
+          {%- endif %}
+        </ul>
+      </details>
+    </div>
+
+    <p class="footer-more">More ways to get help: visit our <a href="{{ '/contact' | relative_url }}">Contact page</a> or email <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a>.</p>
+
+    <div class="footer-legal">
+      <p class="footer-copy">Copyright &copy; {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
+      <ul class="footer-legal-links">
         <li><a href="{{ '/privacy-policy' | relative_url }}">Privacy Policy</a></li>
         <li><a href="{{ '/terms-of-service' | relative_url }}">Terms of Service</a></li>
+        <li><a href="{{ '/contact' | relative_url }}">Contact</a></li>
       </ul>
-    </nav>
-
-    <div class="footer-col footer-get">
-      <p class="footer-head">Get the app</p>
-      {% include store-badges.html ios_url=_flagship.ios_url android_url=_flagship.android_url class="footer-badges" %}
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div class="footer-legal">
-      <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
-      <p>Apps for iPhone and Android.</p>
+      <p class="footer-region">Apps for iPhone and Android</p>
     </div>
   </div>
 </footer>

@@ -1,69 +1,20 @@
 {%- comment -%}
-  Homepage hero: what the apps do, one primary action, and the apps
-  as real navigation. On wide screens the apps sit in an orbit around the
-  flagship; on phones the same links become one compact row (index.css),
-  so the first screen reaches the apps instead of a large decoration.
+  Opening, as on apple.com's Store page: a two-tone headline (the name in
+  black, what it is in grey), then every app as a "chiclet" (tile + short
+  name). Lists whatever apps.yml holds, flagship first; on phones the row
+  scrolls sideways.
   Params: flagship, others (apps.yml entries).
 {%- endcomment -%}
-<section class="home-hero hero-glow-host" aria-labelledby="home-title">
-  {% include hero-glow.html %}
-  <div class="wrap hero-glow-content home-hero-grid">
-    <div class="home-hero-copy">
-      <h1 id="home-title">Simple apps for your phone's <span class="home-hero-accent">everyday jobs</span></h1>
-      <p class="home-hero-sub">Backing up your photos, opening documents, moving to a new phone: each everyday job gets its own simple app, all from one team.</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="#apps">See the apps<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read Daily Info</a>
-      </div>
-    </div>
-
-    {%- comment -%} Each tile is a labelled link; the label is its accessible
-    name (the tile itself is aria-hidden). {%- endcomment %}
-    {%- comment -%} Every other app goes on the ring, however many there
-    are (no limit, so a new app in apps.yml appears here with no edit).
-    Angles, in degrees, y growing downward:
-      1 app:  -90 (straight above the flagship)
-      2 apps: -150 and -30, a V above it
-      3+:     spread evenly round the whole ring, starting at
-              -90 - 180/n, so the group is always symmetric
-    Tiles shrink as the ring fills. Apps in the upper half label above
-    their tile, the rest below. Float lengths alternate (19s, 24s, 21s,
-    26s ...) and directions flip, so no two tiles move together. {%- endcomment -%}
-    {%- assign _n = include.others | size -%}
-    {%- assign _tile = "20%" -%}
-    {%- if _n >= 6 -%}{%- assign _tile = "14%" -%}{%- elsif _n >= 4 -%}{%- assign _tile = "17%" -%}{%- endif %}
-    <nav class="home-hero-visual" aria-label="Our apps">
-      <div class="orbit" style="--orbit-tile: {{ _tile }}">
-        <div class="orbit-ring" aria-hidden="true"></div>
-        <a class="orbit-app orbit-app--main tone-{{ include.flagship.tone }}" href="{{ '/' | append: include.flagship.slug | relative_url }}">
-          <span class="orbit-float">{% include app-tile.html app=include.flagship %}</span>
-          <span class="orbit-label">{{ include.flagship.short | escape }}</span>
-        </a>
+<section class="ap-hero" aria-labelledby="home-title">
+  <div class="ap-wrap">
+    <h1 id="home-title" class="ap-hero-title">{{ site.title }}. <span>Simple apps for your phone's everyday jobs.</span></h1>
+    <nav class="ap-chiclets" aria-label="Our apps">
+      <ul>
+        <li><a class="ap-chiclet tone-{{ include.flagship.tone }}" href="{{ '/' | append: include.flagship.slug | relative_url }}">{% include app-tile.html app=include.flagship %}<span>{{ include.flagship.short | escape }}</span></a></li>
         {%- for app in include.others %}
-        {%- assign _i = forloop.index0 -%}
-        {%- if _n == 1 -%}
-          {%- assign _a = -90.0 -%}
-        {%- elsif _n == 2 -%}
-          {%- assign _a = _i | times: 120.0 | minus: 150.0 -%}
-        {%- else -%}
-          {%- assign _step = 360.0 | divided_by: _n -%}
-          {%- assign _start = _step | divided_by: 2.0 | plus: 90.0 | times: -1.0 -%}
-          {%- assign _a = _i | times: _step | plus: _start -%}
-        {%- endif -%}
-        {%- assign _a = _a | round: 2 -%}
-        {%- assign _wrapped = _a | plus: 360.0 | modulo: 360.0 -%}
-        {%- assign _up = false -%}
-        {%- if _wrapped > 180.0 and _wrapped < 360.0 -%}{%- assign _up = true -%}{%- endif -%}
-        {%- assign _dur = _i | modulo: 2 | times: 5 -%}
-        {%- assign _dur = _i | divided_by: 2 | times: 2 | plus: 19 | plus: _dur -%}
-        {%- assign _odd = _i | modulo: 2 -%}
-        {%- assign _dir = "reverse" -%}{%- if _odd == 1 -%}{%- assign _dir = "normal" -%}{%- endif %}
-        <a class="orbit-app orbit-app--other{% if _up %} orbit-app--up{% endif %} tone-{{ app.tone }}" href="{{ '/' | append: app.slug | relative_url }}" style="--a: {{ _a }}deg; --float-dur: {{ _dur }}s; --float-dir: {{ _dir }}">
-          <span class="orbit-float">{% include app-tile.html app=app %}</span>
-          <span class="orbit-label">{{ app.short | escape }}</span>
-        </a>
+        <li><a class="ap-chiclet tone-{{ app.tone }}" href="{{ '/' | append: app.slug | relative_url }}">{% include app-tile.html app=app %}<span>{{ app.short | escape }}</span></a></li>
         {%- endfor %}
-      </div>
+      </ul>
     </nav>
   </div>
 </section>

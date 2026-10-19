@@ -24,9 +24,8 @@ css: post
 {%- assign _app = site.data.apps | where: "slug", page.app | first -%}
 {%- assign _published = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
 <article class="tone-{{ _tone }}">
-  <header class="post-hero hero-glow-host">
-    {% include hero-glow.html %}
-    <div class="wrap hero-glow-content post-hero-grid">
+  <header class="post-hero">
+    <div class="wrap post-hero-grid">
       <div class="post-hero-copy">
         <nav class="breadcrumbs" aria-label="Breadcrumb">
           <a href="{{ '/' | relative_url }}">Home</a>

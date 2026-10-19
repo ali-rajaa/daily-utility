@@ -117,7 +117,8 @@
 
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
-      if (openSub && (desktop.matches || !sheetOpen())) { setSub(openSub, false, true); return; }
+      // An open menu (or, on phones, an open sub-panel) closes first.
+      if (openSub) { setSub(openSub, false, true); return; }
       if (sheetOpen()) setSheet(false, true);
     });
 
@@ -126,6 +127,25 @@
       if (!to) return;
       if (!header.contains(to)) { closeSubs(); if (sheetOpen()) setSheet(false); return; }
       if (openSub && desktop.matches && !openSub.parentElement.contains(to)) closeSubs();
+    });
+
+    // Phones: Apps and Help slide in as their own panel. Opening one
+    // moves focus to its back button; the back button closes it and
+    // returns focus to the item that opened it.
+    triggers.forEach(function (t) {
+      t.addEventListener('click', function () {
+        if (desktop.matches || t.getAttribute('aria-expanded') !== 'true') return;
+        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        var back = panel && panel.querySelector('.nav-back');
+        if (back) back.focus({ preventScroll: true });
+      });
+    });
+    Array.prototype.forEach.call(header.querySelectorAll('.nav-back'), function (b) {
+      b.addEventListener('click', function () {
+        var panel = b.closest('.nav-menu');
+        var t = panel && header.querySelector('[aria-controls="' + panel.id + '"]');
+        if (t) setSub(t, false, true);
+      });
     });
 
     var onBreakpoint = function () { closeSubs(); setSheet(false); };
@@ -173,6 +193,25 @@
         if (!wide.matches && e.target.closest('a')) d.open = false;
       });
     });
+  }
+
+  /* ---- Footer columns fold on phones ----
+     Open in the HTML (so they work without JavaScript). On phones they
+     start closed, like apple.com's footer; on wide screens they are always
+     open and the heading is only a label, so it leaves the tab order. */
+  var footFolds = document.querySelectorAll('.footer-fold');
+  if (footFolds.length) {
+    var footWide = window.matchMedia('(min-width: 760px)');
+    var syncFoot = function () {
+      footFolds.forEach(function (d) {
+        d.open = footWide.matches;
+        var s = d.querySelector('summary');
+        if (!s) return;
+        if (footWide.matches) s.setAttribute('tabindex', '-1'); else s.removeAttribute('tabindex');
+      });
+    };
+    syncFoot();
+    if (footWide.addEventListener) footWide.addEventListener('change', syncFoot);
   }
 
   /* ---- Share button ----

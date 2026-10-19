@@ -1,29 +1,20 @@
 {%- comment -%}
-  Site header, one copy for every page (user, 29 Sep): three items named
-  for what's behind them, in one Apple-style capsule. Apps and Help open
-  menus of real destinations; Guides is a plain link to the Daily Info
-  hub (user: "a genuine button to go there, not a drop-down"). No
-  "Get the app" button in the bar (user, 29 Sep): each app page has its
-  own store badges, and the Apps menu is one click from all of them.
+  Site header, apple.com style (preview): one thin translucent bar the
+  width of the page, the logo at the left and the items spread evenly
+  across the rest, in small type. Apps and Help open full-width menus
+  (big links first, smaller links beside them) with the page blurred
+  behind; Guides, About and Sign in are plain links. On phones the bar
+  keeps the logo and a two-line menu button; the menu fills the screen
+  with large links, and Apps and Help slide in as their own panel with a
+  back button, as on apple.com.
 
-  One nav at every size. Desktop (760px+): Apps and Help are full-width
-  flyouts under the bar, opened by hover (short intent delay) or click,
-  with the page dimmed behind. Phones: the menu button opens a sheet;
-  Apps and Help fold open inside it and Guides is a row that links
-  straight to the hub. Menus are disclosure buttons (aria-expanded /
-  aria-controls) driven by scripts.html; without JavaScript they open on
-  hover and focus.
+  Same behaviour and hooks as before (site.js "Navigation"): .nav-trigger
+  buttons with aria-expanded / aria-controls, .nav-link--page for plain
+  links (hovering one closes an open menu), #nav-scrim, #nav-toggle,
+  .menu-open / .nav-open on the header.
 
-  Everything lists itself: apps from _data/apps.yml (built: true, the
-  flagship featured). Platforms (iPhone / Android) are deliberately not
-  shown here -- they live on the app pages and the homepage's
-  availability table, where they're the point (user, 29 Sep). "Contact
-  support" opens the Contact page, which carries the support email.
-
-  "Sign in" (user, 11 Oct) goes to the Daily Utility Cloud Storage web app
-  (site.cloud_url). It sits outside the capsule, since it leaves the site:
-  a small outlined button beside it on wide screens, a full-width button
-  at the foot of the phone menu.
+  Everything lists itself: apps from _data/apps.yml (built: true).
+  "Sign in" goes to the cloud web app (site.cloud_url).
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
@@ -31,9 +22,9 @@
 <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 <div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
-  <div class="wrap header-inner">
+  <div class="header-inner">
     <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
-      {%- include logo.html -%}
+      {%- include brand-mark.html class="logo-mark" size="20" eager=true -%}
     </a>
 
     <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -45,32 +36,28 @@
         <li class="nav-item">
           <button class="nav-link nav-trigger{% if page.layout == 'app' %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-apps">Apps<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
           <div class="nav-menu" id="menu-apps">
-            <div class="wrap nav-menu-inner nav-menu-inner--apps">
-              <div class="nav-menu-main">
-                <p class="nav-menu-label">Our apps</p>
-                <ul class="nav-apps" style="--nav-others: {{ _apps.size | minus: 1 }}">
+            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Apps</span></button>
+            <div class="nav-menu-inner">
+              <div class="nav-col nav-col--main">
+                <p class="nav-col-head">Explore our apps</p>
+                <ul class="nav-big">
                   {%- for app in _apps %}
-                  <li class="tone-{{ app.tone }}{% if app.tier == 'flagship' %} nav-apps-featured{% endif %}">
-                    <a class="nav-app{% if app.tier == 'flagship' %} nav-app--featured{% endif %}" href="{{ '/' | append: app.slug | relative_url }}"{% if page.url contains app.slug %} aria-current="page"{% endif %}>
-                      {% include app-tile.html app=app class="nav-app-tile" %}
-                      <span class="nav-app-text">
-                        {%- if app.tier == 'flagship' %}<span class="nav-app-badge">Flagship</span>{% endif %}
-                        <span class="nav-app-name">{{ app.name | escape }}</span>
-                        <span class="nav-app-desc">{{ app.tagline | escape }}</span>
-                        {%- if app.tier == 'flagship' %}<span class="nav-app-more">See how it works<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></span>{% endif %}
-                      </span>
-                      {%- unless app.tier == 'flagship' %}<svg class="nav-app-arrow" aria-hidden="true"><use href="#i-arrow-right"/></svg>{% endunless %}
-                    </a>
-                  </li>
+                  <li><a href="{{ '/' | append: app.slug | relative_url }}"{% if page.url contains app.slug %} aria-current="page"{% endif %}>{{ app.short | default: app.name | escape }}</a></li>
                   {%- endfor %}
                 </ul>
               </div>
-              <div class="nav-menu-side">
-                <p class="nav-menu-label">Choose an app</p>
-                <ul class="nav-quick">
-                  <li><a href="{{ '/' | relative_url }}#which"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-compass"/></svg></span>Not sure which app you need?</a></li>
-                  <li><a href="{{ '/' | relative_url }}#apps"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-grid"/></svg></span>Compare our apps</a></li>
-                  <li><a href="{{ '/daily-info/' | relative_url }}"><span class="nav-quick-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>Read our phone guides</a></li>
+              <div class="nav-col">
+                <p class="nav-col-head">Choose an app</p>
+                <ul class="nav-small">
+                  <li><a href="{{ '/' | relative_url }}#which">Not sure which app you need?</a></li>
+                  <li><a href="{{ '/' | relative_url }}#apps">Compare our apps</a></li>
+                </ul>
+              </div>
+              <div class="nav-col">
+                <p class="nav-col-head">Learn more</p>
+                <ul class="nav-small">
+                  <li><a href="{{ '/daily-info/' | relative_url }}">Read our phone guides</a></li>
+                  <li><a href="{{ '/about' | relative_url }}">About us</a></li>
                 </ul>
               </div>
             </div>
@@ -78,27 +65,40 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link nav-link--page" href="{{ '/daily-info/' | relative_url }}"{% if page.url == "/daily-info/" %} aria-current="page"{% elsif _in_guides %} aria-current="true"{% endif %}>Guides<svg class="nav-go" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          <a class="nav-link nav-link--page" href="{{ '/daily-info/' | relative_url }}"{% if page.url == "/daily-info/" %} aria-current="page"{% elsif _in_guides %} aria-current="true"{% endif %}>Guides</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link nav-link--page" href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About</a>
         </li>
 
         <li class="nav-item">
           <button class="nav-link nav-trigger{% if _in_help %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-help">Help<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
           <div class="nav-menu" id="menu-help">
-            <div class="wrap nav-menu-inner nav-menu-inner--help">
-              <div class="nav-menu-main">
-                <p class="nav-menu-label">Help &amp; support</p>
-                <ul class="nav-help">
-                  <li><a class="nav-help-link" href="{{ '/' | relative_url }}#faq"><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-help"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Questions about our apps</span><span class="nav-help-desc">What each app does, and where to get it.</span></span></a></li>
-                  <li><a class="nav-help-link" href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Contact support</span><span class="nav-help-desc">Email our support team about any of our apps.</span></span></a></li>
-                  <li><a class="nav-help-link" href="{{ '/privacy-policy' | relative_url }}"{% if page.url == "/privacy-policy" %} aria-current="page"{% endif %}><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Privacy Policy</span><span class="nav-help-desc">How your data is handled, and the choices you have.</span></span></a></li>
-                  <li><a class="nav-help-link" href="{{ '/terms-of-service' | relative_url }}"{% if page.url == "/terms-of-service" %} aria-current="page"{% endif %}><span class="nav-help-icon" aria-hidden="true"><svg><use href="#i-doc"/></svg></span><span class="nav-help-text"><span class="nav-help-name">Terms of Service</span><span class="nav-help-desc">The terms for using our apps and this site.</span></span></a></li>
+            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Help</span></button>
+            <div class="nav-menu-inner">
+              <div class="nav-col nav-col--main">
+                <p class="nav-col-head">Help &amp; support</p>
+                <ul class="nav-big">
+                  <li><a href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}>Contact support</a></li>
+                  <li><a href="{{ '/' | relative_url }}#faq">Questions about our apps</a></li>
+                </ul>
+              </div>
+              <div class="nav-col">
+                <p class="nav-col-head">Legal</p>
+                <ul class="nav-small">
+                  <li><a href="{{ '/privacy-policy' | relative_url }}"{% if page.url == "/privacy-policy" %} aria-current="page"{% endif %}>Privacy Policy</a></li>
+                  <li><a href="{{ '/terms-of-service' | relative_url }}"{% if page.url == "/terms-of-service" %} aria-current="page"{% endif %}>Terms of Service</a></li>
                 </ul>
               </div>
             </div>
           </div>
         </li>
+
+        <li class="nav-item nav-item--signin">
+          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+        </li>
       </ul>
-      <a class="nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
     </nav>
   </div>
 </header>

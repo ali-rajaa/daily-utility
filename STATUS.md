@@ -1988,6 +1988,65 @@ check.
   server ends on the latest `main`.
 - `pages.yml` still builds the noindex preview on every push.
 
+## 5zzz. Apple-style redesign of every page (19 Oct)
+
+User: *"Redesign the interface to match Apple's web design language (such as
+apple.com)"*: system fonts, monochrome palette, frosted glass, 1px
+borders, soft shadows, generous spacing, physics-based transitions, no
+copied logos or assets, content kept. Previewed as a private artifact
+first, then *"push it live, ensure every page is the same test seo"*.
+
+- **Type:** the device's own font (`-apple-system, BlinkMacSystemFont,
+  "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI",
+  Roboto…`) for headings and body. DM Sans, Space Grotesk, their preloads
+  and `assets/fonts/` are removed. Headings semibold with tight
+  tracking; body 17px / 1.47.
+- **Colour:** near-black `#1d1d1f`, greys `#6e6e73` / `#d2d2d7`,
+  surfaces white and `#f5f5f7`; one blue for every action. `--brand-soft`
+  is now Apple grey, so former tinted panels are grey. App tones colour
+  only the app's tile, its glow and an accent label (`--tone-text`);
+  buttons and links stay blue on app pages. Hero glow blobs removed
+  (include, CSS and template calls).
+- **Surfaces:** 18px card radius, 1px hairlines, soft directional
+  shadows (`2px 4px 12px rgba(0,0,0,.08)`); cards grow 1% on hover;
+  pills are apple.com's filled / outlined pair; store badges black.
+- **Motion:** `--spring` (a critically damped spring sampled into
+  `linear()`, with a cubic-bezier fallback) on hovers, menus and cards;
+  press feedback instant; reduced-motion respected.
+- **Header:** logo mark only (the link is labelled), items spaced evenly
+  to the right edge in 12px type. Full-width menus grow down with links
+  fading in one after another; the page behind takes a faint tint, no
+  blur (user). Phones: full-screen menu with large links; Apps and Help
+  slide in as their own panel with a "Menu" back button; Escape closes the
+  panel, then the menu. `_includes/logo.html` removed.
+- **Footer:** apple.com layout: grey, 12px; note, "you are here" trail
+  (every page but the homepage), five directory columns (fold on phones),
+  a "more ways to get help" line with the support email, copyright and
+  legal links. Fixes the duplicated footer line from 5z.
+- **Homepage:** Store-style two-tone headline with every app as a
+  chiclet; flagship on a grey panel; other apps as promo tiles (any
+  number); compare table (sideways on phones, rows aligned with subgrid);
+  switching steps; privacy cards; guides shelf. Includes in
+  `_includes/home/` (hero, app-promo, jobs, switch, privacy, guides);
+  `home/apps.html` removed.
+- **Other pages:** app, guide and hub hero art are the app/topic tile on a
+  quiet grey panel; icon squares became plain blue glyphs; callouts are
+  grey panels without coloured edges; the 404 numeral is grey.
+- **About** gained breadcrumb front matter and its BreadcrumbList schema.
+
+**Checks (live-address build):** HTML valid on all pages; no unrendered
+Liquid; a new SEO audit of all 17 pages (titles and descriptions present,
+unique and in range, canonical and og:url equal the clean URL, robots,
+og/twitter tags, og images exist, one H1 and no skipped heading levels,
+JSON-LD parses with the right types per page and no ratings, FAQPage
+matches the visible questions, every internal link and anchor resolves,
+sitemap lists exactly the indexable pages, robots.txt, identical header
+and footer on every page): 0 problems. axe clean on every page at 1440
+and 390px, no sideways scroll; 20/20 header/footer interaction tests;
+phone audit (320–430px): no tap target under 44px. Found and fixed on the
+way: the homepage compare row widened the page on phones in Chromium
+(`contain: paint` on the section).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2486,3 +2545,4 @@ flagship Apple id.
 - 16 Oct: removed the old sign-in page's three leftover files from the
   server (end of section 5z).
 - 18 Oct: ftp.yml uploads automatically on every push to main (section 5zz).
+- 19 Oct: Apple-style redesign of every page, live (section 5zzz).

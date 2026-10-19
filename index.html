@@ -26,16 +26,18 @@ faqs:
 updated: 2026-10-15
 ---
 {%- comment -%}
-  Homepage. Seven parts, most of them includes in _includes/home/, in the
-  order a first-time visitor needs them: what this is (hero), which app to
-  use (apps), how the jobs differ and when to use each (jobs), how data is
-  handled (privacy), the guide library (guides), questions, then one
-  closing action.
+  Homepage, in apple.com's layout (19 Oct): a Store-style two-tone
+  headline with every app as a chiclet (home/hero); the flagship on a
+  full-width grey panel and the other apps as promo tiles two to a row
+  (home/app-promo); "Which kind of app do you need?" as a compare table
+  (home/jobs); the switching steps (home/switch); privacy (home/privacy);
+  a sideways shelf of guides (home/guides); the FAQ; a closing action.
 
   Content comes from data, not this file: apps from _data/apps.yml, the
   repeating homepage copy from _data/home.yml, company details from
   _config.yml, articles from pages on the post layout. Adding an app or an
-  article never means editing this file.
+  article never means editing this file, and nothing here states how many
+  apps there are.
 {%- endcomment -%}
 {%- assign apps = site.data.apps | where: "built", true -%}
 {%- assign flagship = apps | where: "tier", "flagship" | first -%}
@@ -45,22 +47,33 @@ updated: 2026-10-15
 {%- assign guide_cards = posts | concat: upcoming -%}
 
 {% include home/schema.html apps=apps %}
+<div class="ap">
 {% include home/hero.html flagship=flagship others=others %}
-{% include home/apps.html flagship=flagship others=others %}
+
+<section class="ap-apps" id="apps" aria-labelledby="apps-title">
+  <h2 id="apps-title" class="visually-hidden">Our apps</h2>
+  {% include home/app-promo.html app=flagship hero=true %}
+  {%- if others.size > 0 %}
+  <div class="ap-grid">
+    {%- for app in others %}
+    {% include home/app-promo.html app=app %}
+    {%- endfor %}
+  </div>
+  {%- endif %}
+</section>
+
 {% include home/jobs.html %}
+{% include home/switch.html %}
 {% include home/privacy.html %}
 {% include home/guides.html posts=guide_cards %}
-{% include faq-section.html faqs=page.faqs id="faq" alt=true split=true heading="Questions about our apps" sub="What each app does, where to get it and how your data is handled." %}
+{% include faq-section.html faqs=page.faqs id="faq" heading="Questions about our apps." sub="What each app does, where to get it and how your data is handled." %}
 
-<section class="section" aria-labelledby="start-title">
-  <div class="wrap">
-    <div class="cta-band cta-band--card home-cta tone-{{ flagship.tone }} reveal">
-      {% include app-tile.html app=flagship class="cta-band-icon" %}
-      <div class="section-head">
-        <h2 id="start-title">Start with a backup</h2>
-        <p class="section-sub">If you install one of our apps, make it {{ flagship.name | escape }}. A copy of your photos, videos, contacts and app data off your phone makes every other job safer, from clearing space to switching phones. It's free to download on {% include platforms.html app=flagship %}.</p>
-      </div>
-      {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url app=flagship.short %}
-    </div>
+<section class="ap-section ap-close tone-{{ flagship.tone }}" aria-labelledby="start-title">
+  <div class="ap-wrap reveal">
+    {% include app-tile.html app=flagship class="ap-close-icon" %}
+    <h2 id="start-title">Start with a backup.</h2>
+    <p>If you install one of our apps, make it {{ flagship.name | escape }}. A copy of your photos, videos, contacts and app data off your phone makes every other job safer, from clearing space to switching phones. It's free to download on {% include platforms.html app=flagship %}.</p>
+    {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url app=flagship.short %}
   </div>
 </section>
+</div>

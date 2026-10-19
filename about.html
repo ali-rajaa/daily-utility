@@ -4,6 +4,11 @@ permalink: /about
 css: about
 title: "About Daily Utility Apps: Focused Apps for Everyday Phone Jobs"
 description: "Daily Utility Apps makes phone apps that are free to download, each built around one everyday job, like backing up, reading documents or moving files."
+breadcrumbs:
+  - name: "Home"
+    url: "/"
+  - name: "About"
+    url: "/about"
 ---
 {%- comment -%}
   About page (3 Oct). Every statement here is already made elsewhere on
@@ -14,10 +19,10 @@ description: "Daily Utility Apps makes phone apps that are free to download, eac
   confirmed. The registered company name appears on the legal pages only
   (STATUS.md section 5u).
 {%- endcomment -%}
+{% include breadcrumb-schema.html crumbs=page.breadcrumbs %}
 {%- assign apps = site.data.apps | where: "built", true -%}
-<section class="section about-hero hero-glow-host" aria-labelledby="about-title">
-  {% include hero-glow.html %}
-  <div class="wrap hero-glow-content about-hero-grid">
+<section class="section about-hero" aria-labelledby="about-title">
+  <div class="wrap about-hero-grid">
     <div class="about-hero-copy">
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="{{ '/' | relative_url }}">Home</a>

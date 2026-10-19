@@ -1,613 +1,459 @@
 ---
-# Front matter fence: tells Jekyll to compile this file with Sass
-# (compressed, see _config.yml). Output keeps the .css name.
+# Front matter fence: tells Jekyll to compile this file with Sass.
 ---
 /* ==========================================================================
-   index.css: the homepage (index.html + _includes/home/).
-   Order: hero with the app orbit, the apps (flagship feature + the
-   other cards), backup/transfer/read compared with the switching-phones
-   order, how data is handled, latest Daily Info, FAQ (split, shell.css),
-   closing CTA.
+   index.css: the homepage, in apple.com's layout.
 
-   Colours are shell.css tokens only. Every app card and job card sits in
-   its app's .tone-* scope (shell.css "App tones"), so accents take the
-   app's colour, with no per-app rules here. Gradients are
-   decoration only, never behind text.
+   A stack of calm sections: a Store-style two-tone headline with the app
+   row; the flagship on a full-width grey panel; the other apps as promo
+   tiles two to a row; a compare table; the switching steps; privacy; a
+   sideways shelf of guides; the FAQ; a closing call to action.
 
-   Motion follows the apple-design skill: transform/opacity only, slow
-   floats of 18s+, press feedback on :active, hover lifts only where a
-   pointer can hover, reduced-motion and more-contrast fallbacks at the end.
+   Built on shell.css tokens (system font, monochrome greys, one blue).
+   This file adds only layout and the few sizes the homepage needs.
+   Motion: transform and opacity on the spring curve; promo tiles rise
+   into place as they scroll in where the browser has scroll timelines;
+   nothing moves with reduced motion.
    ========================================================================== */
 
-/* ---------- Hero ---------- */
-
-.home-hero { padding-block: var(--space-hero-top) var(--space-hero-bottom); }
-
-.home-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 4rem);
-}
-@media (max-width: 899.98px) {
-  .home-hero-grid { grid-template-columns: 1fr; }
+.ap {
+  --ap-gap: 12px;            /* between edge-to-edge panels, as apple.com */
+  --ap-wrap: 61.25rem;       /* 980px content width */
 }
 
-.home-hero-accent { color: var(--brand-text); }
+.ap-wrap {
+  width: min(100% - 2 * var(--gutter), var(--ap-wrap));
+  margin-inline: auto;
+}
 
-.home-hero-sub {
-  max-width: 34rem;
-  margin-top: 1.25rem;
-  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
-  line-height: 1.6;
+/* ---------- Shared pieces ---------- */
+
+.ap-section { padding-block: var(--space-section); }
+
+/* Full-width grey panel, inset by the same 12px as the tiles. */
+.ap-panel {
+  margin-inline: var(--ap-gap);
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+  background: var(--bg-alt);
+}
+
+/* Section headline, centred (compare, privacy, closing). */
+.ap-head { max-width: 46rem; margin: 0 auto clamp(2.5rem, 5vw, 4rem); text-align: center; }
+.ap-head h2, .ap-close h2 { font-size: clamp(2.125rem, 1.35rem + 3.2vw, 3.5rem); line-height: 1.07; }
+.ap-head p,
+.ap-switch-intro > p,
+.ap-close p {
+  margin-top: 1rem;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.3125rem);
+  line-height: 1.5;
   color: var(--text-2);
+  text-wrap: pretty;
 }
 
-.home-hero-copy .btn-row { margin-top: 2rem; }
+/* Two-tone headline, as on apple.com's Store: the name in black, what it
+   is in grey, one heading. */
+.ap-hero-title span,
+.ap-guides-head h2 span { color: var(--text-2); }
 
-/* ---------- The app orbit ----------
-   Real navigation: each app is a labelled link. The flagship sits at the
-   ring's centre; every other app sits ON the ring at an angle hero.html
-   works out from how many there are (--a): with two, -150 and -30
-   degrees, a balanced V (chosen over a diagonal and a wider arc by
-   comparing all three, 15 Oct); with more, spread evenly round the ring.
-   Ring: centre (50%, 52%), radius 38% of the box, so the group sits in
-   the middle of the square. Sizes (centre tile 30%, others --orbit-tile,
-   20% for up to three) were set by checking every label's box against
-   its neighbours at desktop and phone widths: tiles in the upper half
-   label above themselves (.orbit-app--up), the rest below. Each link is
-   centred on its point with the `translate` property; the float animates
-   `transform` on an inner span and the hover scales the tile with
-   `scale`, so the three never fight.
-     x = 50 + 38cos(a), y = 52 + 38sin(a)   (y grows downward) */
+/* The app's own colour, for a short label only. */
+.ap-accent { color: var(--tone-text, var(--brand-text)); }
 
-.home-hero-visual { display: flex; justify-content: center; }
+.ap-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.5rem;
+}
+.ap-ctas .btn { min-width: 7.5rem; }
 
-.orbit {
-  position: relative;
-  width: min(100%, 26rem);
-  aspect-ratio: 1;
+/* "Learn more ›": text link with a chevron that steps forward on hover. */
+.ap-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  color: var(--brand-text);
+  font-size: 1.0625rem;
+  text-decoration: none;
+}
+.ap-link svg {
+  width: 0.85rem;
+  height: 0.85rem;
+  transform: rotate(-90deg);
+  transition: transform var(--spring-dur) var(--spring);
+}
+@media (hover: hover) {
+  .ap-link:hover { text-decoration: underline; }
+  .ap-link:hover svg { transform: rotate(-90deg) translateY(3px); }
 }
 
-.orbit-ring,
-.orbit-ring::after {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px dashed var(--border-strong);
-}
-.orbit-ring { left: 12%; top: 14%; width: 76%; aspect-ratio: 1; }
-.orbit-ring::after { content: ""; inset: 22%; border-style: solid; border-color: var(--border); }
+/* ---------- Opening: two-tone headline and the app row ---------- */
 
-.orbit-app {
-  position: absolute;
-  display: block;
-  translate: -50% -50%;
-  border-radius: 23%;
+.ap-hero { padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
+.ap-hero-title {
+  max-width: 22ch;
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+/* Every app, as on apple.com's Store page. Wraps on wide screens and
+   scrolls sideways on phones, so it takes any number of apps. */
+.ap-chiclets ul {
+  display: flex;
+  gap: 1.25rem clamp(1.5rem, 4vw, 2.75rem);
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 760px) { .ap-chiclets ul { flex-wrap: wrap; } }
+@media (max-width: 759.98px) {
+  .ap-chiclets { margin-inline: calc(-1 * var(--gutter)); }
+  .ap-chiclets ul {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    padding: 0.25rem var(--gutter) 0.75rem;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .ap-chiclets ul::-webkit-scrollbar { display: none; }
+  .ap-chiclets li { scroll-snap-align: start; }
+}
+.ap-chiclet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 6.5rem;
   color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-align: center;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
-.orbit-app--main { width: 30%; left: 50%; top: 52%; z-index: 2; }
-.orbit-app--other {
-  width: var(--orbit-tile, 20%);
-  left: calc(50% + 38% * cos(var(--a, -90deg)));
-  top: calc(52% + 38% * sin(var(--a, -90deg)));
+.ap-chiclet .app-tile {
+  width: 4.5rem;
+  transition: transform var(--spring-dur) var(--spring);
 }
-
-.orbit-float { display: block; will-change: transform; }
-.orbit-app--main .orbit-float { animation: orbitFloat 22s ease-in-out infinite; }
-.orbit-app--other .orbit-float { animation: orbitFloat var(--float-dur, 20s) ease-in-out infinite var(--float-dir, normal); }
-
-@keyframes orbitFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+@media (hover: hover) {
+  .ap-chiclet:hover { color: var(--brand-text); }
+  .ap-chiclet:hover .app-tile { transform: translateY(-3px); }
 }
+.ap-chiclet:active .app-tile { transform: scale(0.95); transition-duration: 0.1s; }
 
-.orbit-app .app-tile {
-  width: 100%;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-lg);
-  transition: scale 0.25s var(--ease-out);
-}
-.orbit-app:hover .app-tile { scale: 1.06; }
-.orbit-app:active .app-tile { scale: 0.96; transition-duration: 0.1s; }
+/* ---------- App promo tiles ---------- */
 
-.orbit-label {
-  position: absolute;
-  top: calc(100% + 0.6rem);
-  left: 50%;
-  translate: -50% 0;
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  font: 600 0.8125rem/1.2 var(--font-heading);
-  white-space: nowrap;
-  transition: color 0.15s ease, border-color 0.15s ease;
-}
-.orbit-app:hover .orbit-label { color: var(--brand-text); border-color: var(--border-strong); }
-/* Tiles in the upper half label above themselves: below, their labels
-   would crowd the centre tile at narrow widths. */
-.orbit-app--up .orbit-label { top: auto; bottom: calc(100% + 0.6rem); }
-
-/* Phones and small tablets: the orbit becomes one row of labelled tiles
-   under the buttons, so the first screen reaches the apps instead of a
-   large decoration. Same links, same order (flagship first). The row
-   holds any number of apps: columns are added while each stays at
-   least 3.75rem wide, then the row wraps. */
-@media (max-width: 899.98px) {
-  .home-hero-visual { justify-content: stretch; }
-  .orbit {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(3.75rem, 1fr));
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 24rem;
-    aspect-ratio: auto;
-  }
-  .orbit-ring { display: none; }
-  .orbit-app,
-  .orbit-app--main, .orbit-app--other {
-    position: static;
-    translate: none;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding-block: 0.25rem;
-    text-align: center;
-  }
-  .orbit-float { animation: none; }
-  .orbit-app .app-tile { width: 3.5rem; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), var(--shadow-md); }
-  .orbit-label,
-  .orbit-app--up .orbit-label {
-    position: static;
-    translate: none;
-    padding: 0;
-    border: 0;
-    background: none;
-    box-shadow: none;
-    font-size: 0.8125rem;
-    line-height: 1.25;
-    white-space: normal;
-  }
-}
-
-/* ---------- Apps ---------- */
-
-.apps-grid {
+.ap-apps {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  align-items: stretch;
-  gap: 1.25rem;
+  gap: var(--ap-gap);
+  padding-inline: var(--ap-gap);
 }
-@media (max-width: 959.98px) {
-  .apps-grid { grid-template-columns: 1fr; }
+.ap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ap-gap);
 }
+/* An odd one out takes the full width, so the grid never leaves a hole. */
+.ap-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+@media (max-width: 759.98px) { .ap-grid { grid-template-columns: minmax(0, 1fr); } }
 
-.app-feature {
+.ap-tile {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
+  align-items: center;
   overflow: hidden;
   isolation: isolate;
-}
-/* A wash of the app's colour behind the tile only, never behind text. */
-.app-feature::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 9rem;
-  z-index: -1;
-  background: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%);
-}
-.app-feature-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-.app-feature-tile { width: 4.5rem; }
-.app-flag {
-  padding: 0.4rem 0.7rem;
-  border-radius: var(--radius-pill);
-  background: var(--brand-soft);
-  color: var(--brand-text);
-  font: 650 0.75rem/1 var(--font-heading);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.app-name { font-size: 1.125rem; }
-.app-feature .app-name { font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem); }
-.app-name a {
-  /* a full 44px+ tap height without changing the heading's spacing */
-  display: inline-block;
-  padding-block: 0.6875rem;
-  margin-block: -0.6875rem;
-  color: var(--text);
-  text-decoration: none;
-}
-.app-name a:hover { color: var(--brand-text); }
-.app-job {
-  margin-top: 0.4rem;
-  font-weight: 600;
-  color: var(--brand-text);
-}
-.app-text {
-  margin-top: 0.5rem;
-  color: var(--text-2);
-  line-height: 1.6;
-}
-.app-item .app-job, .app-item .app-text { font-size: 0.9375rem; }
-
-.app-feats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-.app-feats li {
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
+  padding: clamp(3rem, 5.5vw, 3.75rem) var(--gutter) 0;
   background: var(--bg-alt);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  line-height: 1.3;
+  text-align: center;
 }
+.ap-tile--hero { padding-top: clamp(3.25rem, 6.5vw, 4.5rem); }
 
-.app-platform {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  color: var(--text-2);
+.ap-eyebrow { margin-bottom: 0.4rem; font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem); font-weight: 600; }
+.ap-tile-name {
+  max-width: 20ch;
+  margin-inline: auto;
+  font-size: clamp(2.125rem, 1.4rem + 2.9vw, 3.5rem);
+  line-height: 1.07;
 }
-.app-platform svg { width: 1rem; height: 1rem; flex-shrink: 0; }
-
-.app-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1.25rem;
-  margin-top: 1.25rem;
+.ap-grid .ap-tile-name { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem); }
+.ap-tile-tagline {
+  max-width: 34rem;
+  margin: 0.75rem auto 0;
+  font-size: clamp(1.1875rem, 1rem + 0.75vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
 }
-.app-feature .app-actions { margin-top: auto; padding-top: 1.75rem; }
+.ap-grid .ap-tile-tagline { font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem); max-width: 28rem; }
+.ap-tile-meta { margin-top: 0.6rem; font-size: 0.9375rem; color: var(--text-2); }
 
-/* Arrow text link used across the page ("Learn more", "Use Backup & Drive"). */
-.app-more,
-.job-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  min-height: 2.75rem;
-  font-weight: 600;
-  color: var(--brand-text);
-  text-decoration: none;
-  overflow-wrap: anywhere;
-}
-.app-more svg, .job-link svg { width: 1rem; height: 1rem; flex-shrink: 0; transition: transform 0.2s var(--ease-out); }
-.app-more:hover svg, .job-link:hover svg { transform: translateX(3px); }
+/* The copy takes what it needs and the visual sits at the foot, so tiles
+   side by side line up even when one name runs to two lines. */
+.ap-tile-copy { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
 
-.apps-list {
+/* The visual: the app's tile, large, on a soft glow of its own colour,
+   with what it covers as chips beneath. Decorative (aria-hidden): the
+   same facts are on the app's page. */
+.ap-tile-visual {
+  position: relative;
   display: grid;
-  gap: 1.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.apps-list > li { display: flex; }
-.app-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  justify-items: center;
+  gap: 1.75rem;
   width: 100%;
-  padding: 1.25rem 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
+  margin-top: auto;
+  padding-bottom: clamp(3rem, 6vw, 4.5rem);
 }
-.app-item-tile { width: 3.25rem; }
-/* The cards stretch to the flagship card's height; the platform and store
-   buttons sit at the foot, so the extra height falls between the text and
-   the buttons rather than as an empty band at the bottom. */
-.app-item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; align-self: stretch; }
-.app-item-foot {
+.ap-glow {
+  position: absolute;
+  inset: -15% -20% -10%;
+  z-index: -1;
+  background: radial-gradient(45% 50% at 50% 40%, color-mix(in srgb, var(--tone-light) 26%, transparent), transparent 72%);
+  pointer-events: none;
+}
+.ap-tile-icon {
+  width: clamp(8.5rem, 6rem + 9vw, 12.5rem);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 30px 60px -18px color-mix(in srgb, var(--tone-deep) 50%, transparent);
+  transition: transform 0.6s var(--spring);
+}
+.ap-grid .ap-tile-icon { width: clamp(6.5rem, 5rem + 4.5vw, 8.5rem); }
+@media (hover: hover) {
+  .ap-tile:hover .ap-tile-icon { transform: scale(1.03); }
+}
+
+.ap-chips {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  margin-top: auto;
-  padding-top: 1rem;
-}
-.app-moments {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
-}
-.app-moments h4 { font: 600 1rem/1.35 var(--font-heading); letter-spacing: -0.01em; }
-.app-moments ul { display: grid; gap: 0.75rem; margin: 0.9rem 0 0; padding: 0; list-style: none; }
-.app-moments li { display: flex; gap: 0.6rem; font-size: 0.9375rem; line-height: 1.55; color: var(--text-2); }
-.app-moments li svg { width: 1.125rem; height: 1.125rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--brand-text); }
-.app-moments strong { color: var(--text); font-weight: 600; }
-
-.app-item-moments {
-  margin-top: 1.1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-.app-item-moments-head { font: 600 0.9375rem/1.35 var(--font-heading); letter-spacing: -0.01em; color: var(--text); }
-.app-item-moments ul { display: grid; gap: 0.5rem; margin: 0.7rem 0 0; padding: 0; list-style: none; }
-.app-item-moments li { display: flex; gap: 0.55rem; font-size: 0.9375rem; line-height: 1.5; color: var(--text-2); }
-.app-item-moments li svg { width: 1.05rem; height: 1.05rem; flex-shrink: 0; margin-top: 0.15rem; color: var(--brand-text); }
-/* Stacked, the cards no longer stretch beside the flagship, so the list
-   would only add length. */
-@media (max-width: 959.98px) { .app-item-moments { display: none; } }
-
-.app-item-foot .app-platform,
-.app-item-foot .app-actions { margin-top: 0; }
-@media (max-width: 479.98px) {
-  .app-item { flex-direction: column; padding: 1.25rem; }
-}
-
-/* ---------- Back up, transfer or read ---------- */
-
-.jobs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 30rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-/* Phones: a swipeable shelf instead of stacked cards. The next card
-   peeks in so it's obvious there's more; each card snaps into place.
-   Every card stays in the page (and the tab order), just side by side. */
-@media (max-width: 599.98px) {
-  .jobs-grid {
+.ap-chips li {
+  padding: 0.4rem 0.95rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+/* ---------- Compare ---------- */
+
+.ap-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+  gap: 3.5rem clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Rows line up across columns: each column is a subgrid of seven rows
+   (tile, name, app, three facts, link). */
+.ap-compare-col {
+  display: grid;
+  grid-row: span 7;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  justify-items: center;
+  align-content: start;
+  text-align: center;
+}
+.ap-compare-col dl { display: contents; }
+.ap-compare-icon { width: 4.5rem; }
+.ap-compare-col h3 { margin-top: 1.25rem; font-size: clamp(1.625rem, 1.3rem + 1vw, 2rem); letter-spacing: -0.01em; }
+.ap-compare-app { margin: 0.25rem 0 1.5rem; font-size: 1rem; font-weight: 600; }
+.ap-compare-col dl > div { width: 100%; padding-block: 1.15rem; border-top: 1px solid var(--border); }
+.ap-compare-col dt { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.01em; color: var(--text-2); }
+.ap-compare-col dd { margin: 0.4rem 0 0; font-size: 1.0625rem; line-height: 1.47; text-wrap: pretty; }
+.ap-compare-col .ap-link { align-self: start; margin-top: 0.25rem; }
+/* Phones: the columns sit side by side in a sideways swipe, each most of
+   the screen wide, so the rows still line up and the page stays short. */
+@media (max-width: 759.98px) {
+  /* The swipe row must never widen the page itself. Clipping the row
+     alone isn't enough: in Chromium its line-up (subgrid) columns still
+     count toward the page width, so the section is a paint boundary. */
+  .ap-compare { contain: paint; }
+  .ap-compare .ap-wrap { width: 100%; }
+  .ap-compare .ap-head { padding-inline: var(--gutter); }
+  .ap-compare-grid {
     grid-template-columns: none;
     grid-auto-flow: column;
-    grid-auto-columns: 84%;
-    gap: 0.875rem;
+    grid-auto-columns: min(19rem, 82%);
+    column-gap: 1.75rem;
+    padding: 0 var(--gutter) 1rem;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--gutter);
-    margin-inline: calc(-1 * var(--gutter));
-    padding: 0.25rem var(--gutter) 1rem;
-    scrollbar-width: none;
+    scrollbar-width: thin;
   }
-  .jobs-grid::-webkit-scrollbar { display: none; }
-  .jobs-grid > .job { scroll-snap-align: start; }
-}
-.job {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: inset 0 3px 0 var(--brand);
-}
-.job-head { display: flex; align-items: center; gap: 0.75rem; }
-.job-tile { width: 2.5rem; }
-.job-head h3 { font-size: 1.25rem; }
-.job-facts {
-  display: grid;
-  gap: 1rem;
-  flex-grow: 1;
-  margin: 1.25rem 0 0;
-}
-.job-facts dt {
-  font: 600 0.875rem/1.3 var(--font);
-  color: var(--brand-text);
-}
-.job-facts dd {
-  margin: 0.3rem 0 0;
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  color: var(--text-2);
-}
-.job-link { margin-top: 1rem; }
-/* Tablets: one card per row, its three facts side by side, which uses the
-   width better than three narrow columns. */
-@media (min-width: 600px) and (max-width: 899.98px) {
-  .jobs-grid { grid-template-columns: minmax(0, 1fr); }
-  .job-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.5rem; }
-}
-/* Side by side, each card's rows line up with its neighbours': heading,
-   the three facts and the link share row tracks across the grid
-   (subgrid), so "When to use it" starts at the same height in every
-   card however long the text above it is. */
-@media (min-width: 900px) {
-  @supports (grid-template-rows: subgrid) {
-    .job { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
-    .job-facts { grid-row: span 3; grid-template-rows: subgrid; row-gap: 1rem; }
-    .job-link { align-self: end; }
-  }
+  .ap-compare-col { scroll-snap-align: start; }
 }
 
-/* Switching phones: the three apps in the order the guide recommends. */
-.switch {
+/* ---------- Switching phones ---------- */
+
+.ap-switch-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(1.5rem, 4vw, 3rem);
-  margin-top: clamp(2rem, 4vw, 3rem);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border: 1px solid var(--border);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 2.5rem clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+@media (max-width: 899.98px) { .ap-switch-grid { grid-template-columns: minmax(0, 1fr); } }
+.ap-switch-intro h2 { font-size: clamp(2rem, 1.35rem + 2.5vw, 3rem); }
+
+.ap-steps { display: grid; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.ap-steps li {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  column-gap: 1.25rem;
+  padding-block: 1.6rem;
+  border-top: 1px solid var(--border);
+  counter-increment: step;
+}
+.ap-steps li:first-child { padding-top: 0.25rem; border-top: 0; }
+.ap-steps li::before {
+  content: counter(step);
+  grid-row: 1 / span 2;
+  font-size: 2.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--brand-text);
+  font-variant-numeric: tabular-nums;
+}
+.ap-steps h3 { font-size: 1.3125rem; line-height: 1.25; }
+.ap-steps p { margin-top: 0.45rem; line-height: 1.5; color: var(--text-2); }
+
+/* ---------- Privacy ---------- */
+
+.ap-privacy-mark {
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0 auto 1.75rem;
+  border-radius: 50%;
+  background: var(--tone-gradient);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 2px 8px 24px rgba(11, 95, 232, 0.3);
+}
+.ap-privacy-mark svg { width: 2.6rem; height: 2.6rem; }
+
+.ap-privacy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+  gap: var(--ap-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ap-privacy-card {
+  padding: clamp(1.75rem, 3vw, 2.25rem);
   border-radius: var(--radius-lg);
   background: var(--bg-alt);
 }
-@media (max-width: 859.98px) {
-  .switch { grid-template-columns: 1fr; }
-}
-.switch-intro h3 { font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); }
-.switch-intro p { margin-top: 0.75rem; color: var(--text-2); line-height: 1.6; }
-.switch-intro .app-more { margin-top: 0.5rem; }
-.switch-steps {
-  display: grid;
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: step;
-}
-.switch-steps li {
-  position: relative;
-  padding-left: 3rem;
-  counter-increment: step;
-}
-.switch-steps li::before {
-  content: counter(step);
-  position: absolute;
-  left: 0;
-  top: -0.1rem;
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--brand);
-  color: var(--on-brand);
-  font: 650 0.9375rem/1 var(--font-heading);
-}
-.switch-steps h4 { font: 600 1.0625rem/1.35 var(--font-heading); letter-spacing: -0.01em; }
-.switch-steps p { margin-top: 0.3rem; font-size: 0.9375rem; line-height: 1.6; color: var(--text-2); }
+.ap-privacy-card svg { width: 2rem; height: 2rem; color: var(--brand-text); }
+.ap-privacy-card h3 { margin-top: 1rem; }
+.ap-privacy-card p { margin-top: 0.5rem; line-height: 1.5; color: var(--text-2); }
 
-/* ---------- How we handle your data ---------- */
+/* ---------- Guides shelf ---------- */
 
-.privacy-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  align-items: start;
-  gap: clamp(2rem, 5vw, 4rem);
-}
-@media (max-width: 899.98px) {
-  .privacy-layout { grid-template-columns: 1fr; }
-}
-.privacy-links {
+.ap-guides-head {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 1.5rem;
-  margin-top: 1.25rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-bottom: 2rem;
 }
-.privacy-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.75rem 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-@media (max-width: 599.98px) {
-  .privacy-list { grid-template-columns: 1fr; }
-}
-.privacy-item { display: flex; align-items: flex-start; gap: 1rem; }
-.privacy-icon {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: var(--radius);
-  background: var(--brand-soft);
-  color: var(--brand-text);
-}
-.privacy-icon svg { width: 1.375rem; height: 1.375rem; }
-.privacy-item h3 { font-size: 1.0625rem; }
-.privacy-item p { margin-top: 0.35rem; font-size: 0.9375rem; line-height: 1.6; color: var(--text-2); }
+.ap-guides-head h2 { max-width: 34rem; font-size: clamp(2rem, 1.35rem + 2.5vw, 3rem); }
+.ap-guides-head .ap-link { margin-top: 0; }
 
-/* ---------- Latest Daily Info ---------- */
-
-.home-guides .section-head { max-width: 42rem; }
-.guide-topics {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1rem;
-  margin-top: 2rem;
-}
-.guide-topics-label { font-size: 0.875rem; font-weight: 600; color: var(--text-2); }
-.guide-topics ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+/* A sideways shelf, starting in line with the content above it and
+   running to the screen edge, like apple.com's "Get to know" rows. */
+.ap-shelf {
+  --shelf-pad: max(var(--gutter), (100% - var(--ap-wrap)) / 2);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(20rem, 80%);
+  gap: 1.25rem;
   margin: 0;
-  padding: 0;
+  padding: 0.75rem var(--shelf-pad) 2rem;
   list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--shelf-pad);
+  scrollbar-width: thin;
 }
-.guide-topics a {
+.ap-shelf > li { display: flex; scroll-snap-align: start; }
+.ap-shelf .post-card-banner { height: 10rem; }
+
+.ap-topics ul { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.5rem 0 0; padding: 0; list-style: none; }
+.ap-topics a {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   min-height: 2.75rem;
-  padding: 0 1rem;
+  padding: 0.5rem 1.1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   background: var(--surface);
   color: var(--text);
   font-size: 0.9375rem;
-  font-weight: 600;
   text-decoration: none;
-  transition: border-color 0.15s ease, color 0.15s ease, transform 0.1s ease-out;
+  transition: border-color var(--spring-dur) var(--spring), color var(--spring-dur) var(--spring);
 }
-.guide-topics a svg { width: 1rem; height: 1rem; color: var(--brand-text); }
-.guide-topics a:hover { border-color: var(--brand); color: var(--brand-text); }
-.guide-topics a:active { transform: scale(0.97); }
+.ap-topics svg { width: 1.1rem; height: 1.1rem; color: var(--brand-text); }
+@media (hover: hover) { .ap-topics a:hover { color: var(--brand-text); border-color: var(--brand-text); } }
 
-/* Phones: each guide becomes a compact row (glyph beside the text)
-   instead of a tall banner card. The hub keeps its full cards. */
-/* Phones: guide cards are compact rows site-wide (shell.css); the
-   homepage's teaser also drops the description. */
-@media (max-width: 599.98px) {
-  .home-guides .post-card-desc { display: none; }
+/* ---------- FAQ: the shared list, with this page's headline size ---------- */
+
+.ap .faq-split .section-head h2 { font-size: clamp(2rem, 1.35rem + 2.5vw, 3rem); }
+
+/* ---------- Closing ---------- */
+
+.ap-close { text-align: center; }
+.ap-close-icon { width: 5.5rem; margin: 0 auto 1.75rem; }
+.ap-close p { max-width: 40rem; margin-inline: auto; }
+.ap-close .store-badges { justify-content: center; margin-top: 2rem; }
+
+/* ---------- Motion ---------- */
+
+/* The promo tiles' visuals rise into place as they scroll in, tied to
+   scroll position (so it's reversible and never "plays" on its own).
+   Not on the flagship: it is partly in the first screen. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ap-grid .ap-tile-visual {
+      animation: apRise linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 35%;
+    }
+  }
 }
-
-/* ---------- Closing CTA ---------- */
-
-/* The closing band is shell.css's .cta-band--card; the homepage adds a
-   wash of the flagship's colour in two corners. */
-.home-cta {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
+@keyframes apRise {
+  from { opacity: 0.35; transform: translateY(2.5rem) scale(0.94); }
+  to { opacity: 1; transform: none; }
 }
-/* Soft brand-coloured light in the two far corners -- kept to the edges
-   so it never sits behind the heading or copy. */
-.home-cta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 40%),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--glow-b) 22%, transparent), transparent 40%);
-}
-
-/* ---------- Accessibility preferences ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit-float { animation: none !important; }
-  .orbit-app .app-tile { transition: none; }
-  .orbit-app:hover .app-tile, .orbit-app:active .app-tile { scale: none; }
-  .app-more:hover svg, .job-link:hover svg { transform: none; }
-  .guide-topics a:active { transform: none; }
+  .ap-link svg, .ap-chiclet .app-tile, .ap-tile-icon, .ap-topics a { transition: none; }
+  .ap-chiclet:active .app-tile, .ap-tile:hover .ap-tile-icon, .ap-chiclet:hover .app-tile { transform: none; }
+  .ap-link:hover svg { transform: rotate(-90deg); }
 }
-
 @media (prefers-contrast: more) {
-  .orbit-label, .app-feature, .app-item, .job, .switch, .app-feats li, .guide-topics a { border-color: var(--border-strong); }
-  .app-feature::before, .home-cta::before { display: none; }
+  .ap-tile, .ap-panel, .ap-privacy-card { outline: 1px solid var(--border-strong); }
 }

@@ -19,17 +19,14 @@
 .notfound-inner .section-sub { max-width: 34rem; }
 .notfound-inner .btn-row { justify-content: center; margin-top: 2rem; }
 
-/* The big numeral is decoration (the H1 says it in words), so it can
-   carry the brand gradient as a text fill: it is hidden from assistive
-   tech and isn't the message. */
+/* The big numeral is decoration (the H1 says it in words) and hidden
+   from assistive tech; it sits back in Apple's mid grey (3.5:1, above
+   the 3:1 large-text minimum). */
 .notfound-code {
   margin-bottom: 0.5rem;
-  font: 700 clamp(5rem, 3rem + 10vw, 9rem)/0.9 var(--font-heading);
-  letter-spacing: -0.04em;
-  background: var(--brand-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font: 600 clamp(5rem, 3rem + 10vw, 9rem)/0.9 var(--font-heading);
+  letter-spacing: -0.03em;
+  color: var(--border-strong);
 }
 
 .notfound-apps {

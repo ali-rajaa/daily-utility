@@ -35,9 +35,8 @@ breadcrumbs:
   "about": { "@id": {{ '/' | absolute_url | append: '#organization' | jsonify }} }
 }
 </script>
-<section class="section contact-hero hero-glow-host" aria-labelledby="contact-title">
-  {% include hero-glow.html %}
-  <div class="wrap hero-glow-content contact-hero-grid">
+<section class="section contact-hero" aria-labelledby="contact-title">
+  <div class="wrap contact-hero-grid">
     <div class="contact-hero-copy">
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <a href="{{ '/' | relative_url }}">Home</a>

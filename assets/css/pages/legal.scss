@@ -148,9 +148,8 @@
    paragraph. */
 .legal-body .callout {
   padding: 1rem 1.25rem;
-  border-left: 3px solid var(--brand);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  background: var(--brand-soft);
+  border-radius: var(--radius);
+  background: var(--bg-alt);
 }
 
 .legal-body .contact-card {

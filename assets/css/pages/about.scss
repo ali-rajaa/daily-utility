@@ -57,12 +57,8 @@
   gap: 1.5rem;
   aspect-ratio: 1 / 0.82;
   padding: clamp(1rem, 2.5vw, 1.4rem);
-  border: 1px solid color-mix(in srgb, var(--brand) 14%, var(--border));
-  border-radius: 1.5rem;
-  background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 60%),
-    var(--surface);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  background: var(--bg-alt);
 }
 .about-hero-tile { width: clamp(2.75rem, 6vw, 3.5rem); }
 .about-hero-name { font: 600 clamp(0.875rem, 0.8rem + 0.3vw, 1rem)/1.25 var(--font-heading); color: var(--text); }
@@ -120,18 +116,13 @@
 }
 @media (max-width: 1099.98px) { .about-principles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 599.98px) { .about-principles { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
-.about-principles li { padding-top: 1.5rem; border-top: 1px solid var(--border-strong); }
+.about-principles li { padding-top: 1.5rem; border-top: 1px solid var(--border); }
 .about-principle-icon {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin-bottom: 1.25rem;
-  border-radius: 0.85rem;
-  background: var(--tone-gradient);
-  color: #fff;
+  display: block;
+  margin-bottom: 1rem;
+  color: var(--brand-text);
 }
-.about-principle-icon svg { width: 1.3rem; height: 1.3rem; }
+.about-principle-icon svg { width: 2rem; height: 2rem; }
 .about-principles h3 { font-size: 1.125rem; }
 .about-principles p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
 .about-principles a { color: var(--brand-text); text-decoration: underline; text-underline-offset: 0.15em; }

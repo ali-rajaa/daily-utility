@@ -109,9 +109,8 @@ beside its heading, other apps, and a closing pair of cards (get the app,
 your privacy). Every section is named by its heading (aria-labelledby).
 {%- endcomment %}
 <div class="tone-{{ _app.tone }}">
-<section class="section app-hero hero-glow-host" aria-labelledby="app-title">
-  {% include hero-glow.html %}
-  <div class="wrap hero-glow-content app-hero-grid">
+<section class="section app-hero" aria-labelledby="app-title">
+  <div class="wrap app-hero-grid">
     <div class="app-hero-copy">
       <p class="app-hero-kicker">{% include app-tile.html app=_app class="app-hero-kicker-tile" %}<span>Free to download on {{ _platforms }}</span></p>
       <h1 id="app-title">{{ page.app_name | escape }}</h1>
@@ -133,7 +132,7 @@ your privacy). Every section is named by its heading (aria-labelledby).
       {%- endfor %}
     </div>
   </div>
-  <div class="wrap hero-glow-content">
+  <div class="wrap">
     <nav class="app-jump" aria-label="On this page">
       {%- if page.moments %}<a href="#moments">When to use it</a>{% endif %}
       {%- if page.how_it_works %}<a href="#how-it-works">How it works</a>{% endif %}
