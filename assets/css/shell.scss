@@ -47,6 +47,11 @@
      has to --brand. */
   --brand-2-text: #0a7a47;
   --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #0f9ed6 45%, var(--brand-2) 100%);
+  /* The logo's blue-to-green sweep, darkened to be safe as text: every
+     stop is 4.5:1 or better on white and on --bg-alt (blue 5.5:1, the
+     teal middle 5.1:1, green 5.4:1 on white). Used sparingly (.brand-ink)
+     so the site keeps its own colour inside the monochrome design. */
+  --brand-ink: linear-gradient(90deg, #0b5fe8 0%, #0b76a3 55%, #0a7a47 100%);
   --accent: #06b6d4;
   --glass: rgba(255, 255, 255, 0.94);
 
@@ -351,6 +356,28 @@ h3, .h3 {
 picture { display: contents; }
 .logo-mark { width: 2rem; height: 2rem; display: block; object-fit: contain; }
 
+/* The name beside the mark. A young brand needs its name in view, so it
+   stays (apple.com can show a bare logo; we can't yet). */
+.logo-word {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Text in the logo's colours (see --brand-ink). Falls back to the solid
+   link blue where gradient text isn't supported or contrast is raised. */
+.brand-ink {
+  color: var(--brand-text);
+  background: var(--brand-ink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@media (prefers-contrast: more), (forced-colors: active) {
+  .brand-ink { background: none; -webkit-text-fill-color: currentColor; }
+}
+
 
 /* ---------- Header (apple.com style) ----------
    One thin translucent bar the page scrolls under (a material, so content
@@ -414,10 +441,11 @@ picture { display: contents; }
   margin-inline: auto;
 }
 
-/* The bar shows the mark only, as apple.com shows its logo; the link's
-   label ("Daily Utility Apps home") names the site. */
-.site-header .brand { justify-content: center; min-width: 2.75rem; min-height: var(--header-h); margin-left: -0.75rem; }
-.site-header .logo-mark { width: 1.25rem; height: 1.25rem; }
+/* The bar shows the mark and the name ("Daily Utility Apps", with
+   Utility in the logo's colours). */
+.site-header .brand { gap: 0.45rem; min-height: var(--header-h); }
+.site-header .logo-mark { width: 1.375rem; height: 1.375rem; }
+.site-header .logo-word { font-size: 0.9375rem; color: #1d1d1f; }
 
 .nav-list { margin: 0; padding: 0; list-style: none; }
 
@@ -477,15 +505,21 @@ picture { display: contents; }
 
 /* ---------- Desktop: the bar and its full-width menus ---------- */
 @media (min-width: 760px) {
-  .site-nav { flex: 1; }
-  /* space-between with an empty first item: the gap after the logo
-     equals the gap between items, and the last item meets the right
-     edge, as on apple.com. */
-  .nav-list { display: flex; align-items: center; justify-content: space-between; }
-  .nav-list::before { content: ""; }
+  /* Three columns: the name at the left, the items centred on the bar
+     (equal side columns, so the group sits in the true middle), Sign in
+     at the right. A side column grows past its share rather than
+     overlap if the text is enlarged. */
+  .header-inner {
+    display: grid;
+    grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
+  }
+  .site-header .brand { justify-self: start; }
+  .nav-list { display: flex; align-items: center; gap: clamp(1rem, 2.6vw, 2.25rem); }
   .nav-item { display: flex; }
+  .nav-item--signin { display: none; }
+  .bar-signin { display: flex; justify-self: end; }
+  .bar-signin .nav-link { margin-right: -0.5rem; }
   .nav-link { height: var(--header-h); padding: 0 0.5rem; font-size: 0.75rem; line-height: 1; letter-spacing: -0.01em; }
-  .nav-item:last-child .nav-link { margin-right: -0.5rem; }
   .nav-chevron { display: none; }
 
   /* The menu grows down from the bar (a clip, so it reads as the bar
@@ -541,6 +575,7 @@ picture { display: contents; }
 /* ---------- Phones: the full-screen menu ---------- */
 @media (max-width: 759.98px) {
   .header-inner { justify-content: space-between; }
+  .bar-signin { display: none; }
   .nav-toggle {
     display: grid;
     place-items: center;
@@ -765,6 +800,70 @@ picture { display: contents; }
 @media (prefers-contrast: more) {
   .site-header { background: var(--chrome-solid); box-shadow: 0 1px 0 #86868b; }
   .site-footer { --chrome-text-2: #4b4b50; --chrome-line: #86868b; }
+}
+
+/* ---------- Phone frame ----------
+   _includes/phone-frame.html: a device-neutral phone drawn in CSS, sized
+   by --phone-w (set by the page). Holds the app's real screenshot, or
+   until there is one, its launch screen: the app's colour, glyph and
+   name. Every measurement scales with --phone-w. */
+
+.phone {
+  --phone-w: 13rem;
+  position: relative;
+  display: block;
+  width: var(--phone-w);
+  aspect-ratio: 9 / 19.5;
+  padding: calc(var(--phone-w) * 0.035);
+  border-radius: calc(var(--phone-w) * 0.17);
+  background: #1d1d1f;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 30px 60px -22px rgba(0, 0, 0, 0.35),
+    0 24px 48px -24px color-mix(in srgb, var(--tone-deep) 45%, transparent);
+}
+.phone-screen {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(var(--phone-w) * 0.14);
+  background: var(--tone-gradient);
+}
+/* The front camera: a small dot, the same on any phone. */
+.phone-screen::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--phone-w) * 0.045);
+  left: 50%;
+  z-index: 1;
+  width: calc(var(--phone-w) * 0.055);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #0b0b0d;
+  translate: -50% 0;
+}
+.phone-screen img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.phone-launch {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: calc(var(--phone-w) * 0.06);
+  padding-inline: 10%;
+  color: #ffffff;
+  text-align: center;
+  background: radial-gradient(120% 55% at 50% 0%, rgba(255, 255, 255, 0.28), transparent 65%);
+}
+.phone-launch svg { width: calc(var(--phone-w) * 0.3); height: calc(var(--phone-w) * 0.3); }
+.phone-launch-name {
+  font-size: calc(var(--phone-w) * 0.075);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 /* ---------- App tones ----------

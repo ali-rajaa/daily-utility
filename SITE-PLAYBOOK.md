@@ -264,10 +264,13 @@ Daily Utility follows **apple.com's web design language** (redesigned 19 Oct 202
 --brand: #0b5fe8;     --brand-hover: #0848b8;  --on-brand: #ffffff;
 --brand-soft: #f5f5f7;                         /* quiet panels and icon chips */
 --brand-text: #0a52c9;                         /* the blue used for text links */
+--brand-ink: linear-gradient(90deg, #0b5fe8 0%, #0b76a3 55%, #0a7a47 100%);
+                     /* the logo's blue-to-green, as text (.brand-ink) */
 ```
 
 - **Monochrome with one blue.** Near-black text, Apple's greys, white and `#f5f5f7` surfaces. Every button and link uses the same blue, sampled from the real logo, on every page.
 - **Every text/background pair is measured for WCAG AA 4.5:1** before use, and the CSS comment records the result.
+- **One touch of the logo's colours:** `.brand-ink` paints text with `--brand-ink`, the logo's blue-to-green sweep darkened until every stop passes 4.5:1 on white and on `#f5f5f7` (blue 5.5 / 5.05, teal 5.08 / 4.66, green 5.4 / 4.96). It is used in three places only: "Utility" in the header name, "Daily Utility Apps." opening the homepage headline, and the "Flagship" label. Under `prefers-contrast: more` and forced colours it falls back to solid `--brand-text`. Don't spread it further: the design stays monochrome with one blue.
 
 ### 8.2 Tones (per-product colour, used sparingly)
 
@@ -307,7 +310,9 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 
 ### 8.6 App tiles (instead of real logos)
 
-`app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white sprite glyph at about 54%, an inset top highlight and a soft shadow. Big product visuals are this tile, large, on a quiet grey panel with a soft glow of its colour and white feature chips. Guide cards and guide heroes use the same tile with the topic's colour.
+`app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white sprite glyph at about 54%, an inset top highlight and a soft shadow. Chiclets, the compare table, guide cards and guide heroes use it, with the app's or topic's colour.
+
+**Phone frames (big product visuals).** `phone-frame.html` draws a device-neutral phone in CSS: a dark frame, a camera dot, rounded corners, no maker's design or logo. Every size comes from one custom property, `--phone-w`. The screen shows the app's real screenshot when its `apps.yml` entry has `screenshot:` (a portrait PNG or JPEG from the app, saved in `assets/screens/`). Until then it shows a launch screen built from what the site already has: the app's colour, glyph and name. **Never draw a made-up app interface.** On the homepage tiles the phone is cropped by the foot of the tile, apple.com style, and the launch content moves up into the part that shows. On app pages the whole phone sits on the grey panel, with the feature labels floating above it. A label may cross the frame's edge, but none may reach the glyph and name or leave the panel (checked at every width from 320 to 1600). Callers put the frame inside an `aria-hidden` visual.
 
 ### 8.7 Light and dark
 
@@ -321,19 +326,19 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 ### 9.1 Header (apple.com's global bar)
 
 - **A thin translucent bar** (44px, 48px on phones): `rgba(250,250,252,.8)` with `backdrop-filter: saturate(180%) blur(20px)`, content scrolling under it.
-- **Desktop (760px+):** the logo mark only at the far left (the link is labelled with the site name), then Apps · Guides · About · Help · Sign in in 12px type, **spaced evenly to the right edge** (`justify-content: space-between` with an empty first flex item, so the gap after the logo equals the gaps between items).
+- **Desktop (760px+):** three columns (`grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr)`): the mark and the name "Daily *Utility* Apps" (Utility in `.brand-ink`) at the left; Apps · Guides · About · Help **centred on the bar as a group** in 12px type, `clamp(1rem, 2.6vw, 2.25rem)` apart plus each link's padding (36px at 760, 52px at 1440); Sign in at the right edge. The equal side columns keep the group in the true middle; with enlarged text a side column grows rather than overlap. Sign in is written twice: in the list (shown in the phone menu) and in `.bar-signin` after the nav (shown in the bar), with CSS showing one at a time. The wrapper gives the bar copy its own hover area for `site.js`.
 - **Menus:** Apps and Help open full-width panels that grow down from the bar (`clip-path` reveal), big 24px links on the left, small 12px links in columns beside them, each link fading in a moment after the one above. The bar turns solid while a menu is open, and **the page behind takes a faint tint, no blur** (owner's choice). Open on hover after a 140ms intent delay or on click; Escape closes and returns focus; moving to a plain link closes the menu.
-- **Phones:** the mark and a two-line menu button that turns into a cross. The menu fills the screen below the bar with large 28px links that fade in one by one, and the page behind can't scroll. Apps and Help **slide in from the right as their own panel** with a "‹ Menu" back button (focus moves to it); Escape closes the panel first, then the menu.
+- **Phones:** the mark and name, and a two-line menu button that turns into a cross. The menu fills the screen below the bar with large 28px links that fade in one by one, and the page behind can't scroll. Apps and Help **slide in from the right as their own panel** with a "‹ Menu" back button (focus moves to it); Escape closes the panel first, then the menu.
 - Menus are disclosure buttons (`aria-expanded`, `aria-controls`). Without JavaScript the menus open on hover and focus, and the phone links stay reachable.
 
 ### 9.2 Hero
 
-Breadcrumbs (except the homepage), H1, a lead paragraph, the main actions. Product and guide heroes show the tile on a quiet grey panel ringed by hairlines, with white feature chips. No coloured gradients or animated blobs. The hero is never a scroll-reveal element (it would delay the largest paint).
+Breadcrumbs (except the homepage), H1, a lead paragraph, the main actions. Product heroes show the app on a phone frame (section 8.6) on a quiet grey panel ringed by hairlines, with white feature chips; guide heroes show the topic's tile. No coloured gradients or animated blobs. The hero is never a scroll-reveal element (it would delay the largest paint).
 
 ### 9.3 Homepage (Daily Utility)
 
-1. **Store-style opening:** a two-tone H1 and every app as a "chiclet" (tile + short name). The row wraps on wide screens and scrolls sideways on phones, so it takes any number of apps.
-2. **Flagship panel:** full-width grey panel: eyebrow, product name (56px), tagline, "Free to download on iPhone and Android", blue **Learn more** and outlined **Download** pills, then the big tile with feature chips.
+1. **Store-style opening:** a two-tone H1 (the name in `.brand-ink`, what it is in grey) and every app as a "chiclet" (tile + short name). The row wraps on wide screens and scrolls sideways on phones, so it takes any number of apps.
+2. **Flagship panel:** full-width grey panel: eyebrow, product name (56px), tagline, "Free to download on iPhone and Android", blue **Learn more** and outlined **Download** pills, then the feature chips and the app on a phone cropped by the foot of the panel.
 3. **Promo tiles:** every other app two to a row on grey panels with 12px gaps; an odd one out spans the full width. Tiles side by side line up (the visual sits at the foot).
 4. **Compare table** ("Which kind of app do you need?"): one column per job, rows aligned across columns with CSS subgrid; on phones a sideways swipe.
 5. **Switching steps** on a grey panel with large numerals; **privacy** commitments as grey cards under a lock mark; a **sideways shelf** of guide cards; the FAQ as a hairline list; a closing call to action with store badges.
@@ -342,7 +347,7 @@ All of it reads from data; nothing states how many apps there are.
 
 ### 9.4 Product page (Daily Utility `app.html`)
 
-Built entirely from front matter. Hero (eyebrow, name, tagline, store badges with `id="download"`, the tile on a grey panel) → moments (blue glyphs over hairlines) → how it works (3 steps) → features (grey bento tiles) → optional compare (outlined "without", raised white "with") → tips → related guides → FAQ → closing call to action → other apps. **On phones only** the sections compact into rows; nothing is hidden and desktop is unchanged.
+Built entirely from front matter. Hero (eyebrow, name, tagline, store badges with `id="download"`, the app on a phone frame on a grey panel) → moments (blue glyphs over hairlines) → how it works (3 steps) → features (grey bento tiles) → optional compare (outlined "without", raised white "with") → tips → related guides → FAQ → closing call to action → other apps. **On phones only** the sections compact into rows; nothing is hidden and desktop is unchanged.
 
 ### 9.5 Guides hub and guide pages
 
@@ -1698,11 +1703,11 @@ css: legal
 
 ```liquid
 {%- comment -%}
-  Site header, apple.com style (preview): one thin translucent bar the
-  width of the page, the logo at the left and the items spread evenly
-  across the rest, in small type. Apps and Help open full-width menus
-  (big links first, smaller links beside them) with the page blurred
-  behind; Guides, About and Sign in are plain links. On phones the bar
+  Site header, apple.com style: one thin translucent bar the width of
+  the page, in small type: the logo and name at the left, the menu items
+  centred as a group, Sign in at the right. Apps and Help open
+  full-width menus (big links first, smaller links beside them) over a
+  faint tint; Guides, About and Sign in are plain links. On phones the bar
   keeps the logo and a two-line menu button; the menu fills the screen
   with large links, and Apps and Help slide in as their own panel with a
   back button, as on apple.com.
@@ -1710,7 +1715,10 @@ css: legal
   Same behaviour and hooks as before (site.js "Navigation"): .nav-trigger
   buttons with aria-expanded / aria-controls, .nav-link--page for plain
   links (hovering one closes an open menu), #nav-scrim, #nav-toggle,
-  .menu-open / .nav-open on the header.
+  .menu-open / .nav-open on the header. Sign in is written twice: in the
+  list (shown in the phone menu) and after the nav (shown in the bar);
+  CSS shows one at a time. Its wrapper gives the bar copy its own hover
+  area, as the list items have.
 
   Everything lists itself: apps from _data/apps.yml (built: true).
   "Sign in" goes to the cloud web app (site.cloud_url).
@@ -1724,6 +1732,7 @@ css: legal
   <div class="header-inner">
     <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
       {%- include brand-mark.html class="logo-mark" size="20" eager=true -%}
+      <span class="logo-word">Daily <span class="brand-ink">Utility</span> Apps</span>
     </a>
 
     <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -1799,6 +1808,10 @@ css: legal
         </li>
       </ul>
     </nav>
+
+    <div class="bar-signin">
+      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+    </div>
   </div>
 </header>
 ```
@@ -1820,6 +1833,34 @@ css: legal
   Usage: {% include app-tile.html app=flagship class="app-card-icon" %}
 {%- endcomment -%}
 <span class="app-tile app-tile--{{ include.app.tone }}{% if include.class %} {{ include.class }}{% endif %}" aria-hidden="true"><svg><use href="#i-{{ include.app.glyph }}"/></svg></span>
+```
+
+### Appendix G8: _includes/phone-frame.html
+
+```liquid
+{%- comment -%}
+  A phone, drawn in CSS (shell.css "Phone frame"): a dark frame, a small
+  camera dot and a screen. Device-neutral on purpose (the apps run on
+  iPhone and Android) and no maker's design or logo.
+
+  The screen shows the app's real screenshot once there is one: set
+  `screenshot:` on the app's entry in _data/apps.yml (a portrait PNG or
+  JPEG from the app, saved in assets/screens/). Until then it shows a
+  launch screen built from what the site already has: the app's colour,
+  its glyph and its name. Never a made-up interface.
+
+  Params: app (an apps.yml entry), class (optional, sets the size via
+  --phone-w). Callers put it inside an aria-hidden visual.
+{%- endcomment -%}
+<span class="phone{% if include.class %} {{ include.class }}{% endif %} tone-{{ include.app.tone }}">
+  <span class="phone-screen">
+    {%- if include.app.screenshot %}
+    <img src="{{ include.app.screenshot | relative_url }}" alt="" loading="lazy" decoding="async">
+    {%- else %}
+    <span class="phone-launch"><svg><use href="#i-{{ include.app.glyph }}"/></svg><span class="phone-launch-name">{{ include.app.short | default: include.app.name | escape }}</span></span>
+    {%- endif %}
+  </span>
+</span>
 ```
 
 ### Appendix H: .htaccess

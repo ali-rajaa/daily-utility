@@ -84,6 +84,7 @@
   background: var(--bg-alt);
   overflow: hidden;
   isolation: isolate;
+  container-type: inline-size;
 }
 .app-hero-visual::before {
   content: "";
@@ -104,21 +105,16 @@
   border-style: solid;
   border-color: rgba(0, 0, 0, 0.06);
 }
-.app-hero-icon {
-  display: grid;
-  place-items: center;
-  width: 26%;
-  max-width: 8.5rem;
-  aspect-ratio: 1;
-  border-radius: 23%;
-  background: var(--tone-gradient);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 18px 36px -14px color-mix(in srgb, var(--tone-deep) 55%, transparent);
-  color: #ffffff;
-}
-.app-hero-icon svg { width: 54%; height: 54%; }
+/* The app on a phone, sized from the panel's width (cqw) so it always
+   fits the panel's height. */
+.app-hero-phone { --phone-w: 32cqw; }
 
+/* The labels float above the phone: a long one may cross the frame's
+   edge, but none reaches the app's glyph and name or leaves the panel
+   (checked on every app page at every width from 320 to 1600). */
 .app-hero-chip {
   position: absolute;
+  z-index: 1;
   padding: 0.55rem 0.95rem;
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-pill);
@@ -135,12 +131,10 @@
 .app-hero-chip--4 { bottom: 12%; right: 12%; }
 
 /* Below the two-column layout the panel is shorter for its width, so the
-   labels move out to the four corners and the icon shrinks: long labels
-   ("Photos and videos") then never reach the icon (checked at every
-   width from 320 to 899, the rotated icon's full box included). */
+   labels move out to the four corners and the phone shrinks. */
 @media (max-width: 899.98px) {
   .app-hero-visual { aspect-ratio: 16 / 10.5; max-width: 36rem; }
-  .app-hero-icon { width: 22%; max-width: 6.5rem; }
+  .app-hero-phone { --phone-w: 24cqw; }
   .app-hero-chip--1 { top: 6%; left: 5%; }
   .app-hero-chip--2 { top: 6%; right: 5%; left: auto; }
   .app-hero-chip--3 { bottom: 6%; left: 5%; top: auto; }
@@ -148,7 +142,7 @@
 }
 @media (max-width: 599.98px) {
   .app-hero-visual { aspect-ratio: 1 / 0.82; }
-  .app-hero-icon { width: 26%; }
+  .app-hero-phone { --phone-w: 30cqw; }
   .app-hero-chip { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
   .app-hero-chip--1, .app-hero-chip--2 { top: 5%; }
   .app-hero-chip--3, .app-hero-chip--4 { bottom: 5%; }

@@ -1,9 +1,9 @@
 {%- comment -%}
-  Site header, apple.com style (preview): one thin translucent bar the
-  width of the page, the logo at the left and the items spread evenly
-  across the rest, in small type. Apps and Help open full-width menus
-  (big links first, smaller links beside them) with the page blurred
-  behind; Guides, About and Sign in are plain links. On phones the bar
+  Site header, apple.com style: one thin translucent bar the width of
+  the page, in small type: the logo and name at the left, the menu items
+  centred as a group, Sign in at the right. Apps and Help open
+  full-width menus (big links first, smaller links beside them) over a
+  faint tint; Guides, About and Sign in are plain links. On phones the bar
   keeps the logo and a two-line menu button; the menu fills the screen
   with large links, and Apps and Help slide in as their own panel with a
   back button, as on apple.com.
@@ -11,7 +11,10 @@
   Same behaviour and hooks as before (site.js "Navigation"): .nav-trigger
   buttons with aria-expanded / aria-controls, .nav-link--page for plain
   links (hovering one closes an open menu), #nav-scrim, #nav-toggle,
-  .menu-open / .nav-open on the header.
+  .menu-open / .nav-open on the header. Sign in is written twice: in the
+  list (shown in the phone menu) and after the nav (shown in the bar);
+  CSS shows one at a time. Its wrapper gives the bar copy its own hover
+  area, as the list items have.
 
   Everything lists itself: apps from _data/apps.yml (built: true).
   "Sign in" goes to the cloud web app (site.cloud_url).
@@ -25,6 +28,7 @@
   <div class="header-inner">
     <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
       {%- include brand-mark.html class="logo-mark" size="20" eager=true -%}
+      <span class="logo-word">Daily <span class="brand-ink">Utility</span> Apps</span>
     </a>
 
     <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -100,5 +104,9 @@
         </li>
       </ul>
     </nav>
+
+    <div class="bar-signin">
+      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+    </div>
   </div>
 </header>

@@ -1,0 +1,23 @@
+{%- comment -%}
+  A phone, drawn in CSS (shell.css "Phone frame"): a dark frame, a small
+  camera dot and a screen. Device-neutral on purpose (the apps run on
+  iPhone and Android) and no maker's design or logo.
+
+  The screen shows the app's real screenshot once there is one: set
+  `screenshot:` on the app's entry in _data/apps.yml (a portrait PNG or
+  JPEG from the app, saved in assets/screens/). Until then it shows a
+  launch screen built from what the site already has: the app's colour,
+  its glyph and its name. Never a made-up interface.
+
+  Params: app (an apps.yml entry), class (optional, sets the size via
+  --phone-w). Callers put it inside an aria-hidden visual.
+{%- endcomment -%}
+<span class="phone{% if include.class %} {{ include.class }}{% endif %} tone-{{ include.app.tone }}">
+  <span class="phone-screen">
+    {%- if include.app.screenshot %}
+    <img src="{{ include.app.screenshot | relative_url }}" alt="" loading="lazy" decoding="async">
+    {%- else %}
+    <span class="phone-launch"><svg><use href="#i-{{ include.app.glyph }}"/></svg><span class="phone-launch-name">{{ include.app.short | default: include.app.name | escape }}</span></span>
+    {%- endif %}
+  </span>
+</span>

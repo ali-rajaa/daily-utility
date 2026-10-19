@@ -2047,6 +2047,45 @@ phone audit (320–430px): no tap target under 44px. Found and fixed on the
 way: the homepage compare row widened the page on phones in Chromium
 (`contain: paint` on the section).
 
+## 5zzzz. Name back in the header, brand colour, phone frames (19 Oct)
+
+User, after asking whether the redesign beat the original: *"yes please
+do that do alll 3"* (the name back in the header, a touch of the logo's
+blue-green, the apps shown on phones), then, looking at the live bar,
+*"make them more spaced in the middle"*. Previewed as a private artifact,
+then *"push it live"*.
+
+- **Header:** the mark and the name "Daily Utility Apps" at the left,
+  Apps · Guides · About · Help centred on the bar as a group (36px apart
+  at 760px, 52px at 1440px), Sign in at the right edge. Three grid
+  columns with equal sides keep the group in the true middle (measured
+  at 760, 1024, 1440 and 1920px). Sign in is written twice (phone menu and
+  bar; CSS shows one). Phones unchanged apart from the name.
+- **Brand colour:** `--brand-ink`, the logo's blue-to-green darkened
+  until every stop passes 4.5:1 on white and on the grey panels, used as
+  text in three places: "Utility" in the header, "Daily Utility Apps."
+  opening the homepage headline, and the "Flagship" label. Solid blue
+  under high contrast and forced colours.
+- **Phone frames:** `_includes/phone-frame.html`, a device-neutral phone
+  drawn in CSS (no maker's design or logo), replaces the big app tile on
+  the homepage's promo tiles (cropped by the tile's foot) and in each app
+  page's hero. There are no real screenshots yet, so each screen shows
+  the app's launch screen: its colour, glyph and name. Nothing invented.
+  Setting `screenshot:` on an app in `_data/apps.yml` (a file in
+  `assets/screens/`) puts the real screen in every frame for that app.
+  On app pages the feature labels float above the phone; a long one
+  ("Photos and videos") crosses the frame's edge but never reaches the
+  glyph or name or leaves the panel.
+
+**Checks:** HTML valid on all pages; axe clean on every page at 1440 and
+390px with no sideways scroll; 20/20 header/footer interaction tests;
+SEO audit of the live-address build: 0 problems on 17 pages; phone audit
+(320–430px): nothing new against the live site; app-page labels against
+the launch content and panel edges at every 10px from 320 to 1600 on
+all three app pages: 0 problems. Found and fixed: the flagship phone cut
+through the app's name (launch content moved up); a comment that still
+promised the labels never touch the old icon.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2299,6 +2338,10 @@ sections they link to.*
       store listing's title and package establish. Send each app's real
       store description (or confirm features) to fill them out, plus a
       `trust_text` where an app has a specific, true privacy point.
+- [ ] **App screenshots** for the phone frames (5zzzz): one portrait
+      screenshot from each app, taken on a real phone, showing no
+      personal photos, names or files. Until then the frames show each
+      app's launch screen.
 - [ ] **App Store links** for Document Reader, Data Transfer and Photo
       Recover, if any is on iOS (only the flagship is linked).
 - [ ] **Analytics (optional):** a GA4 measurement ID if visitor stats are
@@ -2546,3 +2589,5 @@ flagship Apple id.
   server (end of section 5z).
 - 18 Oct: ftp.yml uploads automatically on every push to main (section 5zz).
 - 19 Oct: Apple-style redesign of every page, live (section 5zzz).
+- 19 Oct: name back in the header with the items centred, the logo's
+  blue-green as text, apps shown on phone frames, live (section 5zzzz).

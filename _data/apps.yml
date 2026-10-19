@@ -34,6 +34,10 @@
 #   and "App tones" (the app's whole colour identity on its own page
 #   and homepage card).
 #   Tones: blue, violet, teal or rose. Glyphs: any icon-sprite symbol.
+# screenshot (optional): a real portrait screenshot from the app, saved in
+#   assets/screens/ (e.g. "/assets/screens/cloud-storage-backup-drive.png").
+#   The phone frames on the homepage and the app's page show it; without
+#   one they show the app's launch screen (colour, glyph, name).
 #
 # Adding an app is one entry here plus its page (layout: app). Nothing on
 # the site states how many apps there are (user, 16 Oct): the header,

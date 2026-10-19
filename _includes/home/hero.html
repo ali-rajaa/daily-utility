@@ -7,7 +7,7 @@
 {%- endcomment -%}
 <section class="ap-hero" aria-labelledby="home-title">
   <div class="ap-wrap">
-    <h1 id="home-title" class="ap-hero-title">{{ site.title }}. <span>Simple apps for your phone's everyday jobs.</span></h1>
+    <h1 id="home-title" class="ap-hero-title"><span class="brand-ink">{{ site.title }}.</span> <span class="ap-hero-tone">Simple apps for your phone's everyday jobs.</span></h1>
     <nav class="ap-chiclets" aria-label="Our apps">
       <ul>
         <li><a class="ap-chiclet tone-{{ include.flagship.tone }}" href="{{ '/' | append: include.flagship.slug | relative_url }}">{% include app-tile.html app=include.flagship %}<span>{{ include.flagship.short | escape }}</span></a></li>

@@ -126,7 +126,7 @@ your privacy). Every section is named by its heading (aria-labelledby).
     <div class="app-hero-visual" aria-hidden="true">
       <span class="app-hero-ring"></span>
       <span class="app-hero-ring app-hero-ring--outer"></span>
-      <span class="app-hero-icon"><svg><use href="#i-{{ _app.glyph }}"/></svg></span>
+      {% include phone-frame.html app=_app class="app-hero-phone" %}
       {%- for feat in _app.features limit: 4 %}
       <span class="app-hero-chip app-hero-chip--{{ forloop.index }}">{{ feat | escape }}</span>
       {%- endfor %}

@@ -1,15 +1,17 @@
 {%- comment -%}
   One app as an apple.com-style promo tile: name, tagline, platforms,
-  "Learn more" and "Download" pills, then the app's tile and feature
-  chips as the visual. Params: app (apps.yml entry), hero (true for the
-  flagship's full-width panel).
+  "Learn more" and "Download" pills, then the feature chips and the app
+  on a phone (its screenshot, or its launch screen until there is one),
+  cropped by the foot of the tile as on apple.com.
+  Params: app (apps.yml entry), hero (true for the flagship's full-width
+  panel).
 {%- endcomment -%}
 {%- assign a = include.app -%}
 {%- assign _url = '/' | append: a.slug | relative_url -%}
 <article class="ap-tile{% if include.hero %} ap-tile--hero{% else %} reveal{% endif %} tone-{{ a.tone }}" aria-labelledby="ap-{{ a.slug }}">
   <div class="ap-tile-copy">
     {%- if include.hero %}
-    <p class="ap-eyebrow ap-accent">Flagship</p>
+    <p class="ap-eyebrow"><span class="brand-ink">Flagship</span></p>
     {%- endif %}
     <h3 class="ap-tile-name" id="ap-{{ a.slug }}">{{ a.name | escape }}</h3>
     <p class="ap-tile-tagline">{{ a.tagline | escape }}</p>
@@ -21,9 +23,9 @@
   </div>
   <div class="ap-tile-visual" aria-hidden="true">
     <span class="ap-glow"></span>
-    {% include app-tile.html app=a class="ap-tile-icon" %}
     <ul class="ap-chips">
       {%- for feat in a.features %}<li>{{ feat | escape }}</li>{% endfor -%}
     </ul>
+    {% include phone-frame.html app=a class="ap-phone" %}
   </div>
 </article>

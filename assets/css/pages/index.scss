@@ -52,7 +52,7 @@
 
 /* Two-tone headline, as on apple.com's Store: the name in black, what it
    is in grey, one heading. */
-.ap-hero-title span,
+.ap-hero-tone,
 .ap-guides-head h2 span { color: var(--text-2); }
 
 /* The app's own colour, for a short label only. */
@@ -199,17 +199,17 @@
    side by side line up even when one name runs to two lines. */
 .ap-tile-copy { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
 
-/* The visual: the app's tile, large, on a soft glow of its own colour,
-   with what it covers as chips beneath. Decorative (aria-hidden): the
-   same facts are on the app's page. */
+/* The visual: what the app covers as chips, then the app on a phone on a
+   soft glow of its colour, cut off by the foot of the tile as on
+   apple.com. Decorative (aria-hidden): the same facts are on the app's
+   page. */
 .ap-tile-visual {
   position: relative;
   display: grid;
   justify-items: center;
-  gap: 1.75rem;
+  gap: clamp(2rem, 4vw, 2.75rem);
   width: 100%;
   margin-top: auto;
-  padding-bottom: clamp(3rem, 6vw, 4.5rem);
 }
 .ap-glow {
   position: absolute;
@@ -218,16 +218,18 @@
   background: radial-gradient(45% 50% at 50% 40%, color-mix(in srgb, var(--tone-light) 26%, transparent), transparent 72%);
   pointer-events: none;
 }
-.ap-tile-icon {
-  width: clamp(8.5rem, 6rem + 9vw, 12.5rem);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 30px 60px -18px color-mix(in srgb, var(--tone-deep) 50%, transparent);
+.ap-phone {
+  --phone-w: clamp(11rem, 8rem + 9vw, 15rem);
+  /* About a third of the phone sits below the tile's edge. */
+  margin-bottom: calc(var(--phone-w) * -0.72);
   transition: transform 0.6s var(--spring);
 }
-.ap-grid .ap-tile-icon { width: clamp(6.5rem, 5rem + 4.5vw, 8.5rem); }
+.ap-grid .ap-phone { --phone-w: clamp(9.5rem, 7.5rem + 5vw, 12rem); }
+/* With the lower third hidden, the launch screen's glyph and name move up
+   into the part that shows. */
+.ap-phone .phone-launch { place-content: start center; padding-top: calc(var(--phone-w) * 0.45); }
 @media (hover: hover) {
-  .ap-tile:hover .ap-tile-icon { transform: scale(1.03); }
+  .ap-tile:hover .ap-phone { transform: translateY(-8px); }
 }
 
 .ap-chips {
@@ -450,8 +452,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ap-link svg, .ap-chiclet .app-tile, .ap-tile-icon, .ap-topics a { transition: none; }
-  .ap-chiclet:active .app-tile, .ap-tile:hover .ap-tile-icon, .ap-chiclet:hover .app-tile { transform: none; }
+  .ap-link svg, .ap-chiclet .app-tile, .ap-phone, .ap-topics a { transition: none; }
+  .ap-chiclet:active .app-tile, .ap-tile:hover .ap-phone, .ap-chiclet:hover .app-tile { transform: none; }
   .ap-link:hover svg { transform: rotate(-90deg); }
 }
 @media (prefers-contrast: more) {
