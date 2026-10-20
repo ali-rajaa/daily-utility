@@ -3,67 +3,84 @@
 # (compressed, see _config.yml). Output keeps the .css name.
 ---
 /* ==========================================================================
-   blog-hub.css: the Daily Info hub (daily-info/index.html). Article cards
-   come from shell.css ("Article cards"); this file lays out the hero
-   (copy + featured guide), the topic grid and the per-topic groups.
-   Topic colours come from each item's .tone-* scope (shell.css "App
-   tones"), so there are no per-topic rules here. shell.css tokens only.
+   blog-hub.css: the Daily Info hub (daily-info/index.html).
+
+   Phase 3 (20 Oct): the homepage's rhythm and type scale. A centred
+   opening over a grey stage with the newest guide as one wide card; the
+   topics as cards on white; every guide by topic on grey; a dark closing
+   card. Built from shell.css's blocks (.ap-section, .ap-panel, .ap-wrap,
+   .ap-head, .ap-cards, .ap-card) and its article cards; this file adds
+   only what the hub has of its own. Topic colours come from each item's
+   .tone-* scope (shell.css "App tones"), so there are no per-topic rules.
    ========================================================================== */
 
-/* ---------- Hero: copy left, featured guide right ---------- */
+/* ---------- Opening: centred, then the stage ---------- */
 
-.hub-hero { padding-block: var(--space-hero-top) var(--space-hero-bottom); }
+.hub-hero { padding-top: clamp(1.25rem, 3vw, 2rem); }
+.hub-hero-copy { text-align: center; }
+.hub-crumbs {
+  justify-content: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
 
-.hub-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+.hub-kicker {
+  display: inline-flex;
   align-items: center;
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: 0.45rem;
+  margin: 0 0 1.5rem;
+  padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg-alt);
+  color: var(--brand-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
-@media (max-width: 899.98px) {
-  .hub-hero-grid { grid-template-columns: 1fr; }
+.hub-kicker-icon { flex: none; width: 1rem; height: 1rem; }
+
+.hub-hero h1 {
+  max-width: 16ch;
+  margin-inline: auto;
+  font-size: var(--ap-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
 }
-
-
 .hub-accent { color: var(--text-2); }
 .hub-sub {
-  max-width: 34rem;
-  margin-top: 1.25rem;
-  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
+  max-width: 38rem;
+  margin: 1.25rem auto 0;
+  font-size: var(--ap-lede);
+  line-height: 1.47;
   color: var(--text-2);
+  text-wrap: pretty;
 }
 
 .hub-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 2rem 0 0;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  margin: 1.5rem 0 0;
   padding: 0;
   list-style: none;
-}
-.hub-stats li {
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
   font-size: 0.9375rem;
   color: var(--text-2);
 }
-.hub-stats strong { color: var(--text); font-family: var(--font-heading); }
+.hub-stats strong { color: var(--text); font-weight: 600; }
 
-/* The featured (newest) guide: a large card that fills the hero's right
-   half, with its topic's colour. */
-.hub-featured { position: relative; }
-.hub-featured-label {
-  display: inline-block;
-  margin-bottom: 0.75rem;
-  font: 600 0.875rem/1.2 var(--font);
-  color: var(--brand-text);
+/* The stage: a full-width grey row (inset 12px, as every row) holding the
+   newest guide as one wide white card: its topic's banner on the left,
+   the guide on the right; stacked on phones. */
+.hub-stage {
+  margin: clamp(3rem, 6vw, 4.5rem) var(--ap-gap) 0;
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  background: var(--bg-alt);
 }
+
 .hub-featured-card {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   border-radius: var(--radius-lg);
   background: var(--surface);
   box-shadow: var(--shadow-md);
@@ -73,46 +90,63 @@
   -webkit-tap-highlight-color: transparent;
   transition: transform var(--spring-dur) var(--spring), box-shadow var(--spring-dur) var(--spring);
 }
-.hub-featured-card:hover { color: var(--text); transform: scale(1.01); box-shadow: var(--shadow-lg); }
+@media (min-width: 760px) {
+  .hub-featured-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+}
+@media (hover: hover) {
+  .hub-featured-card:hover { color: var(--text); transform: scale(1.01); box-shadow: var(--shadow-lg); }
+  .hub-featured-card:hover .hub-featured-glyph { transform: scale(1.06); }
+  .hub-featured-card:hover .hub-read-icon { transform: translateX(3px); }
+}
 .hub-featured-card:active { transform: scale(0.99); transition-duration: 0.1s; }
 
+/* The banner: the topic's glyph on its gradient, on a soft glow of the
+   same colour, ringed by two hairlines. Decorative. */
 .hub-featured-banner {
   position: relative;
   display: grid;
   place-items: center;
-  height: clamp(9rem, 18vw, 12rem);
+  min-height: clamp(12rem, 26vw, 20rem);
   background:
-    radial-gradient(55% 75% at 50% 50%, color-mix(in srgb, var(--tone-light) 24%, transparent), transparent 75%),
+    radial-gradient(closest-side, color-mix(in srgb, var(--tone-light) 22%, transparent), transparent),
     var(--bg-alt);
   overflow: hidden;
 }
-.hub-featured-banner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: none;
-}
 .hub-featured-ring {
   position: absolute;
-  width: clamp(8rem, 15vw, 10rem);
+  width: clamp(8rem, 15vw, 11rem);
   aspect-ratio: 1;
-  border: 1px dashed var(--border);
+  border: 1px dashed var(--border-strong);
   border-radius: 50%;
 }
-.hub-featured-glyph { width: 4.5rem; height: 4.5rem; }
-.hub-featured-card:hover .hub-featured-glyph { transform: scale(1.06); }
+.hub-featured-ring--outer {
+  width: clamp(12rem, 23vw, 17rem);
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.07);
+}
+.hub-featured-glyph { width: clamp(4rem, 7vw, 5.25rem); height: clamp(4rem, 7vw, 5.25rem); }
 
 .hub-featured-body {
   display: flex;
   flex-direction: column;
-  padding: clamp(1.5rem, 3vw, 2rem);
+  justify-content: center;
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+.hub-featured-label {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-2);
 }
 .hub-featured-title {
-  margin-top: 1rem;
-  font: 650 clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem)/1.25 var(--font-heading);
+  margin-top: 0.75rem;
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+  font-weight: 600;
+  line-height: 1.12;
   letter-spacing: -0.015em;
+  text-wrap: balance;
 }
-.hub-featured-desc { margin-top: 0.6rem; color: var(--text-2); }
+.hub-featured-desc { margin-top: 0.75rem; line-height: 1.5; color: var(--text-2); }
 .hub-featured-foot {
   display: flex;
   flex-wrap: wrap;
@@ -127,22 +161,23 @@
 .hub-read {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-weight: 600;
+  gap: 0.2rem;
+  font-size: 1.0625rem;
   color: var(--brand-text);
 }
-.hub-read svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
-.hub-featured-card:hover .hub-read svg { transform: translateX(3px); }
+.hub-read-icon { flex: none; width: 0.875rem; height: 0.875rem; transition: transform var(--spring-dur) var(--spring); }
 
-/* ---------- Topic grid ---------- */
+/* ---------- Topics ----------
+   Four grey cards: the topic's glyph on its gradient, its name, its line
+   and how many guides it has. Two by two on tablets, four across from
+   900px. */
 
-.topic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.topic-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 600px) {
+  .topic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .topic-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .topic-grid > li { display: flex; }
 
@@ -150,84 +185,113 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 1.75rem;
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
   color: var(--text);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: transform var(--spring-dur) var(--spring), box-shadow var(--spring-dur) var(--spring);
+  transition: transform var(--spring-dur) var(--spring);
 }
-a.topic-card:hover { color: var(--text); box-shadow: var(--shadow-lg); transform: scale(1.01); }
+@media (hover: hover) {
+  a.topic-card:hover { color: var(--text); transform: scale(1.01); }
+  a.topic-card:hover .topic-count-icon { transform: translateX(3px); }
+}
 a.topic-card:active { transform: scale(0.985); transition-duration: 0.1s; }
-.topic-card--soon { background: var(--surface); }
 
 .topic-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 3rem;
   height: 3rem;
-  flex-shrink: 0;
   border-radius: var(--radius);
   background: var(--tone-gradient);
-  color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 2px 4px 12px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 .topic-icon svg { width: 1.5rem; height: 1.5rem; }
-.topic-card--soon .topic-icon { background: var(--brand-soft); color: var(--brand-text); box-shadow: none; }
+.topic-card--soon .topic-icon { background: var(--surface); color: var(--tone-text, var(--brand-text)); box-shadow: none; }
 
-.topic-name { margin-top: 1.25rem; font: 650 1.1875rem/1.3 var(--font-heading); letter-spacing: -0.01em; }
-.topic-blurb { flex-grow: 1; margin-top: 0.5rem; font-size: 0.9375rem; color: var(--text-2); }
+.topic-name { margin-top: 1.25rem; font-size: 1.1875rem; font-weight: 600; line-height: 1.25; }
+.topic-blurb { flex-grow: 1; margin-top: 0.5rem; font-size: 0.9375rem; line-height: 1.47; color: var(--text-2); }
 .topic-count {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.2rem;
   margin-top: 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 1rem;
   color: var(--brand-text);
 }
-.topic-card--soon .topic-count { color: var(--text-2); font-weight: 500; }
-.topic-count svg { width: 1rem; height: 1rem; transition: transform 0.2s var(--ease-out); }
-a.topic-card:hover .topic-count svg { transform: translateX(3px); }
+.topic-card--soon .topic-count { color: var(--text-2); }
+.topic-count-icon { flex: none; width: 0.875rem; height: 0.875rem; transition: transform var(--spring-dur) var(--spring); }
+/* Phones: each topic is a compact row, its glyph beside the words. */
+@media (max-width: 599.98px) {
+  .topic-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: 1rem;
+    padding: 1.25rem;
+  }
+  .topic-icon { grid-row: span 3; width: 2.75rem; height: 2.75rem; }
+  .topic-name { margin-top: 0; font-size: 1.0625rem; }
+  .topic-blurb { margin-top: 0.2rem; font-size: 0.875rem; }
+  .topic-count { margin-top: 0.5rem; font-size: 0.9375rem; }
+}
 
-/* ---------- Per-topic groups ---------- */
+/* ---------- Every guide, by topic ----------
+   Each topic: its glyph, name and line, then its guides as white cards
+   on the grey row. A hairline separates the topics. */
 
-/* Each topic: its name and one-line description beside its guides on
-   wide screens (so two guides fill the row instead of leaving a gap),
-   stacked on phones. A hairline separates the topics. */
 .hub-group {
-  display: grid;
-  grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
-  align-items: start;
-  gap: 1.5rem clamp(2rem, 5vw, 4rem);
   padding-block: clamp(2.5rem, 5vw, 3.5rem);
   border-top: 1px solid var(--border);
   scroll-margin-top: var(--header-h);
 }
-.hub-group:first-child { padding-top: 0; border-top: 0; }
-@media (max-width: 899.98px) { .hub-group { grid-template-columns: minmax(0, 1fr); } }
-.hub-group-head { position: sticky; top: calc(var(--header-h) + 2rem); }
-@media (max-width: 899.98px) { .hub-group-head { position: static; } }
-.hub-group-title { margin-top: 1.25rem; font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem); }
-.hub-group-blurb { margin-top: 0.5rem; max-width: 20rem; color: var(--text-2); line-height: 1.6; }
-.hub-group-grid { grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr)); }
-.hub-groups .hub-cta { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+.ap-head + .hub-group { padding-top: 0; border-top: 0; }
+.hub-group:last-child { padding-bottom: 0; }
+.hub-group-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.hub-group-text { min-width: 0; }
+.hub-group-title { font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem); line-height: 1.2; }
+.hub-group-blurb { margin-top: 0.25rem; line-height: 1.47; color: var(--text-2); }
 
-/* The closing band is shell.css's .cta-band--card. */
+/* ---------- Closing card ----------
+   One dark card, centred, for the backup app. */
+
+.hub-close-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+}
+.hub-close-tile { width: 4.5rem; }
+.hub-close-card h2 { max-width: 16ch; margin-top: 1.5rem; }
+.hub-close-card p {
+  max-width: 36rem;
+  margin-top: 1rem;
+  font-size: var(--ap-lede);
+  line-height: 1.47;
+  text-wrap: pretty;
+}
+.hub-close-card .store-badges { justify-content: center; margin-top: 2rem; }
 
 /* ---------- Accessibility preferences ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .hub-featured-card, .topic-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .hub-featured-card, .topic-card, .hub-read-icon, .topic-count-icon { transition: none; }
   .hub-featured-card:hover, .hub-featured-card:active,
   a.topic-card:hover, a.topic-card:active,
   .hub-featured-card:hover .hub-featured-glyph,
-  .hub-featured-card:hover .hub-read svg,
-  a.topic-card:hover .topic-count svg { transform: none; }
+  .hub-featured-card:hover .hub-read-icon,
+  a.topic-card:hover .topic-count-icon { transform: none; }
 }
 @media (prefers-contrast: more) {
-  .hub-stats li, .hub-featured-card, .topic-card { border-color: var(--border-strong); }
+  .hub-stage { outline: 1px solid var(--border-strong); }
+  .hub-featured-card { border: 1px solid var(--border-strong); }
+  .hub-group { border-color: var(--border-strong); }
 }

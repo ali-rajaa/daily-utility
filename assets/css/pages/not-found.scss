@@ -3,85 +3,109 @@
 # (compressed, see _config.yml). Output keeps the .css name.
 ---
 /* ==========================================================================
-   not-found.css: the 404 page (404.html). shell.css tokens only.
+   not-found.css: the 404 page (404.html).
+
+   Phase 3 (20 Oct): the site's centred opening on its type scale, then
+   the apps as white cards on a grey stage (inset 12px, as every row),
+   with white space below it before the footer. shell.css tokens only.
    ========================================================================== */
 
-.notfound { min-height: calc(100vh - var(--header-h) - 12rem); display: flex; align-items: center; }
-
-.notfound-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.notfound-inner h1 { max-width: 20ch; }
-.notfound-inner .section-sub { max-width: 34rem; }
-.notfound-inner .btn-row { justify-content: center; margin-top: 2rem; }
+.notfound { padding: clamp(4rem, 9vw, 7.5rem) 0 var(--ap-pad); }
+.notfound-copy { text-align: center; }
 
 /* The big numeral is decoration (the H1 says it in words) and hidden
    from assistive tech; it sits back in Apple's mid grey (3.5:1, above
    the 3:1 large-text minimum). */
 .notfound-code {
-  margin-bottom: 0.5rem;
-  font: 600 clamp(5rem, 3rem + 10vw, 9rem)/0.9 var(--font-heading);
+  margin-bottom: 0.75rem;
+  font-size: clamp(5rem, 3rem + 10vw, 9rem);
+  font-weight: 600;
+  line-height: 0.9;
   letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
   color: var(--border-strong);
 }
+.notfound h1 {
+  max-width: 16ch;
+  margin-inline: auto;
+  font-size: var(--ap-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+.notfound-lead {
+  max-width: 38rem;
+  margin: 1.25rem auto 0;
+  font-size: var(--ap-lede);
+  line-height: 1.47;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+.notfound .ap-ctas { margin-top: clamp(1.75rem, 3.5vw, 2.5rem); }
 
+/* The stage: each app as a white card, its tile above its name; one even
+   row on wide screens, one column of rows on phones. */
+.notfound-stage {
+  margin: clamp(3rem, 6vw, 4.5rem) var(--ap-gap) 0;
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+  background: var(--bg-alt);
+}
 .notfound-apps {
   display: grid;
-  /* One even row of the apps on wide screens, each as a tile above its
-     name; one column of rows on phones. */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ap-gap);
   max-width: 44rem;
-  margin: clamp(2.5rem, 6vw, 3.5rem) 0 0;
+  margin-block: 0;
   padding: 0;
   list-style: none;
 }
-
-.notfound-apps a {
+@media (min-width: 640px) {
+  .notfound-apps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.notfound-apps > li { display: flex; }
+.notfound-app {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  min-height: 3.5rem;
-  padding: 0.625rem 0.875rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  gap: 0.875rem;
+  width: 100%;
+  min-height: 4rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-lg);
   background: var(--surface);
   color: var(--text);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.3;
-  text-align: left;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease-out;
+  transition: transform var(--spring-dur) var(--spring);
 }
-.notfound-apps a:hover { color: var(--text); border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
-.notfound-apps a:active { transform: scale(0.98); }
-.notfound-tile { width: 2.25rem; }
+.notfound-app-name { flex-grow: 1; min-width: 0; }
+.notfound-tile { flex: none; width: 2.5rem; }
+.notfound-app-go { flex: none; width: 0.875rem; height: 0.875rem; color: var(--text-2); }
 @media (min-width: 640px) {
-  .notfound-apps a {
+  .notfound-app {
     flex-direction: column;
     justify-content: center;
-    gap: 0.6rem;
-    height: 100%;
-    padding: 1.1rem 0.9rem;
+    gap: 0.75rem;
+    padding: 1.75rem 1rem;
     text-align: center;
     text-wrap: balance;
   }
-  .notfound-tile { width: 2.75rem; }
+  .notfound-app-name { flex-grow: 0; }
+  .notfound-tile { width: 3.25rem; }
+  .notfound-app-go { display: none; }
 }
-@media (max-width: 639.98px) { .notfound-apps { grid-template-columns: minmax(0, 1fr); } }
+@media (hover: hover) {
+  .notfound-app:hover { color: var(--text); transform: scale(1.02); }
+}
+.notfound-app:active { transform: scale(0.97); transition-duration: 0.1s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .notfound-apps a:active { transform: none; }
+  .notfound-app { transition: none; }
+  .notfound-app:hover, .notfound-app:active { transform: none; }
 }
-
 @media (prefers-contrast: more) {
-  .notfound-code { background: none; color: var(--text); }
-  .notfound-apps a { border-color: var(--border-strong); }
+  .notfound-code { color: var(--text); }
+  .notfound-stage, .notfound-app { outline: 1px solid var(--border-strong); }
 }

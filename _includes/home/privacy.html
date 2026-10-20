@@ -16,8 +16,8 @@
     </header>
     <ul class="ap-bento-cards">
       {%- for item in site.data.home.privacy %}
-      <li class="ap-bento-card reveal">
-        {% include icon.html name=item.icon class="ap-bento-icon" size="32" %}
+      <li class="ap-card reveal">
+        {% include icon.html name=item.icon class="ap-card-icon" size="32" %}
         <h3>{{ item.title | escape }}</h3>
         <p>{{ item.text | escape }}</p>
       </li>

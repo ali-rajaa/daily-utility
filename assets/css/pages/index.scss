@@ -21,96 +21,27 @@
    timelines; nothing moves with reduced motion.
    ========================================================================== */
 
-.ap {
-  --ap-gap: 12px;              /* between edge-to-edge panels, as apple.com */
-  --ap-wrap: 61.25rem;         /* 980px content width */
-  /* One type scale for every homepage section. */
-  --ap-display: clamp(2.75rem, 1.35rem + 5.6vw, 5.25rem);   /* the opening line */
-  --ap-h2: clamp(2.125rem, 1.35rem + 3.2vw, 3.5rem);        /* every section heading */
-  --ap-lede: clamp(1.1875rem, 1rem + 0.75vw, 1.5rem);       /* the line under it */
-  /* Generous, even pacing: white sections and grey rows. */
-  --ap-pad: clamp(4.5rem, 10vw, 8.5rem);
-  --ap-pad-panel: clamp(4.5rem, 9vw, 7.5rem);
-}
+/* ---------- Shared pieces ----------
+   The type scale (--ap-display, --ap-h2, --ap-lede), the spacing and the
+   building blocks (.ap-wrap, .ap-section, .ap-panel, .ap-head, .ap-link,
+   .ap-ctas, .ap-steps, .ap-shelf, .ap-card) are site-wide in shell.css
+   since Phase 3; this file keeps what only the homepage has. */
 
-.ap-wrap {
-  width: min(100% - 2 * var(--gutter), var(--ap-wrap));
-  margin-inline: auto;
-}
-
-/* ---------- Shared pieces ---------- */
-
-.ap-section { padding-block: var(--ap-pad); }
-
-/* Full-width grey row, inset by the same 12px as the tiles. */
-.ap-panel {
-  margin-inline: var(--ap-gap);
-  padding-block: var(--ap-pad-panel);
-  background: var(--bg-alt);
-}
-
-/* Section headline, centred (compare, switching, closing). */
-.ap-head { max-width: 46rem; margin: 0 auto clamp(2.5rem, 5vw, 4rem); text-align: center; }
-
-/* Every section heading and the line under it, one size each. */
-.ap-head h2,
-.ap-guides-head h2,
-.ap-close h2,
-.ap .faq-split .section-head h2 {
-  font-size: var(--ap-h2);
-  line-height: 1.07;
-  letter-spacing: -0.015em;
-}
-.ap-head p,
 .ap-close p,
 .ap-bento-lead p {
   margin-top: 1rem;
   font-size: var(--ap-lede);
-  line-height: 1.45;
+  line-height: 1.47;
   color: var(--text-2);
   text-wrap: pretty;
 }
 
 /* Two-tone headline, as on apple.com's Store: the name in black, what it
    is in grey, one heading. */
-.ap-guides-head h2 span { color: var(--text-2); }
+.ap-guides h2 span { color: var(--text-2); }
 
 /* The app's own colour, for a short label only. */
 .ap-accent { color: var(--tone-text, var(--brand-text)); }
-
-.ap-ctas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem 1rem;
-  margin-top: 1.5rem;
-}
-.ap-ctas .btn { min-width: 7.5rem; }
-
-/* "Learn more ›": a text link whose chevron steps forward on hover. */
-.ap-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  min-height: 2.75rem;
-  margin-top: 0.75rem;
-  color: var(--brand-text);
-  font-size: 1.0625rem;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.2s ease;
-}
-.ap-link-icon {
-  flex: none;
-  width: 0.875rem;
-  height: 0.875rem;
-  transition: transform var(--spring-dur) var(--spring);
-}
-@media (hover: hover) {
-  .ap-link:hover { text-decoration: underline; text-underline-offset: 0.15em; }
-  .ap-link:hover .ap-link-icon { transform: translateX(3px); }
-}
-.ap-link:active { opacity: 0.6; transition-duration: 0s; }
 
 /* ---------- Opening: centred and cinematic ---------- */
 
@@ -143,7 +74,7 @@
   max-width: 38rem;
   margin: 1.5rem auto 0;
   font-size: var(--ap-lede);
-  line-height: 1.45;
+  line-height: 1.47;
   color: var(--text-2);
   text-wrap: pretty;
 }
@@ -369,36 +300,8 @@
 }
 
 /* ---------- Switching phones ----------
-   The heading centred on top, then the steps as columns, each under a
-   large numeral on a hairline (stacked on narrow screens). */
-
-.ap-steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  gap: 2.5rem clamp(1.5rem, 3vw, 2.5rem);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: step;
-}
-.ap-steps li {
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  counter-increment: step;
-}
-.ap-steps li::before {
-  content: counter(step);
-  display: block;
-  margin-bottom: 1rem;
-  font-size: clamp(2.75rem, 2.2rem + 1.6vw, 3.5rem);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--brand-text);
-  font-variant-numeric: tabular-nums;
-}
-.ap-steps h3 { font-size: 1.3125rem; line-height: 1.25; }
-.ap-steps p { margin-top: 0.5rem; line-height: 1.5; color: var(--text-2); }
+   The heading centred on top (.ap-head), then the steps as numbered
+   columns (.ap-steps, shell.css). */
 
 /* ---------- Privacy: a bento ---------- */
 
@@ -450,49 +353,12 @@
   padding: 0;
   list-style: none;
 }
-.ap-bento-card {
-  padding: clamp(1.75rem, 3vw, 2.25rem);
-  border-radius: var(--radius-lg);
-  background: var(--bg-alt);
-}
-.ap-bento-icon { display: block; width: 2rem; height: 2rem; color: var(--brand-text); }
-.ap-bento-card h3 { margin-top: 1rem; }
-.ap-bento-card p { margin-top: 0.5rem; line-height: 1.5; color: var(--text-2); }
 @media (max-width: 899.98px) { .ap-bento { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 599.98px) { .ap-bento-cards { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- Guides shelf ---------- */
-
-.ap-guides-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.5rem 2rem;
-  margin-bottom: 2rem;
-}
-.ap-guides-head h2 { max-width: 44rem; }
-.ap-guides-head .ap-link { margin-top: 0; }
-
-/* A sideways shelf, starting in line with the content above it and
-   running to the screen edge, like apple.com's "Get to know" rows. */
-.ap-shelf {
-  --shelf-pad: max(var(--gutter), (100% - var(--ap-wrap)) / 2);
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(20rem, 80%);
-  gap: 1.25rem;
-  margin: 0;
-  padding: 0.75rem var(--shelf-pad) 2rem;
-  list-style: none;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  scroll-padding-inline: var(--shelf-pad);
-  scrollbar-width: thin;
-}
-.ap-shelf > li { display: flex; scroll-snap-align: start; }
-.ap-shelf .post-card-banner { height: 10rem; }
+/* ---------- Guides shelf ----------
+   The heading and "All guides ›" (.ap-head-row) over the shelf (.ap-shelf),
+   both in shell.css; then the topics. */
 
 .ap-topics ul { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.5rem 0 0; padding: 0; list-style: none; }
 .ap-topics a {
@@ -541,10 +407,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ap-link-icon, .ap-chiclet .app-tile, .ap-phone, .ap-topics a { transition: none; }
+  .ap-chiclet .app-tile, .ap-phone, .ap-topics a { transition: none; }
   .ap-chiclet:active .app-tile, .ap-tile:hover .ap-phone, .ap-chiclet:hover .app-tile,
-  .ap-link:hover .ap-link-icon, .ap-topics a:active { transform: none; }
+  .ap-topics a:active { transform: none; }
 }
 @media (prefers-contrast: more) {
-  .ap-tile, .ap-panel, .ap-bento-card { outline: 1px solid var(--border-strong); }
+  .ap-tile { outline: 1px solid var(--border-strong); }
 }

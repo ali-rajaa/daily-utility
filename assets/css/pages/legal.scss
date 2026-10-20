@@ -5,112 +5,139 @@
 /* ==========================================================================
    legal.css: the privacy/terms layout (_layouts/legal.html).
 
-   Every colour used here is an existing shell.css token already checked
-   for contrast; no new colour pairs are introduced in this file. Base
-   prose typography (headings, paragraphs, lists, links) is the shared
-   .prose class in shell.css -- legal.html applies both classes
-   (class="prose legal-body"); only the TOC layout, the hero and the
-   callout/contact blocks below are specific to this layout.
+   Phase 3 (20 Oct): an apple.com text page on the site's type scale. A
+   centred opening (title, lead, dates), then the document in a reading
+   column beside its contents on white. Base prose typography (headings,
+   paragraphs, lists, links) is shell.css's .prose (legal.html applies
+   class="prose legal-body"); this file adds the opening, the contents,
+   the section rules and the callout and contact blocks. Every colour is
+   a shell.css token already checked for contrast. Layout only: the
+   documents' own text is never changed here.
    ========================================================================== */
 
-/* Hero and body share one width, so the H1 lines up with the TOC's
-   left edge instead of floating in a narrower centred column. */
-.legal-wrap { max-width: calc(42rem + 14rem + 4rem + var(--gutter) * 2); }
+/* ---------- Opening: centred ---------- */
 
-.legal-hero {
-  padding-top: var(--space-hero-top);
-  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
-  background: linear-gradient(to bottom, var(--bg-alt), var(--bg));
+.legal-hero { padding-top: clamp(1.25rem, 3vw, 2rem); }
+.legal-hero-copy { text-align: center; }
+.legal-crumbs {
+  justify-content: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
 }
-
-
+.legal-hero h1 {
+  max-width: 16ch;
+  margin-inline: auto;
+  font-size: var(--ap-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
 .legal-lead {
-  max-width: 42rem;
-  margin-top: 1rem;
-  font-size: 1.125rem;
-  line-height: 1.6;
+  max-width: 40rem;
+  margin: 1.25rem auto 0;
+  font-size: var(--ap-lede);
+  line-height: 1.47;
   color: var(--text-2);
+  text-wrap: pretty;
 }
 
+/* The document's dates, centred under the lead. Two dates can run past a
+   phone's width, so the row wraps. */
 .legal-updated {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 1.25rem;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
+  gap: 0.15rem 0.45rem;
+  margin-top: 1.5rem;
   color: var(--text-2);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
-.legal-updated svg { width: 1rem; height: 1rem; color: var(--brand-text); }
-/* Two dates can run past a phone's width: let them wrap, on a card
-   rather than a pill once they do. */
-.legal-updated { flex-wrap: wrap; row-gap: 0.15rem; }
-.legal-updated svg { flex: 0 0 auto; }
-@media (max-width: 479.98px) { .legal-updated { border-radius: 0.875rem; } }
+.legal-updated-icon { flex: none; width: 1rem; height: 1rem; color: var(--brand-text); }
 
-.legal-layout { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
+/* ---------- Document: contents rail + reading column ----------
+   The column is the site's 980px; the document inside it is capped at a
+   comfortable measure (42rem), as on the guides. */
+
+.legal-layout { padding-top: clamp(3rem, 6vw, 4.5rem); }
 
 .legal-grid {
   display: grid;
-  grid-template-columns: 14rem minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+.legal-body { min-width: 0; max-width: 42rem; }
+@media (min-width: 60rem) {
+  .legal-grid {
+    grid-template-columns: 14.5rem minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .legal-toc {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    max-height: calc(100vh - var(--header-h) - 3rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+@media (max-width: 59.99rem) {
+  .legal-toc, .legal-body { width: 100%; max-width: 42rem; margin-inline: auto; }
 }
 
 /* `sections:` is documented as required front matter (STATUS.md
    section 4), but a page that skips it shouldn't silently render its
-   body squeezed into the 14rem sidebar track -- CSS grid auto-places a
-   lone child into the first column when nothing declares otherwise.
+   body squeezed into the sidebar track: CSS grid auto-places a lone
+   child into the first column when nothing declares otherwise.
    :only-child (true exactly when legal.html's conditional around the
-   TOC nav left it out) spans the body across both columns instead. */
-.legal-grid > .legal-body:only-child {
-  grid-column: 1 / -1;
-  max-width: 42rem;
-}
+   contents left it out) spans the body across both columns instead. */
+.legal-grid > .legal-body:only-child { grid-column: 1 / -1; margin-inline: auto; }
 
-@media (max-width: 899.98px) {
-  .legal-grid { grid-template-columns: 1fr; }
-}
-
+/* ---------- "On this page" ----------
+   A grey card, as on the guides: open beside the document on wide
+   screens, folded above it on phones (site.js, .post-toc-fold). */
 .legal-toc {
-  position: sticky;
-  top: calc(var(--header-h) + 1.5rem);
-  max-height: calc(100vh - var(--header-h) - 3rem);
-  overflow-y: auto;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 1rem 0.75rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-alt);
 }
-
-@media (max-width: 899.98px) {
-  .legal-toc { position: static; max-height: none; }
-}
-
+.legal-toc-fold > summary { list-style: none; }
+.legal-toc-fold > summary::-webkit-details-marker { display: none; }
 .legal-toc-head {
-  margin-bottom: 0.75rem;
-  color: var(--text-2);
-  font: 650 0.75rem/1.4 var(--font-heading);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  margin: -0.5rem 0;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+}
+.legal-toc-count { margin-left: auto; font-weight: 400; color: var(--text-2); }
+.legal-toc-chevron { flex: none; width: 1.125rem; height: 1.125rem; color: var(--text-2); transition: transform var(--spring-dur) var(--spring); }
+.legal-toc-fold[open] .legal-toc-chevron { transform: rotate(180deg); }
+.legal-toc-head:focus-visible { outline-offset: 2px; border-radius: var(--radius-sm); }
+@media (min-width: 60rem) {
+  .legal-toc-head { min-height: 0; margin: 0 0 0.25rem; cursor: default; pointer-events: none; }
+  .legal-toc-count, .legal-toc-chevron { display: none; }
 }
 
 .legal-toc ol {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  margin: 0;
+  margin: 0.75rem 0 0;
   padding: 0;
   list-style: none;
   counter-reset: toc;
 }
 .legal-toc li { counter-increment: toc; }
 
-/* Each TOC entry is a full-height tap target (44px min), numbered to
-   match reading order. */
+/* Each entry is a full-height tap target (44px min), numbered to match
+   reading order. */
 .legal-toc a {
   display: flex;
   align-items: center;
@@ -122,44 +149,60 @@
   font-size: 0.9375rem;
   line-height: 1.35;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 .legal-toc a::before {
   content: counter(toc, decimal-leading-zero);
   flex-shrink: 0;
-  font: 600 0.75rem/1 var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
   color: var(--brand-text);
 }
-.legal-toc a:hover { background: var(--bg-alt); color: var(--text); }
+@media (hover: hover) {
+  .legal-toc a:hover { background: rgba(0, 0, 0, 0.04); color: var(--text); }
+}
+.legal-toc a:active { opacity: 0.6; transition-duration: 0s; }
 
-/* Jumping to a heading from the TOC would otherwise land it right under
-   the sticky header. .prose already sets h2's margin-top; this only
-   adds the extra scroll-position offset, specific to anchor-linked
-   headings, which post.html's h2s (never targeted by an anchor) don't
-   need. */
+/* ---------- The document ----------
+   Each section opens on a hairline. Jumping to a heading from the
+   contents would otherwise land it right under the sticky header, so
+   anchored headings get a scroll offset. */
 .legal-body h2 {
-  scroll-margin-top: calc(var(--header-h) + 1.5rem);
-  padding-top: 2rem;
+  margin-top: clamp(2.5rem, 5vw, 3.25rem);
+  padding-top: clamp(2.5rem, 5vw, 3.25rem);
   border-top: 1px solid var(--border);
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
 }
 .legal-body > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
-.legal-body h3 { font-size: 1.0625rem; }
+.legal-body h3 { font-size: 1.1875rem; }
 
 /* Key commitments, written in the Markdown as `{: .callout}` after a
    paragraph. */
 .legal-body .callout {
-  padding: 1rem 1.25rem;
-  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
   background: var(--bg-alt);
 }
 
 .legal-body .contact-card {
-  padding: 1.25rem 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius-lg);
   background: var(--bg-alt);
 }
 .legal-body .contact-card p + p { margin-top: 0.35rem; }
 
+/* ---------- Accessibility preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .legal-toc-chevron, .legal-toc a { transition: none; }
+}
 @media (prefers-contrast: more) {
-  .legal-toc, .legal-updated, .legal-body .contact-card { border-color: var(--border-strong); }
+  .legal-toc, .legal-body .callout, .legal-body .contact-card { outline: 1px solid var(--border-strong); }
+  .legal-body h2 { border-color: var(--border-strong); }
 }

@@ -101,33 +101,37 @@ has -- never hardcoded, since most of the apps are Android-only.
 {% include faq-schema.html faqs=page.faqs %}
 
 {%- comment -%} Everything visible sits inside the app's tone scope
-(shell.css "App tones"): buttons, links, step numbers, icon chips and the
-hero all take this app's colour. The header and footer stay outside it,
-in brand blue.
+(shell.css "App tones"): step numbers, card icons and the stage take this
+app's colour. The header and footer stay outside it, in brand blue.
 
-Layout (redesigned 3 Oct): a two-column hero (copy left, the app's tile
-with its features right), then sections with left-aligned headings like
-the homepage -- no uppercase labels over headings, and open layouts
-rather than a box around every item: moments, how it works, features (one
-panel, or the bento for 6+), with/without, tips, related guides, FAQ
-beside its heading, other apps, and a closing pair of cards (get the app,
-your privacy). Every section is named by its heading (aria-labelledby).
+Layout (Phase 3, 20 Oct), an apple.com product page in the homepage's
+rhythm, white and grey in turn, every heading and lead on the shared
+scale: a centred opening (the app's name very large, its tagline, the
+store badges with id="download") over a grey stage with the app on a
+phone, its features as labels around it, and links to the sections;
+then the moments as cards (white), how it works as numbered columns
+(grey), what it does as cards, a bento when there are six or more
+(white), with and without as a light and a dark card (grey), tips as
+numbered cards (white), related guides on a shelf (grey), the FAQ
+(white), the other apps (grey), and a closing pair: get the app, your
+privacy (white). Every section is named by its heading
+(aria-labelledby); every icon is inline (icon.html).
 {%- endcomment %}
 <div class="tone-{{ _app.tone }}">
-<section class="section app-hero" aria-labelledby="app-title">
-  <div class="wrap app-hero-grid">
-    <div class="app-hero-copy">
-      <p class="app-hero-kicker">{% include app-tile.html app=_app class="app-hero-kicker-tile" %}<span>Free to download on {{ _platforms }}</span></p>
-      <h1 id="app-title">{{ page.app_name | escape }}</h1>
-      <p class="app-hero-lead">{{ page.tagline | escape }}</p>
-      <div class="app-hero-get" id="download">
-        {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
-      </div>
-      <ul class="app-hero-meta">
-        <li>{% include brand-mark.html class="app-hero-mark" size="18" %}By Daily Utility Apps</li>
-        <li><svg aria-hidden="true"><use href="#i-shield"/></svg>Your data is never sold</li>
-      </ul>
+<section class="app-hero" aria-labelledby="app-title">
+  <div class="ap-wrap app-hero-copy">
+    <p class="app-hero-kicker">{% include app-tile.html app=_app class="app-hero-kicker-tile" %}<span>Free to download on {{ _platforms }}</span></p>
+    <h1 id="app-title">{{ page.app_name | escape }}</h1>
+    <p class="app-hero-lead">{{ page.tagline | escape }}</p>
+    <div class="app-hero-get" id="download">
+      {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
     </div>
+    <ul class="app-hero-meta">
+      <li>{% include brand-mark.html class="app-hero-mark" size="18" %}By Daily Utility Apps</li>
+      <li>{% include icon.html name="shield" class="app-hero-meta-icon" size="18" %}Your data is never sold</li>
+    </ul>
+  </div>
+  <div class="app-stage">
     <div class="app-hero-visual" aria-hidden="true">
       <span class="app-hero-ring"></span>
       <span class="app-hero-ring app-hero-ring--outer"></span>
@@ -136,8 +140,6 @@ your privacy). Every section is named by its heading (aria-labelledby).
       <span class="app-hero-chip app-hero-chip--{{ forloop.index }}">{{ feat | escape }}</span>
       {%- endfor %}
     </div>
-  </div>
-  <div class="wrap">
     <nav class="app-jump" aria-label="On this page">
       {%- if page.moments %}<a href="#moments">When to use it</a>{% endif %}
       {%- if page.how_it_works %}<a href="#how-it-works">How it works</a>{% endif %}
@@ -148,18 +150,18 @@ your privacy). Every section is named by its heading (aria-labelledby).
 </section>
 
 {%- if page.moments %}
-<section class="section" id="moments" aria-labelledby="moments-title">
-  <div class="wrap">
-    <div class="section-head reveal">
+<section class="ap-section" id="moments" aria-labelledby="moments-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
       <h2 id="moments-title">{{ page.moments_heading | default: "Made for everyday moments" | escape }}</h2>
       {%- if page.moments_sub %}
-      <p class="section-sub">{{ page.moments_sub | escape }}</p>
+      <p>{{ page.moments_sub | escape }}</p>
       {%- endif %}
-    </div>
-    <ul class="moments">
+    </header>
+    <ul class="ap-cards app-moments">
       {%- for m in page.moments %}
-      <li class="moment reveal">
-        <span class="moment-icon" aria-hidden="true"><svg><use href="#i-{{ m.icon | escape }}"/></svg></span>
+      <li class="ap-card reveal">
+        {% include icon.html name=m.icon class="ap-card-icon" size="32" %}
         <h3>{{ m.title | escape }}</h3>
         <p>{{ m.text | escape }}</p>
       </li>
@@ -170,15 +172,14 @@ your privacy). Every section is named by its heading (aria-labelledby).
 {%- endif %}
 
 {%- if page.how_it_works %}
-<section class="section section--alt" id="how-it-works" aria-labelledby="how-title">
-  <div class="wrap">
-    <div class="section-head reveal">
+<section class="ap-panel" id="how-it-works" aria-labelledby="how-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
       <h2 id="how-title">{{ page.steps_heading | default: "Three steps to get started" | escape }}</h2>
-    </div>
-    <ol class="steps">
+    </header>
+    <ol class="ap-steps">
       {%- for step in page.how_it_works %}
-      <li class="step reveal">
-        <span class="step-number" aria-hidden="true">{{ forloop.index }}</span>
+      <li class="reveal">
         <h3><span class="visually-hidden">Step {{ forloop.index }}: </span>{{ step.title | escape }}</h3>
         <p>{{ step.text | escape }}</p>
       </li>
@@ -189,48 +190,47 @@ your privacy). Every section is named by its heading (aria-labelledby).
 {%- endif %}
 
 {%- if page.features %}
-<section class="section" id="features" aria-labelledby="features-title">
-  <div class="wrap">
-    <div class="section-head reveal">
+<section class="ap-section" id="features" aria-labelledby="features-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
       <h2 id="features-title">What {{ _short | escape }} does</h2>
-    </div>
-    {%- comment -%} Six or more features: bento layout, the first feature as
-    a large 2x2 tile (3 columns x 3 rows = 1 big + 5 small, no gaps).
-    Fewer: one panel split into columns, rather than a box per feature.
-    {%- endcomment %}
-    <div class="feature-grid{% if page.features.size >= 6 %} feature-grid--bento{% else %} feature-panel{% endif %} reveal">
+    </header>
+    {%- comment -%} Six or more features: a bento, the first feature as a
+    large tile two columns wide and two rows tall (3 columns x 3 rows = 1
+    big + 5 small, no gaps). Fewer: one row of equal cards. {%- endcomment %}
+    <ul class="ap-cards app-features{% if page.features.size >= 6 %} app-features--bento{% endif %}">
       {%- for feature in page.features %}
-      <div class="feature-card">
-        <svg class="feature-icon" aria-hidden="true"><use href="#i-{{ feature.icon | escape }}"/></svg>
+      <li class="ap-card reveal">
+        {% include icon.html name=feature.icon class="ap-card-icon" size="32" %}
         <h3>{{ feature.title | escape }}</h3>
         <p>{{ feature.text | escape }}</p>
-      </div>
+      </li>
       {%- endfor %}
-    </div>
+    </ul>
   </div>
 </section>
 {%- endif %}
 
 {%- if page.compare %}
-<section class="section section--alt" id="compare" aria-labelledby="compare-title">
-  <div class="wrap">
-    <div class="section-head reveal">
+<section class="ap-panel" id="compare" aria-labelledby="compare-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
       <h2 id="compare-title">{{ page.compare.heading | escape }}</h2>
-    </div>
-    <div class="compare reveal">
-      <div class="compare-col compare-col--without">
-        <h3 class="compare-title">{{ page.compare.without_title | default: "Without it" | escape }}</h3>
+    </header>
+    <div class="app-compare">
+      <div class="ap-card app-compare-col reveal">
+        <h3>{{ page.compare.without_title | default: "Without it" | escape }}</h3>
         <ul>
           {%- for item in page.compare.without %}
-          <li><span class="compare-mark" aria-hidden="true"><svg><use href="#i-x"/></svg></span><span>{{ item | escape }}</span></li>
+          <li><span class="app-compare-mark">{% include icon.html name="x" size="14" %}</span><span>{{ item | escape }}</span></li>
           {%- endfor %}
         </ul>
       </div>
-      <div class="compare-col compare-col--with">
-        <h3 class="compare-title">{% if page.compare.with_title %}{{ page.compare.with_title | escape }}{% else %}With {{ _short | escape }}{% endif %}</h3>
+      <div class="ap-card ap-card--dark app-compare-col app-compare-col--with reveal">
+        <h3>{% if page.compare.with_title %}{{ page.compare.with_title | escape }}{% else %}With {{ _short | escape }}{% endif %}</h3>
         <ul>
           {%- for item in page.compare.with %}
-          <li><span class="compare-mark" aria-hidden="true"><svg><use href="#i-tick"/></svg></span><span>{{ item | escape }}</span></li>
+          <li><span class="app-compare-mark">{% include icon.html name="tick" size="14" %}</span><span>{{ item | escape }}</span></li>
           {%- endfor %}
         </ul>
       </div>
@@ -240,15 +240,15 @@ your privacy). Every section is named by its heading (aria-labelledby).
 {%- endif %}
 
 {%- if page.tips %}
-<section class="section" id="tips" aria-labelledby="tips-title">
-  <div class="wrap">
-    <div class="section-head reveal">
+<section class="ap-section" id="tips" aria-labelledby="tips-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
       <h2 id="tips-title">{{ page.tips_heading | default: "Good to know" | escape }}</h2>
-    </div>
-    <ol class="tips">
+    </header>
+    <ol class="ap-cards app-tips">
       {%- for t in page.tips %}
-      <li class="tip reveal">
-        <span class="tip-num" aria-hidden="true">{{ forloop.index | prepend: "0" }}</span>
+      <li class="ap-card reveal">
+        <span class="app-tip-num" aria-hidden="true">{{ forloop.index | prepend: "0" }}</span>
         <h3>{{ t.title | escape }}</h3>
         <p>{{ t.text | escape }}</p>
       </li>
@@ -259,24 +259,22 @@ your privacy). Every section is named by its heading (aria-labelledby).
 {%- endif %}
 
 {%- if page.guides %}
-<section class="section section--alt" id="guides" aria-labelledby="guides-title">
-  <div class="wrap">
-    <div class="section-head-row reveal">
-      <div class="section-head">
-        <h2 id="guides-title">Related guides</h2>
-        <p class="section-sub">Free, plain-English guides from Daily Info.</p>
-      </div>
-      <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
+<section class="ap-panel" id="guides" aria-labelledby="guides-title">
+  <div class="ap-wrap ap-head-row reveal">
+    <div>
+      <h2 id="guides-title">Related guides</h2>
+      <p class="app-guides-sub">Free, plain-English guides from Daily Info.</p>
     </div>
-    <ul class="post-grid app-guides-grid">
-      {%- for slug in page.guides %}
-      {%- assign _g = site.pages | where: "layout", "post" | where: "slug", slug | first -%}
-      {%- if _g %}
-      {% include post-card.html post=_g %}
-      {%- endif %}
-      {%- endfor %}
-    </ul>
+    <a class="ap-link" href="{{ '/daily-info/' | relative_url }}">All guides{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
   </div>
+  <ul class="ap-shelf">
+    {%- for slug in page.guides %}
+    {%- assign _g = site.pages | where: "layout", "post" | where: "slug", slug | first -%}
+    {%- if _g %}
+    {% include post-card.html post=_g %}
+    {%- endif %}
+    {%- endfor %}
+  </ul>
 </section>
 {%- endif %}
 
@@ -284,23 +282,23 @@ your privacy). Every section is named by its heading (aria-labelledby).
 
 {%- assign _others = site.data.apps | where: "built", true -%}
 {%- if _others.size > 1 %}
-<section class="section section--alt" aria-labelledby="others-title">
-  <div class="wrap">
-    <div class="section-head reveal">
+<section class="ap-panel" aria-labelledby="others-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
       <h2 id="others-title">Other everyday tools</h2>
-      <p class="section-sub">Each of our apps does one job. These are the others.</p>
-    </div>
-    <ul class="other-apps">
+      <p>Each of our apps does one job. These are the others.</p>
+    </header>
+    <ul class="app-others">
       {%- for app in _others %}
       {%- unless app.name == page.app_name %}
       <li class="reveal tone-{{ app.tone }}">
-        <a class="other-app" href="{{ '/' | append: app.slug | relative_url }}">
-          {% include app-tile.html app=app class="other-app-tile" %}
-          <span class="other-app-text">
-            <span class="other-app-name">{{ app.name | escape }}</span>
-            <span class="other-app-tagline">{{ app.tagline | escape }}</span>
+        <a class="app-other" href="{{ '/' | append: app.slug | relative_url }}">
+          {% include app-tile.html app=app class="app-other-tile" %}
+          <span class="app-other-text">
+            <span class="app-other-name">{{ app.name | escape }}</span>
+            <span class="app-other-tagline">{{ app.tagline | escape }}</span>
           </span>
-          <svg class="other-app-arrow" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          {% include icon.html name="chevron-right" class="app-other-arrow" size="18" %}
         </a>
       </li>
       {%- endunless %}
@@ -311,23 +309,24 @@ your privacy). Every section is named by its heading (aria-labelledby).
 {%- endif %}
 
 {%- comment -%} The privacy card states only what's true company-wide
-(who makes the app, and the privacy policy's commitment not to sell your files or use them for anything but the features you ask for). Anything
+(who makes the app, and the privacy policy's commitment not to sell your
+files or use them for anything but the features you ask for). Anything
 app-specific -- how or where that app stores data -- goes in the page's
 own optional trust_text, so it's never claimed for an app it doesn't
 apply to. {%- endcomment %}
-<section class="section app-close" aria-labelledby="get-title">
-  <div class="wrap app-close-grid">
-    <div class="app-close-get reveal">
+<section class="ap-section app-close" aria-labelledby="get-title">
+  <div class="ap-wrap app-close-grid">
+    <div class="ap-card app-close-get reveal">
       {% include app-tile.html app=_app class="app-close-tile" %}
       <h2 id="get-title">Get {{ _short | escape }}</h2>
-      <p class="section-sub">Free to download on {{ _platforms }}.</p>
+      <p>Free to download on {{ _platforms }}.</p>
       {% include store-badges.html ios_url=page.ios_url android_url=page.android_url %}
     </div>
-    <div class="app-close-privacy reveal">
-      <span class="app-close-privacy-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+    <div class="ap-card ap-card--dark app-close-privacy reveal">
+      <span class="app-close-privacy-mark">{% include icon.html name="shield" size="28" %}</span>
       <h2 class="h3">Your privacy</h2>
       <p>{{ page.app_name | escape }} is made by Daily Utility Apps. {% if page.trust_text %}{{ page.trust_text | escape }} {% endif %}We don't sell your private files, photos, videos, documents or contacts, and we only use them to provide the features you ask for.</p>
-      <a class="app-close-link" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a class="ap-link" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
     </div>
   </div>
 </section>

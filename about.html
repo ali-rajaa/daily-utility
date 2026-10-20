@@ -19,77 +19,79 @@ breadcrumbs:
   own description. No company history, team or location: none of that is
   confirmed. The registered company name appears on the legal pages only
   (STATUS.md section 5u).
+
+  Phase 3 (20 Oct): the homepage's rhythm. A centred opening over a grey
+  stage with the apps' tiles; what we make on white; how we work on
+  grey; a dark closing card for support. Icons are inline (icon.html).
 {%- endcomment -%}
 {% include breadcrumb-schema.html crumbs=page.breadcrumbs %}
 {%- assign apps = site.data.apps | where: "built", true -%}
-<section class="section about-hero" aria-labelledby="about-title">
-  <div class="wrap about-hero-grid">
-    <div class="about-hero-copy">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ '/' | relative_url }}">Home</a>
-        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
-        <span aria-current="page">About</span>
-      </nav>
-      <h1 id="about-title">About Daily Utility Apps</h1>
-      <p class="about-lead">We make focused phone apps for everyday jobs, like cloud backup, reading documents and phone-to-phone transfer. Each one is built around a single job, so it stays simple to use.</p>
-      <div class="btn-row">
-        <a class="btn btn--primary" href="#apps">See the apps<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
-        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read Daily Info</a>
-      </div>
+<section class="about-hero" aria-labelledby="about-title">
+  <div class="ap-wrap about-hero-copy">
+    <nav class="breadcrumbs about-crumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+      <span aria-current="page">About</span>
+    </nav>
+    <h1 id="about-title">About Daily Utility Apps</h1>
+    <p class="about-lead">We make focused phone apps for everyday jobs, like cloud backup, reading documents and phone-to-phone transfer. Each one is built around a single job, so it stays simple to use.</p>
+    <div class="ap-ctas">
+      <a class="btn btn--primary" href="#apps">See the apps</a>
+      <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read Daily Info</a>
     </div>
-    <div class="about-hero-visual" aria-hidden="true">
+  </div>
+  <div class="about-stage" aria-hidden="true">
+    <ul class="about-stage-row">
       {%- for app in apps %}
-      <span class="about-hero-cell tone-{{ app.tone }}">{% include app-tile.html app=app class="about-hero-tile" %}<span class="about-hero-name">{{ app.short | escape }}</span></span>
+      <li class="about-stage-cell tone-{{ app.tone }}">{% include app-tile.html app=app class="about-stage-tile" %}<span class="about-stage-name">{{ app.short | escape }}</span></li>
       {%- endfor %}
-    </div>
+    </ul>
   </div>
 </section>
 
-<section class="section" id="apps" aria-labelledby="apps-title">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2 id="apps-title">What we make</h2>
-      <p class="section-sub">One app for each job. All of them are free to download.</p>
+<section class="ap-section" id="apps" aria-labelledby="apps-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="apps-title">What we make.</h2>
+      <p>One app for each job. All of them are free to download.</p>
     </div>
-    <ul class="about-apps">
+    <ul class="ap-cards about-apps">
       {%- for app in apps %}
-      <li class="about-app tone-{{ app.tone }} reveal">
+      <li class="ap-card about-app tone-{{ app.tone }} reveal">
         {% include app-tile.html app=app class="about-app-tile" %}
-        <div class="about-app-text">
-          <h3><a href="{{ '/' | append: app.slug | relative_url }}">{{ app.name | escape }}</a></h3>
-          <p class="about-app-job">{{ app.task | escape }}</p>
-          <p>{{ app.task_text | escape }}</p>
-        </div>
-        <p class="about-app-platform"><svg aria-hidden="true"><use href="#i-phone"/></svg>Free to download on {% include platforms.html app=app %}</p>
+        <h3><a href="{{ '/' | append: app.slug | relative_url }}">{{ app.name | escape }}</a></h3>
+        <p class="about-app-job">{{ app.task | escape }}</p>
+        <p class="about-app-text">{{ app.task_text | escape }}</p>
+        <p class="about-app-platform">{% include icon.html name="phone" class="about-app-platform-icon" size="18" %}Free to download on {% include platforms.html app=app %}</p>
       </li>
       {%- endfor %}
     </ul>
   </div>
 </section>
 
-<section class="section section--alt" aria-labelledby="work-title">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2 id="work-title">How we work</h2>
+<section class="ap-panel" aria-labelledby="work-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="work-title">How we work.</h2>
     </div>
-    <ul class="about-principles">
-      <li class="reveal">
-        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-grid"/></svg></span>
+    <ul class="ap-cards about-principles">
+      <li class="ap-card reveal">
+        {% include icon.html name="grid" class="ap-card-icon" size="32" %}
         <h3>One job per app</h3>
         <p>Backing up, reading documents and moving files are different jobs, so each has its own app. That keeps every app simple to use.</p>
       </li>
-      <li class="reveal">
-        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-phone"/></svg></span>
+      <li class="ap-card reveal">
+        {% include icon.html name="phone" class="ap-card-icon" size="32" %}
         <h3>Free to download</h3>
         <p>Our apps are free to download. Each app's page links to the stores it's on: Google Play, the App Store or both.</p>
       </li>
-      <li class="reveal">
-        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+      <li class="ap-card reveal">
+        {% include icon.html name="shield" class="ap-card-icon" size="32" %}
         <h3>Your files aren't sold</h3>
         <p>We don't sell your private files, photos, videos, documents or contacts, and we only use them to provide the features you ask for. The <a href="{{ '/privacy-policy' | relative_url }}">privacy policy</a> covers every app and this website.</p>
       </li>
-      <li class="reveal">
-        <span class="about-principle-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>
+      <li class="ap-card reveal">
+        {% include icon.html name="book" class="ap-card-icon" size="32" %}
         <h3>Guides for everyone</h3>
         <p><a href="{{ '/daily-info/' | relative_url }}">Daily Info</a> is our free library of plain-English guides to everyday phone problems. Each guide is useful whether or not you use our apps.</p>
       </li>
@@ -97,15 +99,15 @@ breadcrumbs:
   </div>
 </section>
 
-<section class="section" aria-labelledby="contact-title">
-  <div class="wrap">
-    <div class="cta-band cta-band--card reveal">
-      <span class="about-cta-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span>
-      <div class="section-head">
-        <h2 id="contact-title">Questions about an app?</h2>
-        <p class="section-sub">Email our support team at <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a>.</p>
+<section class="ap-section" aria-labelledby="contact-title">
+  <div class="ap-wrap">
+    <div class="ap-card ap-card--dark about-close-card reveal">
+      <span class="about-close-icon tone-blue" aria-hidden="true">{% include icon.html name="mail" size="34" %}</span>
+      <h2 id="contact-title">Questions about an app?</h2>
+      <p>Email our support team at <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a>.</p>
+      <div class="ap-ctas">
+        <a class="btn btn--primary" href="{{ '/contact' | relative_url }}">Contact support</a>
       </div>
-      <a class="btn btn--primary" href="{{ '/contact' | relative_url }}">Contact support<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
     </div>
   </div>
 </section>

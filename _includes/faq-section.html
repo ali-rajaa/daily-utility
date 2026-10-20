@@ -1,17 +1,17 @@
 {%- comment -%}
   A visible FAQ section (shell.css FAQ cards). Params: faqs (list of
   {q, a}), optional heading (default "Questions people ask"), sub, id and
-  alt (true for the alternate section background). The heading sits
-  beside the questions on wide screens and above them on phones -- the
-  same layout on every page (3 Oct; `split` is still accepted and no
-  longer needed). Pair it with faq-schema.html, which writes the same
-  questions as FAQPage data -- the visible and structured answers must
-  always match.
+  alt (true for a grey row, shell.css .ap-panel, instead of a white
+  section). The heading sits beside the questions on wide screens and
+  above them on phones, in the site's 980px column -- the same layout on
+  every page (3 Oct; `split` is still accepted and no longer needed).
+  Pair it with faq-schema.html, which writes the same questions as
+  FAQPage data -- the visible and structured answers must always match.
 {%- endcomment -%}
 {%- if include.faqs and include.faqs.size > 0 %}
 {%- assign _faq_title = include.id | default: "faq" | append: "-title" %}
-<section class="section{% if include.alt %} section--alt{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %} aria-labelledby="{{ _faq_title }}">
-  <div class="wrap faq-split">
+<section class="{% if include.alt %}ap-panel{% else %}ap-section{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %} aria-labelledby="{{ _faq_title }}">
+  <div class="ap-wrap faq-split">
     <div class="section-head reveal">
       <h2 id="{{ _faq_title }}">{{ include.heading | default: "Questions people ask" | escape }}</h2>
       {%- if include.sub %}

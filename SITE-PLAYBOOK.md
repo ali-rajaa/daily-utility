@@ -289,10 +289,12 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 ### 8.4 Spacing, shape, depth
 
 ```css
---wrap: 70rem;                         /* page width; Apple-style sections use 61.25rem (980px) */
+--ap-wrap: 61.25rem;                   /* the 980px content column, every page */
 --gutter: clamp(1rem, 4vw, 2rem);      /* never under 16px on phones */
 --header-h: 3rem;                      /* 2.75rem (44px) from 760px up */
---space-section: clamp(4.5rem, 10vw, 8rem);
+--ap-pad: clamp(4.5rem, 10vw, 8.5rem); /* a white section, top and bottom */
+--ap-pad-panel: clamp(4.5rem, 9vw, 7.5rem); /* a grey row */
+--ap-gap: 12px;                        /* between panels and cards */
 --radius-sm: 10px; --radius: 12px; --radius-lg: 18px; --radius-pill: 980px;
 --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
 --shadow-md: 2px 4px 12px rgba(0,0,0,.08);   /* soft, directional */
@@ -306,8 +308,8 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 ### 8.5 Icons
 
 - **One set of shapes, in data:** `_data/icons.yml` holds every icon (the inside of a 24×24 SVG) and the drawing spec. Chevrons are drawn pointing the way they mean (`chevron-down`, `chevron-right`), never rotated by CSS.
-- **Inline icons:** `{% include icon.html name="lock" class="…" size="40" %}` draws one inline: its own `viewBox`, `width` and `height`, stroked in `currentColor`, `aria-hidden`. An unknown name stops the build (the include calls a filter that doesn't exist, and `strict_filters` is on), so a typo can't ship an empty icon. The homepage and the shared pieces it renders (app tiles, phone frames, guide cards, FAQ chevrons) use it (Phase 2, 20 Oct).
-- **The sprite** (`icon-sprite.html`, after `<body>`) is built from the same data for pages not yet moved over (`<svg><use href="#i-cloud"/></svg>`); it goes once nothing uses `<use>`.
+- **Inline icons:** `{% include icon.html name="lock" class="…" size="40" %}` draws one inline: its own `viewBox`, `width` and `height`, stroked in `currentColor`, `aria-hidden`. An unknown name stops the build (the include calls a filter that doesn't exist, and `strict_filters` is on), so a typo can't ship an empty icon. Every page uses it (homepage in Phase 2, every other page in Phase 3, 20 Oct).
+- **The sprite** (`icon-sprite.html`, after `<body>`) is built from the same data for the one piece still on `<use>`, the footer; it goes with the footer's rewrite.
 - **One drawing spec:** 24×24 grid, 2-unit margin, 1.75 stroke, round caps and joins, no fills.
 - In content, icons are plain blue glyphs (no coloured squares). Decorative icons get `aria-hidden="true"`; icon-only buttons get an `aria-label`. No emoji.
 
@@ -339,7 +341,7 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 
 ### 9.2 Hero
 
-Breadcrumbs (except the homepage), H1, a lead paragraph, the main actions. Product heroes show the app on a phone frame (section 8.6) on a quiet grey panel ringed by hairlines, with white feature chips; guide heroes show the topic's tile. No coloured gradients or animated blobs. The hero is never a scroll-reveal element (it would delay the largest paint).
+Every page opens the same way (Phase 3, 20 Oct): the breadcrumb trail centred at the top (not on the homepage), then the H1 very large and centred (`--ap-display`, weight 700, about 16 characters a line; guide titles a step smaller), its lead (`--ap-lede`, grey, 1.47 leading) and the main actions as a centred pill pair. Below it, a **grey stage**: a full-width row inset 12px holding the page's one picture: the app on a phone frame with white feature chips (app pages), the topic's tile ringed by hairlines with the article's own numbers under it (guides), the newest guide as one wide card (Daily Info), the apps' tiles (About), the email card (Contact), the apps (404). Legal pages are text pages and have no stage. No coloured gradients or animated blobs. The opening is never a scroll-reveal element (it would delay the largest paint).
 
 ### 9.3 Homepage (Daily Utility)
 
@@ -357,25 +359,25 @@ All of it reads from data; nothing states how many apps there are.
 
 ### 9.4 Product page (Daily Utility `app.html`)
 
-Built entirely from front matter. Hero (eyebrow, name, tagline, store badges with `id="download"`, the app on a phone frame on a grey panel) → moments (blue glyphs over hairlines) → how it works (3 steps) → features (grey bento tiles) → optional compare (outlined "without", raised white "with") → tips → related guides → FAQ → closing call to action → other apps. **On phones only** the sections compact into rows; nothing is hidden and desktop is unchanged.
+Built entirely from front matter, white and grey in turn. Opening (the app's tile and "Free to download on …", name, tagline, store badges with `id="download"`, "By Daily Utility Apps" and "Your data is never sold") over the grey stage (the app on a phone frame with feature chips, then links to the sections) → moments (white: grey cards two by two) → how it works (grey: numbered columns) → features (white: grey cards, a bento with the first card 2×2 once there are six) → optional compare (grey: a light "without" card beside a dark "with" card) → tips (white: numbered cards) → related guides (grey: a sideways shelf) → FAQ (white) → other apps (grey) → closing pair (white: a grey "Get the app" card beside a dark "Your privacy" card).
 
 ### 9.5 Guides hub and guide pages
 
-- **Hub:** H1 with a grey second half; the newest guide as a large card; topic cards (white, soft shadow, the topic's tile); per-topic lists once a topic has more than one guide.
-- **Guide cards:** Apple Store cards: white, 18px corners, soft shadow, a quiet grey banner with the topic tile; they grow 1% on hover. Category label in the topic's accent colour.
-- **Guide page:** breadcrumbs, title, date, reading time, the tile on a grey panel with stat tiles, a grey "short version" panel, a contents list (folded on phones, highlights the section being read), sections, FAQ, related guides, share button. Tables become cards on phones.
+- **Hub:** the opening (a "Daily Info" pill, H1 with a grey second half, counts of guides and topics) over a grey stage with the newest guide as one wide white card (banner left, guide right; stacked on phones) → topics (white: four grey cards with the topic's tile, line and "N guides ›"; two by two on tablets, compact rows on phones) → every guide by topic (grey: each topic's tile, name and line over its guide cards, hairlines between topics) → a dark closing card for the backup app.
+- **Guide cards:** Apple Store cards: white, 18px corners, soft shadow, a quiet grey banner with the topic tile; they grow 1% on hover. Category label in the topic's accent colour. Compact rows on phones.
+- **Guide page:** the opening (topic pill, title, lead, byline and dates) over a grey stage (the topic's tile ringed by hairlines on a glow of its colour, then the article's own numbers: minutes, sections or steps, quick answers) → the article (white): a 42rem reading column beside a 14.5rem rail with the app card and the contents (a grey card, pinned on wide screens, folded on phones, highlights the section being read); "The short version" and the closing note as grey cards; steps as numbered markers joined by a hairline; share button → FAQ (grey row) → "More from Daily Info." (white: three guide cards, then every topic as a grey card) → a dark closing card for the backup app. Tables become cards on phones. The coming-soon layout shares the opening and stage.
 
 ### 9.6 Contact page
 
-The support email on a white card with a soft shadow, "Write an email" and "Copy address" pills, one mailto link per product (the product named in the subject), what to put in an email, and links to the FAQ, guides and privacy choices. **No phone number, address, hours or reply-time promise** unless confirmed.
+The opening over a grey stage with the support email on one white card ("Write an email" and "Copy address" pills) → one mailto link per product as a grouped list (white; the product named in the subject) → what to put in an email (grey: numbered columns, then the password note) → links to the FAQ, guides and privacy choices as grey cards (white). **No phone number, address, hours or reply-time promise** unless confirmed.
 
 ### 9.7 Legal pages
 
-Hero with H1, lead and "Effective and last updated …"; a sticky contents list generated from front matter; prose at about 70 characters; callouts as grey panels; company details in a contact card at the end. Content rules are in section 15.
+The opening (H1, lead, "Effective and last updated …" with a clock icon), then the document (white): a 42rem reading column beside a contents list generated from front matter (a grey card, pinned on wide screens, folded on phones); each section opens on a hairline; callouts and the company details as grey cards. Layout only: the documents' text is the owner's. Content rules are in section 15.
 
 ### 9.8 404
 
-A large grey "404" (decorative, hidden from screen readers), a plain H1, homepage and guides buttons, and the products as tiles. `noindex`, no canonical, out of the sitemap, and a real 404 status (Appendix I).
+A large grey "404" (decorative, hidden from screen readers), the H1, homepage and guides pills, then the products as white cards on a grey stage. `noindex`, no canonical, out of the sitemap, and a real 404 status (Appendix I).
 
 ### 9.9 Footer (apple.com's)
 
@@ -389,7 +391,13 @@ Light grey `#f5f5f7`, 12px type, `#424245` links. A short note line; a "you are 
 
 ### 9.11 Section scaffold
 
-`<section class="section" aria-labelledby="…-title"><div class="wrap">…`. `.section-head` holds the H2 and a `.section-sub`. Alternate sections use `--bg-alt`. Vary layouts (heading beside content, centred compare, sideways shelves) so pages don't repeat one pattern.
+Every page is built from the blocks in shell.css "Page building blocks"; page stylesheets arrange them and add only what the page has of its own.
+
+- `<section class="ap-section" aria-labelledby="…-title"><div class="ap-wrap">…`: a white section on the 980px column. `.ap-panel` instead is a grey row inset 12px. Alternate them; a page ends on white, so the grey footer never meets a grey row.
+- `.ap-head`: the H2 (`--ap-h2`) and its lead centred over the content. `.ap-head-row`: the H2 on the left and its "All guides ›" link on the right. The FAQ keeps its heading beside the questions (`faq-section.html`; `alt=true` puts it on a grey row).
+- `.ap-cards` of `.ap-card`: grey cards on white, white on a grey row; `.ap-card-icon` takes the page's tone. `.ap-card--dark` (`#1d1d1f`) is the one dark accent a section may carry; on it text is `#f5f5f7`, lines `#a1a1a6` and links and focus `#2997ff`.
+- `.ap-steps`: numbered columns under large numerals. `.ap-shelf`: a sideways row of cards from the column's edge to the screen's. `.ap-link`: "Learn more ›". `.ap-ctas`: a centred pill pair.
+- Press feedback on everything you can tap: links dim to 60%, cards press to 98.5%, pills to 97%, at once. Hover lifts sit inside `@media (hover: hover)` so they never stick on phones.
 
 ---
 
@@ -1042,14 +1050,17 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
      the same family; hierarchy comes from size, weight and tracking. */
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
   --font-heading: var(--font);
-  --wrap: 70rem;
   --gutter: clamp(1rem, 4vw, 2rem);
   --header-h: 3rem;
-  --space-section: clamp(4.5rem, 10vw, 8rem);
-  /* One hero rhythm for every page type (home, hub, app, article, legal):
-     48px above / 56px below on phones, growing on larger screens. */
-  --space-hero-top: clamp(3rem, 7vw, 5.5rem);
-  --space-hero-bottom: clamp(3.5rem, 8vw, 6rem);
+  /* One type scale and one pacing for every page (the homepage set it in
+     Phase 2; every page uses it from Phase 3, 20 Oct). */
+  --ap-display: clamp(2.75rem, 1.35rem + 5.6vw, 5.25rem);   /* a page's one big line */
+  --ap-h2: clamp(2.125rem, 1.35rem + 3.2vw, 3.5rem);        /* every section heading */
+  --ap-lede: clamp(1.1875rem, 1rem + 0.75vw, 1.5rem);       /* the line under it */
+  --ap-pad: clamp(4.5rem, 10vw, 8.5rem);                    /* a white section */
+  --ap-pad-panel: clamp(4.5rem, 9vw, 7.5rem);               /* a grey row */
+  --ap-gap: 12px;                                           /* between panels and cards */
+  --ap-wrap: 61.25rem;                                      /* 980px content width */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   /* Motion: a critically damped spring (damping 1.0, response ~0.4s),
      sampled into linear() where supported, else its closest curve. */
@@ -1488,6 +1499,12 @@ css: legal
   No hardcoded canonical: here -- legal pages use the same canonical
   logic as every other page (default.html). The BreadcrumbList is
   Home > this page (STATUS.md section 6: legal pages carry one).
+
+  Phase 3 (20 Oct): an apple.com text page. A centred opening (title,
+  lead, dates), then the document in a reading column beside its
+  contents on white. The contents fold on phones, as on the guides
+  (site.js folds any .post-toc-fold below 60rem). Layout only: the
+  documents' own text is the owner's, unchanged.
 {%- endcomment -%}
 {%- assign _heading = page.heading | default: page.title -%}
 {%- assign _clean_url = page.url -%}
@@ -1502,9 +1519,9 @@ css: legal
 }
 </script>
 
-<section class="section legal-hero" aria-labelledby="legal-title">
-  <div class="wrap legal-wrap">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
+<section class="legal-hero" aria-labelledby="legal-title">
+  <div class="ap-wrap legal-hero-copy">
+    <nav class="breadcrumbs legal-crumbs" aria-label="Breadcrumb">
       <a href="{{ '/' | relative_url }}">Home</a>
       <span class="breadcrumbs-sep" aria-hidden="true">/</span>
       <span aria-current="page">{{ _heading | escape }}</span>
@@ -1515,7 +1532,7 @@ css: legal
     {%- endif %}
     {%- assign _eff = page.effective | date: "%Y-%m-%d" -%}
     {%- assign _upd = page.last_updated | date: "%Y-%m-%d" %}
-    <p class="legal-updated"><svg aria-hidden="true"><use href="#i-auto"/></svg>
+    <p class="legal-updated">{% include icon.html name="auto" class="legal-updated-icon" size="16" %}
       {%- if page.effective and _eff == _upd -%}
       <span>Effective and last updated <time datetime="{{ _upd }}">{{ page.last_updated | date: "%-d %B %Y" }}</time></span>
       {%- else -%}
@@ -1526,16 +1543,18 @@ css: legal
   </div>
 </section>
 
-<div class="section legal-layout">
-  <div class="wrap legal-wrap legal-grid">
+<div class="ap-section legal-layout">
+  <div class="ap-wrap legal-grid">
     {%- if page.sections %}
     <nav class="legal-toc" aria-label="Table of contents">
-      <p class="legal-toc-head">On this page</p>
-      <ol>
-        {%- for item in page.sections %}
-        <li><a href="#{{ item.id }}">{{ item.label | escape }}</a></li>
-        {%- endfor %}
-      </ol>
+      <details class="post-toc-fold legal-toc-fold" open>
+        <summary class="legal-toc-head"><span>On this page</span><span class="legal-toc-count">{{ page.sections.size }} sections</span>{% include icon.html name="chevron-down" class="legal-toc-chevron" size="18" %}</summary>
+        <ol>
+          {%- for item in page.sections %}
+          <li><a href="#{{ item.id }}">{{ item.label | escape }}</a></li>
+          {%- endfor %}
+        </ol>
+      </details>
     </nav>
     {%- endif %}
     <div class="prose legal-body">
@@ -1605,17 +1624,17 @@ css: legal
 {%- comment -%}
   A visible FAQ section (shell.css FAQ cards). Params: faqs (list of
   {q, a}), optional heading (default "Questions people ask"), sub, id and
-  alt (true for the alternate section background). The heading sits
-  beside the questions on wide screens and above them on phones -- the
-  same layout on every page (3 Oct; `split` is still accepted and no
-  longer needed). Pair it with faq-schema.html, which writes the same
-  questions as FAQPage data -- the visible and structured answers must
-  always match.
+  alt (true for a grey row, shell.css .ap-panel, instead of a white
+  section). The heading sits beside the questions on wide screens and
+  above them on phones, in the site's 980px column -- the same layout on
+  every page (3 Oct; `split` is still accepted and no longer needed).
+  Pair it with faq-schema.html, which writes the same questions as
+  FAQPage data -- the visible and structured answers must always match.
 {%- endcomment -%}
 {%- if include.faqs and include.faqs.size > 0 %}
 {%- assign _faq_title = include.id | default: "faq" | append: "-title" %}
-<section class="section{% if include.alt %} section--alt{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %} aria-labelledby="{{ _faq_title }}">
-  <div class="wrap faq-split">
+<section class="{% if include.alt %}ap-panel{% else %}ap-section{% endif %}"{% if include.id %} id="{{ include.id }}"{% endif %} aria-labelledby="{{ _faq_title }}">
+  <div class="ap-wrap faq-split">
     <div class="section-head reveal">
       <h2 id="{{ _faq_title }}">{{ include.heading | default: "Questions people ask" | escape }}</h2>
       {%- if include.sub %}
@@ -1627,7 +1646,7 @@ css: legal
       <details class="faq-item">
         <summary class="faq-q">
           <span>{{ item.q | escape }}</span>
-          <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          {% include icon.html name="chevron-down" class="faq-chevron" size="16" %}
         </summary>
         <div class="faq-a"><p>{{ item.a | escape }}</p></div>
       </details>
@@ -1849,8 +1868,9 @@ css: legal
   An app's tile: a drawn SVG glyph on a coloured rounded square. Used
   everywhere an app needs a visual (homepage, app pages, 404) INSTEAD of
   the real store icon -- the site never shows the actual app logos (user,
-  29 Sep). Each app's glyph (an icon-sprite symbol) and tone (a colour in
-  shell.css's "App tiles") come from _data/apps.yml.
+  29 Sep). Each app's glyph (a shape in _data/icons.yml, drawn inline by
+  icon.html) and tone (a colour in shell.css's "App tiles") come from
+  _data/apps.yml.
 
   Params: app (an apps.yml entry), class (optional extra classes that set
   size/position). Always decorative: the app's name is always given in
@@ -1858,7 +1878,7 @@ css: legal
 
   Usage: {% include app-tile.html app=flagship class="app-card-icon" %}
 {%- endcomment -%}
-<span class="app-tile app-tile--{{ include.app.tone }}{% if include.class %} {{ include.class }}{% endif %}" aria-hidden="true"><svg><use href="#i-{{ include.app.glyph }}"/></svg></span>
+<span class="app-tile app-tile--{{ include.app.tone }}{% if include.class %} {{ include.class }}{% endif %}" aria-hidden="true">{% include icon.html name=include.app.glyph %}</span>
 ```
 
 ### Appendix G8: _includes/phone-frame.html
@@ -1883,7 +1903,7 @@ css: legal
     {%- if include.app.screenshot %}
     <img src="{{ include.app.screenshot | relative_url }}" alt="" loading="lazy" decoding="async">
     {%- else %}
-    <span class="phone-launch"><svg><use href="#i-{{ include.app.glyph }}"/></svg><span class="phone-launch-name">{{ include.app.short | default: include.app.name | escape }}</span></span>
+    <span class="phone-launch">{% include icon.html name=include.app.glyph %}<span class="phone-launch-name">{{ include.app.short | default: include.app.name | escape }}</span></span>
     {%- endif %}
   </span>
 </span>

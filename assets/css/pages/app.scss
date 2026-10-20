@@ -3,63 +3,65 @@
 # (compressed, see _config.yml). Output keeps the .css name.
 ---
 /* ==========================================================================
-   app.css: the app landing page layout (_layouts/app.html). Every app
-   shares this one stylesheet, so a change here is consistent across all
-   app pages.
+   app.css: the app pages (_layouts/app.html). Every app shares this one
+   stylesheet, so a change here is consistent across all app pages.
 
-   Redesigned 3 Oct: a two-column hero, left-aligned section headings like
-   the homepage, and open layouts instead of a box around every item.
-   Colours are shell.css tokens only (contrast-checked there); the hero
-   panel and icon chips use the fixed illustration tokens (--tone-*), so
-   they look the same everywhere. FAQ, post cards and the section
-   scaffold live in shell.css because other pages use them too.
+   Phase 3 (20 Oct): an apple.com product page in the homepage's rhythm.
+   A centred opening (the app's name very large over its tagline and the
+   store badges) over a grey stage with the app on a phone; then sections
+   white and grey in turn, built from shell.css's blocks (.ap-section,
+   .ap-panel, .ap-head, .ap-cards, .ap-steps, .ap-shelf) on the shared
+   type scale. This file adds only what an app page has of its own: the
+   opening and its stage, the moments and features grids, with and
+   without, tips, the other apps and the closing pair. Colours are
+   shell.css tokens; the stage and card icons take the app's tone.
    ========================================================================== */
 
-/* ---------- Hero ---------- */
+/* ---------- Opening: centred, then the stage ---------- */
 
-.app-hero { padding-block: var(--space-hero-top) clamp(2.5rem, 5vw, 3.5rem); }
+.app-hero { padding-top: clamp(4rem, 9vw, 7.5rem); }
+.app-hero-copy { text-align: center; }
 
-.app-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  align-items: center;
-  gap: clamp(2.5rem, 5vw, 4.5rem);
-}
-@media (max-width: 899.98px) {
-  .app-hero-grid { grid-template-columns: minmax(0, 1fr); }
-}
-
-/* "Free on Android", with the app's own tile: what it costs and where it
-   runs, before anything else. */
+/* "Free to download on Android", with the app's own tile: what it costs
+   and where it runs, before anything else. */
 .app-hero-kicker {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   padding: 0.3rem 0.95rem 0.3rem 0.3rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  background: var(--surface);
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text);
 }
 .app-hero-kicker-tile { width: 1.75rem; box-shadow: none; }
 
-.app-hero h1 { text-wrap: balance; }
+.app-hero h1 {
+  max-width: 16ch;
+  margin-inline: auto;
+  font-size: var(--ap-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
 .app-hero-lead {
-  max-width: 34rem;
-  margin-top: 1.25rem;
-  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.3125rem);
-  line-height: 1.55;
+  max-width: 38rem;
+  margin: 1.25rem auto 0;
+  font-size: var(--ap-lede);
+  line-height: 1.47;
   color: var(--text-2);
   text-wrap: pretty;
 }
-.app-hero-get { margin-top: 2rem; }
+.app-hero-get { margin-top: clamp(1.75rem, 3.5vw, 2.5rem); }
+.app-hero-get .store-badges { justify-content: center; }
 
 .app-hero-meta {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem 1.5rem;
   margin: 1.5rem 0 0;
   padding: 0;
@@ -68,20 +70,26 @@
   color: var(--text-2);
 }
 .app-hero-meta li { display: inline-flex; align-items: center; gap: 0.45rem; }
-.app-hero-meta svg { width: 1.125rem; height: 1.125rem; color: var(--brand-text); }
+.app-hero-meta-icon { width: 1.125rem; height: 1.125rem; color: var(--brand-text); }
 .app-hero-mark { width: 1.125rem; height: 1.125rem; }
 
-/* The app's illustration, apple.com style: its tile, large, on a quiet
-   grey panel with a soft glow of the app's colour, ringed by hairlines,
-   with the app's main features as white labels around it. Decorative:
-   every label repeats something stated in text on the page. */
+/* The stage: a full-width grey row (inset 12px, as every row) holding
+   the app on a phone on a soft glow of its colour, ringed by hairlines,
+   with the app's main features as white labels around it, then links to
+   the page's sections. Decorative: every label repeats something stated
+   in text on the page. */
+.app-stage {
+  margin: clamp(3rem, 6vw, 4.5rem) var(--ap-gap) 0;
+  padding: clamp(2.5rem, 5vw, 4rem) var(--gutter);
+  background: var(--bg-alt);
+}
 .app-hero-visual {
   position: relative;
   display: grid;
   place-items: center;
+  width: min(100%, 40rem);
   aspect-ratio: 1 / 0.86;
-  border-radius: var(--radius-lg);
-  background: var(--bg-alt);
+  margin-inline: auto;
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;
@@ -105,12 +113,12 @@
   border-style: solid;
   border-color: rgba(0, 0, 0, 0.06);
 }
-/* The app on a phone, sized from the panel's width (cqw) so it always
-   fits the panel's height. */
+/* The app on a phone, sized from the stage's width (cqw) so it always
+   fits its height. */
 .app-hero-phone { --phone-w: 32cqw; }
 
 /* The labels float above the phone: a long one may cross the frame's
-   edge, but none reaches the app's glyph and name or leaves the panel
+   edge, but none reaches the app's glyph and name or leaves the stage
    (checked on every app page at every width from 320 to 1600). */
 .app-hero-chip {
   position: absolute;
@@ -130,8 +138,8 @@
 .app-hero-chip--3 { bottom: 20%; left: 10%; }
 .app-hero-chip--4 { bottom: 12%; right: 12%; }
 
-/* Below the two-column layout the panel is shorter for its width, so the
-   labels move out to the four corners and the phone shrinks. */
+/* Narrower screens: the stage is shorter for its width, so the labels
+   move out to the four corners and the phone shrinks. */
 @media (max-width: 899.98px) {
   .app-hero-visual { aspect-ratio: 16 / 10.5; max-width: 36rem; }
   .app-hero-phone { --phone-w: 24cqw; }
@@ -141,6 +149,7 @@
   .app-hero-chip--4 { bottom: 6%; right: 5%; left: auto; top: auto; }
 }
 @media (max-width: 599.98px) {
+  .app-stage { padding-inline: 0.75rem; }
   .app-hero-visual { aspect-ratio: 1 / 0.82; }
   .app-hero-phone { --phone-w: 30cqw; }
   .app-hero-chip { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
@@ -150,381 +159,181 @@
   .app-hero-chip--2, .app-hero-chip--4 { right: 4%; }
 }
 
-/* Quick links to the page's main sections. */
+/* Links to the page's main sections, as white pills under the phone. */
 .app-jump {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
 }
 .app-jump a {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
-  padding: 0.5rem 1.1rem;
+  padding: 0.5rem 1.15rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  background: var(--surface);
   color: var(--text);
   font-size: 0.9375rem;
-  font-weight: 550;
   text-decoration: none;
-  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--spring-dur) var(--spring), color var(--spring-dur) var(--spring), transform 0.1s ease-out;
 }
-.app-jump a:hover { border-color: var(--brand); color: var(--brand-text); }
-.app-jump a:active { background: var(--brand-soft); }
-/* Sections the quick links land on sit clear of the sticky header. */
-#moments, #how-it-works, #features, #compare, #tips, #guides, #faq { scroll-margin-top: var(--header-h); }
+@media (hover: hover) { .app-jump a:hover { color: var(--tone-text, var(--brand-text)); border-color: currentColor; } }
+.app-jump a:active { transform: scale(0.97); }
 
-/* ---------- Moments: when to use it ----------
-   Open columns with a hairline above each, not four boxes. */
-.moments {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 2.5rem 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-@media (max-width: 1099.98px) { .moments { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 599.98px) { .moments { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
-.moment { padding-top: 1.5rem; border-top: 1px solid var(--border); }
-.moment-icon {
-  display: block;
-  margin-bottom: 1rem;
-  color: var(--brand-text);
-}
-.moment-icon svg { width: 2rem; height: 2rem; }
-.moment h3 { font-size: 1.125rem; }
-.moment p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+/* ---------- Moments and features ---------- */
 
-/* ---------- How it works ----------
-   Three numbered steps joined by a line on wide screens. */
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2.5rem 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* Four moments, two by two. */
+@media (min-width: 760px) {
+  .app-moments { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 719.98px) { .steps { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
-.step { position: relative; }
-.step-number {
-  display: inline-grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  background: var(--brand);
-  color: var(--on-brand);
-  font: 700 1.0625rem/1 var(--font-heading);
-}
-@media (min-width: 720px) {
-  .step:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 1.375rem;
-    left: 3.75rem;
-    right: 0.5rem;
-    border-top: 2px dashed var(--border-strong);
+
+/* Six or more features: a bento. Three columns; the first feature fills
+   two columns and two rows, with a larger icon and heading. */
+@media (min-width: 900px) {
+  .app-features--bento { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .app-features--bento > li:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(2.25rem, 4vw, 3rem);
   }
-}
-.step h3 { margin-top: 1.25rem; }
-.step p { margin-top: 0.5rem; max-width: 22rem; color: var(--text-2); font-size: 1rem; line-height: 1.6; }
-
-/* ---------- Features ---------- */
-
-.feature-icon {
-  display: block;
-  width: 3rem;
-  height: 3rem;
-  margin-bottom: 1.25rem;
-  padding: 0.75rem;
-  border-radius: var(--radius);
-  background: var(--brand-soft);
-  color: var(--brand-text);
-}
-.feature-card h3 { font-size: 1.125rem; }
-.feature-card p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
-
-/* Fewer than six: one panel divided into columns. The 1px gap shows the
-   panel's border colour, so the dividers stay right however it wraps. */
-.feature-panel {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--border);
-  overflow: hidden;
-}
-.feature-panel .feature-card { padding: clamp(1.75rem, 3vw, 2.25rem); background: var(--surface); }
-
-/* Six or more: a bento, the first feature as a large 2x2 tile -- 1 big
-   + 5 small fills a 3x3 grid exactly. */
-.feature-grid--bento {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-.feature-grid--bento .feature-card {
-  padding: 1.75rem;
-  border-radius: var(--radius-lg);
-  background: var(--bg-alt);
-}
-.feature-grid--bento .feature-icon { background: var(--surface); }
-.feature-grid--bento .feature-card:first-child {
-  grid-column: span 2;
-  grid-row: span 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: clamp(1.75rem, 4vw, 2.5rem);
-}
-.feature-grid--bento .feature-card:first-child .feature-icon {
-  width: 4rem;
-  height: 4rem;
-  padding: 1rem;
-  margin-bottom: auto;
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-}
-.feature-grid--bento .feature-card:first-child h3 {
-  margin-top: 2rem;
-  font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
-}
-.feature-grid--bento .feature-card:first-child p { font-size: 1.0625rem; max-width: 28rem; }
-@media (max-width: 899.98px) {
-  .feature-grid--bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 559.98px) {
-  .feature-grid--bento { grid-template-columns: minmax(0, 1fr); }
-  .feature-grid--bento .feature-card:first-child { grid-column: auto; grid-row: auto; }
+  .app-features--bento > li:first-child .ap-card-icon { width: 3.5rem; height: 3.5rem; margin-bottom: auto; }
+  .app-features--bento > li:first-child h3 { font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem); line-height: 1.1; }
+  .app-features--bento > li:first-child p { max-width: 28rem; font-size: 1.1875rem; }
 }
 
-/* ---------- With / without ---------- */
-.compare {
+/* ---------- With and without ---------- */
+
+.app-compare {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-  max-width: 60rem;
+  gap: var(--ap-gap);
 }
-@media (max-width: 719.98px) { .compare { grid-template-columns: minmax(0, 1fr); } }
-.compare-col {
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: transparent;
-}
-/* The answer raised: white with a soft shadow, on white or grey. */
-.compare-col--with { border-color: transparent; background: var(--surface); box-shadow: var(--shadow-md); }
-.compare-title { font-size: 1.125rem; }
-.compare-col--without .compare-title { color: var(--text-2); }
-.compare-col--with .compare-title { color: var(--brand-text); }
-.compare ul { display: grid; gap: 0.9rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
-.compare li { display: flex; align-items: flex-start; gap: 0.75rem; line-height: 1.5; }
-.compare-col--without li { color: var(--text-2); }
-.compare-mark {
+@media (max-width: 759.98px) { .app-compare { grid-template-columns: minmax(0, 1fr); } }
+.app-compare-col h3 { font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem); }
+.app-compare-col ul { display: grid; gap: 1rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+.app-compare-col li { display: flex; align-items: flex-start; gap: 0.75rem; line-height: 1.47; color: var(--text-2); }
+.app-compare-mark {
   display: grid;
   place-items: center;
-  flex-shrink: 0;
+  flex: none;
   width: 1.5rem;
   height: 1.5rem;
-  margin-top: 0.05rem;
+  margin-top: -0.05rem;
   border-radius: 50%;
+  background: var(--bg-alt);
+  color: var(--text-2);
 }
-.compare-mark svg { width: 0.85rem; height: 0.85rem; }
-.compare-col--without .compare-mark { background: var(--bg-alt); color: var(--text-2); }
-.compare-col--with .compare-mark { background: var(--brand); color: var(--on-brand); }
+.app-compare-mark .icon { width: 0.875rem; height: 0.875rem; }
+/* With the app: the dark card, ticks on the app's colour. */
+.app-compare-col--with li { color: #f5f5f7; }
+.app-compare-col--with .app-compare-mark { background: var(--tone-gradient); color: #ffffff; }
 
-/* ---------- Tips ----------
-   Three numbered notes in open columns; the numerals carry the rhythm. */
-.tips {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2.5rem 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-@media (max-width: 899.98px) { .tips { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
-.tip-num {
+/* ---------- Tips: numbered cards ---------- */
+
+.app-tip-num {
   display: block;
-  margin-bottom: 0.75rem;
-  font: 700 2.25rem/1 var(--font-heading);
-  letter-spacing: -0.04em;
-  color: var(--brand-text);
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--tone-text, var(--brand-text));
+  font-variant-numeric: tabular-nums;
 }
-.tip h3 { font-size: 1.125rem; }
-.tip p { margin-top: 0.5rem; color: var(--text-2); font-size: 0.9375rem; line-height: 1.6; }
+.app-tips .ap-card > .app-tip-num + h3 { margin-top: 0; }
 
-/* ---------- Related guides ----------
-   auto-fit: two guides share the row instead of leaving a gap. */
-.app-guides-grid { grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+/* ---------- Related guides ---------- */
+
+.app-guides-sub { margin-top: 0.75rem; font-size: var(--ap-lede); line-height: 1.47; color: var(--text-2); }
 
 /* ---------- Other apps ---------- */
-.other-apps {
+
+.app-others {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: var(--ap-gap);
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.other-apps > li { display: flex; }
-.other-app {
+.app-others > li { display: flex; }
+.app-other {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   width: 100%;
-  padding: 1.1rem 1.25rem;
-  border: 1px solid var(--border);
+  padding: 1.5rem;
   border-radius: var(--radius-lg);
   background: var(--surface);
   color: var(--text);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
+  transition: transform var(--spring-dur) var(--spring), box-shadow var(--spring-dur) var(--spring);
 }
 @media (hover: hover) {
-  .other-app:hover { color: var(--text); border-color: var(--border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-  .other-app:hover .other-app-arrow { transform: translateX(3px); }
+  .app-other:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .app-other:hover .app-other-arrow { transform: translateX(3px); }
 }
-.other-app:active { transform: scale(0.985); transition-duration: 0.1s; }
-.other-app-tile { width: 3.25rem; }
-.other-app-text { display: flex; flex-direction: column; min-width: 0; }
-.other-app-name { font: 600 1rem/1.3 var(--font-heading); }
-.other-app-tagline { margin-top: 0.2rem; font-size: 0.875rem; line-height: 1.45; color: var(--text-2); }
-.other-app-arrow {
+.app-other:active { transform: scale(0.985); transition-duration: 0.1s; }
+.app-other-tile { width: 3.5rem; flex: none; }
+.app-other-text { display: grid; gap: 0.25rem; min-width: 0; }
+.app-other-name { font-size: 1.1875rem; font-weight: 600; line-height: 1.25; }
+.app-other-tagline { font-size: 0.9375rem; line-height: 1.47; color: var(--text-2); }
+.app-other-arrow {
   width: 1.125rem;
   height: 1.125rem;
   margin-left: auto;
-  flex-shrink: 0;
-  color: var(--brand-text);
-  transition: transform 0.2s var(--ease-out);
+  color: var(--tone-text, var(--brand-text));
+  transition: transform var(--spring-dur) var(--spring);
 }
 
-/* ---------- Closing pair: get the app, your privacy ---------- */
+/* ---------- Closing: get the app, your privacy ---------- */
+
 .app-close-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--ap-gap);
 }
 @media (max-width: 899.98px) { .app-close-grid { grid-template-columns: minmax(0, 1fr); } }
-.app-close-get,
-.app-close-privacy {
+.app-close-get {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  border-radius: 1.75rem;
+  align-items: center;
+  padding: clamp(2.5rem, 5vw, 3.75rem) var(--gutter);
+  text-align: center;
 }
-.app-close-get {
-  padding: clamp(2rem, 5vw, 3.5rem);
-  background: var(--bg-alt);
-}
-.app-close-tile { width: 4rem; margin-bottom: 1.5rem; }
-.app-close-get .section-sub { margin-top: 0.75rem; margin-bottom: 1.75rem; }
-.app-close-privacy {
-  padding: clamp(2rem, 4vw, 2.75rem);
-  border: 1px solid var(--border);
-  background: var(--surface);
-}
-.app-close-privacy-icon {
+.app-close-tile { width: 4.5rem; margin-bottom: 1.5rem; }
+.app-close-get h2 { margin-top: 0; }
+.app-close-get p { margin-top: 0.75rem; font-size: var(--ap-lede); }
+.app-close-get .store-badges { justify-content: center; margin-top: 1.75rem; }
+.app-close-privacy { display: flex; flex-direction: column; align-items: flex-start; }
+.app-close-privacy-mark {
   display: grid;
   place-items: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3.25rem;
+  height: 3.25rem;
   margin-bottom: 1.25rem;
-  border-radius: var(--radius);
-  background: var(--brand-soft);
-  color: var(--brand-text);
+  border-radius: 50%;
+  background: var(--tone-gradient);
+  color: #ffffff;
 }
-.app-close-privacy-icon svg { width: 1.5rem; height: 1.5rem; }
-.app-close-privacy p { margin-top: 0.75rem; color: var(--text-2); line-height: 1.65; }
-.app-close-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 2.75rem;
-  margin-top: auto;
-  padding-top: 1rem;
-  color: var(--brand-text);
-  font-weight: 600;
-  text-decoration: none;
-}
-.app-close-link svg { width: 1.05rem; height: 1.05rem; transition: transform 0.2s var(--ease-out); }
-@media (hover: hover) { .app-close-link:hover svg { transform: translateX(3px); } }
+.app-close-privacy-mark .icon { width: 1.75rem; height: 1.75rem; }
+.app-close-privacy h2 { margin-top: 0; }
+.app-close-privacy p { margin-top: 0.6rem; }
+.app-close-privacy .ap-link { margin-top: auto; padding-top: 1.25rem; }
 
-/* ---------- Phones only: a shorter page ----------
-   Desktop and tablets are untouched (pixel-compared at 600px and up).
-   Below 600px the stacked blocks -- icon or number above, title, then
-   text -- become compact rows with the icon or number beside the text,
-   which roughly halves the height of moments, steps, features and tips
-   without hiding any of it. */
-@media (max-width: 599.98px) {
-  .moment, .step, .tip,
-  .feature-panel .feature-card,
-  .feature-grid--bento .feature-card {
-    display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr);
-    column-gap: 1rem;
-    align-items: start;
-  }
-  .moment > :not(.moment-icon), .step > :not(.step-number), .tip > :not(.tip-num),
-  .feature-card > :not(.feature-icon) { grid-column: 2; }
-  .moment-icon, .step-number, .tip-num, .feature-icon { grid-row: 1 / span 2; }
+/* ---------- Motion and preferences ---------- */
 
-  .moments { gap: 0; }
-  .moment { padding-block: 1.25rem; }
-  .moment-icon { width: 2.5rem; height: 2.5rem; margin-bottom: 0; border-radius: 0.75rem; }
-  .moment h3 { font-size: 1.0625rem; }
-  .moment p { margin-top: 0.3rem; }
-
-  .steps { gap: 1.5rem; }
-  .step-number { width: 2.5rem; height: 2.5rem; font-size: 1rem; }
-  .step h3 { margin-top: 0.45rem; font-size: 1.0625rem; }
-  .step p { margin-top: 0.3rem; font-size: 0.9375rem; }
-
-  /* six features: one divided panel, like the smaller app pages, not
-     six separate boxes */
-  .feature-grid--bento {
-    gap: 1px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--border);
-    overflow: hidden;
-  }
-  .feature-grid--bento .feature-card,
-  .feature-grid--bento .feature-card:first-child { border: 0; border-radius: 0; background: var(--surface); }
-  /* related guides are a teaser here: title and date, the description
-     is on the guide */
-  .app-guides-grid .post-card-desc { display: none; }
-  .feature-panel .feature-card,
-  .feature-grid--bento .feature-card,
-  .feature-grid--bento .feature-card:first-child { padding: 1.25rem; }
-  .feature-grid--bento .feature-card:first-child { display: grid; }
-  .feature-icon,
-  .feature-grid--bento .feature-card:first-child .feature-icon {
-    width: 2.5rem; height: 2.5rem; padding: 0.6rem; margin-bottom: 0;
-  }
-  .feature-grid--bento .feature-card:first-child .feature-icon { box-shadow: none; }
-  .feature-card h3,
-  .feature-grid--bento .feature-card:first-child h3 { margin-top: 0.35rem; font-size: 1.0625rem; }
-  .feature-card p,
-  .feature-grid--bento .feature-card:first-child p { margin-top: 0.3rem; font-size: 0.9375rem; }
-
-  .tips { gap: 1.5rem; }
-  .tip-num { margin-bottom: 0; font-size: 1.625rem; line-height: 1.2; }
-  .tip h3 { font-size: 1.0625rem; margin-top: 0.15rem; }
-  .tip p { margin-top: 0.3rem; }
-}
-
-/* ---------- Accessibility preferences ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .other-app { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-  .other-app:hover, .other-app:active, .other-app:hover .other-app-arrow, .app-close-link:hover svg { transform: none; }
+  .app-jump a, .app-other, .app-other-arrow { transition: none; }
+  .app-jump a:active, .app-other:hover, .app-other:active, .app-other:hover .app-other-arrow { transform: none; }
 }
 @media (prefers-contrast: more) {
-  .moment, .compare-col, .other-app, .app-close-privacy, .feature-panel, .feature-grid--bento .feature-card, .app-jump a, .app-hero-kicker { border-color: var(--border-strong); }
+  .app-other { outline: 1px solid var(--border-strong); }
 }

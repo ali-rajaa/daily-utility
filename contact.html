@@ -22,6 +22,11 @@ breadcrumbs:
   the subject, so we know which app it's about before reading it. The
   Copy button is added by site.js; without JavaScript the address is
   still plain, selectable text and the mailto link still works.
+
+  Phase 3 (20 Oct): the homepage's rhythm. A centred opening over a grey
+  stage with the email on one white card; the per-app links on white;
+  what to put in the email on grey; other ways to find an answer on
+  white. Icons are inline (icon.html).
 {%- endcomment -%}
 {%- assign apps = site.data.apps | where: "built", true -%}
 {%- assign _email = site.company.support_email -%}
@@ -36,24 +41,24 @@ breadcrumbs:
   "about": { "@id": {{ '/' | absolute_url | append: '#organization' | jsonify }} }
 }
 </script>
-<section class="section contact-hero" aria-labelledby="contact-title">
-  <div class="wrap contact-hero-grid">
-    <div class="contact-hero-copy">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ '/' | relative_url }}">Home</a>
-        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
-        <span aria-current="page">Contact</span>
-      </nav>
-      <h1 id="contact-title">Contact us</h1>
-      <p class="contact-lead">A question about one of our apps, a problem to report, feedback or a privacy request: email our support team and tell us what's going on.</p>
-    </div>
+<section class="contact-hero" aria-labelledby="contact-title">
+  <div class="ap-wrap contact-hero-copy">
+    <nav class="breadcrumbs contact-crumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+      <span aria-current="page">Contact</span>
+    </nav>
+    <h1 id="contact-title">Contact us</h1>
+    <p class="contact-lead">A question about one of our apps, a problem to report, feedback or a privacy request: email our support team and tell us what's going on.</p>
+  </div>
 
-    <div class="contact-card">
-      <span class="contact-card-icon" aria-hidden="true"><svg><use href="#i-mail"/></svg></span>
+  <div class="contact-stage">
+    <div class="contact-card tone-blue">
+      <span class="contact-card-icon" aria-hidden="true">{% include icon.html name="mail" size="30" %}</span>
       <p class="contact-card-label">Email support</p>
       <p class="contact-card-email"><a href="mailto:{{ _email }}">{{ _email }}</a></p>
       <div class="contact-card-actions">
-        <a class="btn btn--primary" href="mailto:{{ _email }}">Write an email<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        <a class="btn btn--primary" href="mailto:{{ _email }}">Write an email</a>
         <button class="btn btn--ghost contact-copy" type="button" data-copy="{{ _email }}" hidden><span class="contact-copy-text">Copy address</span></button>
       </div>
       <p class="contact-copy-status" role="status" aria-live="polite"></p>
@@ -61,23 +66,23 @@ breadcrumbs:
   </div>
 </section>
 
-<section class="section" aria-labelledby="apps-title">
-  <div class="wrap contact-split">
-    <div class="section-head reveal">
-      <h2 id="apps-title">Email about an app</h2>
-      <p class="section-sub">Pick the app and your email opens with its name in the subject line.</p>
+<section class="ap-section" aria-labelledby="apps-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="apps-title">Email about an app.</h2>
+      <p>Pick the app and your email opens with its name in the subject line.</p>
     </div>
-    <ul class="contact-apps">
+    <ul class="contact-apps reveal">
       {%- for app in apps %}
       {%- capture _subject %}{{ app.name }} support{% endcapture %}
-      <li class="tone-{{ app.tone }} reveal">
+      <li class="tone-{{ app.tone }}">
         <a class="contact-app" href="mailto:{{ _email }}?subject={{ _subject | url_encode | replace: '+', '%20' }}">
           {% include app-tile.html app=app class="contact-app-tile" %}
           <span class="contact-app-text">
             <span class="contact-app-name">{{ app.name | escape }}</span>
             <span class="contact-app-desc">Questions, problems or feedback</span>
           </span>
-          <svg class="contact-app-go" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          {% include icon.html name="chevron-right" class="contact-app-go" size="16" %}
         </a>
       </li>
       {%- endfor %}
@@ -85,13 +90,13 @@ breadcrumbs:
   </div>
 </section>
 
-<section class="section section--alt" aria-labelledby="include-title">
-  <div class="wrap contact-split">
-    <div class="section-head reveal">
-      <h2 id="include-title">What to put in your email</h2>
-      <p class="section-sub">A few details up front mean fewer emails back and forth.</p>
+<section class="ap-panel" aria-labelledby="include-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="include-title">What to put in your email.</h2>
+      <p>A few details up front mean fewer emails back and forth.</p>
     </div>
-    <ol class="contact-steps">
+    <ol class="ap-steps">
       <li class="reveal">
         <h3>Which app</h3>
         <p>The app's name, if you didn't start from one of the links above.</p>
@@ -105,33 +110,33 @@ breadcrumbs:
         <p>What you were doing, what you expected and what you saw instead. A screenshot often says it best.</p>
       </li>
     </ol>
-    <p class="contact-note reveal"><svg aria-hidden="true"><use href="#i-shield"/></svg><span>Please don't include your password. Support doesn't need it to help you.</span></p>
+    <p class="contact-note reveal">{% include icon.html name="shield" class="contact-note-icon" size="20" %}<span>Please don't include your password. Support doesn't need it to help you.</span></p>
   </div>
 </section>
 
-<section class="section" aria-labelledby="more-title">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2 id="more-title">Other ways to find an answer</h2>
+<section class="ap-section" aria-labelledby="more-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="more-title">Other ways to find an answer.</h2>
     </div>
-    <ul class="contact-more">
+    <ul class="ap-cards contact-more">
       <li class="reveal">
-        <a href="{{ '/' | relative_url }}#faq">
-          <span class="contact-more-icon" aria-hidden="true"><svg><use href="#i-help"/></svg></span>
+        <a class="ap-card contact-more-link" href="{{ '/' | relative_url }}#faq">
+          {% include icon.html name="help" class="ap-card-icon" size="32" %}
           <span class="contact-more-name">Questions about our apps</span>
           <span class="contact-more-desc">What each app does, and where to get it.</span>
         </a>
       </li>
       <li class="reveal">
-        <a href="{{ '/daily-info/' | relative_url }}">
-          <span class="contact-more-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>
+        <a class="ap-card contact-more-link" href="{{ '/daily-info/' | relative_url }}">
+          {% include icon.html name="book" class="ap-card-icon" size="32" %}
           <span class="contact-more-name">Daily Info guides</span>
           <span class="contact-more-desc">Plain-English guides to everyday phone problems.</span>
         </a>
       </li>
       <li class="reveal">
-        <a href="{{ '/privacy-policy' | relative_url }}#your-rights">
-          <span class="contact-more-icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+        <a class="ap-card contact-more-link" href="{{ '/privacy-policy' | relative_url }}#your-rights">
+          {% include icon.html name="shield" class="ap-card-icon" size="32" %}
           <span class="contact-more-name">Your privacy choices</span>
           <span class="contact-more-desc">How to ask to access, correct or delete your information.</span>
         </a>

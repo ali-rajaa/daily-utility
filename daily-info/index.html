@@ -14,6 +14,11 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
   article counts, and the per-topic lists appear once there's more than
   the one featured article. Adding an article never means editing this
   file.
+
+  Phase 3 (20 Oct): the homepage's rhythm. A centred opening over a grey
+  stage with the newest guide as one wide card; the topics as cards on
+  white; every guide by topic on grey; a dark closing card for the
+  backup app. Icons are inline (icon.html).
 {%- endcomment -%}
 {%- assign posts = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
 {%- assign featured = posts | first -%}
@@ -55,55 +60,58 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
 }
 </script>
 
-<section class="section hub-hero" aria-labelledby="hub-title">
-  <div class="wrap hub-hero-grid">
-    <div class="hub-hero-copy">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ '/' | relative_url }}">Home</a>
-        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
-        <span aria-current="page">Daily Info</span>
-      </nav>
-      <h1 id="hub-title">Guides for everyday <span class="hub-accent">phone problems</span></h1>
-      <p class="hub-sub">Plain-English help with backing up, switching phones, looking after your photos and storage, and keeping your data private.</p>
-      <ul class="hub-stats">
-        <li><strong>{{ posts.size }}</strong> {% if posts.size == 1 %}guide{% else %}guides{% endif %}</li>
-        <li><strong>{{ site.data.categories.size }}</strong> topics</li>
-        {%- if upcoming.size > 0 %}
-        <li><strong>{{ upcoming.size }}</strong> on the way</li>
-        {%- endif %}
-      </ul>
-    </div>
+<section class="hub-hero" aria-labelledby="hub-title">
+  <div class="ap-wrap hub-hero-copy">
+    <nav class="breadcrumbs hub-crumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+      <span aria-current="page">Daily Info</span>
+    </nav>
+    <div class="hub-kicker">{% include icon.html name="book" class="hub-kicker-icon" size="16" %}Daily Info</div>
+    <h1 id="hub-title">Guides for everyday <span class="hub-accent">phone problems.</span></h1>
+    <p class="hub-sub">Plain-English help with backing up, switching phones, looking after your photos and storage, and keeping your data private.</p>
+    <ul class="hub-stats">
+      <li><strong>{{ posts.size }}</strong> {% if posts.size == 1 %}guide{% else %}guides{% endif %}</li>
+      <li><strong>{{ site.data.categories.size }}</strong> topics</li>
+      {%- if upcoming.size > 0 %}
+      <li><strong>{{ upcoming.size }}</strong> on the way</li>
+      {%- endif %}
+    </ul>
+  </div>
 
-    {%- if featured %}
-    {%- assign _fcat = site.data.categories | where: "name", featured.category | first -%}
-    <div class="hub-featured tone-{{ _fcat.tone | default: 'blue' }}">
-      <span class="hub-featured-label">Latest guide</span>
+  {%- if featured %}
+  {%- assign _fcat = site.data.categories | where: "name", featured.category | first -%}
+  {%- assign _fglyph = featured.glyph | default: _fcat.glyph | default: "book" -%}
+  <div class="hub-stage">
+    <div class="ap-wrap hub-featured tone-{{ _fcat.tone | default: 'blue' }}">
       <a class="hub-featured-card" href="{{ featured.url | relative_url }}">
         <span class="hub-featured-banner" aria-hidden="true">
+          <span class="hub-featured-ring hub-featured-ring--outer"></span>
           <span class="hub-featured-ring"></span>
-          <span class="post-card-glyph hub-featured-glyph"><svg><use href="#i-{{ featured.glyph | default: _fcat.glyph | default: 'spark' }}"/></svg></span>
+          <span class="post-card-glyph hub-featured-glyph">{% include icon.html name=_fglyph size="40" %}</span>
         </span>
         <span class="hub-featured-body">
+          <span class="hub-featured-label">Latest guide</span>
           <span class="post-card-cat">{{ featured.category | escape }}</span>
           <span class="hub-featured-title">{{ featured.heading | default: featured.title | escape }}</span>
           <span class="hub-featured-desc">{{ featured.description | escape }}</span>
           <span class="hub-featured-foot">
             <span class="post-card-meta"><time datetime="{{ featured.date | date_to_xmlschema }}">{{ featured.date | date: "%-d %b %Y" }}</time>{% if featured.read_min %}<span aria-hidden="true">&middot;</span>{{ featured.read_min }} min read{% endif %}</span>
-            <span class="hub-read">Read the guide<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+            <span class="hub-read">Read the guide{% include icon.html name="chevron-right" class="hub-read-icon" size="14" %}</span>
           </span>
         </span>
       </a>
     </div>
-    {%- endif %}
   </div>
+  {%- endif %}
 </section>
 
-<section class="section section--alt" id="topics" aria-labelledby="topics-title">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2 id="topics-title">Find help by what you're trying to do</h2>
+<section class="ap-section" id="topics" aria-labelledby="topics-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="topics-title">Find help by what you're trying to do.</h2>
     </div>
-    <ul class="topic-grid">
+    <ul class="ap-cards topic-grid">
       {%- for cat in site.data.categories %}
       {%- assign _group = by_cat | where: "name", cat.name | first -%}
       {%- assign _count = _group.size | default: 0 -%}
@@ -112,14 +120,14 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
       <li class="tone-{{ cat.tone }} reveal">
         {%- assign _any = _count | plus: _soon_count -%}
         {%- if _any > 0 %}
-        <a class="topic-card" href="#{{ cat.name | slugify }}">
+        <a class="ap-card topic-card" href="#{{ cat.name | slugify }}">
         {%- else %}
-        <div class="topic-card topic-card--soon">
+        <div class="ap-card topic-card topic-card--soon">
         {%- endif %}
-          <span class="topic-icon"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg></span>
+          <span class="topic-icon" aria-hidden="true">{% include icon.html name=cat.glyph size="24" %}</span>
           <span class="topic-name">{{ cat.name | escape }}</span>
           <span class="topic-blurb">{{ cat.blurb | escape }}</span>
-          <span class="topic-count">{% if _count > 0 %}{{ _count }} {% if _count == 1 %}guide{% else %}guides{% endif %}{% if _soon_count > 0 %} &middot; {{ _soon_count }} coming soon{% endif %}<svg aria-hidden="true"><use href="#i-arrow-right"/></svg>{% elsif _soon_count > 0 %}{{ _soon_count }} coming soon{% else %}Guides coming soon{% endif %}</span>
+          <span class="topic-count">{% if _count > 0 %}{{ _count }} {% if _count == 1 %}guide{% else %}guides{% endif %}{% if _soon_count > 0 %} &middot; {{ _soon_count }} coming soon{% endif %}{% include icon.html name="chevron-right" class="topic-count-icon" size="14" %}{% elsif _soon_count > 0 %}{{ _soon_count }} coming soon{% else %}Guides coming soon{% endif %}</span>
         {%- if _any > 0 %}
         </a>
         {%- else %}
@@ -133,17 +141,22 @@ og_image_alt: "Daily Info: guides for everyday phone problems, from Daily Utilit
 
 {%- comment -%} Per-topic lists: published guides first, then the
 planned ones (upcoming layout, marked "Coming soon"). {%- endcomment %}
-<section class="section hub-groups" aria-label="Guides by topic">
-  <div class="wrap">
+<section class="ap-panel hub-groups" aria-labelledby="groups-title">
+  <div class="ap-wrap">
+    <div class="ap-head reveal">
+      <h2 id="groups-title">Every guide, by topic.</h2>
+    </div>
     {%- for cat in site.data.categories %}
     {%- assign _group = by_cat | where: "name", cat.name | first -%}
     {%- assign _soon = soon_by_cat | where: "name", cat.name | first -%}
     {%- if _group or _soon %}
     <section class="hub-group tone-{{ cat.tone }}" id="{{ cat.name | slugify }}" aria-labelledby="{{ cat.name | slugify }}-title">
       <div class="hub-group-head">
-        <span class="topic-icon"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg></span>
-        <h2 class="hub-group-title" id="{{ cat.name | slugify }}-title">{{ cat.name | escape }}</h2>
-        <p class="hub-group-blurb">{{ cat.blurb | escape }}</p>
+        <span class="topic-icon" aria-hidden="true">{% include icon.html name=cat.glyph size="24" %}</span>
+        <div class="hub-group-text">
+          <h3 class="hub-group-title" id="{{ cat.name | slugify }}-title">{{ cat.name | escape }}</h3>
+          <p class="hub-group-blurb">{{ cat.blurb | escape }}</p>
+        </div>
       </div>
       <ul class="post-grid hub-group-grid">
         {%- if _group %}{% for post in _group.items %}
@@ -156,13 +169,15 @@ planned ones (upcoming layout, marked "Coming soon"). {%- endcomment %}
     </section>
     {%- endif %}
     {%- endfor %}
+  </div>
+</section>
 
-    <div class="cta-band cta-band--card hub-cta tone-{{ flagship.tone }} reveal">
-      {% include app-tile.html app=flagship class="cta-band-icon" %}
-      <div class="section-head">
-        <h2>Back up before you need to</h2>
-        <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data.</p>
-      </div>
+<section class="ap-section hub-close" aria-labelledby="hub-cta-title">
+  <div class="ap-wrap">
+    <div class="ap-card ap-card--dark hub-close-card tone-{{ flagship.tone }} reveal">
+      {% include app-tile.html app=flagship class="hub-close-tile" %}
+      <h2 id="hub-cta-title">Back up before you need to.</h2>
+      <p>{{ flagship.name | escape }} backs up your photos, videos, contacts and app data. Free to download on {% include platforms.html app=flagship %}.</p>
       {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
     </div>
   </div>

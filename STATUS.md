@@ -2225,6 +2225,61 @@ compare row's own sideways swipe (by design) and one lead line-height
 (fixed, 1.45); every other page pixel-identical to before at 1280 and
 390px apart from sub-pixel anti-aliasing of inline icons.
 
+## 5zzzzzzzz. Phase 3: every interior page (20 Oct)
+
+User: *"do pahse 3 do all pages sstemaicay"*, then *"keep going, finish
+all pages and push live"*. Every page other than the homepage rebuilt on
+the homepage's system, one page type at a time.
+
+- **Shared blocks (shell.css "Page building blocks"):** the homepage's
+  pieces moved into shell.css so every page uses the same ones: the 980px
+  column (`.ap-wrap`), white sections (`.ap-section`) and inset grey rows
+  (`.ap-panel`) in turn, a centred head (`.ap-head`) or a head with its
+  link on the right (`.ap-head-row`), "Learn more ›" links (`.ap-link`),
+  numbered columns (`.ap-steps`), a sideways shelf (`.ap-shelf`), and grey
+  or dark cards (`.ap-cards`, `.ap-card`, `.ap-card--dark`). The type
+  scale is tokens: `--ap-display`, `--ap-h2`, `--ap-lede`; spacing is
+  `--ap-pad`, `--ap-pad-panel`, `--ap-gap`.
+- **One opening on every page:** the trail centred at the top, then the
+  title very large and centred over its lead, then a grey stage: the app
+  on a phone (app pages), the topic's drawn banner and the article's own
+  numbers (guides), the newest guide as one wide card (Daily Info), the
+  apps' tiles (About), the email card (Contact), the apps (404). Legal
+  pages are text pages: the opening, then the document.
+- **App pages:** moments 2×2, steps, features as a bento, with and
+  without (light and dark card), tips, guides shelf, FAQ, other apps, and
+  a closing pair (get the app; your privacy).
+- **Guides:** the article beside its contents (a grey card, pinned on
+  wide screens, folded on phones), "The short version" and the closing
+  note as grey cards, steps as numbered markers joined by a hairline;
+  then the questions on grey, more guides and every topic as cards, and a
+  dark closing card for the backup app. The coming-soon layout shares the
+  opening and stage (tested with a throwaway page: renders and validates).
+- **Daily Info hub:** the topics as four cards with their guide counts,
+  every guide by topic on grey, a dark closing card.
+- **About, Contact, 404:** cards on the same grid; Contact's per-app
+  links are one grouped list, "what to put in your email" uses the
+  numbered columns. **Legal:** layout only, the owner's text unchanged;
+  the contents fold on phones like the guides'.
+- **Icons:** every page's icons are inline (`icon.html`); only the footer
+  still uses the sprite (it goes with the footer in Phase 4).
+- **Removed** (no page used them any more): `.wrap`, `.wrap--narrow`,
+  `.section`, `.section--alt`, `.section-head-row`, `.cta-band`,
+  `.btn-row`, `--wrap`, `--space-hero-*`, `--space-section`. The FAQ
+  section is on the 980px column everywhere (`alt` gives a grey row).
+  Lead text is 1.47 leading everywhere (Apple's own, and clear of the
+  phone audit's 1.45 floor, which rounding was tripping).
+- **Fixed:** guide cards could run 12px past a 320px screen inside a grey
+  row (the grid's 18rem minimum); now `min(100%, 18rem)`.
+
+**Checks:** both builds clean; HTML valid on every page; SEO check 0
+problems; deep audit: nothing new; axe clean on every page at 1440 and
+390px; 20/20 header/footer tests and 9/9 header checks; app labels 0
+problems of 387; no sideways scroll on any page; phone audit 320–430px:
+no new type, tap, clip or nav issues, and "outside the gutter" notes
+only for cards inside sideways shelves (by design) and the breadcrumb's
+widened tap area (1px).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2734,3 +2789,7 @@ flagship Apple id.
   frosted bar, inline SVG icons, press states, slide-down phone menu.
 - 20 Oct: Phase 2, the homepage (section 5zzzzzzz): cinematic opening,
   white/grey rhythm, privacy bento, inline SVG icons from _data/icons.yml.
+- 20 Oct: Phase 3, every interior page (section 5zzzzzzzz): app pages,
+  guides, Daily Info, About, Contact, legal and 404 on the homepage's
+  blocks; centred openings over grey stages; icons inline; old layout CSS
+  removed.

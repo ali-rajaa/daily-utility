@@ -23,17 +23,24 @@ css: post
   itself says), faqs, related (other posts' `slug` values). A closing
   note goes in <aside class="post-note" markdown="1"> at the end.
 
-  The body is split on its H2s so each section renders as its own card,
+  The body is split on its H2s so each section renders as its own part,
   and the same split builds the "On this page" contents -- no heading
   list is written twice. kramdown gives every H2 an id.
 
   Breadcrumbs are hand-written: Home > Daily Info > <heading> never
   varies in shape for a post.
+
+  Phase 3 (20 Oct): the homepage's rhythm. A centred opening (topic,
+  title, lead, byline) over a grey stage with the topic's drawn banner
+  and the article's own numbers; the reading column beside its contents
+  on white; then the questions on grey, more guides on white and a dark
+  closing card for the backup app. Icons are inline (icon.html).
 {%- endcomment -%}
 {%- assign _clean_url = page.url -%}
 {%- assign _cat = site.data.categories | where: "name", page.category | first -%}
 {%- assign _tone = _cat.tone | default: "blue" -%}
 {%- assign _glyph = page.glyph | default: _cat.glyph | default: "book" -%}
+{%- assign _topic_glyph = _cat.glyph | default: "book" -%}
 {%- assign flagship = site.data.apps | where: "tier", "flagship" | first -%}
 {%- assign _words = content | strip_html | number_of_words -%}
 {%- assign _body = content | replace: '<table', '<section class="table-scroll" tabindex="0" aria-label="Table, scrolls sideways on small screens"><table' | replace: '</table>', '</table></section>' -%}
@@ -89,73 +96,71 @@ css: post
 
 <article class="tone-{{ _tone }}">
   <header class="post-hero">
-    <div class="wrap post-hero-grid">
-      <div class="post-hero-copy">
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="{{ '/' | relative_url }}">Home</a>
-          <span class="breadcrumbs-sep" aria-hidden="true">/</span>
-          <a href="{{ '/daily-info/' | relative_url }}">Daily Info</a>
-          <span class="breadcrumbs-sep" aria-hidden="true">/</span>
-          <span aria-current="page">{{ page.heading | escape }}</span>
-        </nav>
-        <span class="post-topic"><svg aria-hidden="true"><use href="#i-{{ _cat.glyph | default: 'book' }}"/></svg>{{ page.category | escape }}</span>
-        <h1>{{ page.heading | escape }}</h1>
-        <p class="post-lead">{{ page.description | escape }}</p>
-        <div class="post-meta">
-          <span class="post-byline">{% include brand-mark.html class="post-byline-mark" size="30" %}By {{ site.title }}</span>
-          <span class="post-meta-sep" aria-hidden="true">&middot;</span>
-          <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
-          {%- if page.updated and page.updated != page.date %}
-          <span class="post-meta-sep" aria-hidden="true">&middot;</span>
-          <span>Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: "%-d %B %Y" }}</time></span>
-          {%- endif %}
-        </div>
+    <div class="ap-wrap post-hero-copy">
+      <nav class="breadcrumbs post-crumbs" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+        <a href="{{ '/daily-info/' | relative_url }}">Daily Info</a>
+        <span class="breadcrumbs-sep" aria-hidden="true">/</span>
+        <span aria-current="page">{{ page.heading | escape }}</span>
+      </nav>
+      <div class="post-topic">{% include icon.html name=_topic_glyph class="post-topic-icon" size="16" %}{{ page.category | escape }}</div>
+      <h1>{{ page.heading | escape }}</h1>
+      <p class="post-lead">{{ page.description | escape }}</p>
+      <div class="post-meta">
+        <span class="post-byline">{% include brand-mark.html class="post-byline-mark" size="24" %}By {{ site.title }}</span>
+        <span class="post-meta-sep" aria-hidden="true">&middot;</span>
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
+        {%- if page.updated and page.updated != page.date %}
+        <span class="post-meta-sep" aria-hidden="true">&middot;</span>
+        <span>Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: "%-d %B %Y" }}</time></span>
+        {%- endif %}
       </div>
+    </div>
 
-      <div class="post-hero-visual">
+    {%- comment -%} The stage: the article's photo, or a drawn banner in
+    the topic's colour with the post's glyph (never a borrowed app icon),
+    then facts about this article itself, counted from it -- never
+    ratings, downloads or other outside numbers. {%- endcomment %}
+    <div class="post-stage">
       {%- if page.image %}
-        <img class="post-image" src="{{ page.image | relative_url }}" alt="{{ page.image_alt | default: '' | escape }}" width="1200" height="630" fetchpriority="high">
+      <img class="post-image" src="{{ page.image | relative_url }}" alt="{{ page.image_alt | default: '' | escape }}" width="1200" height="630" fetchpriority="high">
       {%- else %}
-        {%- comment -%} No photo: a drawn banner in the topic's colour with
-        the post's glyph, never a borrowed app icon. Decorative. {%- endcomment %}
-        <div class="post-banner" aria-hidden="true">
-          <span class="post-banner-ring post-banner-ring--outer"></span>
-          <span class="post-banner-ring"></span>
-          <span class="post-banner-glyph"><svg><use href="#i-{{ _glyph }}"/></svg></span>
-        </div>
-      {%- endif %}
-        {%- comment -%} Facts about this article itself, counted from it --
-        never ratings, downloads or other outside numbers. {%- endcomment %}
-        <ul class="post-stats">
-          {%- if page.read_min %}
-          <li><strong>{{ page.read_min }} min</strong><span>read</span></li>
-          {%- endif %}
-          {%- if _sections > 0 %}
-          <li><strong>{{ _sections }}</strong><span>{% if page.steps %}steps{% else %}sections{% endif %}</span></li>
-          {%- endif %}
-          {%- if page.faqs %}
-          <li><strong>{{ page.faqs.size }}</strong><span>quick answers</span></li>
-          {%- endif %}
-        </ul>
+      <div class="post-banner" aria-hidden="true">
+        <span class="post-banner-ring post-banner-ring--outer"></span>
+        <span class="post-banner-ring"></span>
+        <span class="post-banner-glyph">{% include icon.html name=_glyph size="56" %}</span>
       </div>
+      {%- endif %}
+      <ul class="post-stats">
+        {%- if page.read_min %}
+        <li><strong>{{ page.read_min }} min</strong><span>read</span></li>
+        {%- endif %}
+        {%- if _sections > 0 %}
+        <li><strong>{{ _sections }}</strong><span>{% if page.steps %}steps{% else %}sections{% endif %}</span></li>
+        {%- endif %}
+        {%- if page.faqs %}
+        <li><strong>{{ page.faqs.size }}</strong><span>quick answers</span></li>
+        {%- endif %}
+      </ul>
     </div>
   </header>
 
-  <div class="section post-main">
-    <div class="wrap post-grid-layout">
+  <div class="ap-section post-main">
+    <div class="ap-wrap post-grid-layout">
       <div class="post-aside">
 
         <div class="post-promo tone-{{ flagship.tone }}">
           {% include app-tile.html app=flagship class="post-promo-tile" %}
           <p class="post-promo-name">{{ flagship.name | escape }}</p>
           <p class="post-promo-text">Backs up your photos, videos, contacts and app data.</p>
-          <a class="btn btn--primary post-promo-btn" href="{{ '/' | append: flagship.slug | relative_url }}">See the app<svg aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          <a class="ap-link post-promo-link" href="{{ '/' | append: flagship.slug | relative_url }}">See the app{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
         </div>
 
         {%- if _sections > 1 %}
         <nav class="post-toc" aria-label="On this page">
           <details class="post-toc-fold" open>
-          <summary class="post-toc-title"><span>On this page</span><span class="post-toc-count">{{ _sections }} sections</span><svg class="post-toc-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+          <summary class="post-toc-title"><span>On this page</span><span class="post-toc-count">{{ _sections }} sections</span>{% include icon.html name="chevron-down" class="post-toc-chevron" size="18" %}</summary>
           <ol class="post-toc-list">
             {%- for part in _parts offset: 1 %}
             {%- assign _id = part | split: '"' | first -%}
@@ -174,10 +179,10 @@ css: post
       <div class="post-content">
         {%- if page.takeaways %}
         <div class="post-takeaways">
-          <p class="post-takeaways-title"><svg aria-hidden="true"><use href="#i-list"/></svg>The short version</p>
+          <p class="post-takeaways-title">{% include icon.html name="list" class="post-takeaways-icon" size="20" %}The short version</p>
           <ul>
             {%- for item in page.takeaways %}
-            <li><svg aria-hidden="true"><use href="#i-tick"/></svg><span>{{ item | escape }}</span></li>
+            <li>{% include icon.html name="tick" class="post-takeaways-tick" size="22" %}<span>{{ item | escape }}</span></li>
             {%- endfor %}
           </ul>
         </div>
@@ -185,8 +190,8 @@ css: post
 
         <div class="prose post-body{% if page.steps %} post-body--steps{% endif %}">
           {%- comment -%} Each H2 and everything up to the next one becomes a
-          section. A closing <aside class="post-note" aria-label="In summary"> is kept out of
-          the last card and rendered after it. {%- endcomment %}
+          section. A closing <aside class="post-note"> is kept out of the
+          last section and rendered after it. {%- endcomment %}
           <div class="post-intro">{{ _parts.first | strip }}</div>
           {%- for part in _parts offset: 1 %}
           {%- assign _id = part | split: '"' | first -%}
@@ -207,7 +212,7 @@ css: post
           {%- assign _attr = _split.last | split: '>' | first -%}
           {%- assign _note = _split.last | remove_first: _attr | remove_first: '>' | remove: '</aside>' %}
           <aside class="post-note" aria-label="In summary">
-            <span class="post-note-icon" aria-hidden="true"><svg><use href="#i-auto"/></svg></span>
+            <span class="post-note-icon" aria-hidden="true">{% include icon.html name="auto" size="20" %}</span>
             <div class="post-note-body">{{ _note | strip }}</div>
           </aside>
           {%- endif %}
@@ -217,7 +222,7 @@ css: post
         <div class="post-share">
           <span class="post-share-label">Found this useful?</span>
           <button class="btn btn--ghost post-share-btn" type="button" data-share-url="{{ _clean_url | absolute_url }}" data-share-title="{{ page.heading | escape }}">
-            <svg aria-hidden="true"><use href="#i-share"/></svg><span class="post-share-text" aria-live="polite">Share this guide</span>
+            {% include icon.html name="share" size="18" %}<span class="post-share-text" aria-live="polite">Share this guide</span>
           </button>
         </div>
       </div>
@@ -227,8 +232,8 @@ css: post
 {% include faq-section.html faqs=page.faqs alt=true id="faq" %}
 
   {%- comment -%} Keep reading: the posts named in `related`, else other
-  posts in the same topic, else the newest others. Hidden when this is
-  the only post, in which case the topics card below stands alone.
+  posts in the same topic, else the newest others. The grid is hidden
+  when this is the only post; the topics below it always show.
   {%- endcomment -%}
   {%- assign _all = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
   {%- assign _more = "" | split: "" -%}
@@ -246,13 +251,11 @@ css: post
       {%- if p.url != page.url and p.category != page.category -%}{%- assign _more = _more | push: p -%}{%- endif -%}
     {%- endfor -%}
   {%- endif %}
-  <section class="section" aria-labelledby="more-title">
-    <div class="wrap">
-      <div class="section-head-row reveal">
-        <div class="section-head">
-          <h2 id="more-title">More from Daily Info</h2>
-        </div>
-        <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">All guides</a>
+  <section class="ap-section post-more" aria-labelledby="more-title">
+    <div class="ap-wrap">
+      <div class="ap-head-row reveal">
+        <h2 id="more-title">More from Daily Info.</h2>
+        <a class="ap-link" href="{{ '/daily-info/' | relative_url }}">All guides{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
       </div>
       {%- if _more.size > 0 %}
       <ul class="post-grid">
@@ -261,12 +264,14 @@ css: post
         {%- endfor %}
       </ul>
       {%- endif %}
-      <ul class="post-topics reveal">
+      <h3 class="post-topics-title">Browse by topic</h3>
+      <ul class="ap-cards post-topics">
         {%- for c in site.data.categories %}
-        <li class="tone-{{ c.tone }}">
-          <a class="post-topic-link" href="{{ '/daily-info/' | relative_url }}#{{ c.name | slugify }}">
-            <span class="post-topic-icon" aria-hidden="true"><svg><use href="#i-{{ c.glyph }}"/></svg></span>
-            <span class="post-topic-text"><span class="post-topic-name">{{ c.name | escape }}</span><span class="post-topic-blurb">{{ c.blurb | escape }}</span></span>
+        <li class="tone-{{ c.tone }} reveal">
+          <a class="ap-card post-topic-link" href="{{ '/daily-info/' | relative_url }}#{{ c.name | slugify }}">
+            {% include icon.html name=c.glyph class="ap-card-icon" size="32" %}
+            <span class="post-topic-name">{{ c.name | escape }}</span>
+            <span class="post-topic-blurb">{{ c.blurb | escape }}</span>
           </a>
         </li>
         {%- endfor %}
@@ -274,14 +279,12 @@ css: post
     </div>
   </section>
 
-  <section class="section section--alt" aria-labelledby="post-cta-title">
-    <div class="wrap">
-      <div class="cta-band cta-band--card post-cta tone-{{ flagship.tone }} reveal">
-        {% include app-tile.html app=flagship class="cta-band-icon" %}
-        <div class="section-head">
-          <h2 id="post-cta-title">Keep a copy off your phone</h2>
-          <p class="section-sub">{{ flagship.name | escape }} backs up your photos, videos, contacts and app data, ready to restore when you need them. Free to download on {% include platforms.html app=flagship %}.</p>
-        </div>
+  <section class="ap-section post-close" aria-labelledby="post-cta-title">
+    <div class="ap-wrap">
+      <div class="ap-card ap-card--dark post-close-card tone-{{ flagship.tone }} reveal">
+        {% include app-tile.html app=flagship class="post-close-tile" %}
+        <h2 id="post-cta-title">Keep a copy off your phone.</h2>
+        <p>{{ flagship.name | escape }} backs up your photos, videos, contacts and app data, ready to restore when you need them. Free to download on {% include platforms.html app=flagship %}.</p>
         {% include store-badges.html ios_url=flagship.ios_url android_url=flagship.android_url %}
       </div>
     </div>

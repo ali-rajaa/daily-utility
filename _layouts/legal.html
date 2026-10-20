@@ -26,6 +26,12 @@ css: legal
   No hardcoded canonical: here -- legal pages use the same canonical
   logic as every other page (default.html). The BreadcrumbList is
   Home > this page (STATUS.md section 6: legal pages carry one).
+
+  Phase 3 (20 Oct): an apple.com text page. A centred opening (title,
+  lead, dates), then the document in a reading column beside its
+  contents on white. The contents fold on phones, as on the guides
+  (site.js folds any .post-toc-fold below 60rem). Layout only: the
+  documents' own text is the owner's, unchanged.
 {%- endcomment -%}
 {%- assign _heading = page.heading | default: page.title -%}
 {%- assign _clean_url = page.url -%}
@@ -40,9 +46,9 @@ css: legal
 }
 </script>
 
-<section class="section legal-hero" aria-labelledby="legal-title">
-  <div class="wrap legal-wrap">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
+<section class="legal-hero" aria-labelledby="legal-title">
+  <div class="ap-wrap legal-hero-copy">
+    <nav class="breadcrumbs legal-crumbs" aria-label="Breadcrumb">
       <a href="{{ '/' | relative_url }}">Home</a>
       <span class="breadcrumbs-sep" aria-hidden="true">/</span>
       <span aria-current="page">{{ _heading | escape }}</span>
@@ -53,7 +59,7 @@ css: legal
     {%- endif %}
     {%- assign _eff = page.effective | date: "%Y-%m-%d" -%}
     {%- assign _upd = page.last_updated | date: "%Y-%m-%d" %}
-    <p class="legal-updated"><svg aria-hidden="true"><use href="#i-auto"/></svg>
+    <p class="legal-updated">{% include icon.html name="auto" class="legal-updated-icon" size="16" %}
       {%- if page.effective and _eff == _upd -%}
       <span>Effective and last updated <time datetime="{{ _upd }}">{{ page.last_updated | date: "%-d %B %Y" }}</time></span>
       {%- else -%}
@@ -64,16 +70,18 @@ css: legal
   </div>
 </section>
 
-<div class="section legal-layout">
-  <div class="wrap legal-wrap legal-grid">
+<div class="ap-section legal-layout">
+  <div class="ap-wrap legal-grid">
     {%- if page.sections %}
     <nav class="legal-toc" aria-label="Table of contents">
-      <p class="legal-toc-head">On this page</p>
-      <ol>
-        {%- for item in page.sections %}
-        <li><a href="#{{ item.id }}">{{ item.label | escape }}</a></li>
-        {%- endfor %}
-      </ol>
+      <details class="post-toc-fold legal-toc-fold" open>
+        <summary class="legal-toc-head"><span>On this page</span><span class="legal-toc-count">{{ page.sections.size }} sections</span>{% include icon.html name="chevron-down" class="legal-toc-chevron" size="18" %}</summary>
+        <ol>
+          {%- for item in page.sections %}
+          <li><a href="#{{ item.id }}">{{ item.label | escape }}</a></li>
+          {%- endfor %}
+        </ol>
+      </details>
     </nav>
     {%- endif %}
     <div class="prose legal-body">
