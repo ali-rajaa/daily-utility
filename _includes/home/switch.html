@@ -1,10 +1,16 @@
+{%- comment -%}
+  "Switching phones?" as a full-width grey row: the heading, why it
+  matters and a link to the full checklist centred on top, then the steps
+  in order as columns (from _data/home.yml), each under a large blue
+  numeral. The columns stack on narrow screens.
+{%- endcomment -%}
 <section class="ap-panel ap-switch" aria-labelledby="switch-title">
-  <div class="ap-wrap ap-switch-grid">
-    <div class="ap-switch-intro reveal">
+  <div class="ap-wrap">
+    <header class="ap-head ap-switch-intro reveal">
       <h2 id="switch-title">Switching phones? Use them in this order.</h2>
       <p>Switching phones is one of the easiest times to lose something. The setup screens move quickly, and what didn't come across usually shows up only after the old phone is wiped.</p>
-      <a class="ap-link" href="{{ '/daily-info/backup-before-switching-phones' | relative_url }}">Read the full switching checklist<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></a>
-    </div>
+      <a class="ap-link" href="{{ '/daily-info/backup-before-switching-phones' | relative_url }}">Read the full switching checklist{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
+    </header>
     <ol class="ap-steps">
       {%- for step in site.data.home.switch %}
       <li class="reveal">

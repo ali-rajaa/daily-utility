@@ -20,7 +20,7 @@ css: post
 {%- endcomment -%}
 {%- assign _cat = site.data.categories | where: "name", page.category | first -%}
 {%- assign _tone = _cat.tone | default: "blue" -%}
-{%- assign _glyph = page.glyph | default: _cat.glyph | default: "spark" -%}
+{%- assign _glyph = page.glyph | default: _cat.glyph | default: "book" -%}
 {%- assign _app = site.data.apps | where: "slug", page.app | first -%}
 {%- assign _published = site.pages | where: "layout", "post" | sort: "date" | reverse -%}
 <article class="tone-{{ _tone }}">
@@ -34,7 +34,7 @@ css: post
           <span class="breadcrumbs-sep" aria-hidden="true">/</span>
           <span aria-current="page">{{ page.heading | escape }}</span>
         </nav>
-        <span class="post-topic"><svg aria-hidden="true"><use href="#i-{{ _cat.glyph | default: 'spark' }}"/></svg>{{ page.category | escape }}</span>
+        <span class="post-topic"><svg aria-hidden="true"><use href="#i-{{ _cat.glyph | default: 'book' }}"/></svg>{{ page.category | escape }}</span>
         <span class="soon-pill">Coming soon</span>
         <h1>{{ page.heading | escape }}</h1>
         <p class="post-lead">{{ page.description | escape }}</p>

@@ -305,7 +305,9 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 
 ### 8.5 Icons
 
-- **One SVG sprite** (`icon-sprite.html`), included once after `<body>`, used as `<svg><use href="#i-cloud"/></svg>`.
+- **One set of shapes, in data:** `_data/icons.yml` holds every icon (the inside of a 24×24 SVG) and the drawing spec. Chevrons are drawn pointing the way they mean (`chevron-down`, `chevron-right`), never rotated by CSS.
+- **Inline icons:** `{% include icon.html name="lock" class="…" size="40" %}` draws one inline: its own `viewBox`, `width` and `height`, stroked in `currentColor`, `aria-hidden`. An unknown name stops the build (the include calls a filter that doesn't exist, and `strict_filters` is on), so a typo can't ship an empty icon. The homepage and the shared pieces it renders (app tiles, phone frames, guide cards, FAQ chevrons) use it (Phase 2, 20 Oct).
+- **The sprite** (`icon-sprite.html`, after `<body>`) is built from the same data for pages not yet moved over (`<svg><use href="#i-cloud"/></svg>`); it goes once nothing uses `<use>`.
 - **One drawing spec:** 24×24 grid, 2-unit margin, 1.75 stroke, round caps and joins, no fills.
 - In content, icons are plain blue glyphs (no coloured squares). Decorative icons get `aria-hidden="true"`; icon-only buttons get an `aria-label`. No emoji.
 
@@ -341,11 +343,15 @@ Breadcrumbs (except the homepage), H1, a lead paragraph, the main actions. Produ
 
 ### 9.3 Homepage (Daily Utility)
 
-1. **Store-style opening:** a two-tone H1 (the name in `.brand-ink`, what it is in grey) and every app as a "chiclet" (tile + short name). The row wraps on wide screens and scrolls sideways on phones, so it takes any number of apps.
-2. **Flagship panel:** full-width grey panel: eyebrow, product name (56px), tagline, "Free to download on iPhone and Android", blue **Learn more** and outlined **Download** pills, then the feature chips and the app on a phone cropped by the foot of the panel.
-3. **Promo tiles:** every other app two to a row on grey panels with 12px gaps; an odd one out spans the full width. Tiles side by side line up (the visual sits at the foot).
-4. **Compare table** ("Which kind of app do you need?"): one column per job, rows aligned across columns with CSS subgrid; on phones a sideways swipe.
-5. **Switching steps** on a grey panel with large numerals; **privacy** commitments as grey cards under a lock mark; a **sideways shelf** of guide cards; the FAQ as a hairline list; a closing call to action with store badges.
+Phase 2 (20 Oct). A rhythm of full-bleed rows and tiles, white and grey in turn; every section heading uses one size (`--ap-h2`) and every lead another (`--ap-lede`), in `index.scss`.
+
+1. **Cinematic opening** (white): centred. The H1 is the name in `.brand-ink` over one very large line (`--ap-display`, 44–84px, weight 700): "Daily Utility Apps: Simple apps for your phone's everyday jobs." Then a lead naming the jobs (never a count), a filled **Explore the apps** and an outlined **Read our guides** pill (side by side on phones, stacked under 360px), and every app as a "chiclet" (tile + short name), centred while it fits and a sideways swipe when it doesn't (`justify-content: safe center`).
+2. **Flagship tile** (grey): eyebrow, product name, tagline, "Free to download on iPhone and Android", **Learn more** and **Download** pills, feature chips, then the app on a phone cropped by the tile's foot.
+3. **Promo tiles** (grey): every other app two to a row with 12px gaps; an odd one out spans the full width.
+4. **Compare table** (white): "Which kind of app do you need?", one column per job, rows aligned with CSS subgrid; a sideways swipe on phones.
+5. **Switching steps** (grey row): the heading centred on top, the steps as columns under large blue numerals.
+6. **Privacy bento** (white): a dark `#1d1d1f` lead card (lock mark, heading, link in `#2997ff`) beside the commitments as grey cards two by two; lead on top below 900px, one column below 600px.
+7. **Guides shelf** (grey row), the FAQ (white), and the **closing action** (grey row): the flagship tile, "Start with a backup.", store badges.
 
 All of it reads from data; nothing states how many apps there are.
 

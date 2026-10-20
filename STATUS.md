@@ -2190,6 +2190,41 @@ emulation, more contrast, no-JS phone and desktop); items centred and
 the logo on the gutter at 760–1920px; phone audit: nothing new against
 the live site.
 
+## 5zzzzzzz. Phase 2: the homepage (20 Oct)
+
+User: *"yep do next phase please properly"* (Phase 2 of the overhaul:
+cinematic hero, bento or full-bleed rows, standard text, clean inline
+SVGs), applied and pushed live as Phase 1 was.
+
+- **Opening:** centred and cinematic. The H1 is the name in the logo's
+  colours over one very large line ("Daily Utility Apps: Simple apps for
+  your phone's everyday jobs."), then a lead naming the jobs, a filled
+  "Explore the apps" and an outlined "Read our guides" pill, and the app
+  row. No count of apps; "free to download" only.
+- **Rhythm:** white and grey rows in turn: flagship and app tiles (grey),
+  compare (white), switching steps now centred over three columns (grey),
+  privacy as a bento with a dark lead card (white), guides shelf (grey),
+  FAQ (white), closing action now on a grey row. One type scale for every
+  section heading and lead; more generous section spacing.
+- **Inline SVG icons:** every icon shape moved from the sprite into
+  `_data/icons.yml` (plus a `chevron-right`); `_includes/icon.html` draws
+  one inline with its own viewBox, width and height in currentColor, and
+  an unknown name stops the build (tested). The homepage and the shared
+  pieces it shows (app tiles, phone frames, guide cards, FAQ chevrons) use
+  it; the sprite is now built from the same data for the pages still on
+  `<use>` (checked: every symbol identical, plus chevron-right).
+- **Fixed:** guide cards and guide pages fell back to an icon called
+  `spark` that never existed (an empty icon for any guide without a
+  glyph); the fallback is now `book`.
+
+**Checks:** HTML valid; SEO check 0 problems; deep audit: nothing new on
+the homepage; axe clean at 1440 and 390px on every page; 20/20
+header/footer tests and 9/9 header checks; no sideways scroll; phone
+audit 320–430px: only "outside the gutter" notes for links inside the
+compare row's own sideways swipe (by design) and one lead line-height
+(fixed, 1.45); every other page pixel-identical to before at 1280 and
+390px apart from sub-pixel anti-aliasing of inline icons.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2697,3 +2732,5 @@ flagship Apple id.
   schema, About title.
 - 20 Oct: Phase 1, the header (section 5zzzzzz): own stylesheet, 70%
   frosted bar, inline SVG icons, press states, slide-down phone menu.
+- 20 Oct: Phase 2, the homepage (section 5zzzzzzz): cinematic opening,
+  white/grey rhythm, privacy bento, inline SVG icons from _data/icons.yml.

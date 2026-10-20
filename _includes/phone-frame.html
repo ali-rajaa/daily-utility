@@ -17,7 +17,7 @@
     {%- if include.app.screenshot %}
     <img src="{{ include.app.screenshot | relative_url }}" alt="" loading="lazy" decoding="async">
     {%- else %}
-    <span class="phone-launch"><svg><use href="#i-{{ include.app.glyph }}"/></svg><span class="phone-launch-name">{{ include.app.short | default: include.app.name | escape }}</span></span>
+    <span class="phone-launch">{% include icon.html name=include.app.glyph %}<span class="phone-launch-name">{{ include.app.short | default: include.app.name | escape }}</span></span>
     {%- endif %}
   </span>
 </span>

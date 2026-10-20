@@ -1,0 +1,13 @@
+{%- comment -%}
+  The closing action on a grey row: the flagship's tile, one line of
+  advice ("Start with a backup."), why, and its store badges.
+  Params: flagship (apps.yml entry).
+{%- endcomment -%}
+<section class="ap-panel ap-close tone-{{ include.flagship.tone }}" aria-labelledby="start-title">
+  <div class="ap-wrap reveal">
+    {% include app-tile.html app=include.flagship class="ap-close-icon" %}
+    <h2 id="start-title">Start with a backup.</h2>
+    <p>If you install one of our apps, make it {{ include.flagship.name | escape }}. A copy of your photos, videos, contacts and app data off your phone makes every other job safer, from clearing space to switching phones. It's free to download on {% include platforms.html app=include.flagship %}.</p>
+    {% include store-badges.html ios_url=include.flagship.ios_url android_url=include.flagship.android_url app=include.flagship.short %}
+  </div>
+</section>

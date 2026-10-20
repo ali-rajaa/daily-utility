@@ -10,10 +10,10 @@
   every card is visually tied to its topic without any per-post images.
 {%- endcomment -%}
 {%- assign _cat = site.data.categories | where: "name", include.post.category | first -%}
-{%- assign _glyph = include.post.glyph | default: _cat.glyph | default: "spark" -%}
+{%- assign _glyph = include.post.glyph | default: _cat.glyph | default: "book" -%}
 <li class="reveal tone-{{ _cat.tone | default: 'blue' }}">
   <a class="post-card" href="{{ include.post.url | relative_url }}">
-    <span class="post-card-banner" aria-hidden="true"><span class="post-card-glyph"><svg><use href="#i-{{ _glyph }}"/></svg></span></span>
+    <span class="post-card-banner" aria-hidden="true"><span class="post-card-glyph">{% include icon.html name=_glyph %}</span></span>
     <div class="post-card-body">
       <span class="post-card-cat">{{ include.post.category | escape }}</span>
       <h3 class="post-card-title">{{ include.post.heading | default: include.post.title | escape }}</h3>

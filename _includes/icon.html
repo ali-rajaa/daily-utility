@@ -1,0 +1,18 @@
+{%- comment -%}
+  One icon drawn inline: an <svg> with its own viewBox, width and height,
+  stroked in currentColor so it takes the colour of the text around it.
+  The shapes live in _data/icons.yml (the same list the shared sprite is
+  built from). Always decorative: the words beside it say what it means.
+
+  Params: name (required, an icons.yml key), class, size (px for the
+  width and height attributes, default 24; CSS may still size it).
+  Usage: {% include icon.html name="lock" class="ap-privacy-icon" size="40" %}
+
+  An unknown name stops the build: the filter below doesn't exist, and
+  _config.yml turns on strict_filters, so a typo can never ship an empty
+  icon.
+{%- endcomment -%}
+{%- assign _icon = site.data.icons[include.name] -%}
+{%- unless _icon -%}{{ include.name | unknown_icon_name_see_data_icons_yml }}{%- endunless -%}
+{%- assign _size = include.size | default: 24 -%}
+<svg class="icon{% if include.class %} {{ include.class }}{% endif %}" width="{{ _size }}" height="{{ _size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{ _icon.stroke | default: 1.75 }}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ _icon.paths | strip_newlines }}</svg>

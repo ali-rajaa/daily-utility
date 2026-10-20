@@ -23,7 +23,7 @@
       <details class="faq-item">
         <summary class="faq-q">
           <span>{{ item.q | escape }}</span>
-          <svg class="faq-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          {% include icon.html name="chevron-down" class="faq-chevron" size="16" %}
         </summary>
         <div class="faq-a"><p>{{ item.a | escape }}</p></div>
       </details>

@@ -1,6 +1,7 @@
 {%- comment -%}
   "Which kind of app do you need?" as an Apple compare table: one column
   per job from _data/home.yml, rows lined up across columns (subgrid).
+  On phones the columns sit side by side in a sideways swipe.
 {%- endcomment -%}
 <section class="ap-section ap-compare" id="which" aria-labelledby="which-title">
   <div class="ap-wrap">
@@ -20,7 +21,7 @@
           <div><dt>When to use it</dt><dd>{{ job.when | escape }}</dd></div>
           <div><dt>Does it keep a copy?</dt><dd>{{ job.keeps_copy | escape }}</dd></div>
         </dl>
-        <a class="ap-link" href="{{ '/' | append: app.slug | relative_url }}">Learn more<span class="visually-hidden"> about {{ app.short | escape }}</span><svg aria-hidden="true"><use href="#i-chevron-down"/></svg></a>
+        <a class="ap-link" href="{{ '/' | append: app.slug | relative_url }}">Learn more<span class="visually-hidden"> about {{ app.short | escape }}</span>{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
       </li>
       {%- endfor %}
     </ul>

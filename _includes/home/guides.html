@@ -1,12 +1,14 @@
 {%- comment -%}
-  Daily Info as an apple.com "Get to know" shelf: every guide in a
-  sideways row of cards, newest first, then the topics.
+  Daily Info as an apple.com "Get to know" shelf on a grey row: every
+  guide in a sideways row of cards, newest first, starting in line with
+  the content above and running to the screen edge, then the topics.
+  Params: posts (guide pages, newest first).
 {%- endcomment -%}
 {%- if include.posts.size > 0 %}
 <section class="ap-panel ap-guides" aria-labelledby="guides-title">
   <div class="ap-wrap ap-guides-head reveal">
     <h2 id="guides-title">Daily Info. <span>Guides for everyday phone problems.</span></h2>
-    <a class="ap-link" href="{{ '/daily-info/' | relative_url }}">All guides<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></a>
+    <a class="ap-link" href="{{ '/daily-info/' | relative_url }}">All guides{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
   </div>
   <ul class="ap-shelf">
     {%- for post in include.posts %}
@@ -16,7 +18,7 @@
   <nav class="ap-wrap ap-topics reveal" aria-label="Guide topics">
     <ul>
       {%- for cat in site.data.categories %}
-      <li><a class="tone-{{ cat.tone }}" href="{{ '/daily-info/' | relative_url }}#{{ cat.name | slugify }}"><svg aria-hidden="true"><use href="#i-{{ cat.glyph }}"/></svg>{{ cat.name | escape }}</a></li>
+      <li><a class="tone-{{ cat.tone }}" href="{{ '/daily-info/' | relative_url }}#{{ cat.name | slugify }}">{% include icon.html name=cat.glyph class="ap-topic-icon" size="18" %}{{ cat.name | escape }}</a></li>
       {%- endfor %}
     </ul>
   </nav>

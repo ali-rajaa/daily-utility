@@ -1,13 +1,25 @@
 {%- comment -%}
-  Opening, as on apple.com's Store page: a two-tone headline (the name in
-  black, what it is in grey), then every app as a "chiclet" (tile + short
-  name). Lists whatever apps.yml holds, flagship first; on phones the row
-  scrolls sideways.
+  Opening, apple.com style: centred and cinematic, with nothing but type
+  and the two main actions above the fold's first product. The name in
+  the logo's colours sits over one very large line (together they are the
+  page's H1: "Daily Utility Apps: Simple apps for your phone's everyday
+  jobs."), then a short lead, a filled and an outlined pill, and every app
+  as a "chiclet" (tile + short name), flagship first. The app row centres
+  while it fits and scrolls sideways on phones when it doesn't, so it
+  takes any number of apps.
+
+  The lead names jobs, not a count of apps (STATUS 5z), and "free to
+  download" is the only price wording (STATUS 5u, never a bare "free").
   Params: flagship, others (apps.yml entries).
 {%- endcomment -%}
 <section class="ap-hero" aria-labelledby="home-title">
-  <div class="ap-wrap">
-    <h1 id="home-title" class="ap-hero-title"><span class="brand-ink">{{ site.title }}.</span> <span class="ap-hero-tone">Simple apps for your phone's everyday jobs.</span></h1>
+  <div class="ap-wrap ap-hero-inner">
+    <h1 id="home-title" class="ap-hero-title"><span class="ap-hero-brand brand-ink">{{ site.title }}<span class="visually-hidden">:</span></span> <span class="ap-hero-line">Simple apps for your phone's everyday jobs.</span></h1>
+    <p class="ap-hero-lede">Back up your phone, move to a new one and read your documents, each with an app built for just that job. All of them are free to download.</p>
+    <div class="ap-ctas ap-hero-ctas">
+      <a class="btn btn--primary" href="#apps">Explore the apps</a>
+      <a class="btn btn--ghost" href="{{ '/daily-info/' | relative_url }}">Read our guides</a>
+    </div>
     <nav class="ap-chiclets" aria-label="Our apps">
       <ul>
         <li><a class="ap-chiclet tone-{{ include.flagship.tone }}" href="{{ '/' | append: include.flagship.slug | relative_url }}">{% include app-tile.html app=include.flagship %}<span>{{ include.flagship.short | escape }}</span></a></li>

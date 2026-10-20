@@ -1,15 +1,23 @@
+{%- comment -%}
+  "How we handle your data." as an apple.com bento: a dark lead card with
+  the lock, the heading and the link to the policy, beside the policy's
+  commitments as lighter cards (_data/home.yml, each paraphrased from a
+  named section of the owner's policy, never widened). Wide screens: the
+  lead on the left, the cards two by two on the right. Below 900px the
+  lead sits on top; below 600px everything stacks.
+{%- endcomment -%}
 <section class="ap-section ap-privacy" aria-labelledby="privacy-title">
-  <div class="ap-wrap">
-    <header class="ap-head reveal">
-      <span class="ap-privacy-mark" aria-hidden="true"><svg><use href="#i-lock"/></svg></span>
+  <div class="ap-wrap ap-bento">
+    <header class="ap-bento-lead reveal">
+      <span class="ap-privacy-mark">{% include icon.html name="lock" size="40" %}</span>
       <h2 id="privacy-title">How we handle your data.</h2>
       <p>These are the commitments in our privacy policy, in plain words. The policy itself covers every app and this website.</p>
-      <a class="ap-link" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></a>
+      <a class="ap-link" href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a>
     </header>
-    <ul class="ap-privacy-grid">
+    <ul class="ap-bento-cards">
       {%- for item in site.data.home.privacy %}
-      <li class="ap-privacy-card reveal">
-        <svg aria-hidden="true"><use href="#i-{{ item.icon }}"/></svg>
+      <li class="ap-bento-card reveal">
+        {% include icon.html name=item.icon class="ap-bento-icon" size="32" %}
         <h3>{{ item.title | escape }}</h3>
         <p>{{ item.text | escape }}</p>
       </li>
