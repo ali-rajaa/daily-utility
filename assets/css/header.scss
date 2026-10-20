@@ -1,0 +1,422 @@
+---
+# Front matter fence: tells Jekyll to compile this file with Sass
+# (compressed, see _config.yml). Output keeps the .css name.
+---
+/* ==========================================================================
+   header.css: the site header (_includes/header.html), loaded by every
+   page straight after shell.css. Everything the bar, its menus and the
+   phone menu need lives here, including their reduced-motion, reduced-
+   transparency and high-contrast versions. shell.css keeps only what the
+   header reads: the tokens (--font, --gutter, --header-h, --brand,
+   --spring) and the chrome colours it shares with the footer.
+
+   apple.com's global bar: one low, frosted strip the page scrolls under
+   (70% white, blurred 20px and saturated, so content reads through it).
+   Desktop (760px+): the mark and name at the left, Apps · Guides · About
+   · Help centred, Sign in at the right, all in 12px type. Apps and Help
+   open full-width menus that grow down from the bar, their links fading
+   in one after another, over a faint tint (no blur: the owner's choice).
+   Phones: the mark, the name and a two-line menu button that turns into
+   a cross; the menu slides down from the bar and fills the screen with
+   large links, and Apps and Help slide in from the right as their own
+   panel with a back button.
+
+   Every control answers the moment it's pressed (an instant dim) and
+   eases back when released. Icons are inline SVG drawn in currentColor.
+   Behaviour and hooks: site.js "Navigation".
+   ========================================================================== */
+
+/* ---------- The bar ---------- */
+
+.site-header {
+  --chrome-bg: rgba(255, 255, 255, 0.7);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--chrome-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  font-family: var(--font);
+  transition: background-color 0.24s var(--chrome-ease), box-shadow 0.24s var(--chrome-ease);
+}
+/* Once the page has scrolled under the bar, a hairline marks its edge
+   (site.js sets .is-scrolled when the sentinel leaves the screen). */
+.site-header.is-scrolled { box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06); }
+/* With a menu open the bar and the menu are one solid surface: no blur,
+   no line between them. */
+.site-header.menu-open,
+.site-header.nav-open {
+  background: var(--chrome-solid);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header { background: var(--chrome-solid); }
+}
+
+/* A 1px marker at the top of the page: when it scrolls out of view the
+   bar knows content is passing under it. */
+.scroll-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Not positioned: the desktop menus and the phone menu are placed
+   against the full-width header, not this centred row. */
+.header-inner {
+  display: flex;
+  align-items: center;
+  width: min(100% - 2 * var(--gutter), 61.25rem);
+  height: var(--header-h);
+  margin-inline: auto;
+}
+
+/* ---------- Logo and name ----------
+   The owner's mark (an image, never redrawn) and the name "Daily Utility
+   Apps", with Utility in the logo's colours (.brand-ink, shell.css). A
+   young brand needs its name in view, so it stays beside the mark. */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: var(--header-h);
+  border-radius: var(--radius-sm);
+  color: #1d1d1f;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s var(--chrome-ease);
+}
+.brand:hover { color: #1d1d1f; }
+.brand:active { opacity: 0.6; transition-duration: 0s; }
+.logo-mark { display: block; width: 1.375rem; height: 1.375rem; object-fit: contain; }
+.logo-word {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* ---------- Items ---------- */
+
+.nav-list { margin: 0; padding: 0; list-style: none; }
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 0;
+  background: none;
+  color: var(--chrome-text);
+  font-family: var(--font);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.24s var(--chrome-ease), opacity 0.2s var(--chrome-ease);
+}
+.nav-link:hover, .nav-link[aria-expanded="true"] { color: #000; }
+/* Pressed: an instant dim; released: a quick return. */
+.nav-link:active { opacity: 0.6; transition-duration: 0s; }
+.nav-link:focus:not(:focus-visible) { outline: none; }
+.nav-link:focus-visible { outline: 2px solid var(--brand); outline-offset: -4px; border-radius: 6px; }
+
+/* Icons: inline SVG, sized here, coloured by the text they sit in. */
+.nav-chevron, .nav-signin-icon, .nav-back-icon { display: block; flex: none; }
+.nav-signin-icon { width: 0.875rem; height: 0.875rem; }
+
+/* ---------- Menu contents (desktop flyouts and phone panels) ---------- */
+
+.nav-col-head {
+  margin: 0 0 0.85rem;
+  font-size: 0.75rem;
+  line-height: 1.33;
+  letter-spacing: -0.01em;
+  color: var(--chrome-text-2);
+}
+.nav-big, .nav-small { margin: 0; padding: 0; list-style: none; }
+.nav-big a, .nav-small a {
+  display: inline-block;
+  color: var(--chrome-ink);
+  font-weight: 600;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s var(--chrome-ease), opacity 0.2s var(--chrome-ease);
+}
+.nav-big a { font-size: 1.5rem; line-height: 1.17; letter-spacing: 0.009em; padding-block: 0.25rem; }
+.nav-small a { font-size: 0.75rem; line-height: 1.33; letter-spacing: -0.01em; padding-block: 0.3rem; }
+.nav-big a:hover, .nav-small a:hover { color: #000; text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 1px; }
+.nav-big a:active, .nav-small a:active { opacity: 0.6; transition-duration: 0s; }
+.nav-big a[aria-current="page"], .nav-small a[aria-current="page"] { color: var(--brand-text); }
+.nav-big a:focus-visible, .nav-small a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+
+.nav-toggle, .nav-back { display: none; }
+
+/* The page behind an open menu: a faint tint, no blur. */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  background: rgba(232, 232, 237, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s var(--chrome-ease), visibility 0s linear 0.24s;
+}
+.nav-flyout-open .nav-scrim { opacity: 1; visibility: visible; transition: opacity 0.32s var(--chrome-ease); }
+
+/* ---------- Desktop: the bar and its full-width menus ---------- */
+@media (min-width: 760px) {
+  /* Three columns: the name at the left, the items centred on the bar
+     (equal side columns, so the group sits in the true middle), Sign in
+     at the right. A side column grows past its share rather than
+     overlap if the text is enlarged. */
+  .header-inner {
+    display: grid;
+    grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
+  }
+  .site-header .brand { justify-self: start; }
+  .nav-list { display: flex; align-items: center; gap: clamp(1rem, 2.6vw, 2.25rem); }
+  .nav-item { display: flex; }
+  .nav-item--signin { display: none; }
+  .bar-signin { display: flex; justify-self: end; }
+  .bar-signin .nav-link { margin-right: -0.5rem; gap: 0.35rem; }
+  .nav-link { height: var(--header-h); padding: 0 0.5rem; font-size: 0.75rem; line-height: 1; letter-spacing: -0.01em; }
+  .nav-chevron { display: none; }
+
+  /* The menu grows down from the bar (a clip, so it reads as the bar
+     extending), then its links fade in top to bottom. Closing is
+     quicker and all at once. */
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--chrome-solid);
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+    transition: clip-path 0.24s var(--chrome-ease), visibility 0s linear 0.24s;
+  }
+  .nav-trigger[aria-expanded="true"] + .nav-menu {
+    clip-path: inset(0 0 0 0);
+    visibility: visible;
+    transition: clip-path 0.32s var(--chrome-ease);
+  }
+  .nav-menu-inner {
+    display: flex;
+    gap: 2.75rem;
+    width: min(100% - 2 * var(--gutter), 61.25rem);
+    margin-inline: auto;
+    padding: 2.5rem 0 5.25rem;
+  }
+  .nav-col--main { min-width: 15rem; }
+  .nav-col-head, .nav-big li, .nav-small li {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    transition: opacity 0.12s var(--chrome-ease), transform 0.12s var(--chrome-ease);
+  }
+  .nav-trigger[aria-expanded="true"] + .nav-menu :is(.nav-col-head, .nav-big li, .nav-small li) {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.24s var(--chrome-ease) var(--d, 0.08s), transform 0.24s var(--chrome-ease) var(--d, 0.08s);
+  }
+  /* One step later for each link down a column, and for each column. */
+  .nav-big li:nth-child(1), .nav-small li:nth-child(1) { --d: 0.1s; }
+  .nav-big li:nth-child(2), .nav-small li:nth-child(2) { --d: 0.12s; }
+  .nav-big li:nth-child(3), .nav-small li:nth-child(3) { --d: 0.14s; }
+  .nav-big li:nth-child(4), .nav-small li:nth-child(4) { --d: 0.16s; }
+  .nav-big li:nth-child(n+5), .nav-small li:nth-child(n+5) { --d: 0.18s; }
+  .nav-col + .nav-col .nav-col-head { --d: 0.12s; }
+
+  /* Without JavaScript the menus still open on hover and keyboard focus,
+     at once (the closed state's delayed visibility would hold them back). */
+  html:not(.js) .nav-item:hover > .nav-menu,
+  html:not(.js) .nav-item:focus-within > .nav-menu {
+    clip-path: inset(0 0 0 0);
+    visibility: visible;
+    transition: clip-path 0.32s var(--chrome-ease);
+  }
+  html:not(.js) .nav-item:is(:hover, :focus-within) :is(.nav-col-head, .nav-big li, .nav-small li) { opacity: 1; transform: none; }
+}
+
+/* ---------- Phones: the menu that slides down from the bar ---------- */
+@media (max-width: 759.98px) {
+  .header-inner { justify-content: space-between; }
+  .bar-signin { display: none; }
+
+  .nav-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.75rem;
+    border: 0;
+    background: none;
+    color: #1d1d1f;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.2s var(--chrome-ease);
+  }
+  .nav-toggle:active { opacity: 0.6; transition-duration: 0s; }
+  .nav-toggle:focus:not(:focus-visible) { outline: none; }
+  .nav-toggle:focus-visible { outline: 2px solid var(--brand); outline-offset: -4px; border-radius: 8px; }
+  /* Two lines that turn into a cross: each moves to the middle line and
+     turns 45 degrees about the icon's centre. */
+  .nav-toggle-icon { display: block; overflow: visible; }
+  .nav-toggle-icon path {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    transition: transform 0.3s var(--chrome-ease);
+  }
+  .nav-open .nav-toggle-top { transform: rotate(45deg) translateY(3px); }
+  .nav-open .nav-toggle-bottom { transform: rotate(-45deg) translateY(-3px); }
+
+  /* The menu: below the bar, the rest of the screen. It slides down from
+     the bar (a clip, so the bar reads as extending) on a spring, and
+     closes quicker. Hidden only once JavaScript is running, so without
+     it the links stay reachable. */
+  .js .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: calc(100dvh - var(--header-h));
+    overflow: hidden;
+    background: var(--chrome-solid);
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+    transition: clip-path 0.24s var(--chrome-ease), visibility 0s linear 0.24s;
+  }
+  .js .nav-open .site-nav {
+    clip-path: inset(0 0 0 0);
+    visibility: visible;
+    transition: clip-path var(--spring-dur) var(--spring);
+  }
+  html:has(.site-header.nav-open) { overflow: hidden; }
+
+  .nav-list {
+    height: 100%;
+    overflow-y: auto;
+    padding: 0.5rem 3rem 3rem;
+    transition: transform 0.36s var(--chrome-ease), opacity 0.36s var(--chrome-ease);
+  }
+  /* A sub-menu is open: the main list moves off to the left. */
+  .site-nav:has(.nav-trigger[aria-expanded="true"]) .nav-list > .nav-item > .nav-link { opacity: 0; transform: translateX(-2rem); pointer-events: none; }
+
+  /* The links follow the sheet down, one after another. */
+  .nav-item {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.2s var(--chrome-ease), transform 0.2s var(--chrome-ease);
+  }
+  .nav-open .nav-item { opacity: 1; transform: none; transition-duration: 0.36s; }
+  .nav-open .nav-item:nth-child(2) { transition-delay: 0.03s; }
+  .nav-open .nav-item:nth-child(3) { transition-delay: 0.06s; }
+  .nav-open .nav-item:nth-child(4) { transition-delay: 0.09s; }
+  .nav-open .nav-item:nth-child(5) { transition-delay: 0.12s; }
+  html:not(.js) .nav-item { opacity: 1; transform: none; }
+
+  .nav-link {
+    justify-content: space-between;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.3rem 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.14;
+    letter-spacing: 0.007em;
+    color: var(--chrome-ink);
+    text-align: left;
+    transition: opacity 0.3s var(--chrome-ease), transform 0.36s var(--chrome-ease), color 0.2s ease;
+  }
+  /* Items with a panel point right: it slides in from that side. */
+  .nav-chevron { width: 1rem; height: 1rem; color: var(--chrome-text-2); }
+  .nav-signin {
+    justify-content: flex-start;
+    gap: 0.45rem;
+    margin-top: 0.75rem;
+    font-size: 1.0625rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--brand-text);
+  }
+  .nav-signin-icon { width: 1.125rem; height: 1.125rem; }
+
+  /* A sub-menu: its own panel, sliding in from the right over the list. */
+  .js .nav-menu {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow-y: auto;
+    padding: 0 3rem 3rem;
+    background: var(--chrome-solid);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.36s var(--chrome-ease), visibility 0s linear 0.36s;
+  }
+  .js .nav-trigger[aria-expanded="true"] + .nav-menu {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.36s var(--chrome-ease);
+  }
+  .js .nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 2.75rem;
+    margin: 0.25rem 0 0 -0.35rem;
+    padding: 0 0.35rem;
+    border: 0;
+    background: none;
+    color: var(--chrome-text-2);
+    font: 400 1.0625rem/1 var(--font);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.2s var(--chrome-ease);
+  }
+  .nav-back:active { opacity: 0.6; transition-duration: 0s; }
+  .nav-back-icon { width: 1rem; height: 1rem; }
+  .nav-back:focus:not(:focus-visible) { outline: none; }
+  .nav-back:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+
+  .nav-menu-inner { display: grid; gap: 2rem; padding-top: 0.75rem; }
+  .nav-col-head { margin-bottom: 0.4rem; font-size: 0.875rem; }
+  .nav-big a, .nav-small a { display: flex; align-items: center; min-height: 2.75rem; }
+  .nav-big a { font-size: 1.5rem; padding-block: 0.15rem; }
+  .nav-small a { font-size: 1.0625rem; letter-spacing: -0.01em; padding-block: 0.15rem; }
+}
+
+/* ---------- Preferences ---------- */
+
+/* Reduced motion: menus appear in place, without growing, sliding or
+   staggering; the menu button still shows its cross. */
+@media (prefers-reduced-motion: reduce) {
+  .nav-menu, .nav-trigger[aria-expanded="true"] + .nav-menu,
+  .nav-col-head, .nav-big li, .nav-small li,
+  .nav-trigger[aria-expanded="true"] + .nav-menu :is(.nav-col-head, .nav-big li, .nav-small li),
+  .nav-item, .nav-open .nav-item, .nav-list, .nav-link,
+  .site-nav:has(.nav-trigger[aria-expanded="true"]) .nav-list > .nav-item > .nav-link,
+  .nav-toggle-icon path { transition: none; transform: none; }
+  .nav-open .nav-toggle-top { transform: rotate(45deg) translateY(3px); }
+  .nav-open .nav-toggle-bottom { transform: rotate(-45deg) translateY(-3px); }
+}
+/* On phones the menu fades in instead of sliding down. */
+@media (prefers-reduced-motion: reduce) and (max-width: 759.98px) {
+  .js .site-nav { clip-path: none; opacity: 0; transition: opacity 0.2s ease, visibility 0s linear 0.2s; }
+  .js .nav-open .site-nav { clip-path: none; opacity: 1; transition: opacity 0.2s ease; }
+}
+
+/* Reduced transparency: a solid bar, and a stronger tint behind menus. */
+@media (prefers-reduced-transparency: reduce) {
+  .site-header { background: var(--chrome-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .nav-scrim { background: rgba(232, 232, 237, 0.85); }
+}
+
+/* More contrast: a solid bar with a defined edge. */
+@media (prefers-contrast: more) {
+  .site-header { background: var(--chrome-solid); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 #86868b; }
+}

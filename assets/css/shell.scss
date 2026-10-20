@@ -6,7 +6,8 @@
    shell.css: loaded by every page, before the page's own stylesheet.
 
    Holds the design tokens, base type, the section scaffold every page
-   builds on (title, sub), buttons, and the header and footer.
+   builds on (title, sub), buttons and the footer. The header has its own
+   stylesheet, header.css, loaded straight after this one.
    Page stylesheets (pages/*.css) add only what their own sections need
    and read these tokens rather than redefining them, so the header,
    footer and rhythm can never drift apart between page types.
@@ -338,18 +339,9 @@ h3, .h3 {
 }
 .skip-link:focus { top: 0.75rem; color: var(--bg); }
 
-/* ---------- Logo ---------- */
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  gap: 0.625rem;
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  text-decoration: none;
-}
-.brand:hover { color: var(--text); }
+/* ---------- Brand mark and ink ----------
+   The header's logo and name (.brand, .logo-mark, .logo-word) are styled
+   in header.css; these two pieces are used across the site. */
 
 /* <picture> (brand-mark.html) wraps the mark only to offer WebP; it
    takes no part in layout, so the <img> sizes and aligns as before.
@@ -359,16 +351,6 @@ h3, .h3 {
    change which file the browser picks. */
 picture { display: contents; }
 picture > source { display: none; }
-.logo-mark { width: 2rem; height: 2rem; display: block; object-fit: contain; }
-
-/* The name beside the mark. A young brand needs its name in view, so it
-   stays (apple.com can show a bare logo; we can't yet). */
-.logo-word {
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
 
 /* Text in the logo's colours (see --brand-ink). Falls back to the solid
    link blue where gradient text isn't supported or contrast is raised. */
@@ -384,330 +366,20 @@ picture > source { display: none; }
 }
 
 
-/* ---------- Header (apple.com style) ----------
-   One thin translucent bar the page scrolls under (a material, so content
-   reads through it). Desktop (760px+): the logo mark at the far left, the
-   items spaced evenly to the far right edge in 12px type. Apps and Help
-   open full-width menus that grow down from the bar; each link fades in a
-   moment after the one above it, and the page behind takes a faint tint
-   (no blur). Phones: the mark and a two-line menu button; the menu fills
-   the screen with large links, and Apps and Help slide in from the right
-   as their own panel with a back button. Hooks: site.js "Navigation". */
+/* ---------- Header and footer chrome ----------
+   The header itself (bar, menus, phone menu and their preferences) is
+   styled in header.css, loaded straight after this file. These colours
+   are shared by the header, its menu tint and the footer. */
 
 .site-header,
 .site-footer,
 .nav-scrim {
-  --chrome-bg: rgba(250, 250, 252, 0.8);
   --chrome-solid: #fafafc;
   --chrome-text: rgba(0, 0, 0, 0.8);
   --chrome-ink: #333336;
   --chrome-text-2: #6e6e73;
   --chrome-line: #d2d2d7;
   --chrome-ease: cubic-bezier(0.4, 0, 0.6, 1);
-}
-
-.scroll-sentinel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 1px;
-  pointer-events: none;
-}
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: var(--chrome-bg);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  font-family: var(--font);
-  transition: background-color 0.24s var(--chrome-ease);
-}
-/* With a menu open the bar and the menu are one solid surface: no blur. */
-.site-header.menu-open,
-.site-header.nav-open {
-  background: var(--chrome-solid);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header { background: var(--chrome-solid); }
-}
-
-/* Not positioned: the desktop menus and the phone menu are placed
-   against the full-width header, not this centred row. */
-.header-inner {
-  display: flex;
-  align-items: center;
-  width: min(100% - 2 * var(--gutter), 61.25rem);
-  height: var(--header-h);
-  margin-inline: auto;
-}
-
-/* The bar shows the mark and the name ("Daily Utility Apps", with
-   Utility in the logo's colours). */
-.site-header .brand { gap: 0.45rem; min-height: var(--header-h); }
-.site-header .logo-mark { width: 1.375rem; height: 1.375rem; }
-.site-header .logo-word { font-size: 0.9375rem; color: #1d1d1f; }
-
-.nav-list { margin: 0; padding: 0; list-style: none; }
-
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  border: 0;
-  background: none;
-  color: var(--chrome-text);
-  font-family: var(--font);
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: color 0.24s var(--chrome-ease), opacity 0.24s var(--chrome-ease);
-}
-.nav-link:hover, .nav-link[aria-expanded="true"] { color: #000; }
-.nav-link:focus:not(:focus-visible) { outline: none; }
-.nav-link:focus-visible { outline: 2px solid var(--brand); outline-offset: -4px; border-radius: 6px; }
-.nav-chevron { width: 0.85rem; height: 0.85rem; }
-
-.nav-col-head {
-  margin: 0 0 0.85rem;
-  font-size: 0.75rem;
-  line-height: 1.33;
-  letter-spacing: -0.01em;
-  color: var(--chrome-text-2);
-}
-.nav-big, .nav-small { margin: 0; padding: 0; list-style: none; }
-.nav-big a, .nav-small a {
-  display: inline-block;
-  color: var(--chrome-ink);
-  font-weight: 600;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.nav-big a { font-size: 1.5rem; line-height: 1.17; letter-spacing: 0.009em; padding-block: 0.25rem; }
-.nav-small a { font-size: 0.75rem; line-height: 1.33; letter-spacing: -0.01em; padding-block: 0.3rem; }
-.nav-big a:hover, .nav-small a:hover { color: #000; text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 1px; }
-.nav-big a[aria-current="page"], .nav-small a[aria-current="page"] { color: var(--brand-text); }
-.nav-big a:focus-visible, .nav-small a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
-
-.nav-toggle, .nav-back { display: none; }
-
-/* The page behind an open menu: a faint tint, no blur. */
-.nav-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 49;
-  background: rgba(232, 232, 237, 0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.24s var(--chrome-ease), visibility 0s linear 0.24s;
-}
-.nav-flyout-open .nav-scrim { opacity: 1; visibility: visible; transition: opacity 0.32s var(--chrome-ease); }
-
-/* ---------- Desktop: the bar and its full-width menus ---------- */
-@media (min-width: 760px) {
-  /* Three columns: the name at the left, the items centred on the bar
-     (equal side columns, so the group sits in the true middle), Sign in
-     at the right. A side column grows past its share rather than
-     overlap if the text is enlarged. */
-  .header-inner {
-    display: grid;
-    grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
-  }
-  .site-header .brand { justify-self: start; }
-  .nav-list { display: flex; align-items: center; gap: clamp(1rem, 2.6vw, 2.25rem); }
-  .nav-item { display: flex; }
-  .nav-item--signin { display: none; }
-  .bar-signin { display: flex; justify-self: end; }
-  .bar-signin .nav-link { margin-right: -0.5rem; }
-  .nav-link { height: var(--header-h); padding: 0 0.5rem; font-size: 0.75rem; line-height: 1; letter-spacing: -0.01em; }
-  .nav-chevron { display: none; }
-
-  /* The menu grows down from the bar (a clip, so it reads as the bar
-     extending), then its links fade in top to bottom. Closing is
-     quicker and all at once. */
-  .nav-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--chrome-solid);
-    clip-path: inset(0 0 100% 0);
-    visibility: hidden;
-    transition: clip-path 0.24s var(--chrome-ease), visibility 0s linear 0.24s;
-  }
-  .nav-trigger[aria-expanded="true"] + .nav-menu {
-    clip-path: inset(0 0 0 0);
-    visibility: visible;
-    transition: clip-path 0.32s var(--chrome-ease);
-  }
-  .nav-menu-inner {
-    display: flex;
-    gap: 2.75rem;
-    width: min(100% - 2 * var(--gutter), 61.25rem);
-    margin-inline: auto;
-    padding: 2.5rem 0 5.25rem;
-  }
-  .nav-col--main { min-width: 15rem; }
-  .nav-col-head, .nav-big li, .nav-small li {
-    opacity: 0;
-    transform: translateY(-0.25rem);
-    transition: opacity 0.12s var(--chrome-ease), transform 0.12s var(--chrome-ease);
-  }
-  .nav-trigger[aria-expanded="true"] + .nav-menu :is(.nav-col-head, .nav-big li, .nav-small li) {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.24s var(--chrome-ease) var(--d, 0.08s), transform 0.24s var(--chrome-ease) var(--d, 0.08s);
-  }
-  /* One step later for each link down a column, and for each column. */
-  .nav-big li:nth-child(1), .nav-small li:nth-child(1) { --d: 0.1s; }
-  .nav-big li:nth-child(2), .nav-small li:nth-child(2) { --d: 0.12s; }
-  .nav-big li:nth-child(3), .nav-small li:nth-child(3) { --d: 0.14s; }
-  .nav-big li:nth-child(4), .nav-small li:nth-child(4) { --d: 0.16s; }
-  .nav-big li:nth-child(n+5), .nav-small li:nth-child(n+5) { --d: 0.18s; }
-  .nav-col + .nav-col .nav-col-head { --d: 0.12s; }
-
-  /* Without JavaScript the menus still open on hover and keyboard focus. */
-  html:not(.js) .nav-item:hover > .nav-menu,
-  html:not(.js) .nav-item:focus-within > .nav-menu { clip-path: inset(0 0 0 0); visibility: visible; }
-  html:not(.js) .nav-item:is(:hover, :focus-within) :is(.nav-col-head, .nav-big li, .nav-small li) { opacity: 1; transform: none; }
-}
-
-/* ---------- Phones: the full-screen menu ---------- */
-@media (max-width: 759.98px) {
-  .header-inner { justify-content: space-between; }
-  .bar-signin { display: none; }
-  .nav-toggle {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-right: -0.75rem;
-    border: 0;
-    background: none;
-    color: #1d1d1f;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .nav-toggle:focus:not(:focus-visible) { outline: none; }
-  .nav-toggle:focus-visible { outline: 2px solid var(--brand); outline-offset: -4px; border-radius: 8px; }
-  /* Two lines that turn into a cross. */
-  .nav-toggle-bars { position: relative; width: 1.125rem; height: 0.5rem; }
-  .nav-toggle-bars::before,
-  .nav-toggle-bars::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 1.5px;
-    border-radius: 1px;
-    background: currentColor;
-    transition: transform 0.3s var(--chrome-ease);
-  }
-  .nav-toggle-bars::before { top: 0; }
-  .nav-toggle-bars::after { bottom: 0; }
-  .nav-open .nav-toggle-bars::before { transform: translateY(3.25px) rotate(45deg); }
-  .nav-open .nav-toggle-bars::after { transform: translateY(-3.25px) rotate(-45deg); }
-
-  /* The menu: below the bar, the rest of the screen. Hidden only once
-     JavaScript is running, so without it the links stay reachable. */
-  .js .site-nav {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: calc(100dvh - var(--header-h));
-    overflow: hidden;
-    background: var(--chrome-solid);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.24s var(--chrome-ease), visibility 0s linear 0.24s;
-  }
-  .js .nav-open .site-nav { opacity: 1; visibility: visible; transition: opacity 0.3s var(--chrome-ease); }
-  html:has(.site-header.nav-open) { overflow: hidden; }
-
-  .nav-list {
-    height: 100%;
-    overflow-y: auto;
-    padding: 0.5rem 3rem 3rem;
-    transition: transform 0.36s var(--chrome-ease), opacity 0.36s var(--chrome-ease);
-  }
-  /* A sub-menu is open: the main list moves off to the left. */
-  .site-nav:has(.nav-trigger[aria-expanded="true"]) .nav-list > .nav-item > .nav-link { opacity: 0; transform: translateX(-2rem); pointer-events: none; }
-
-  .nav-item {
-    opacity: 0;
-    transform: translateY(-0.5rem);
-    transition: opacity 0.2s var(--chrome-ease), transform 0.2s var(--chrome-ease);
-  }
-  .nav-open .nav-item { opacity: 1; transform: none; transition-duration: 0.36s; }
-  .nav-open .nav-item:nth-child(2) { transition-delay: 0.03s; }
-  .nav-open .nav-item:nth-child(3) { transition-delay: 0.06s; }
-  .nav-open .nav-item:nth-child(4) { transition-delay: 0.09s; }
-  .nav-open .nav-item:nth-child(5) { transition-delay: 0.12s; }
-  html:not(.js) .nav-item { opacity: 1; transform: none; }
-
-  .nav-link {
-    justify-content: space-between;
-    width: 100%;
-    min-height: 2.75rem;
-    padding: 0.3rem 0;
-    font-size: 1.75rem;
-    font-weight: 600;
-    line-height: 1.14;
-    letter-spacing: 0.007em;
-    color: var(--chrome-ink);
-    text-align: left;
-    transition: opacity 0.3s var(--chrome-ease), transform 0.36s var(--chrome-ease), color 0.2s ease;
-  }
-  /* Items with a panel point right: it slides in from that side. */
-  .nav-chevron { width: 1.1rem; height: 1.1rem; color: var(--chrome-text-2); transform: rotate(-90deg); }
-  .nav-signin { margin-top: 0.75rem; font-size: 1.0625rem; font-weight: 400; letter-spacing: -0.02em; color: var(--brand-text); }
-
-  /* A sub-menu: its own panel, sliding in from the right over the list. */
-  .js .nav-menu {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    overflow-y: auto;
-    padding: 0 3rem 3rem;
-    background: var(--chrome-solid);
-    transform: translateX(100%);
-    visibility: hidden;
-    transition: transform 0.36s var(--chrome-ease), visibility 0s linear 0.36s;
-  }
-  .js .nav-trigger[aria-expanded="true"] + .nav-menu {
-    transform: none;
-    visibility: visible;
-    transition: transform 0.36s var(--chrome-ease);
-  }
-  .js .nav-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    min-height: 2.75rem;
-    margin: 0.25rem 0 0 -0.35rem;
-    padding: 0 0.35rem;
-    border: 0;
-    background: none;
-    color: var(--chrome-text-2);
-    font: 400 1.0625rem/1 var(--font);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .nav-back svg { width: 1rem; height: 1rem; transform: rotate(90deg); }
-  .nav-back:focus:not(:focus-visible) { outline: none; }
-  .nav-back:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
-
-  .nav-menu-inner { display: grid; gap: 2rem; padding-top: 0.75rem; }
-  .nav-col-head { margin-bottom: 0.4rem; font-size: 0.875rem; }
-  .nav-big a, .nav-small a { display: flex; align-items: center; min-height: 2.75rem; }
-  .nav-big a { font-size: 1.5rem; padding-block: 0.15rem; }
-  .nav-small a { font-size: 1.0625rem; letter-spacing: -0.01em; padding-block: 0.15rem; }
 }
 
 /* ---------- Footer (apple.com style) ---------- */
@@ -792,21 +464,9 @@ picture > source { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nav-menu, .nav-trigger[aria-expanded="true"] + .nav-menu,
-  .nav-col-head, .nav-big li, .nav-small li,
-  .nav-trigger[aria-expanded="true"] + .nav-menu :is(.nav-col-head, .nav-big li, .nav-small li),
-  .nav-item, .nav-open .nav-item, .nav-list, .nav-link,
-  .site-nav:has(.nav-trigger[aria-expanded="true"]) .nav-list > .nav-item > .nav-link,
-  .nav-toggle-bars::before, .nav-toggle-bars::after, .footer-head svg { transition: none; transform: none; }
-  .nav-open .nav-toggle-bars::before { transform: translateY(3.25px) rotate(45deg); }
-  .nav-open .nav-toggle-bars::after { transform: translateY(-3.25px) rotate(-45deg); }
-}
-@media (prefers-reduced-transparency: reduce) {
-  .site-header { background: var(--chrome-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
-  .nav-scrim { background: rgba(232, 232, 237, 0.85); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .footer-head svg { transition: none; transform: none; }
 }
 @media (prefers-contrast: more) {
-  .site-header { background: var(--chrome-solid); box-shadow: 0 1px 0 #86868b; }
   .site-footer { --chrome-text-2: #4b4b50; --chrome-line: #86868b; }
 }
 
@@ -1336,22 +996,12 @@ picture > source { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .btn:active { transform: none; }
   .reveal-ready .reveal { transform: none; transition: opacity 0.3s ease; }
-  .js .site-nav, .js .nav-open .site-nav { transform: none; }
-  .nav-toggle-bars::before, .nav-toggle-bars::after, .nav-chevron, .nav-go,
-  .nav-app-arrow, .nav-app-more svg, .nav-app, .nav-help-link { transition: none; }
-  .nav-menu, .nav-trigger[aria-expanded="true"] + .nav-menu,
-  .nav-menu-inner > *, .nav-trigger[aria-expanded="true"] + .nav-menu .nav-menu-inner > *,
-  .nav-link:active, .nav-app:active, .nav-help-link:active,
-  .nav-app--featured:hover .nav-app-more svg, .nav-link--page:hover .nav-go { transform: none; }
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
-}
+/* The header's own preference rules are in header.css. */
 
 @media (prefers-contrast: more) {
   :root { --border: var(--border-strong); }
-  .site-header { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 var(--border-strong); }
 }
 
 /* Hidden visually, still read by screen readers (e.g. table captions). */

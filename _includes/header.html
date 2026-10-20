@@ -1,12 +1,20 @@
 {%- comment -%}
-  Site header, apple.com style: one thin translucent bar the width of
-  the page, in small type: the logo and name at the left, the menu items
-  centred as a group, Sign in at the right. Apps and Help open
-  full-width menus (big links first, smaller links beside them) over a
-  faint tint; Guides, About and Sign in are plain links. On phones the bar
-  keeps the logo and a two-line menu button; the menu fills the screen
-  with large links, and Apps and Help slide in as their own panel with a
-  back button, as on apple.com.
+  Site header, apple.com's global bar (styles: header.css). One low,
+  frosted strip the width of the page, in small type: the logo and name
+  at the left, the menu items centred as a group, Sign in at the right.
+  Apps and Help open full-width menus (big links first, smaller links
+  beside them) over a faint tint; Guides, About and Sign in are plain
+  links. On phones the bar keeps the logo, the name and a two-line menu
+  button that turns into a cross; the menu slides down from the bar and
+  fills the screen with large links, and Apps and Help slide in as their
+  own panel with a back button, as on apple.com.
+
+  Icons are inline SVG with their own viewBox and size, drawn in
+  currentColor so they take the colour of the text around them: the menu
+  button's two lines, a right chevron on Apps and Help in the phone menu
+  (their panel slides in from that side), a left chevron on the panel's
+  back button, and a person on Sign in. The logo is the owner's mark, an
+  image (brand-mark.html), never redrawn.
 
   Same behaviour and hooks as before (site.js "Navigation"): .nav-trigger
   buttons with aria-expanded / aria-controls, .nav-link--page for plain
@@ -21,26 +29,29 @@
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
-{%- assign _in_help = false -%}{%- if page.layout == "legal" or page.url == "/contact" -%}{%- assign _in_help = true -%}{%- endif %}
+{%- assign _in_help = false -%}{%- if page.layout == "legal" or page.url == "/contact" -%}{%- assign _in_help = true -%}{%- endif -%}
+{%- capture _chevron -%}<svg class="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg>{%- endcapture -%}
+{%- capture _back -%}<svg class="nav-back-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3.5 5.5 8 10 12.5"/></svg>{%- endcapture -%}
+{%- capture _person -%}<svg class="nav-signin-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="5.25" r="2.75"/><path d="M2.75 14c.6-2.7 2.7-4.25 5.25-4.25S12.65 11.3 13.25 14"/></svg>{%- endcapture %}
 <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 <div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
-      {%- include brand-mark.html class="logo-mark" size="20" eager=true -%}
+      {%- include brand-mark.html class="logo-mark" size="22" eager=true -%}
       <span class="logo-word">Daily <span class="brand-ink">Utility</span> Apps</span>
     </a>
 
     <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
-      <span class="nav-toggle-bars" aria-hidden="true"></span>
+      <svg class="nav-toggle-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path class="nav-toggle-top" d="M2.5 6h13"/><path class="nav-toggle-bottom" d="M2.5 12h13"/></svg>
     </button>
 
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul class="nav-list">
         <li class="nav-item">
-          <button class="nav-link nav-trigger{% if page.layout == 'app' %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-apps">Apps<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <button class="nav-link nav-trigger{% if page.layout == 'app' %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-apps">Apps{{ _chevron }}</button>
           <div class="nav-menu" id="menu-apps">
-            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Apps</span></button>
+            <button class="nav-back" type="button">{{ _back }}Menu<span class="visually-hidden">, close Apps</span></button>
             <div class="nav-menu-inner">
               <div class="nav-col nav-col--main">
                 <p class="nav-col-head">Explore our apps</p>
@@ -77,9 +88,9 @@
         </li>
 
         <li class="nav-item">
-          <button class="nav-link nav-trigger{% if _in_help %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-help">Help<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <button class="nav-link nav-trigger{% if _in_help %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-help">Help{{ _chevron }}</button>
           <div class="nav-menu" id="menu-help">
-            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Help</span></button>
+            <button class="nav-back" type="button">{{ _back }}Menu<span class="visually-hidden">, close Help</span></button>
             <div class="nav-menu-inner">
               <div class="nav-col nav-col--main">
                 <p class="nav-col-head">Help &amp; support</p>
@@ -100,13 +111,13 @@
         </li>
 
         <li class="nav-item nav-item--signin">
-          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">{{ _person }}Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
         </li>
       </ul>
     </nav>
 
     <div class="bar-signin">
-      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">{{ _person }}Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
     </div>
   </div>
 </header>

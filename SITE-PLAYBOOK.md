@@ -253,7 +253,7 @@ Rules that came out of the build:
 
 ## 8. Design system
 
-Daily Utility follows **apple.com's web design language** (redesigned 19 Oct 2026; STATUS.md 5zzz). Everything lives in `shell.scss` as CSS custom properties; page stylesheets read the tokens and never redefine them. No raw hex values in components. CloudGate keeps its own Inter-based system with light and dark modes (section 8.7).
+Daily Utility follows **apple.com's web design language** (redesigned 19 Oct 2026; STATUS.md 5zzz). Tokens and shared components live in `shell.scss` as CSS custom properties; the header has its own `header.scss`, loaded on every page straight after it; page stylesheets read the tokens and never redefine them. No raw hex values in components. CloudGate keeps its own Inter-based system with light and dark modes (section 8.7).
 
 ### 8.1 Colour tokens (Daily Utility)
 
@@ -326,11 +326,14 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 
 ### 9.1 Header (apple.com's global bar)
 
-- **A thin translucent bar** (44px, 48px on phones): `rgba(250,250,252,.8)` with `backdrop-filter: saturate(180%) blur(20px)`, content scrolling under it.
+- **Its own stylesheet:** `assets/css/header.scss` holds every header rule, including its reduced-motion, reduced-transparency and high-contrast versions. `shell.scss` keeps only the tokens and the chrome colours shared with the footer.
+- **A low frosted bar** (44px, 48px on phones): `rgba(255,255,255,.7)` with `backdrop-filter: saturate(180%) blur(20px)`, content scrolling under it; a hairline appears once content passes under (`.is-scrolled`, set by `site.js`). It turns solid with reduced transparency or more contrast.
+- **Icons are inline SVG** with their own `viewBox`, `width` and `height`, drawn in `currentColor`: the menu button's two lines (which morph into a cross), a right chevron on Apps and Help in the phone menu, a left chevron on the panel's back button and a person on Sign in. The logo stays the owner's image.
+- **Instant press feedback:** links and buttons dim to 60% the moment they're pressed (`:active`, no transition) and ease back when released.
 - **Desktop (760px+):** three columns (`grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr)`): the mark and the name "Daily *Utility* Apps" (Utility in `.brand-ink`) at the left; Apps · Guides · About · Help **centred on the bar as a group** in 12px type, `clamp(1rem, 2.6vw, 2.25rem)` apart plus each link's padding (36px at 760, 52px at 1440); Sign in at the right edge. The equal side columns keep the group in the true middle; with enlarged text a side column grows rather than overlap. Sign in is written twice: in the list (shown in the phone menu) and in `.bar-signin` after the nav (shown in the bar), with CSS showing one at a time. The wrapper gives the bar copy its own hover area for `site.js`.
 - **Menus:** Apps and Help open full-width panels that grow down from the bar (`clip-path` reveal), big 24px links on the left, small 12px links in columns beside them, each link fading in a moment after the one above. The bar turns solid while a menu is open, and **the page behind takes a faint tint, no blur** (owner's choice). Open on hover after a 140ms intent delay or on click; Escape closes and returns focus; moving to a plain link closes the menu.
-- **Phones:** the mark and name, and a two-line menu button that turns into a cross. The menu fills the screen below the bar with large 28px links that fade in one by one, and the page behind can't scroll. Apps and Help **slide in from the right as their own panel** with a "‹ Menu" back button (focus moves to it); Escape closes the panel first, then the menu.
-- Menus are disclosure buttons (`aria-expanded`, `aria-controls`). Without JavaScript the menus open on hover and focus, and the phone links stay reachable.
+- **Phones:** the mark and name, and a two-line menu button that turns into a cross. The menu slides down from the bar (a `clip-path` reveal on the site's spring curve; a plain fade with reduced motion) and fills the screen below it with large 28px links that fade in one by one, and the page behind can't scroll. Apps and Help **slide in from the right as their own panel** with a "‹ Menu" back button (focus moves to it); Escape closes the panel first, then the menu.
+- Menus are disclosure buttons (`aria-expanded`, `aria-controls`). Without JavaScript the menus open at once on hover and focus, and the phone links stay reachable.
 
 ### 9.2 Hero
 
@@ -1709,14 +1712,22 @@ css: legal
 
 ```liquid
 {%- comment -%}
-  Site header, apple.com style: one thin translucent bar the width of
-  the page, in small type: the logo and name at the left, the menu items
-  centred as a group, Sign in at the right. Apps and Help open
-  full-width menus (big links first, smaller links beside them) over a
-  faint tint; Guides, About and Sign in are plain links. On phones the bar
-  keeps the logo and a two-line menu button; the menu fills the screen
-  with large links, and Apps and Help slide in as their own panel with a
-  back button, as on apple.com.
+  Site header, apple.com's global bar (styles: header.css). One low,
+  frosted strip the width of the page, in small type: the logo and name
+  at the left, the menu items centred as a group, Sign in at the right.
+  Apps and Help open full-width menus (big links first, smaller links
+  beside them) over a faint tint; Guides, About and Sign in are plain
+  links. On phones the bar keeps the logo, the name and a two-line menu
+  button that turns into a cross; the menu slides down from the bar and
+  fills the screen with large links, and Apps and Help slide in as their
+  own panel with a back button, as on apple.com.
+
+  Icons are inline SVG with their own viewBox and size, drawn in
+  currentColor so they take the colour of the text around them: the menu
+  button's two lines, a right chevron on Apps and Help in the phone menu
+  (their panel slides in from that side), a left chevron on the panel's
+  back button, and a person on Sign in. The logo is the owner's mark, an
+  image (brand-mark.html), never redrawn.
 
   Same behaviour and hooks as before (site.js "Navigation"): .nav-trigger
   buttons with aria-expanded / aria-controls, .nav-link--page for plain
@@ -1731,26 +1742,29 @@ css: legal
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
-{%- assign _in_help = false -%}{%- if page.layout == "legal" or page.url == "/contact" -%}{%- assign _in_help = true -%}{%- endif %}
+{%- assign _in_help = false -%}{%- if page.layout == "legal" or page.url == "/contact" -%}{%- assign _in_help = true -%}{%- endif -%}
+{%- capture _chevron -%}<svg class="nav-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg>{%- endcapture -%}
+{%- capture _back -%}<svg class="nav-back-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3.5 5.5 8 10 12.5"/></svg>{%- endcapture -%}
+{%- capture _person -%}<svg class="nav-signin-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="5.25" r="2.75"/><path d="M2.75 14c.6-2.7 2.7-4.25 5.25-4.25S12.65 11.3 13.25 14"/></svg>{%- endcapture %}
 <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 <div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a class="brand" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">
-      {%- include brand-mark.html class="logo-mark" size="20" eager=true -%}
+      {%- include brand-mark.html class="logo-mark" size="22" eager=true -%}
       <span class="logo-word">Daily <span class="brand-ink">Utility</span> Apps</span>
     </a>
 
     <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
-      <span class="nav-toggle-bars" aria-hidden="true"></span>
+      <svg class="nav-toggle-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path class="nav-toggle-top" d="M2.5 6h13"/><path class="nav-toggle-bottom" d="M2.5 12h13"/></svg>
     </button>
 
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul class="nav-list">
         <li class="nav-item">
-          <button class="nav-link nav-trigger{% if page.layout == 'app' %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-apps">Apps<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <button class="nav-link nav-trigger{% if page.layout == 'app' %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-apps">Apps{{ _chevron }}</button>
           <div class="nav-menu" id="menu-apps">
-            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Apps</span></button>
+            <button class="nav-back" type="button">{{ _back }}Menu<span class="visually-hidden">, close Apps</span></button>
             <div class="nav-menu-inner">
               <div class="nav-col nav-col--main">
                 <p class="nav-col-head">Explore our apps</p>
@@ -1787,9 +1801,9 @@ css: legal
         </li>
 
         <li class="nav-item">
-          <button class="nav-link nav-trigger{% if _in_help %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-help">Help<svg class="nav-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+          <button class="nav-link nav-trigger{% if _in_help %} is-current{% endif %}" type="button" aria-expanded="false" aria-controls="menu-help">Help{{ _chevron }}</button>
           <div class="nav-menu" id="menu-help">
-            <button class="nav-back" type="button"><svg aria-hidden="true"><use href="#i-chevron-down"/></svg>Menu<span class="visually-hidden">, close Help</span></button>
+            <button class="nav-back" type="button">{{ _back }}Menu<span class="visually-hidden">, close Help</span></button>
             <div class="nav-menu-inner">
               <div class="nav-col nav-col--main">
                 <p class="nav-col-head">Help &amp; support</p>
@@ -1810,13 +1824,13 @@ css: legal
         </li>
 
         <li class="nav-item nav-item--signin">
-          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">{{ _person }}Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
         </li>
       </ul>
     </nav>
 
     <div class="bar-signin">
-      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">{{ _person }}Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
     </div>
   </div>
 </header>

@@ -2155,6 +2155,41 @@ phone audit 320–430px: nothing new against the live site; header items
 still centred at 760–1920px; app-page labels 0 problems; all 40 address
 variants as intended on Apache.
 
+## 5zzzzzz. Phase 1: the header (20 Oct)
+
+User set a four-phase Apple overhaul (header, homepage, interior pages
+one by one, then footer and link sweep), each reviewed before the next,
+then for Phase 1: *"proceed and properly apply and push live"*.
+
+- **Own stylesheet:** every header rule moved from `shell.scss` to
+  `assets/css/header.scss` (linked on every page after `shell.css`),
+  including its reduced-motion, reduced-transparency and high-contrast
+  versions. Dead rules for an older header's classes (`.nav-go`,
+  `.nav-app`, `.nav-help-link`…) and duplicate preference rules were
+  dropped; the two files together are the same size as before.
+- **Bar:** 70% white, `saturate(180%) blur(20px)`; a hairline once
+  content scrolls under it; solid with reduced transparency or more
+  contrast.
+- **Icons:** all inline SVG with their own `viewBox`, `width`, `height`,
+  in `currentColor`: the menu button's two lines (now an SVG that morphs
+  into a cross), a right chevron on Apps and Help in the phone menu and a
+  left one on the back button (each drawn the right way round instead of
+  a rotated down-chevron), and a new person icon on Sign in. The logo
+  stays the owner's image. No search, cart or profile icons: the site
+  has none of those features.
+- **Feel:** every link and button dims the instant it's pressed and eases
+  back on release. The phone menu slides down from the bar on the spring
+  curve (a fade with reduced motion). Without JavaScript the desktop
+  menus now open at once on focus (they waited 0.24s).
+
+**Checks:** HTML valid; SEO check 0 problems; axe clean at 1440 and 390px
+on every page; 20/20 header/footer interaction tests; 9/9 header checks
+(70% bar and blur, icons inline with viewBox/size/aria-hidden, press
+state, reduced motion, reduced transparency through Chrome's own
+emulation, more contrast, no-JS phone and desktop); items centred and
+the logo on the gutter at 760–1920px; phone audit: nothing new against
+the live site.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2660,3 +2695,5 @@ flagship Apple id.
 - 20 Oct: site audit (section 5zzzzz): trailing-slash 500 fixed, logo
   placement, guide footer trail, straight quotes, sitemap dates, app
   schema, About title.
+- 20 Oct: Phase 1, the header (section 5zzzzzz): own stylesheet, 70%
+  frosted bar, inline SVG icons, press states, slide-down phone menu.

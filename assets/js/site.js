@@ -27,7 +27,7 @@
      Two layers, each with one function that sets its state, so classes
      and aria attributes never disagree:
      - setSheet: the phone sheet behind the menu button.
-     - setSub: one menu (Apps, Guides, Help). On desktop it's a flyout
+     - setSub: one menu (Apps, Help). On desktop it's a flyout
        with the page dimmed behind it; in the phone sheet it folds open.
      Desktop flyouts open on click, or on hover after a short intent
      delay (so a pointer passing over the bar doesn't flash them), and
