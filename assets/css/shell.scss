@@ -352,8 +352,13 @@ h3, .h3 {
 .brand:hover { color: var(--text); }
 
 /* <picture> (brand-mark.html) wraps the mark only to offer WebP; it
-   takes no part in layout, so the <img> sizes and aligns as before. */
+   takes no part in layout, so the <img> sizes and aligns as before.
+   Its <source> must take no part either: left as a block it became an
+   empty flex or grid item, which put a gap before the header logo and
+   pushed the footer one off-centre (audit, 20 Oct). Hiding it doesn't
+   change which file the browser picks. */
 picture { display: contents; }
+picture > source { display: none; }
 .logo-mark { width: 2rem; height: 2rem; display: block; object-fit: contain; }
 
 /* The name beside the mark. A young brand needs its name in view, so it
@@ -727,6 +732,8 @@ picture { display: contents; }
 .footer-mark { width: 1.125rem; height: 1.125rem; display: block; }
 .footer-crumbs-sep svg { width: 0.75rem; height: 0.75rem; transform: rotate(-90deg); opacity: 0.7; }
 .footer-crumbs [aria-current] { color: #1d1d1f; }
+/* Links keep their width; a long page name wraps instead. */
+.footer-crumbs a { flex: none; white-space: nowrap; }
 
 .footer-directory {
   display: grid;
@@ -780,6 +787,7 @@ picture { display: contents; }
   .footer-legal { flex-direction: column; align-items: flex-start; }
   .footer-legal-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; }
   .footer-crumbs-home { min-width: 2.75rem; min-height: 2.75rem; margin-left: -0.75rem; }
+  .footer-crumbs a:not(.footer-crumbs-home) { display: inline-flex; align-items: center; min-height: 2.75rem; }
   .footer-region { margin-left: 0; }
 }
 

@@ -23,12 +23,13 @@ ErrorDocument 404 /404.php
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # One address for every page: https, no www.
+  # One address for every page: https, no www. www goes first, so
+  # http://www. reaches the final address in one redirect, not two.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
   # A folder asked for without its slash (/daily-info): add the slash
   # here. Left to Apache, the redirect can show the host's internal
@@ -38,18 +39,33 @@ ErrorDocument 404 /404.php
 
   # Clean URLs. Jekyll writes about.html but every link and canonical is
   # /about. A typed or old /about.html redirects to /about (and
-  # /daily-info/index.html to /daily-info/), then /about is answered from
-  # about.html. THE_REQUEST is the browser's own request line, so the
-  # internal rewrite below never loops back into these redirects.
-  RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.html[\s?]
+  # /daily-info/index.html or /daily-info/index to /daily-info/), then
+  # /about is answered from about.html. THE_REQUEST is the browser's own
+  # request line, so the internal rewrite below never loops back into
+  # these redirects.
+  RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index(?:\.html)?[\s?]
   RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
   RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?]
   RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
+  # A page asked for with a slash on the end (/about/): redirect to
+  # /about. Apache reads /about/ as the file "about" plus a trailing
+  # "/", so without this the rewrite below made about/.html,
+  # about/.html.html and so on until the server answered 500 (20 Oct).
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+)/$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # The not-found page's own address answers with a real 404 too.
+  RewriteRule ^404$ 404.php [L]
+
+  # The rewrite itself: never for an address ending in "/" or one it has
+  # already given .html (so /about/anything is a 404, not a loop).
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.+)$ $1.html [L]
+  RewriteCond $1 !\.html$
+  RewriteRule ^(.*[^/])$ $1.html [L]
 
   # Anything else that doesn't exist: 404.php sends a real 404 status
   # with the site's not-found page.

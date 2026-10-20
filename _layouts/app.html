@@ -68,8 +68,13 @@ has -- never hardcoded, since most of the apps are Android-only.
     "price": "0",
     "priceCurrency": "USD"
   },
-  {%- if page.android_url or page.ios_url %}
+  {%- if page.android_url and page.ios_url %}
+  "installUrl": [{{ page.android_url | jsonify | replace: "/", "\/" }}, {{ page.ios_url | jsonify | replace: "/", "\/" }}],
+  {%- elsif page.android_url or page.ios_url %}
   "installUrl": {{ page.android_url | default: page.ios_url | jsonify | replace: "/", "\/" }},
+  {%- endif %}
+  {%- if page.og_image %}
+  "image": {{ page.og_image | absolute_url | jsonify | replace: "/", "\/" }},
   {%- endif %}
   "author": {
     "@type": "Organization",

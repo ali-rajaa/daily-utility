@@ -283,6 +283,7 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 - Headings semibold (600) with tight tracking: h1 `clamp(2.5rem, 1.6rem + 3.6vw, 4rem)`, line-height 1.06, -0.015em; h2 up to 3rem; h3 21px.
 - Body 17px (1.0625rem), line-height 1.47; intro text 18–21px at 1.5; small labels 12px minimum.
 - `text-wrap: balance` on headings, `text-wrap: pretty` on intros. Spacing in `rem`, so the layout grows with the user's text size.
+- **Straight quotes and apostrophes everywhere** (`'` and `"`), as typed. Pages written in HTML and YAML can't curl them, so kramdown's `smart_quotes` is set to straight too (`_config.yml`); otherwise a guide mixes both on one page.
 - **Two-tone headlines** where a section introduces itself, as on Apple's Store: the name in black, what it is in grey, one heading ("Daily Utility Apps. *Simple apps for your phone's everyday jobs.*").
 
 ### 8.4 Spacing, shape, depth
@@ -312,7 +313,7 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 
 `app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white sprite glyph at about 54%, an inset top highlight and a soft shadow. Chiclets, the compare table, guide cards and guide heroes use it, with the app's or topic's colour.
 
-**Phone frames (big product visuals).** `phone-frame.html` draws a device-neutral phone in CSS: a dark frame, a camera dot, rounded corners, no maker's design or logo. Every size comes from one custom property, `--phone-w`. The screen shows the app's real screenshot when its `apps.yml` entry has `screenshot:` (a portrait PNG or JPEG from the app, saved in `assets/screens/`). Until then it shows a launch screen built from what the site already has: the app's colour, glyph and name. **Never draw a made-up app interface.** On the homepage tiles the phone is cropped by the foot of the tile, apple.com style, and the launch content moves up into the part that shows. On app pages the whole phone sits on the grey panel, with the feature labels floating above it. A label may cross the frame's edge, but none may reach the glyph and name or leave the panel (checked at every width from 320 to 1600). Callers put the frame inside an `aria-hidden` visual.
+**Phone frames (big product visuals).** `phone-frame.html` draws a device-neutral phone in CSS: a dark frame, a camera dot, rounded corners, no maker's design or logo. Every size comes from one custom property, `--phone-w`. The screen shows a launch screen built from what the site already has: the app's colour, glyph and name (the owner chose to keep these, 20 Oct). A real screenshot can still be added: set `screenshot:` on the app's `apps.yml` entry (a portrait PNG or JPEG from the app, saved in `assets/screens/`). **Never draw a made-up app interface.** On the homepage tiles the phone is cropped by the foot of the tile, apple.com style, and the launch content moves up into the part that shows. On app pages the whole phone sits on the grey panel, with the feature labels floating above it. A label may cross the frame's edge, but none may reach the glyph and name or leave the panel (checked at every width from 320 to 1600). Callers put the frame inside an `aria-hidden` visual.
 
 ### 8.7 Light and dark
 
@@ -369,7 +370,7 @@ A large grey "404" (decorative, hidden from screen readers), a plain H1, homepag
 
 ### 9.9 Footer (apple.com's)
 
-Light grey `#f5f5f7`, 12px type, `#424245` links. A short note line; a "you are here" trail (logo › page) on every page except the homepage; five directory columns (Apps, Daily Info, Help, Company, Get the app) that **fold on phones** (details/summary, closed by script, open without it); a "More ways to get help" line with the Contact page and support email; then copyright and legal links. No parent company, no "powered by".
+Light grey `#f5f5f7`, 12px type, `#424245` links. A short note line; a "you are here" trail (logo › page, logo › Daily Info › guide on guides, matching the top breadcrumb and BreadcrumbList) on every page except the homepage; five directory columns (Apps, Daily Info, Help, Company, Get the app) that **fold on phones** (details/summary, closed by script, open without it); a "More ways to get help" line with the Contact page and support email; then copyright and legal links. No parent company, no "powered by".
 
 ### 9.10 Buttons and badges
 
@@ -612,11 +613,13 @@ When the site was built in a copy repo and the live repo belonged to someone els
 
 - **look**: logs in, finds the website folder, lists what's there. Changes nothing. Run this first on a new host.
 - **upload**: builds with the live address (`url` = the real domain, `staging: false`), checks the build (key files present, no unrendered Liquid, sitemap uses the live address, no `noindex`), checks https works, backs up the current site to `.site-backups/` on the server (first upload only), mirrors `_site` up with `lftp mirror --reverse`, then **deletes only files that the previous upload put there** (listed in `.site-manifest.txt`) or that are named in `RETIRED_PATHS`. Anything else on the server (the host's own files, other apps) is left alone and reported. Then runs the live checks.
-- **check**: requests the live pages and fails if any answer is wrong: home, about, privacy (must contain the legal name), terms, a guide, `app-ads.txt`, a missing file (404), `.htaccess` hidden, robots, the 404 page, `.html` → clean redirect, folder slash redirect, retired pages gone, http → https.
+- **check**: requests the live pages and fails if any answer is wrong: home, about, privacy (must contain the legal name), terms, a guide, `app-ads.txt`, a missing file (404), `.htaccess` hidden, robots, the 404 page, `.html` → clean redirect, folder slash redirect, page slash redirect (`/about/` → `/about`), an address past a page (`/about/x`, 404), `/index` → `/`, `/404` answering 404, retired pages gone, http → https.
 
 **Secrets** (repo → Settings → Secrets and variables → Actions): `FTP_USERNAME`, `FTP_PASSWORD`. The owner pastes them there. The password is passed to `lftp` through an environment variable (`--env-password`), never on the command line. Host, folder and TLS mode are workflow variables with defaults (`FTP_TLS` "loose" for shared hosts with mismatched certificates).
 
-**`.htaccess`** (Appendix H) handles https and no-www redirects, folder slashes, `.html` → clean redirects (using `THE_REQUEST` so the internal rewrite never loops), serving `/x` from `x.html`, sending anything missing to `404.php`, hiding `.ht*` and the manifest, caching, gzip and two security headers.
+**`.htaccess`** (Appendix H) handles no-www then https redirects (www first, so `http://www.` takes one hop), folder slashes, `.html` and `/index` → clean redirects (using `THE_REQUEST` so the internal rewrite never loops), a page with a trailing slash → its clean address, serving `/x` from `x.html`, `/404` and anything missing through `404.php`, hiding `.ht*` and the manifest, caching, gzip and two security headers.
+
+**Test `.htaccess` on a real Apache before uploading** (`apt-get install apache2`, a vhost with `AllowOverride All` on a copy of `_site`, requests with a `Host:` header and `X-Forwarded-Proto: https`). A rewrite mistake answers 500 for the whole site. Apache maps `/about/` to the file `about` plus a trailing `/`, so a rewrite that appends `.html` to whatever was asked for turns `/about/` into `about/.html`, `about/.html.html` and so on until the server gives up with a 500. That was live until 20 Oct. The clean-URL rewrite must never match an address ending in `/` or one already ending in `.html`, and `/about/` gets its own redirect first.
 
 **`404.php`** (Appendix I): the host's server-wide error page overrode `ErrorDocument` in `.htaccess` and showed Apache's default page, so the last rewrite rule sends missing addresses to this file, which sets status 404 and prints `404.html`.
 
@@ -670,6 +673,9 @@ After a live upload, run `ftp.yml` in **check** mode.
 | Pages looked templated (centred kicker + H2 + paragraph everywhere) | Heading beside content on wide screens; vary section layouts |
 | A sideways swipe row whose columns use CSS subgrid widened the whole page on phones (Chromium) | `contain: paint` on the section; clipping the row alone wasn't enough |
 | Phone menu panel sat inside the page margins | Don't make the bar's centred inner row `position: relative`; place menus against the full-width header |
+| `/about/` (a page with a slash on the end) answered 500 | Apache read it as `about` + `/`; the clean-URL rewrite looped. A slash redirect first, and the rewrite skips addresses ending in `/` or `.html` (Appendix H). Test rules on a real Apache |
+| Logos sat 7px in from the edge, or off-centre in the footer | `picture { display: contents }` left its `<source>` as an empty flex/grid item; `picture > source { display: none }` |
+| Guides had curly apostrophes in the text and straight ones in titles and FAQs | kramdown curls quotes in Markdown only; `smart_quotes` set to straight in `_config.yml` so every page matches |
 
 ---
 
@@ -1891,12 +1897,13 @@ ErrorDocument 404 /404.php
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # One address for every page: https, no www.
+  # One address for every page: https, no www. www goes first, so
+  # http://www. reaches the final address in one redirect, not two.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
   # A folder asked for without its slash (/daily-info): add the slash
   # here. Left to Apache, the redirect can show the host's internal
@@ -1906,18 +1913,33 @@ ErrorDocument 404 /404.php
 
   # Clean URLs. Jekyll writes about.html but every link and canonical is
   # /about. A typed or old /about.html redirects to /about (and
-  # /daily-info/index.html to /daily-info/), then /about is answered from
-  # about.html. THE_REQUEST is the browser's own request line, so the
-  # internal rewrite below never loops back into these redirects.
-  RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.html[\s?]
+  # /daily-info/index.html or /daily-info/index to /daily-info/), then
+  # /about is answered from about.html. THE_REQUEST is the browser's own
+  # request line, so the internal rewrite below never loops back into
+  # these redirects.
+  RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index(?:\.html)?[\s?]
   RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
   RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?]
   RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
+  # A page asked for with a slash on the end (/about/): redirect to
+  # /about. Apache reads /about/ as the file "about" plus a trailing
+  # "/", so without this the rewrite below made about/.html,
+  # about/.html.html and so on until the server answered 500 (20 Oct).
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+)/$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # The not-found page's own address answers with a real 404 too.
+  RewriteRule ^404$ 404.php [L]
+
+  # The rewrite itself: never for an address ending in "/" or one it has
+  # already given .html (so /about/anything is a 404, not a loop).
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.+)$ $1.html [L]
+  RewriteCond $1 !\.html$
+  RewriteRule ^(.*[^/])$ $1.html [L]
 
   # Anything else that doesn't exist: 404.php sends a real 404 status
   # with the site's not-found page.
@@ -2432,6 +2454,11 @@ jobs:
           check "404 page" "$SITE/this-page-does-not-exist-$GITHUB_RUN_ID" 404 "Page not found"
           redirect ".html to clean" "$SITE/about.html" "$SITE/about"
           redirect "folder slash" "$SITE/daily-info" "$SITE/daily-info/"
+          # A page with a slash on the end used to loop to a 500 (20 Oct).
+          redirect "page slash" "$SITE/about/" "$SITE/about"
+          check "past a page" "$SITE/about/x-$GITHUB_RUN_ID" 404 "Page not found"
+          redirect "index to folder" "$SITE/index" "$SITE/"
+          check "404 address" "$SITE/404" 404 "Page not found"
           read -r -a retired <<< "$RETIRED_PATHS"
           for f in "${retired[@]}"; do
             case "$f" in *.html) u="${f%.html}" ;; *) u="$f" ;; esac

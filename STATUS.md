@@ -2086,6 +2086,75 @@ all three app pages: 0 problems. Found and fixed: the flagship phone cut
 through the app's name (launch content moved up); a comment that still
 promised the labels never touch the old icon.
 
+## 5zzzzz. Site audit: URLs, SEO, structure, formatting (20 Oct)
+
+User: *"throughly audit the website for url issues, formatting, structure
+seo etc"*, and on the phone frames: *"no need for personal photos"*
+(the launch screens stay; no screenshots wanted).
+
+How: the live-address build crawled page by page (every link, asset,
+anchor, canonical, og/twitter tag, JSON-LD field and URL, image, heading
+and landmark; the internal link graph; copy against the house rules and
+an en-AU spell check), `.htaccess` run on a real Apache 2.4 against the
+build with 40 address variants, Lighthouse on six page types. This
+container can't reach the live host, so the new address cases were
+added to the upload's live checks to prove them there.
+
+**Found and fixed**
+- **A page with a slash on the end answered 500** (`/about/`,
+  `/daily-info/backup-vs-sync/`), and so did any address past a page
+  (`/about/x`). Apache reads `/about/` as `about` + `/`; the clean-URL
+  rewrite made `about/.html`, `about/.html.html`… until the server gave
+  up. Now `/about/` redirects to `/about`, the rewrite never matches an
+  address ending in `/` or `.html` (so `/about/x` is a 404), `/index` and
+  `/daily-info/index` redirect to their folders, `/404` answers with a
+  real 404, and www is handled before https so `http://www.` takes one
+  redirect instead of two. Four new live checks cover these.
+- **Logos out of place on every page:** the header logo sat 7px in from
+  the content edge, the guide byline's 8px, and the footer trail's 6.5px
+  low on phones. `picture { display: contents }` left each `<source>` as
+  an empty flex/grid item; `picture > source { display: none }` (the
+  browser still picks the WebP).
+- **Footer trail on guides skipped a level** (logo › guide). It now reads
+  logo › Daily Info › guide, like the top breadcrumb and the
+  BreadcrumbList; the link keeps a 44px target on phones and a long title
+  wraps instead of squeezing it.
+- **Mixed apostrophes:** guide text had curly quotes (kramdown), while
+  titles, FAQs, cards and every HTML page had straight ones, so one page
+  showed both. kramdown now keeps quotes as typed; text otherwise
+  identical (checked, legal pages included).
+- **Sitemap dates:** About and Contact had no `lastmod` (now 16 and 15 Oct,
+  their last text changes); the homepage said 15 Oct though its copy was
+  rewritten on 19 Oct.
+- **App schema:** the flagship listed only its Play link; `installUrl`
+  now has both stores, and each app gives its share card as `image`.
+- **About's title** was 62 characters and could be cut off in results:
+  now "About Daily Utility Apps: Apps for Everyday Phone Jobs".
+
+**Checked and fine:** every internal link and anchor resolves, all
+extensionless and in canonical form; no orphan page, everything one click
+from the homepage; canonicals, og:url and the sitemap agree; titles and
+descriptions unique and in range; one H1 per page, no skipped levels;
+JSON-LD valid with no ratings, FAQ schema matches the visible questions;
+share images 1200×630 and under 300KB; feed and sitemap well-formed, feed
+lists every guide; no duplicate content (shared runs are cards and
+related links); house rules hold; site copy is en-AU (US spellings only
+in the owner's legal text, left as written). Lighthouse: 100 for SEO,
+accessibility, best practices and performance on all six pages (no
+network throttling, so performance is optimistic).
+
+**Left as is (owner's call):** the App Store link opens the US storefront
+(`/us/`); without it Apple picks the visitor's own country, which only
+helps if the app is listed in Australia. The legal pages use US spellings
+("anonymized") where the site says "anonymised". App offers say
+`priceCurrency: USD` (price 0, so no effect).
+
+**Checks after the fixes:** HTML valid; SEO check 0 problems on 17 pages;
+axe clean at 1440 and 390px on every page; 20/20 header/footer tests;
+phone audit 320–430px: nothing new against the live site; header items
+still centred at 760–1920px; app-page labels 0 problems; all 40 address
+variants as intended on Apache.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2338,12 +2407,8 @@ sections they link to.*
       store listing's title and package establish. Send each app's real
       store description (or confirm features) to fill them out, plus a
       `trust_text` where an app has a specific, true privacy point.
-- [ ] **App screenshots** for the phone frames (5zzzz): one portrait
-      screenshot from each app, taken on a real phone, showing no
-      personal photos, names or files. Until then the frames show each
-      app's launch screen.
-- [ ] **App Store links** for Document Reader, Data Transfer and Photo
-      Recover, if any is on iOS (only the flagship is linked).
+- [ ] **App Store links** for Document Reader and Data Transfer, if
+      either is on iOS (only the flagship is linked).
 - [ ] **Analytics (optional):** a GA4 measurement ID if visitor stats are
       wanted. The new privacy policy already allows analytics.
 
@@ -2365,7 +2430,8 @@ sections they link to.*
 - [ ] Cloud site (not this repo): its privacy policy numbering jumps
       from 18 to 20.
 
-**Closed:** support email (5t), legal pages (5u: the owner's own
+**Closed:** app screenshots (20 Oct: the owner keeps the launch
+screens, 5zzzzz), support email (5t), legal pages (5u: the owner's own
 documents), go-live and hosting (5w), app icons and names (4a, 5a),
 flagship Apple id.
 
@@ -2591,3 +2657,6 @@ flagship Apple id.
 - 19 Oct: Apple-style redesign of every page, live (section 5zzz).
 - 19 Oct: name back in the header with the items centred, the logo's
   blue-green as text, apps shown on phone frames, live (section 5zzzz).
+- 20 Oct: site audit (section 5zzzzz): trailing-slash 500 fixed, logo
+  placement, guide footer trail, straight quotes, sitemap dates, app
+  schema, About title.

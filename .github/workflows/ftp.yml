@@ -380,6 +380,11 @@ jobs:
           check "404 page" "$SITE/this-page-does-not-exist-$GITHUB_RUN_ID" 404 "Page not found"
           redirect ".html to clean" "$SITE/about.html" "$SITE/about"
           redirect "folder slash" "$SITE/daily-info" "$SITE/daily-info/"
+          # A page with a slash on the end used to loop to a 500 (20 Oct).
+          redirect "page slash" "$SITE/about/" "$SITE/about"
+          check "past a page" "$SITE/about/x-$GITHUB_RUN_ID" 404 "Page not found"
+          redirect "index to folder" "$SITE/index" "$SITE/"
+          check "404 address" "$SITE/404" 404 "Page not found"
           read -r -a retired <<< "$RETIRED_PATHS"
           for f in "${retired[@]}"; do
             case "$f" in *.html) u="${f%.html}" ;; *) u="$f" ;; esac

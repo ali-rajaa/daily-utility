@@ -42,6 +42,13 @@ sass:
 # page with the mistake rendered into it. strict_variables stays off on
 # purpose: optional front matter (css, image, noindex) is read as unset.
 strict_front_matter: true
+
+# Keep quotes and apostrophes as written. kramdown would curl them in
+# Markdown bodies only, while titles, FAQs, cards and every page written
+# in HTML keep straight ones, so a guide read "What's" in its heading and
+# "isn’t" in its text (audit, 20 Oct). Straight everywhere matches.
+kramdown:
+  smart_quotes: ["apos", "apos", "quot", "quot"]
 liquid:
   error_mode: strict
   strict_filters: true
