@@ -5,9 +5,9 @@
 /* ==========================================================================
    shell.css: loaded by every page, before the page's own stylesheet.
 
-   Holds the design tokens, base type, the section scaffold every page
-   builds on (title, sub), buttons and the footer. The header has its own
-   stylesheet, header.css, loaded straight after this one.
+   Holds the design tokens, base type, the page building blocks every
+   page is made from, and buttons. The header and footer have their own
+   stylesheets, header.css and footer.css, loaded straight after this one.
    Page stylesheets (pages/*.css) add only what their own sections need
    and read these tokens rather than redefining them, so the header,
    footer and rhythm can never drift apart between page types.
@@ -18,15 +18,14 @@
    directional shadows, generous spacing, and spring-curve motion.
 
    Colour pairs were checked for WCAG AA (4.5:1) before use:
-   text and text-2 on bg, bg-alt and surface; brand-text on those and on
-   brand-soft; on-brand on brand and brand-hover.
+   text and text-2 on bg, bg-alt and surface; brand-text on those;
+   on-brand on brand and brand-hover.
    ========================================================================== */
 
 :root {
   --bg: #ffffff;
   --bg-alt: #f5f5f7;
   --surface: #ffffff;
-  --surface-glass: rgba(255, 255, 255, 0.72);
   --text: #1d1d1f;
   --text-2: #6e6e73;          /* 5.1:1 on white, 4.7:1 on --bg-alt */
   --border: #d2d2d7;          /* hairlines */
@@ -34,27 +33,13 @@
   --brand: #0b5fe8;
   --brand-hover: #0848b8;
   --on-brand: #ffffff;
-  --brand-soft: #f5f5f7;      /* quiet panels and icon chips: Apple grey */
   --brand-text: #0a52c9;
-  /* Sampled directly from the real logo mark (assets/icons/mark.png), not
-     a generic accent: the icon sweeps from this blue to this green. Used
-     for decoration only (borders, the logo itself) -- never
-     behind text. White text on it fails 4.5:1 contrast past ~20% into
-     the blend (measured), so buttons stay solid --brand. */
-  --brand-2: #16b871;
-  /* --brand-2 itself is 2.6:1 on white -- decoration only, never text.
-     This is the safe foreground sibling (5.4:1) for the rare case a
-     small green label/icon is needed, the same relationship --brand-text
-     has to --brand. */
-  --brand-2-text: #0a7a47;
-  --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #0f9ed6 45%, var(--brand-2) 100%);
-  /* The logo's blue-to-green sweep, darkened to be safe as text: every
-     stop is 4.5:1 or better on white and on --bg-alt (blue 5.5:1, the
-     teal middle 5.1:1, green 5.4:1 on white). Used sparingly (.brand-ink)
-     so the site keeps its own colour inside the monochrome design. */
+  /* The logo's blue-to-green sweep (sampled from assets/icons/mark.png),
+     darkened to be safe as text: every stop is 4.5:1 or better on white
+     and on --bg-alt (blue 5.5:1, the teal middle 5.1:1, green 5.4:1 on
+     white). Used sparingly (.brand-ink) so the site keeps its own colour
+     inside the monochrome design. */
   --brand-ink: linear-gradient(90deg, #0b5fe8 0%, #0b76a3 55%, #0a7a47 100%);
-  --accent: #06b6d4;
-  --glass: rgba(255, 255, 255, 0.94);
 
   /* Illustration colours (see "App tones" below): app tiles, guide
      banners and icon chips. Fixed colours, like the store
@@ -64,7 +49,6 @@
   --tone-gradient: linear-gradient(145deg, #3b82f6, #0b5fe8);
 
   /* Soft, directional (light from above-left), never a hard drop. */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 2px 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 2px 4px 16px rgba(0, 0, 0, 0.16);
 
@@ -106,17 +90,6 @@
   :root {
     --spring: linear(0, 0.0495, 0.1582, 0.2864, 0.4129, 0.5273, 0.6256, 0.7073, 0.7736, 0.8263, 0.8677, 0.8998, 0.9246, 0.9435, 0.9578, 0.9686, 0.9767, 0.9828, 0.9873, 0.9906, 0.9931, 0.995, 0.9963, 0.9973, 1);
   }
-}
-
-/* ---------- Icon sprite ----------
-   The sprite itself is never visible; each icon shows only where a page
-   draws <svg><use href="#i-name"/></svg>. Zero-size and clipped rather
-   than display:none, which some browsers refuse to let <use> reference. */
-.icon-sprite {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
 }
 
 /* ---------- Base ---------- */
@@ -512,8 +485,9 @@ picture > source { display: none; }
 
 /* ---------- Header and footer chrome ----------
    The header itself (bar, menus, phone menu and their preferences) is
-   styled in header.css, loaded straight after this file. These colours
-   are shared by the header, its menu tint and the footer. */
+   styled in header.css and the footer in footer.css, both loaded straight
+   after this file. These colours are shared by the header, its menu tint
+   and the footer. */
 
 .site-header,
 .site-footer,
@@ -524,94 +498,6 @@ picture > source { display: none; }
   --chrome-text-2: #6e6e73;
   --chrome-line: #d2d2d7;
   --chrome-ease: cubic-bezier(0.4, 0, 0.6, 1);
-}
-
-/* ---------- Footer (apple.com style) ---------- */
-
-.site-footer {
-  padding: 1.25rem 0 1.5rem;
-  background: #f5f5f7;
-  color: var(--chrome-text-2);
-  font-family: var(--font);
-  font-size: 0.75rem;
-  line-height: 1.33;
-}
-.footer-wrap { width: min(100% - 2 * var(--gutter), 61.25rem); margin-inline: auto; }
-.site-footer a { color: #424245; text-decoration: none; }
-.site-footer a:hover { color: #1d1d1f; text-decoration: underline; text-underline-offset: 0.15em; }
-.site-footer a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 3px; }
-
-.footer-notes { padding-bottom: 0.75rem; border-bottom: 1px solid var(--chrome-line); }
-
-.footer-crumbs { display: flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding-block: 0.5rem; }
-.footer-crumbs-home { display: inline-grid; place-items: center; min-width: 1.5rem; min-height: 1.5rem; }
-.footer-mark { width: 1.125rem; height: 1.125rem; display: block; }
-.footer-crumbs-sep svg { width: 0.75rem; height: 0.75rem; transform: rotate(-90deg); opacity: 0.7; }
-.footer-crumbs [aria-current] { color: #1d1d1f; }
-/* Links keep their width; a long page name wraps instead. */
-.footer-crumbs a { flex: none; white-space: nowrap; }
-
-.footer-directory {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1.5rem;
-  padding-block: 0.5rem 1.25rem;
-}
-.footer-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #1d1d1f;
-  font-weight: 600;
-  list-style: none;
-}
-.footer-head::-webkit-details-marker { display: none; }
-.footer-head svg { display: none; }
-.footer-links { margin: 0.6rem 0 0; padding: 0; list-style: none; }
-.footer-links li + li { margin-top: 0.6rem; }
-
-.footer-more { padding: 0.5rem 0 0.75rem; }
-.footer-more a { color: var(--brand-text); text-decoration: underline; text-underline-offset: 0.15em; }
-
-.footer-legal {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--chrome-line);
-}
-.footer-copy { margin: 0; }
-.footer-legal-links { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
-.footer-legal-links li + li::before { content: "|"; margin: 0 0.6rem; color: var(--chrome-line); }
-.footer-region { margin: 0 0 0 auto; }
-
-@media (min-width: 760px) {
-  /* Columns are always open on wide screens; the heading is a label. */
-  .footer-head { pointer-events: none; cursor: default; }
-}
-@media (max-width: 759.98px) {
-  .footer-directory { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 0; }
-  .footer-col { border-bottom: 1px solid var(--chrome-line); }
-  .footer-head { min-height: 2.75rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  .footer-head svg { display: block; width: 0.9rem; height: 0.9rem; transition: transform 0.3s var(--chrome-ease); }
-  .footer-col[open] .footer-head svg { transform: rotate(180deg); }
-  .footer-links { margin: 0 0 0.75rem; padding-left: 0.75rem; }
-  .footer-links li + li { margin-top: 0; }
-  .footer-links a { display: flex; align-items: center; min-height: 2.75rem; font-size: 0.875rem; }
-  .footer-more { padding-top: 1rem; }
-  .footer-legal { flex-direction: column; align-items: flex-start; }
-  .footer-legal-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; }
-  .footer-crumbs-home { min-width: 2.75rem; min-height: 2.75rem; margin-left: -0.75rem; }
-  .footer-crumbs a:not(.footer-crumbs-home) { display: inline-flex; align-items: center; min-height: 2.75rem; }
-  .footer-region { margin-left: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .footer-head svg { transition: none; transform: none; }
-}
-@media (prefers-contrast: more) {
-  .site-footer { --chrome-text-2: #4b4b50; --chrome-line: #86868b; }
 }
 
 /* ---------- Phone frame ----------
@@ -693,11 +579,9 @@ picture > source { display: none; }
    accent label (--tone-text). Buttons and links stay the site's one blue,
    as on apple.com, whatever the app.
 
-   All text pairs computed against WCAG AA 4.5:1 (29 Sep):
-   on-brand on brand/hover, brand-text on bg / bg-alt / surface /
-   brand-soft, and body text on brand-soft -- lowest is teal
-   brand-text on its soft tint at 4.85:1. White glyphs on every
-   --tone-gradient stop are 3:1 or better (see App tiles). */
+   Every --tone-text passes WCAG AA 4.5:1 on white and on #f5f5f7
+   (re-measured 20 Oct; lowest is teal, 5.0:1 on #f5f5f7). White glyphs
+   on every --tone-gradient stop are 3:1 or better (see App tiles). */
 .tone-blue {
   --tone-text: #0a52c9;
   --tone-light: #3b82f6; --tone-deep: #0b5fe8;

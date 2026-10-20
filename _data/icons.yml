@@ -1,15 +1,15 @@
 # ---------------------------------------------------------------------------
 # Icons: the site's one set of drawn glyphs. Each entry is the inside of a
 # 24x24 SVG; _includes/icon.html draws one inline (its own viewBox, width
-# and height, in currentColor) and _includes/icon-sprite.html builds the
-# shared <symbol> sprite from the same list, so a shape is defined once.
+# and height, in currentColor), so a shape is defined once. Every page
+# draws its icons this way (the <use> sprite went in Phase 4, 20 Oct).
 #
 # One drawing spec for every icon, so they sit together at any size:
 # - 24x24 grid, drawn inside a 2-unit margin (3-21 for round and square
 #   shapes, so circles and squares look the same size).
 # - 1.75 stroke, round caps and joins, no fills. One exception: the bare
-#   tick is 2.5 (stroke: 2.5), because it only appears small, inside a
-#   filled badge, where check's own circle would draw a ring in a ring.
+#   tick is 2.5 (stroke: 2.5), because it only appears small and on its
+#   own (a list's ticks, the compare cards), where 1.75 reads too thin.
 # - 2-unit corner radius on rectangles (2.75 on the phone, 5.25 on the
 #   toggle's pill).
 # - Arrowheads sit exactly on the ends of their arcs (the arcs and the
@@ -153,10 +153,6 @@ toggle:
   paths: |-
     <rect x="2.75" y="6.75" width="18.5" height="10.5" rx="5.25"/>
     <circle cx="16" cy="12" r="2.75"/>
-compass:
-  paths: |-
-    <circle cx="12" cy="12" r="8.75"/>
-    <path d="m15.5 8.5-2.1 4.9-4.9 2.1 2.1-4.9 4.9-2.1Z"/>
 grid:
   paths: |-
     <rect x="3.5" y="3.5" width="7" height="7" rx="1.75"/>
@@ -201,10 +197,6 @@ chevron-down:
 chevron-right:
   paths: |-
     <path d="m9 6 6 6-6 6"/>
-arrow-right:
-  paths: |-
-    <path d="M5 12h14"/>
-    <path d="m13 6 6 6-6 6"/>
 x:
   paths: |-
     <path d="M18 6 6 18"/>

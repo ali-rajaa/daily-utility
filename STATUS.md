@@ -72,8 +72,8 @@ daily-utility/
 │   ├── footer.html
 │   ├── scripts.html
 │   ├── logo.html                  # brand mark + wordmark, used by header and footer
-│   ├── icon-sprite.html           # hidden SVG <symbol> sprite, included once in
-│   │                              # default.html; use as <use href="#i-name"/>
+│   ├── icon.html                  # one icon drawn inline from _data/icons.yml
+│   │                              # (the <use> sprite went in Phase 4, 20 Oct)
 │   ├── store-badges.html          # params: ios_url, android_url
 │   ├── hero-glow.html             # SVG gradient-mesh glow; pair with
 │   │                              # .hero-glow-host/-content (section 4f)
@@ -2280,6 +2280,58 @@ no new type, tap, clip or nav issues, and "outside the gutter" notes
 only for cards inside sideways shelves (by design) and the breadcrumb's
 widened tap area (1px).
 
+## 5zzzzzzzzz. Phase 4: footer, link audit, final sweep (20 Oct)
+
+User: *"do phase 4 and push live"* (the last phase of the overhaul: the
+global footer as a multi-column directory, an href audit across every
+file, and a final sweep for broken SVGs, layout shift and dead code).
+
+- **Footer:** its own stylesheet, `assets/css/footer.scss`, as the
+  header has. apple.com's directory: five columns sized to their longest
+  link and spread across the 980px column (three across from 760px to
+  1023px; folds on phones), Apple's 12px leading and tracking, press
+  feedback on every link. "Get the app" (backup app only) is now "Get the
+  apps": every app's store links, from `_data/apps.yml`. The trail's
+  separator is a right chevron drawn pointing right (it was a down
+  chevron turned by CSS); coming-soon guides now show Daily Info in the
+  trail too; the logo link's name is real text for screen readers
+  instead of an aria-label over an image.
+- **Icon sprite removed:** nothing used `<use>` any more, so
+  `_includes/icon-sprite.html`, its include and its CSS are gone. Every
+  icon on the site is one inline SVG from `_data/icons.yml`.
+- **Href audit** (a script over the built live-config site: every
+  href, src, srcset and share-image URL on every page): 1,391 references,
+  0 problems. It checks every internal target exists, every #anchor exists
+  on its page, links use clean addresses (no .html, no /index, folder
+  slashes right), nothing relative, externals on https, mailto valid; it
+  caught all 8 faults planted in a test copy. Sitemap, feed and robots
+  URLs all resolve. The five external links (App Store, Google Play,
+  cloud sign-in) can't be fetched from the work sandbox; they are the
+  owner's URLs, unchanged.
+- **SVGs:** all 639 inline SVGs have a valid viewBox, width and height,
+  drawn shapes and aria-hidden; all 43 images have width, height and alt.
+- **Layout shift:** measured on every page at 1440 and 390px while
+  scrolling, motion on. It was 0 everywhere except the guides (worst
+  0.004): the contents list's current entry turned bold, which rewrapped
+  it. It now changes colour and background only: 0 on every page.
+- **Dead code removed:** the `compass` and `arrow-right` icons (nothing
+  draws them); eight colour and shadow tokens nothing read
+  (`--surface-glass`, `--brand-soft`, `--brand-2`, `--brand-2-text`,
+  `--brand-gradient`, `--accent`, `--glass`, `--shadow-sm`). Every class
+  in every stylesheet is used where it loads, apart from the coming-soon
+  styles, the optional guide photo and the rose tone, all kept for
+  content that may come. No unused includes, layouts, data files, Liquid
+  variables, script selectors, commented-out code or debug lines.
+  `assets/icons/mark.png` (the logo master) and `mark-512.png`
+  (reserved for a web app manifest, section 4a) are unlinked on purpose.
+
+**Checks:** both builds clean; HTML valid; SEO check 0 problems; deep
+audit nothing new; axe clean on every page at 1440 and 390px; 20/20
+header/footer tests; 9/9 header checks; app labels 0 of 387; layout
+shift 0 on every page; no sideways scroll; phone audit: no new issues
+(the footer logo link's hidden label, a 1px clipped box, is noted at
+15px from the edge).
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2793,3 +2845,7 @@ flagship Apple id.
   guides, Daily Info, About, Contact, legal and 404 on the homepage's
   blocks; centred openings over grey stages; icons inline; old layout CSS
   removed.
+- 20 Oct: Phase 4 (section 5zzzzzzzzz): footer in its own stylesheet as
+  a five-column directory with every app's store links; icon sprite
+  removed; link audit 0 problems of 1,391; layout shift 0 on every page;
+  unused icons and tokens removed.

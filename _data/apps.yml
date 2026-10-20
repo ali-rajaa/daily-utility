@@ -1,8 +1,9 @@
 # Daily Utility Apps portfolio — listing metadata only (name, tagline,
 # glyph/tone, store links). Never put page content here: an app with page: true
 # gets its full content in its own page's front matter (see app.html in
-# STATUS.md section 4). This file only drives the homepage apps grid and
-# the footer's app list.
+# STATUS.md section 4). This file drives every list of apps on the site
+# (header menu, homepage, other apps, About, Contact, 404, footer) and
+# every store link.
 #
 # Names and package IDs below were taken directly from each app's live
 # Google Play listing (screenshots supplied by the user, 28 Sep) — not
@@ -28,12 +29,12 @@
 #   built page. Every app listed here is built.
 # short: a compact name for tight spaces (the homepage app orbit).
 # glyph + tone: the app's visual everywhere on the site, via
-#   _includes/app-tile.html (an icon-sprite symbol on a coloured tile).
+#   _includes/app-tile.html (an _data/icons.yml glyph on a coloured tile).
 #   The real store icons are never used (user, 29 Sep: "never use actual
 #   logo"); tones are defined in shell.css's "App tiles" (the tile)
 #   and "App tones" (the app's whole colour identity on its own page
 #   and homepage card).
-#   Tones: blue, violet, teal or rose. Glyphs: any icon-sprite symbol.
+#   Tones: blue, violet, teal or rose. Glyphs: any _data/icons.yml name.
 # screenshot (optional): a real portrait screenshot from the app, saved in
 #   assets/screens/ (e.g. "/assets/screens/cloud-storage-backup-drive.png").
 #   The phone frames on the homepage and the app's page show it; without

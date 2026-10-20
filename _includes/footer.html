@@ -1,18 +1,23 @@
 {%- comment -%}
-  Site footer, apple.com style (preview): light grey, small type. A note,
-  a breadcrumb (logo > this page, with Daily Info between on a guide),
-  the directory columns, a "more ways to get help" line, then copyright
-  and legal links. On phones each column is a fold (details/summary,
-  closed by site.js, open without JS).
+  Site footer, apple.com's directory footer (styles: assets/css/footer.css).
+  Light grey, small type. In order: a note; a "you are here" trail (logo
+  > this page, with Daily Info between on a guide); the directory, five
+  columns of links; a "more ways to get help" line; then copyright, legal
+  links and where the apps run.
+  On phones each group is a fold (details/summary, closed by site.js,
+  open without JavaScript) with a chevron that turns as it opens.
 
-  Lists itself: apps from _data/apps.yml, guide topics from
-  _data/categories.yml. The copyright names Daily Utility Apps; the
-  registered company name stays on the legal pages (STATUS.md 5u). The
-  support email is Daily Utility's own, so it may appear here (5t).
-  Nothing here states how many apps there are (5z).
+  Lists itself: apps and their store links from _data/apps.yml, guide
+  topics from _data/categories.yml. The copyright names Daily Utility
+  Apps; the registered company name stays on the legal pages (STATUS.md
+  5u). The support email is Daily Utility's own, so it may appear here
+  (5t). Nothing here states how many apps there are (5z).
+
+  Phase 4 (20 Oct): its own stylesheet, inline icons (icon.html) drawn
+  the way they point, store links for every app, and the site's press
+  feedback on every link.
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
-{%- assign _flagship = site.data.apps | where: "tier", "flagship" | first -%}
 {%- assign _crumb = page.breadcrumbs | last -%}
 {%- assign _title_lead = page.title | split: ":" | first | split: " | " | first -%}
 {%- assign _here = page.heading | default: page.app_name | default: _crumb.name | default: _title_lead -%}
@@ -24,19 +29,19 @@
 
     {%- if page.url != "/" and _here %}
     <nav class="footer-crumbs" aria-label="You are here">
-      <a class="footer-crumbs-home" href="{{ '/' | relative_url }}" aria-label="Daily Utility Apps home">{% include brand-mark.html class="footer-mark" size="18" %}</a>
-      <span class="footer-crumbs-sep" aria-hidden="true"><svg><use href="#i-chevron-down"/></svg></span>
-      {%- if page.layout == "post" %}
+      <a class="footer-crumbs-home" href="{{ '/' | relative_url }}">{% include brand-mark.html class="footer-mark" size="18" %}<span class="visually-hidden">Daily Utility Apps home</span></a>
+      {% include icon.html name="chevron-right" class="footer-crumbs-sep" size="12" %}
+      {%- if page.layout == "post" or page.layout == "upcoming" %}
       <a href="{{ '/daily-info/' | relative_url }}">Daily Info</a>
-      <span class="footer-crumbs-sep" aria-hidden="true"><svg><use href="#i-chevron-down"/></svg></span>
+      {% include icon.html name="chevron-right" class="footer-crumbs-sep" size="12" %}
       {%- endif %}
       <span aria-current="page">{{ _here | escape }}</span>
     </nav>
     {%- endif %}
 
-    <div class="footer-directory">
+    <nav class="footer-directory" aria-label="Site directory">
       <details class="footer-col footer-fold" open>
-        <summary class="footer-head">Apps<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <summary class="footer-head"><span>Apps</span>{% include icon.html name="chevron-down" class="footer-head-icon" size="14" %}</summary>
         <ul class="footer-links">
           {%- for _app in _apps %}
           <li><a href="{{ '/' | append: _app.slug | relative_url }}"{% if page.url contains _app.slug %} aria-current="page"{% endif %}>{{ _app.short | default: _app.name | escape }}</a></li>
@@ -46,9 +51,9 @@
       </details>
 
       <details class="footer-col footer-fold" open>
-        <summary class="footer-head">Daily Info<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <summary class="footer-head"><span>Daily Info</span>{% include icon.html name="chevron-down" class="footer-head-icon" size="14" %}</summary>
         <ul class="footer-links">
-          <li><a href="{{ '/daily-info/' | relative_url }}">All guides</a></li>
+          <li><a href="{{ '/daily-info/' | relative_url }}"{% if page.url == "/daily-info/" %} aria-current="page"{% endif %}>All guides</a></li>
           {%- for cat in site.data.categories %}
           <li><a href="{{ '/daily-info/' | relative_url }}#{{ cat.name | slugify }}">{{ cat.name | escape }}</a></li>
           {%- endfor %}
@@ -56,7 +61,7 @@
       </details>
 
       <details class="footer-col footer-fold" open>
-        <summary class="footer-head">Help<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <summary class="footer-head"><span>Help</span>{% include icon.html name="chevron-down" class="footer-head-icon" size="14" %}</summary>
         <ul class="footer-links">
           <li><a href="{{ '/contact' | relative_url }}"{% if page.url == "/contact" %} aria-current="page"{% endif %}>Contact support</a></li>
           <li><a href="{{ '/' | relative_url }}#faq">Questions about our apps</a></li>
@@ -65,7 +70,7 @@
       </details>
 
       <details class="footer-col footer-fold" open>
-        <summary class="footer-head">Company<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <summary class="footer-head"><span>Company</span>{% include icon.html name="chevron-down" class="footer-head-icon" size="14" %}</summary>
         <ul class="footer-links">
           <li><a href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About us</a></li>
           <li><a href="{{ site.cloud_url }}">Sign in to Cloud Storage</a></li>
@@ -73,17 +78,19 @@
       </details>
 
       <details class="footer-col footer-fold" open>
-        <summary class="footer-head">Get the app<svg aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+        <summary class="footer-head"><span>Get the apps</span>{% include icon.html name="chevron-down" class="footer-head-icon" size="14" %}</summary>
         <ul class="footer-links">
-          {%- if _flagship.ios_url %}
-          <li><a href="{{ _flagship.ios_url }}">{{ _flagship.short | escape }} on the App Store</a></li>
+          {%- for _app in _apps %}
+          {%- if _app.ios_url %}
+          <li><a href="{{ _app.ios_url }}">{{ _app.short | default: _app.name | escape }} on the App Store</a></li>
           {%- endif %}
-          {%- if _flagship.android_url %}
-          <li><a href="{{ _flagship.android_url }}">{{ _flagship.short | escape }} on Google Play</a></li>
+          {%- if _app.android_url %}
+          <li><a href="{{ _app.android_url }}">{{ _app.short | default: _app.name | escape }} on Google Play</a></li>
           {%- endif %}
+          {%- endfor %}
         </ul>
       </details>
-    </div>
+    </nav>
 
     <p class="footer-more">More ways to get help: visit our <a href="{{ '/contact' | relative_url }}">Contact page</a> or email <a href="mailto:{{ site.company.support_email }}">{{ site.company.support_email }}</a>.</p>
 

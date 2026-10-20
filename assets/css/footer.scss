@@ -1,0 +1,169 @@
+---
+# Front matter fence: tells Jekyll to compile this file with Sass
+# (compressed, see _config.yml). Output keeps the .css name.
+---
+/* ==========================================================================
+   footer.css: the site footer (_includes/footer.html), on every page.
+
+   Phase 4 (20 Oct): its own stylesheet, as the header has (header.css),
+   loaded after it. apple.com's directory footer: light grey #f5f5f7, 12px
+   type at Apple's leading and tracking, #424245 links that underline on
+   hover and dim the moment they're pressed. Wide screens: five columns
+   (three from 760px to 1023px, as columns that narrow would wrap every
+   link); phones: each column folds, with a chevron that turns as it
+   opens. The chrome colours (--chrome-*) are shared with the header and
+   live in shell.css. Icons are inline (icon.html), drawn the way they
+   point.
+   ========================================================================== */
+
+.site-footer {
+  padding: 1.0625rem 0 1.3125rem;
+  background: #f5f5f7;
+  color: var(--chrome-text-2);
+  font-family: var(--font);
+  font-size: 0.75rem;
+  line-height: 1.33337;
+  letter-spacing: -0.01em;
+}
+/* The site's 980px column; on a notched phone in landscape the gutter
+   grows to at least the safe-area inset. */
+.footer-wrap {
+  width: min(100% - 2 * max(var(--gutter), env(safe-area-inset-left), env(safe-area-inset-right)), var(--ap-wrap));
+  margin-inline: auto;
+}
+
+.site-footer a {
+  color: #424245;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s ease;
+}
+@media (hover: hover) {
+  .site-footer a:hover { color: #1d1d1f; text-decoration: underline; text-underline-offset: 0.15em; }
+}
+.site-footer a:active { opacity: 0.6; transition-duration: 0s; }
+.site-footer a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 3px; }
+
+/* ---------- Note ---------- */
+
+.footer-notes { padding-bottom: 0.6875rem; border-bottom: 1px solid var(--chrome-line); }
+.footer-notes p + p { margin-top: 0.5rem; }
+
+/* ---------- "You are here" ---------- */
+
+.footer-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  min-height: 2.75rem;
+  padding-block: 0.5rem;
+}
+.footer-crumbs-home { display: inline-grid; place-items: center; min-width: 1.5rem; min-height: 1.5rem; }
+.footer-mark { display: block; width: 1.125rem; height: 1.125rem; }
+.footer-crumbs-sep { flex: none; width: 0.75rem; height: 0.75rem; color: var(--chrome-text-2); }
+.footer-crumbs [aria-current] { color: #1d1d1f; }
+/* Links keep their width; a long page name wraps instead. */
+.footer-crumbs a { flex: none; white-space: nowrap; }
+
+/* ---------- Directory ---------- */
+
+/* Five columns sized to their longest link and spread across the column,
+   as apple.com's are, so no store link wraps. */
+.footer-directory {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-content: space-between;
+  gap: 1.75rem 1.875rem;
+  padding-top: 1.25rem;
+}
+.footer-crumbs + .footer-directory { padding-top: 0.5rem; }
+@media (min-width: 760px) and (max-width: 1023.98px) {
+  .footer-directory { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.footer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.8em;
+  color: #1d1d1f;
+  font-weight: 600;
+  list-style: none;
+}
+.footer-head::-webkit-details-marker { display: none; }
+.footer-head-icon { display: none; }
+.footer-links { margin: 0; padding: 0; list-style: none; }
+.footer-links li + li { margin-top: 0.8em; }
+.footer-links [aria-current="page"] { color: #1d1d1f; }
+
+/* ---------- More ways to get help ---------- */
+
+.footer-more { margin-top: 2.125rem; padding-bottom: 0.6875rem; }
+.footer-more a { color: var(--brand-text); text-decoration: underline; text-underline-offset: 0.15em; }
+.site-footer .footer-more a { color: var(--brand-text); }
+
+/* ---------- Copyright, legal links, where the apps run ---------- */
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--chrome-line);
+}
+.footer-copy { margin: 0; }
+.footer-legal-links { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
+.footer-legal-links li + li::before { content: "|"; margin: 0 0.6rem; color: var(--chrome-line); }
+.footer-region { margin: 0 0 0 auto; }
+
+/* ---------- Wide screens: every column open, the heading a label ---------- */
+
+@media (min-width: 760px) {
+  .footer-head { pointer-events: none; cursor: default; }
+}
+
+/* ---------- Phones: each column folds ---------- */
+
+@media (max-width: 759.98px) {
+  .footer-directory { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 0; }
+  .footer-crumbs + .footer-directory { padding-top: 0; }
+  .footer-col { border-bottom: 1px solid var(--chrome-line); }
+  .footer-head {
+    min-height: 2.75rem;
+    margin: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .footer-head:active { opacity: 0.6; }
+  .footer-head-icon {
+    display: block;
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    color: var(--chrome-text-2);
+    transition: transform 0.3s var(--chrome-ease);
+  }
+  .footer-col[open] .footer-head-icon { transform: rotate(180deg); }
+  .footer-links { margin: 0 0 0.75rem; padding-left: 0.75rem; }
+  .footer-links li + li { margin-top: 0; }
+  .footer-links a { display: flex; align-items: center; min-height: 2.75rem; font-size: 0.875rem; }
+  .footer-more { margin-top: 1rem; }
+  .footer-legal { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .footer-legal-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; }
+  /* A 44px tap area that grows to the right, so the mark stays on the
+     gutter and nothing reaches into it. */
+  .footer-crumbs-home { min-width: 2.75rem; min-height: 2.75rem; place-items: center start; }
+  .footer-crumbs a:not(.footer-crumbs-home) { display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .footer-region { margin-left: 0; }
+}
+
+/* ---------- Accessibility preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer a, .footer-head-icon { transition: none; }
+}
+@media (prefers-contrast: more) {
+  .site-footer { --chrome-text-2: #4b4b50; --chrome-line: #86868b; }
+}

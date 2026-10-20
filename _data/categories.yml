@@ -1,6 +1,6 @@
 # Daily Info topics (STATUS.md section 5's four categories). A post's
 # `category:` must match one `name` here exactly. Each topic has a glyph
-# (icon-sprite symbol) and a tone (shell.css "App tones") so its article
+# (an _data/icons.yml name) and a tone (shell.css "App tones") so its article
 # cards and topic card carry a consistent colour and icon. A topic takes
 # the colour of the app it's about: backup blue, switching teal (Data
 # Transfer). Photos and privacy have no app of their own: photos keep

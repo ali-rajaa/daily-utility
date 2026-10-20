@@ -88,9 +88,10 @@
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#ffffff">
 
-  {%- comment -%} shell.css first, then header.css (the site header, on every
-  page), then the page's own stylesheet, so a page can build on the
-  shared tokens. Every page sets its own css: matching
+  {%- comment -%} shell.css first, then header.css and footer.css (the
+  site header and footer, on every page), then the page's own
+  stylesheet, so a page can build on the shared tokens. Every page sets
+  its own css: matching
   its layout (app, post, legal each need it set on every page that uses
   them, not just on the layout file -- Jekyll doesn't cascade a layout's
   front matter down to its pages, confirmed when pages/post.css silently
@@ -100,13 +101,13 @@
   {%- assign _v = site.time | date: "%s" %}
   <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
   <link rel="stylesheet" href="{{ '/assets/css/header.css' | relative_url }}?v={{ _v }}">
+  <link rel="stylesheet" href="{{ '/assets/css/footer.css' | relative_url }}?v={{ _v }}">
   {%- if page.css %}
   <link rel="stylesheet" href="{{ '/assets/css/pages/' | append: page.css | append: '.css' | relative_url }}?v={{ _v }}">
   {%- endif %}
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-{% include icon-sprite.html %}
 {% include header.html %}
 <main id="main" tabindex="-1">
 {{ content }}

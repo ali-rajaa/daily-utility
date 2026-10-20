@@ -138,9 +138,10 @@ Why not the `github-pages` gem on Actions: it forces `jekyll-github-metadata`, w
 ├── _data/
 │   ├── apps.yml             # one entry per app: name, slug, glyph, tone, store links, tier
 │   ├── categories.yml       # guide topics: name, glyph, tone, blurb
+│   ├── icons.yml            # every icon's shape, one drawing spec
 │   └── home.yml             # homepage copy blocks
 ├── _includes/
-│   ├── icon-sprite.html     # every icon as an SVG <symbol>, included once per page
+│   ├── icon.html            # one icon drawn inline from _data/icons.yml
 │   ├── header.html          # apple.com-style bar: mark, Apps, Guides, About, Help, Sign in
 │   ├── footer.html
 │   ├── brand-mark.html      # the logo mark (PNG + WebP)
@@ -262,7 +263,6 @@ Daily Utility follows **apple.com's web design language** (redesigned 19 Oct 202
 --text: #1d1d1f;      --text-2: #6e6e73;     /* 5.1:1 on white, 4.7:1 on #f5f5f7 */
 --border: #d2d2d7;    --border-strong: #86868b;
 --brand: #0b5fe8;     --brand-hover: #0848b8;  --on-brand: #ffffff;
---brand-soft: #f5f5f7;                         /* quiet panels and icon chips */
 --brand-text: #0a52c9;                         /* the blue used for text links */
 --brand-ink: linear-gradient(90deg, #0b5fe8 0%, #0b76a3 55%, #0a7a47 100%);
                      /* the logo's blue-to-green, as text (.brand-ink) */
@@ -296,7 +296,6 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 --ap-pad-panel: clamp(4.5rem, 9vw, 7.5rem); /* a grey row */
 --ap-gap: 12px;                        /* between panels and cards */
 --radius-sm: 10px; --radius: 12px; --radius-lg: 18px; --radius-pill: 980px;
---shadow-sm: 0 1px 2px rgba(0,0,0,.05);
 --shadow-md: 2px 4px 12px rgba(0,0,0,.08);   /* soft, directional */
 --shadow-lg: 2px 4px 16px rgba(0,0,0,.16);   /* hover */
 ```
@@ -309,13 +308,13 @@ Each product has a tone class (`.tone-blue`, `.tone-violet`, `.tone-teal`, `.ton
 
 - **One set of shapes, in data:** `_data/icons.yml` holds every icon (the inside of a 24×24 SVG) and the drawing spec. Chevrons are drawn pointing the way they mean (`chevron-down`, `chevron-right`), never rotated by CSS.
 - **Inline icons:** `{% include icon.html name="lock" class="…" size="40" %}` draws one inline: its own `viewBox`, `width` and `height`, stroked in `currentColor`, `aria-hidden`. An unknown name stops the build (the include calls a filter that doesn't exist, and `strict_filters` is on), so a typo can't ship an empty icon. Every page uses it (homepage in Phase 2, every other page in Phase 3, 20 Oct).
-- **The sprite** (`icon-sprite.html`, after `<body>`) is built from the same data for the one piece still on `<use>`, the footer; it goes with the footer's rewrite.
+- **No sprite:** since Phase 4 (20 Oct) nothing uses `<use>`; the `<symbol>` sprite and its include are gone, so every icon is one inline SVG you can read in the page.
 - **One drawing spec:** 24×24 grid, 2-unit margin, 1.75 stroke, round caps and joins, no fills.
 - In content, icons are plain blue glyphs (no coloured squares). Decorative icons get `aria-hidden="true"`; icon-only buttons get an `aria-label`. No emoji.
 
 ### 8.6 App tiles (instead of real logos)
 
-`app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white sprite glyph at about 54%, an inset top highlight and a soft shadow. Chiclets, the compare table, guide cards and guide heroes use it, with the app's or topic's colour.
+`app-tile.html`: a rounded square (radius 23%) filled with the app's `--tone-gradient`, a white glyph (`icon.html`) at about 54%, an inset top highlight and a soft shadow. Chiclets, the compare table, guide cards and guide heroes use it, with the app's or topic's colour.
 
 **Phone frames (big product visuals).** `phone-frame.html` draws a device-neutral phone in CSS: a dark frame, a camera dot, rounded corners, no maker's design or logo. Every size comes from one custom property, `--phone-w`. The screen shows a launch screen built from what the site already has: the app's colour, glyph and name (the owner chose to keep these, 20 Oct). A real screenshot can still be added: set `screenshot:` on the app's `apps.yml` entry (a portrait PNG or JPEG from the app, saved in `assets/screens/`). **Never draw a made-up app interface.** On the homepage tiles the phone is cropped by the foot of the tile, apple.com style, and the launch content moves up into the part that shows. On app pages the whole phone sits on the grey panel, with the feature labels floating above it. A label may cross the frame's edge, but none may reach the glyph and name or leave the panel (checked at every width from 320 to 1600). Callers put the frame inside an `aria-hidden` visual.
 
@@ -381,7 +380,7 @@ A large grey "404" (decorative, hidden from screen readers), the H1, homepage an
 
 ### 9.9 Footer (apple.com's)
 
-Light grey `#f5f5f7`, 12px type, `#424245` links. A short note line; a "you are here" trail (logo › page, logo › Daily Info › guide on guides, matching the top breadcrumb and BreadcrumbList) on every page except the homepage; five directory columns (Apps, Daily Info, Help, Company, Get the app) that **fold on phones** (details/summary, closed by script, open without it); a "More ways to get help" line with the Contact page and support email; then copyright and legal links. No parent company, no "powered by".
+Its own stylesheet, `assets/css/footer.scss`, loaded after header.css (Phase 4, 20 Oct). Light grey `#f5f5f7`, 12px type at Apple's leading (1.33) and tracking (-0.01em), `#424245` links that underline on hover and dim to 60% the moment they're pressed. In order: a short note line; a "you are here" trail (the logo, a right chevron, the page; logo › Daily Info › guide on guides and coming-soon pages, matching the top breadcrumb and BreadcrumbList) on every page except the homepage; the **directory**: five columns (Apps, Daily Info, Help, Company, Get the apps) sized to their longest link and spread across the 980px column, three across from 760 to 1023px, and on phones each column **folds** (details/summary, closed by script, open without it) with a chevron that turns as it opens; a "More ways to get help" line with the Contact page and support email; then copyright, legal links and "Apps for iPhone and Android". Everything lists itself from `_data/apps.yml` and `_data/categories.yml` ("Get the apps" names every app's store links). Icons are inline, drawn the way they point. No parent company, no "powered by".
 
 ### 9.10 Buttons and badges
 
@@ -700,7 +699,7 @@ After a live upload, run `ftp.yml` in **check** mode.
 
 1. **Collect facts from the owner**: name, domain, products and their store links, support email, logo files, colours (or sample them from the logo), the legal intake (15.3), whether they want dark mode, analytics yes or no. Start `STATUS.md` with them.
 2. **Scaffold**: `Gemfile`, `_config.yml` in preview state (`staging: true`), `.gitignore` (`_site/`, `.jekyll-cache/`, `.bundle/`, `vendor/`), `pages.yml`. Push and confirm the preview builds and is noindex.
-3. **Shell**: `default.html` (head, SEO tags), `shell.scss` (tokens, system font, base, buttons, section scaffold), icon sprite, header, footer, `site.js` (header state, menus, reveal). Check the header at every width before going on.
+3. **Shell**: `default.html` (head, SEO tags), `shell.scss` (tokens, system font, base, buttons, page building blocks), icons (`_data/icons.yml` + `icon.html`), header, footer, `site.js` (header state, menus, reveal). Check the header at every width before going on.
 4. **Shared includes**: breadcrumbs + schema, FAQ section + schema, store badges, product tile, guide card.
 5. **Layouts**: product, guide, legal. Write each one's front matter contract in its header comment and in `STATUS.md`.
 6. **Pages**: home, products, about, contact, guides hub, legal, 404. Content only from confirmed facts.
@@ -897,8 +896,10 @@ gem "webrick"
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#ffffff">
 
-  {%- comment -%} shell.css first, then the page's own stylesheet, so a page
-  can build on the shared tokens. Every page sets its own css: matching
+  {%- comment -%} shell.css first, then header.css and footer.css (the
+  site header and footer, on every page), then the page's own
+  stylesheet, so a page can build on the shared tokens. Every page sets
+  its own css: matching
   its layout (app, post, legal each need it set on every page that uses
   them, not just on the layout file -- Jekyll doesn't cascade a layout's
   front matter down to its pages, confirmed when pages/post.css silently
@@ -907,13 +908,14 @@ gem "webrick"
   copy after a deploy. {%- endcomment -%}
   {%- assign _v = site.time | date: "%s" %}
   <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
+  <link rel="stylesheet" href="{{ '/assets/css/header.css' | relative_url }}?v={{ _v }}">
+  <link rel="stylesheet" href="{{ '/assets/css/footer.css' | relative_url }}?v={{ _v }}">
   {%- if page.css %}
   <link rel="stylesheet" href="{{ '/assets/css/pages/' | append: page.css | append: '.css' | relative_url }}?v={{ _v }}">
   {%- endif %}
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-{% include icon-sprite.html %}
 {% include header.html %}
 <main id="main" tabindex="-1">
 {{ content }}
@@ -1002,7 +1004,6 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
   --bg: #ffffff;
   --bg-alt: #f5f5f7;
   --surface: #ffffff;
-  --surface-glass: rgba(255, 255, 255, 0.72);
   --text: #1d1d1f;
   --text-2: #6e6e73;          /* 5.1:1 on white, 4.7:1 on --bg-alt */
   --border: #d2d2d7;          /* hairlines */
@@ -1010,22 +1011,13 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
   --brand: #0b5fe8;
   --brand-hover: #0848b8;
   --on-brand: #ffffff;
-  --brand-soft: #f5f5f7;      /* quiet panels and icon chips: Apple grey */
   --brand-text: #0a52c9;
-  /* Sampled directly from the real logo mark (assets/icons/mark.png), not
-     a generic accent: the icon sweeps from this blue to this green. Used
-     for decoration only (borders, the logo itself) -- never
-     behind text. White text on it fails 4.5:1 contrast past ~20% into
-     the blend (measured), so buttons stay solid --brand. */
-  --brand-2: #16b871;
-  /* --brand-2 itself is 2.6:1 on white -- decoration only, never text.
-     This is the safe foreground sibling (5.4:1) for the rare case a
-     small green label/icon is needed, the same relationship --brand-text
-     has to --brand. */
-  --brand-2-text: #0a7a47;
-  --brand-gradient: linear-gradient(135deg, var(--brand) 0%, #0f9ed6 45%, var(--brand-2) 100%);
-  --accent: #06b6d4;
-  --glass: rgba(255, 255, 255, 0.94);
+  /* The logo's blue-to-green sweep (sampled from assets/icons/mark.png),
+     darkened to be safe as text: every stop is 4.5:1 or better on white
+     and on --bg-alt (blue 5.5:1, the teal middle 5.1:1, green 5.4:1 on
+     white). Used sparingly (.brand-ink) so the site keeps its own colour
+     inside the monochrome design. */
+  --brand-ink: linear-gradient(90deg, #0b5fe8 0%, #0b76a3 55%, #0a7a47 100%);
 
   /* Illustration colours (see "App tones" below): app tiles, guide
      banners and icon chips. Fixed colours, like the store
@@ -1035,7 +1027,6 @@ Sitemap: {{ '/sitemap.xml' | absolute_url }}
   --tone-gradient: linear-gradient(145deg, #3b82f6, #0b5fe8);
 
   /* Soft, directional (light from above-left), never a hard drop. */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 2px 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 2px 4px 16px rgba(0, 0, 0, 0.16);
 

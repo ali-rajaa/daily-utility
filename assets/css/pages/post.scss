@@ -308,7 +308,9 @@
   .post-toc-list a:hover { background: rgba(0, 0, 0, 0.04); color: var(--text); }
 }
 .post-toc-list a:active { opacity: 0.6; transition-duration: 0s; }
-.post-toc-list a.is-active { background: var(--surface); color: var(--text); font-weight: 600; }
+/* The section being read: a white chip and dark text. Not bolder: a
+   heavier weight rewraps a long entry and shifts the list as you read. */
+.post-toc-list a.is-active { background: var(--surface); color: var(--text); }
 .post-toc-num {
   display: grid;
   place-items: center;
