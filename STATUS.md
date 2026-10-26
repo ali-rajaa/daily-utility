@@ -2332,6 +2332,32 @@ shift 0 on every page; no sideways scroll; phone audit: no new issues
 (the footer logo link's hidden label, a 1px clipped box, is noted at
 15px from the edge).
 
+## 5zzzzzzzzzz. Google Ads tag (26 Oct)
+
+User: *"please apply this for daily utility - Daily utility conversion
+value fixing"*, with the Google tag for Ads account `AW-18499228710`.
+
+- The tag is in `_layouts/default.html`, straight after the viewport
+  meta, so every page has it once, the 404 page included (404.php serves
+  the built 404.html). The pasted snippet had the address and ID broken
+  across lines; it's written out whole. It loads `async`, so it never
+  holds up the page; `.htaccess` sets no Content-Security-Policy that
+  would block it.
+- **Not yet done: conversion values.** The tag lets Google Ads see the
+  site. A value is recorded only when an event snippet fires for a
+  conversion action (`gtag('event', 'conversion', {send_to:
+  'AW-18499228710/<label>', value, currency})`). For Daily Utility that
+  would be taps on the App Store and Google Play badges. Needs each
+  action's label (Google Ads > Goals > Conversions > the action > Tag
+  setup) and its value and currency.
+- The tag sets Google advertising cookies. The privacy policy is the
+  owner's text and wasn't changed; the owner should check it covers
+  Google Ads.
+
+**Checks:** both builds clean; tag on all 17 pages exactly once; HTML
+valid; SEO check 0 problems; link audit 0 problems; axe clean; 20/20
+header/footer tests; layout shift 0 on every page.
+
 ## 6. SEO and routing
 
 **URLs**
@@ -2849,3 +2875,5 @@ flagship Apple id.
   a five-column directory with every app's store links; icon sprite
   removed; link audit 0 problems of 1,391; layout shift 0 on every page;
   unused icons and tokens removed.
+- 26 Oct: Google Ads tag `AW-18499228710` on every page (section
+  5zzzzzzzzzz); conversion events wait on the labels.

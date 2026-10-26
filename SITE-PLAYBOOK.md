@@ -811,6 +811,17 @@ gem "webrick"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  {%- comment -%} Google Ads tag (owner's account, 26 Oct), on every page
+  including 404 (404.php serves the built 404.html). Loads async, so it
+  never holds up the page. {%- endcomment %}
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18499228710"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18499228710');
+  </script>
   {%- comment -%} Set before any CSS loads, so the phone menu is hidden
   from the first paint rather than flashing open. shell.css gates the
   menu on it, which keeps the links usable without JavaScript. {%- endcomment %}
