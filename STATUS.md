@@ -2340,9 +2340,17 @@ value fixing"*, with the Google tag for Ads account `AW-18499228710`.
 - The tag is in `_layouts/default.html`, straight after the viewport
   meta, so every page has it once, the 404 page included (404.php serves
   the built 404.html). The pasted snippet had the address and ID broken
-  across lines; it's written out whole. It loads `async`, so it never
-  holds up the page; `.htaccess` sets no Content-Security-Policy that
-  would block it.
+  across lines; it's written out whole. `.htaccess` sets no
+  Content-Security-Policy that would block it.
+- **Loads after the page** (owner, same day, after a mobile PageSpeed
+  check): the queue (`dataLayer`, `gtag('js')`, `gtag('config')`) is set
+  up at once, but Google's script (gtag.js) is only fetched after the
+  page's load event, when the browser is idle (2 s at most), so it never
+  competes with the page itself. Anything recorded before it arrives
+  waits in the queue. Trade-off: a visit that leaves before the page has
+  finished loading isn't counted. Conversion events added later must
+  make sure the script has loaded before a store tap leaves the page
+  (Google's `event_callback`, with a short fallback timeout).
 - **Not yet done: conversion values.** The tag lets Google Ads see the
   site. A value is recorded only when an event snippet fires for a
   conversion action (`gtag('event', 'conversion', {send_to:
@@ -2876,4 +2884,5 @@ flagship Apple id.
   removed; link audit 0 problems of 1,391; layout shift 0 on every page;
   unused icons and tokens removed.
 - 26 Oct: Google Ads tag `AW-18499228710` on every page (section
-  5zzzzzzzzzz); conversion events wait on the labels.
+  5zzzzzzzzzz); conversion events wait on the labels. Same day: Google's
+  script now loads after the page has finished loading.
