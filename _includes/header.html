@@ -25,7 +25,10 @@
   area, as the list items have.
 
   Everything lists itself: apps from _data/apps.yml (built: true).
-  "Sign in" goes to the cloud web app (site.cloud_url).
+  "Log in" opens the sign-in popup (assets/js/plans.js) and, without
+  JavaScript, goes to the cloud web app (site.cloud_url). "Get started"
+  goes to /pricing, where visitors choose a plan first (owner, 23 Nov,
+  STATUS.md 5zzzzzzzzzzz).
 {%- endcomment -%}
 {%- assign _apps = site.data.apps | where: "built", true -%}
 {%- assign _in_guides = false -%}{%- if page.url contains "/daily-info/" -%}{%- assign _in_guides = true -%}{%- endif -%}
@@ -111,13 +114,17 @@
         </li>
 
         <li class="nav-item nav-item--signin">
-          <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">{{ _person }}Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+          <a class="nav-link nav-link--page nav-signin nav-login" href="{{ site.cloud_url }}?mode=login&amp;source=website" data-auth="login">{{ _person }}Log in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+        </li>
+        <li class="nav-item nav-item--signin nav-item--getstarted">
+          <a class="nav-getstarted" href="{{ '/pricing' | relative_url }}" data-get-started>Get started</a>
         </li>
       </ul>
     </nav>
 
     <div class="bar-signin">
-      <a class="nav-link nav-link--page nav-signin" href="{{ site.cloud_url }}">{{ _person }}Sign in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+      <a class="nav-link nav-link--page nav-signin nav-login" href="{{ site.cloud_url }}?mode=login&amp;source=website" data-auth="login">{{ _person }}Log in<span class="visually-hidden"> to Daily Utility Cloud Storage</span></a>
+      <a class="nav-getstarted" href="{{ '/pricing' | relative_url }}" data-get-started>Get started</a>
     </div>
   </div>
 </header>

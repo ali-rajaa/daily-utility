@@ -126,6 +126,9 @@
   <link rel="stylesheet" href="{{ '/assets/css/shell.css' | relative_url }}?v={{ _v }}">
   <link rel="stylesheet" href="{{ '/assets/css/header.css' | relative_url }}?v={{ _v }}">
   <link rel="stylesheet" href="{{ '/assets/css/footer.css' | relative_url }}?v={{ _v }}">
+  {%- comment -%} Plans, the sign-in popup and the offer (STATUS.md
+  5zzzzzzzzzzz): on every page, because Log in opens the popup anywhere. {%- endcomment %}
+  <link rel="stylesheet" href="{{ '/assets/css/plans.css' | relative_url }}?v={{ _v }}">
   {%- if page.css %}
   <link rel="stylesheet" href="{{ '/assets/css/pages/' | append: page.css | append: '.css' | relative_url }}?v={{ _v }}">
   {%- endif %}

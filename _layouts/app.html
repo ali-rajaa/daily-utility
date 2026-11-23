@@ -144,6 +144,7 @@ privacy (white). Every section is named by its heading
       {%- if page.moments %}<a href="#moments">When to use it</a>{% endif %}
       {%- if page.how_it_works %}<a href="#how-it-works">How it works</a>{% endif %}
       {%- if page.features %}<a href="#features">Features</a>{% endif %}
+      {%- if page.plans %}<a href="#plans">Plans</a>{% endif %}
       {%- if page.faqs %}<a href="#faq">Questions</a>{% endif %}
     </nav>
   </div>
@@ -235,6 +236,23 @@ privacy (white). Every section is named by its heading
         </ul>
       </div>
     </div>
+  </div>
+</section>
+{%- endif %}
+
+{%- comment -%} Plans (owner, 23 Nov 2026;
+STATUS.md 5zzzzzzzzzzz). Only on an app page with plans: true (Cloud
+Storage Backup & Drive), from _data/plans.yml via plan-cards.html, with
+Monthly / Yearly and "Pay in". {%- endcomment %}
+{%- if page.plans %}
+<section class="ap-section" id="plans" aria-labelledby="plans-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
+      <h2 id="plans-title">Plans that grow with your library</h2>
+      <p>Every account starts with {{ site.data.plans.free_gb }}GB free. When you need more room, pick a plan, billed monthly or yearly.</p>
+    </header>
+    {% include plan-cards.html key="app" controls=true level=3 %}
+    <p class="plans-more reveal"><a class="ap-link" href="{{ '/pricing' | relative_url }}">See billing and trial details{% include icon.html name="chevron-right" class="ap-link-icon" size="14" %}</a></p>
   </div>
 </section>
 {%- endif %}

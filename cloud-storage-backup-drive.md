@@ -12,6 +12,9 @@ category: "Productivity"
 updated: 2026-10-08
 og_image: "/assets/og/cloud-storage-backup-drive.jpg"
 og_image_alt: "Cloud Storage Backup & Drive, an app from Daily Utility Apps"
+# Plans (owner, 23 Nov 2026): the Daily Utility Cloud Storage plan cards
+# from _data/plans.yml, after "How it compares" (STATUS.md 5zzzzzzzzzzz).
+plans: true
 
 moments_heading: "When a backup matters most"
 moments_sub: "A backup is worth the most on the day something goes wrong. These are the days it's for."

@@ -73,7 +73,8 @@
         <summary class="footer-head"><span>Company</span>{% include icon.html name="chevron-down" class="footer-head-icon" size="14" %}</summary>
         <ul class="footer-links">
           <li><a href="{{ '/about' | relative_url }}"{% if page.url == "/about" %} aria-current="page"{% endif %}>About us</a></li>
-          <li><a href="{{ site.cloud_url }}">Sign in to Cloud Storage</a></li>
+          <li><a href="{{ '/pricing' | relative_url }}"{% if page.url == "/pricing" %} aria-current="page"{% endif %}>Cloud Storage plans</a></li>
+          <li><a href="{{ site.cloud_url }}?mode=login&amp;source=website" data-auth="login">Log in to Cloud Storage</a></li>
         </ul>
       </details>
 

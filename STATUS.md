@@ -2366,6 +2366,56 @@ value fixing"*, with the Google tag for Ads account `AW-18499228710`.
 valid; SEO check 0 problems; link audit 0 problems; axe clean; 20/20
 header/footer tests; layout shift 0 on every page.
 
+## 5zzzzzzzzzzz. Plans, pricing and the sign-in popup (23 Nov)
+
+Owner: *"for daily utility we need to apply the cloudgate things everything
+we added like days sign in eveything to copy it there"*. The pricing and
+sign-up flow built for the sister site, rebuilt for Daily Utility with its
+own facts. CloudGate is still named nowhere (5o, 5u): not in copy, code or
+comments.
+
+**Facts, all from the web app** (cloud.dailyutilityapps.store, read 23 Nov
+from its Stripe product list `getproducts` and its English text): Plus
+500GB, Pro 1TB, Family Max 5TB ("Family Storage sharing (up to 5
+members)"); a free tier of 10GB; features "High speed cloud storage" and
+"End to end encryption support"; prices in AED, AUD, EUR, GBP, INR, SAR and
+USD, monthly and yearly. Kept in `_data/plans.yml`. The 3-day free trial on
+Pro and Family Max is the owner's (this request); the web app has no trial
+yet (WEBAPP-HANDOFF.md).
+
+- **Header:** Sign in became **Log in** (opens the sign-in popup; without
+  JavaScript it goes to the web app) and a **Get started** pill to
+  `/pricing`, in the bar and the phone menu. Footer: "Cloud Storage plans"
+  and "Log in to Cloud Storage".
+- **`/pricing`:** the owner's Premium layout: title, a panel with Monthly /
+  Yearly (a sliding thumb) and "Pay in"; storage-first cards with one bar
+  scale (5TB is the full bar); "Billed monthly / yearly in …", the yearly
+  saving worked out from the prices (rounded down); trial terms under each
+  price; the free tier and cancelling; then four billing facts.
+- **Cloud Storage Backup & Drive:** the same cards (`plans: true`), after
+  "How it compares", with a "Plans" jump link. Other app pages unchanged.
+- **Sign-in popup** (Google, Apple, email) on Log in and every plan
+  button, with the plan, due today, the price after the trial and the
+  terms; and a one-off **"Try Pro free for 3 days"** offer on pages with
+  plan cards (after 40 s, or exit intent on desktop; `?offer=show` shows
+  it). Links carry mode, provider, plan, billing, currency, trial and
+  source (WEBAPP-HANDOFF.md).
+- **Currency:** the visitor's country (get.geojs.io, only on pages with
+  prices, once a visit), a time-zone guess first, US dollars otherwise; a
+  picked currency wins. The picker shows codes and symbols ("AUD (A$)"),
+  never country names, so "Australia" stays on the legal pages only.
+- Files: `_data/plans.yml`, `_includes/plan-cards.html`, `pricing.html`,
+  `assets/js/plans.js`, `assets/css/plans.scss` (every page: Log in opens
+  the popup anywhere), `WEBAPP-HANDOFF.md` (excluded from the build).
+- **Checks:** build clean; no "cloudgate" in `_site`; no template tags
+  left; `/pricing` in the sitemap; internal links all resolve; axe clean
+  on every page and in the popup; no sideways scroll from 320px; the
+  popup fits without scrolling; prices, savings, bars and links tested in
+  AUD, USD, GBP, INR and AED.
+- **Owner to note:** the new pages carry the 3-day trial before the web
+  app supports it; the get.geojs.io lookup sends the visitor's IP address
+  to that service (the privacy policy is the owner's text, unchanged).
+
 ## 6. SEO and routing
 
 **URLs**

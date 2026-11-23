@@ -1,0 +1,59 @@
+---
+layout: default
+permalink: /pricing
+title: "Daily Utility Cloud Storage Plans: Plus, Pro and Family Max"
+description: "Compare Daily Utility Cloud Storage plans: Plus (500GB), Pro (1TB) and Family Max (5TB), billed monthly or yearly. Every account starts with 10GB free."
+updated: 2026-11-23
+breadcrumbs:
+  - name: "Home"
+    url: "/"
+  - name: "Pricing"
+    url: "/pricing"
+---
+{%- comment -%}
+  Pricing page (owner, 23 Nov 2026; STATUS.md section 5zzzzzzzzzzz).
+  Layout of the owner's Premium design: the title on the left and a panel with Monthly / Yearly and
+  "Pay in" on the right; the plan cards (_includes/plan-cards.html);
+  the free tier and cancelling below; then the billing facts.
+
+  Every fact is the web app's own (_data/plans.yml): plan names,
+  storage, prices, features, the free tier, "Pay in", "Billed in" and
+  "Cancel anytime, your storage returns to the free tier". The 3-day
+  trial on Pro and Family Max is the owner's (23 Nov).
+{%- endcomment -%}
+{%- assign _P = site.data.plans -%}
+<section class="ap-section" aria-labelledby="pricing-title">
+  <div class="ap-wrap">
+    <div class="pricing-head">
+      <div class="pricing-intro">
+        <h1 id="pricing-title">Storage that grows with you.</h1>
+        <p>Pick the plan that fits how much you store. Every account starts with {{ _P.free_gb }}GB free, and you can cancel at any time.</p>
+      </div>
+      <div class="pricing-controls">
+        <div class="plans-controls">
+          <div class="bill-switch" role="radiogroup" aria-label="Billing"><label><input type="radio" name="billing-pricing" value="monthly" data-billing checked><span>Monthly</span></label><label><input type="radio" name="billing-pricing" value="yearly" data-billing><span>Yearly</span></label></div>
+          <div class="cur-pick" data-currency-pick hidden></div>
+        </div>
+      </div>
+    </div>
+    {% include plan-cards.html key="pricing" level=2 %}
+    <div class="pricing-foot reveal">
+      <p>Cancel anytime, and your storage returns to the free tier. <strong>Just need the basics?</strong> Every account includes {{ _P.free_gb }}GB free, with no card needed.</p>
+      <a class="btn btn--ghost" href="{{ site.cloud_url }}?mode=signup&amp;source=website" data-auth="signup">Get started free</a>
+    </div>
+  </div>
+</section>
+
+<section class="ap-panel" aria-labelledby="billing-title">
+  <div class="ap-wrap">
+    <header class="ap-head reveal">
+      <h2 id="billing-title">No surprises on your bill.</h2>
+    </header>
+    <div class="billing-facts">
+      <div class="reveal"><h3>Free trial on Pro and Family Max</h3><p>Add your payment details to start a {{ _P.trial_days }}-day free trial. Nothing is charged during the {{ _P.trial_days }} days. Plus has no trial: it starts, and is charged, as soon as you subscribe.</p></div>
+      <div class="reveal"><h3>What you pay after the trial</h3><p>When the trial ends, your plan's price is charged, monthly or yearly as you chose, in the currency you pay in. The amount and the date of the first charge are shown before you confirm.</p></div>
+      <div class="reveal"><h3>Renews automatically</h3><p>Every plan renews automatically each month or year, at the price shown, until you cancel.</p></div>
+      <div class="reveal"><h3>Cancel anytime</h3><p>Cancel from Manage plan in the Daily Utility Cloud Storage web app. Your storage returns to the free tier, and cancelling before a trial ends means you won't be charged.</p></div>
+    </div>
+  </div>
+</section>

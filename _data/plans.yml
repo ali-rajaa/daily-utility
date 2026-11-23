@@ -1,0 +1,74 @@
+# Daily Utility Cloud Storage plans, as the website shows them (pricing
+# page, the Cloud Storage Backup & Drive page, the sign-in popup and the
+# offer). Owner, 23 Nov 2026: a pricing page, plans and the sign-in popup. STATUS.md section 5zzzzzzzzzzz.
+#
+# Every figure here is the web app's own (cloud.dailyutilityapps.store),
+# read on 23 Nov 2026 from its Stripe product list (getproducts) and its
+# English text: plan names, storage, features and prices. Nothing is
+# invented. If a price changes in Stripe, change it here, or the website
+# and checkout will disagree.
+#
+# prices: Stripe's minor units (cents), picked the way the web app picks
+#   them (the first price above zero in each currency).
+# free_gb: the free tier every account has (the web app's 10737418240
+#   bytes).
+# trial: a 3-day free trial on Pro and Family Max (owner, 23 Nov). The web app has no trial yet: see WEBAPP-HANDOFF.md.
+# country_currency: the visitor's country to the currency shown, for the
+#   currencies Daily Utility sells in; anywhere else sees US dollars.
+
+free_gb: 10
+trial_days: 3
+fallback_currency: USD
+currencies: [AED, AUD, EUR, GBP, INR, SAR, USD]
+country_currency:
+  US: USD
+  GB: GBP
+  DE: EUR
+  FR: EUR
+  ES: EUR
+  IT: EUR
+  NL: EUR
+  IE: EUR
+  AU: AUD
+  IN: INR
+  AE: AED
+  SA: SAR
+
+plans:
+  - id: plus
+    name: Plus
+    storage: 500GB
+    gb: 500
+    trial: false
+    features:
+      - "High speed cloud storage"
+      - "End to end encryption support"
+    prices:
+      monthly: { AUD: 715, USD: 499, EUR: 444, GBP: 377, INR: 48160, AED: 1833, SAR: 1874 }
+      yearly: { AUD: 4297, USD: 2999, EUR: 2671, GBP: 2265, INR: 289443, AED: 11015, SAR: 11261 }
+  - id: pro
+    name: Pro
+    storage: 1TB
+    gb: 1000
+    trial: true
+    pill: "Best value"
+    features:
+      - "High speed cloud storage"
+      - "End to end encryption support"
+    prices:
+      monthly: { AUD: 1145, USD: 799, EUR: 712, GBP: 603, INR: 77114, AED: 2935, SAR: 3000 }
+      yearly: { AUD: 6877, USD: 4799, EUR: 4274, GBP: 3624, INR: 463166, AED: 17626, SAR: 18020 }
+  - id: family_max
+    name: Family Max
+    storage: 5TB
+    gb: 5000
+    trial: true
+    featured: true
+    pill: "Share with up to 5"
+    features:
+      - "High speed cloud storage"
+      - "End to end encryption support"
+      - "Family Storage sharing (up to 5 members)"
+    prices:
+      monthly: { AUD: 2148, USD: 1499, EUR: 1335, GBP: 1132, INR: 144673, AED: 5506, SAR: 5629 }
+      yearly: { AUD: 12895, USD: 8999, EUR: 8014, GBP: 6795, INR: 868521, AED: 33051, SAR: 33791 }

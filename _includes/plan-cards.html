@@ -1,0 +1,60 @@
+{%- comment -%}
+  Daily Utility Cloud Storage plan cards (owner, 23 Nov 2026). Used by /pricing and the Cloud
+  Storage Backup & Drive page, so the two can never disagree. Data:
+  _data/plans.yml. Behaviour: assets/js/plans.js (prices in the visitor's
+  currency, Monthly / Yearly, savings, smooth changes, the sign-in popup).
+  Styles: assets/css/plans.scss.
+
+  Without JavaScript every card still reads correctly in US dollars, the
+  web app's own default, monthly, and every button goes straight to the
+  web app.
+
+  Params:
+    key       a short word unique on the page, for the heading ids
+    controls  true: Monthly / Yearly and "Pay in" above the cards
+    level     heading level for the plan names (2 or 3; default 3)
+{%- endcomment -%}
+{%- assign _P = site.data.plans -%}
+{%- assign _lvl = include.level | default: 3 -%}
+{%- assign _max = 0 -%}
+{%- for plan in _P.plans -%}{%- if plan.gb > _max -%}{%- assign _max = plan.gb -%}{%- endif -%}{%- endfor -%}
+{%- capture _arrow -%}<svg class="plans-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>{%- endcapture -%}
+{%- capture _tick -%}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>{%- endcapture -%}
+{%- if include.controls %}
+<div class="plans-controls">
+  <div class="bill-switch" role="radiogroup" aria-label="Billing"><label><input type="radio" name="billing-{{ include.key }}" value="monthly" data-billing checked><span>Monthly</span></label><label><input type="radio" name="billing-{{ include.key }}" value="yearly" data-billing><span>Yearly</span></label></div>
+  <div class="cur-pick" data-currency-pick hidden></div>
+</div>
+{%- endif %}
+<div class="plans-grid" id="{{ include.key }}-plans">
+  {%- for plan in _P.plans %}
+  {%- assign _m = plan.prices.monthly.USD | divided_by: 100.0 -%}
+  {%- capture _usd -%}${{ _m }}{%- endcapture -%}
+  {%- capture _href -%}{{ site.cloud_url }}?mode=signup&amp;plan={{ plan.id }}&amp;billing=monthly&amp;currency=USD{% if plan.trial %}&amp;trial={{ _P.trial_days }}{% endif %}&amp;source=website{%- endcapture %}
+  <section class="pcard{% if plan.pill == 'Best value' %} pcard--best{% endif %}{% if plan.featured %} pcard--featured{% endif %} reveal" aria-labelledby="{{ include.key }}-{{ plan.id }}">
+    <div class="pcard-top"><h{{ _lvl }} class="pcard-name" id="{{ include.key }}-{{ plan.id }}">{{ plan.name }}</h{{ _lvl }}>{% if plan.pill %}<span class="pcard-pill">{{ plan.pill }}</span>{% endif %}</div>
+    <div class="pcard-store">
+      <p class="pcard-size"><span class="pcard-gb">{{ plan.storage }}</span> <span class="pcard-muted">of storage</span></p>
+      <div class="pcard-bar" aria-hidden="true"><i style="width:{{ plan.gb | times: 100.0 | divided_by: _max | round: 2 }}%"></i></div>
+    </div>
+    <div class="pcard-price">
+      <p class="price-amt"><span class="price-num" data-price="{{ plan.id }}">{{ _usd }}</span><span class="price-per" data-per>/month</span></p>
+      <p class="pcard-meta"><span data-billed-in>Billed monthly in USD</span>{% if plan.trial %}<span class="pcard-trial">{{ _P.trial_days }}-day free trial</span>{% endif %}</p>
+    </div>
+    <div class="price-actions">
+      {%- if plan.trial %}
+      <a href="{{ _href }}" class="btn pcard-cta" data-auth="plan" data-plan="{{ plan.id }}" data-trial>Try free for {{ _P.trial_days }} days{{ _arrow }}</a>
+      <a href="{{ _href | replace: '&amp;trial=3', '' }}" class="price-buy" data-auth="plan" data-plan="{{ plan.id }}">or buy now{{ _arrow }}</a>
+      {%- else %}
+      <a href="{{ _href }}" class="btn pcard-cta" data-auth="plan" data-plan="{{ plan.id }}">Choose {{ plan.name }}{{ _arrow }}</a>
+      {%- endif %}
+    </div>
+    <p class="price-terms" data-terms="{{ plan.id }}">{% if plan.trial %}Free for {{ _P.trial_days }} days, then {{ _usd }} per month. Your payment details are needed to start the trial. Renews automatically until you cancel; cancel before the trial ends and you won't be charged.{% else %}{{ _usd }} per month from today. Renews automatically until you cancel.{% endif %}</p>
+    <ul class="price-feats" role="list">
+      {%- for f in plan.features %}
+      <li>{{ _tick }}<span>{{ f }}</span></li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endfor %}
+</div>
